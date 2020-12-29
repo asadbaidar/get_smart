@@ -1,0 +1,63 @@
+name: get_smart
+description: A package of widgets and utils to make flutter easy and smart.
+version: 0.0.1
+author: Asad Baidar
+homepage: https://github.com/asadbaidar/get_smart
+
+environment:
+  sdk: ">=2.10.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  sprintf:
+
+  # Dependencies
+  responsive_ui: ^2.0.1
+  object_mapper: ^1.0.0+2
+  dio: ^3.0.10
+  get: ^3.24.0
+  get_stacked: ^1.0.8
+  shared_preferences: ^0.5.12+4
+  cupertino_icons: ^1.0.2
+  auto_size_text: ^2.1.0
+  url_launcher: ^5.7.10
+  #provider: ^4.3.2+3
+  #firebase_core: ^0.5.0
+  #firebase_crashlytics: ^0.2.1
+  #flutter_svg: ^0.19.0
+  #hive: ^1.4.4
+  #path_provider: ^1.6.14
+  #autocomplete_textfield: ^1.7.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  # To add Flutter specific assets to your application, add an assets section:
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+  # assets:
+  #  - assets/icon/
+  #  - assets/image/
+
+  # This adds Flutter specific custom fonts to your application
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
+  #  fonts:
+  #    - family: Cairo
+  #      fonts:
+  #        - asset: assets/fonts/Cairo/Cairo-Regular.ttf
+  #        - asset: assets/fonts/Cairo/Cairo-SemiBold.ttf
+  #          weight: 600
+  #        - asset: assets/fonts/Cairo/Cairo-Bold.ttf
+  #          weight: 700
+  #        - asset: assets/fonts/Cairo/Cairo-Black.ttf
+  #          weight: 900
