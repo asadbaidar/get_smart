@@ -1,3 +1,7 @@
+## [0.0.1+3]
+
+* redefined localizations
+
 ## [0.0.1+2]
 
 * minor changes

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_smart/src/res/localization.dart';
+import 'package:get_smart/src/res/localizations.dart';
 import 'package:get_smart/src/utils/utils.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -19,7 +19,7 @@ enum GetText {
 
 /// Get text data
 Map<Locale, Map<GetText, String>> _getTextMap = {
-  Localization.english: {
+  GetLocalizations.english: {
     GetText.done: "DONE",
     GetText.cancel: "CANCEL",
     GetText.ok: "OK",
@@ -39,7 +39,7 @@ extension LocalizationExt on GetText {
   String call([List<dynamic> arguments]) {
     return this == null
         ? null
-        : _getTextMap[Localization.current.locale][this]
+        : _getTextMap[GetLocalizations.current.locale][this]
             ?.applyIf(arguments?.isNotEmpty, (s) => sprintf(s, arguments));
   }
 }

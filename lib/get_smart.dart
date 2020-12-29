@@ -1,6 +1,6 @@
 library get_smart;
 
-export "src/res/localization.dart";
+export "src/res/localizations.dart";
 export "src/res/texts.dart";
 export "src/res/themes.dart";
 export "src/utils/utils.dart";
