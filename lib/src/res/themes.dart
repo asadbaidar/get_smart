@@ -81,12 +81,10 @@ class AppTheme {
   }
 
   /// Resolves which theme to use based on brightness.
-  static Widget builder(BuildContext context, Widget child) {
-    return Theme(
-      data: isDark(context) ? dark(context) : light(context),
-      child: child,
-    );
-  }
+  static Widget builder(BuildContext context, Widget child) => Theme(
+        data: isDark(context) ? dark(context) : light(context),
+        child: child,
+      );
 
   static resetSystemChrome(BuildContext context) {
     // var theme = Theme.of(context);
