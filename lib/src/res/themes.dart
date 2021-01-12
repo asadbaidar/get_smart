@@ -44,9 +44,9 @@ class AppTheme {
         context,
         brightness: brightness,
         accentColorLight: Colors.black,
+        primarySwatchLight: ColorsX.black,
         accentColorDark: Colors.white,
-        primarySwatchLight: Colors.black,
-        primarySwatchDark: Colors.white,
+        primarySwatchDark: ColorsX.white,
       );
 
   static ThemeData sky(
@@ -118,4 +118,38 @@ class AppTheme {
       statusBarColor: Colors.transparent,
     ));
   }
+}
+
+extension ColorsX on Colors {
+  static const MaterialColor black = MaterialColor(
+    0xFF000000,
+    <int, Color>{
+      50: Color(0xFFDDDDDD),
+      100: Color(0xFF797979),
+      200: Color(0xFF424242),
+      300: Color(0xFF303030),
+      400: Color(0xFF222222),
+      500: Color(0xFF000000),
+      600: Color(0xFF000000),
+      700: Color(0xFF000000),
+      800: Color(0xFF000000),
+      900: Color(0xFF000000),
+    },
+  );
+
+  static const MaterialColor white = MaterialColor(
+    0xFF000000,
+    <int, Color>{
+      50: Color(0x1FFFFFFF),
+      100: Color(0x4DFFFFFF),
+      200: Color(0x8AFFFFFF),
+      300: Color(0x99FFFFFF),
+      400: Color(0xB3FFFFFF),
+      500: Color(0xFFFFFFFF),
+      600: Color(0xFFFFFFFF),
+      700: Color(0xFFFFFFFF),
+      800: Color(0xFFFFFFFF),
+      900: Color(0xFFFFFFFF),
+    },
+  );
 }
