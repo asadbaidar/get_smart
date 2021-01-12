@@ -466,9 +466,10 @@ class TextFormFieldX extends StatelessWidget {
     this.showCounter,
     this.isDense,
     this.filled,
+    this.obscureText,
     this.maxLength,
     this.minLines,
-    this.maxLines,
+    this.maxLines = 1,
     this.margin,
     this.padding,
     this.background,
@@ -476,8 +477,8 @@ class TextFormFieldX extends StatelessWidget {
   }) : super(key: key);
 
   final String initialValue;
-  final GetText label;
-  final GetText hint;
+  final String label;
+  final String hint;
   final String error;
   final String helper;
   final Widget prefix;
@@ -497,6 +498,7 @@ class TextFormFieldX extends StatelessWidget {
   final bool showCounter;
   final bool isDense;
   final bool filled;
+  final bool obscureText;
   final int maxLength;
   final int minLines;
   final int maxLines;
@@ -506,10 +508,10 @@ class TextFormFieldX extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _label = label();
-    final _hint = hint?.call() ?? _label.toLowerCase();
+    final _hint = hint ?? label.toLowerCase();
     final _validator = validator != null ? validator : (v) => null;
     final _readOnly = readOnly == true || onTap != null;
+    final _obscureText = obscureText == true;
     return Container(
       padding: padding ?? EdgeInsets.zero,
       margin: margin ?? EdgeInsets.zero,
@@ -537,14 +539,18 @@ class TextFormFieldX extends StatelessWidget {
               : null,
           isDense: isDense,
           filled: filled,
-          labelText: _label,
-          hintText: hint?.call(),
+          labelText: label,
+          hintText: hint,
           helperText: helper ?? " ",
+          helperMaxLines: 2,
           errorText: error,
           suffix: suffix,
           counterText: showCounter ?? true ? null : "",
         ),
         keyboardType: keyboardType,
+        obscureText: _obscureText,
+        enableSuggestions: !_obscureText,
+        autocorrect: !_obscureText,
         textInputAction: textInputAction,
         maxLength: maxLength,
         inputFormatters: inputFilters,
@@ -611,11 +617,12 @@ class ProgressButton extends StatelessWidget {
                     elevation: 2,
                     highlightElevation: 4,
                     child: Text(
-                      status == WebStatus.failed
-                          ? GetText.retry()
-                          : status == WebStatus.succeeded
-                              ? GetText.ok()
-                              : text(),
+                      (status == WebStatus.failed
+                              ? GetText.retry()
+                              : status == WebStatus.succeeded
+                                  ? GetText.ok()
+                                  : text())
+                          .toUpperCase(),
                     ),
                     onPressed: () {
                       if (status == WebStatus.succeeded)

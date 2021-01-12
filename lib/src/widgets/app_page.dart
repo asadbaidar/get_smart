@@ -22,6 +22,7 @@ class AppPage extends StatelessWidget {
     this.bottomBarLeftItems,
     this.bottomBarRightItems,
     this.bottomBarCenterItems,
+    this.appBarRightItems,
     this.floatingActionButton,
     this.floatingActionButtonLocation = FloatingActionButtonLocation.endDocked,
     Key key,
@@ -39,6 +40,7 @@ class AppPage extends StatelessWidget {
   final List<Widget> bottomBarLeftItems;
   final List<Widget> bottomBarRightItems;
   final List<Widget> bottomBarCenterItems;
+  final List<Widget> appBarRightItems;
   final FloatingActionButton floatingActionButton;
   final FloatingActionButtonLocation floatingActionButtonLocation;
   final GlobalKey<ScaffoldState> _key;
@@ -69,6 +71,7 @@ class AppPage extends StatelessWidget {
               ? kToolbarHeight + 1 + (appBarExtensionSize ?? 0)
               : 1),
         ),
+        actions: appBarRightItems,
       ),
       bottomNavigationBar: snackBar != null
           ? bottomAppBar
