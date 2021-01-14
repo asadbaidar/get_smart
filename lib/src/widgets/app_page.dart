@@ -14,7 +14,7 @@ class AppPage extends StatelessWidget {
     this.children,
     this.title,
     this.subtitle,
-    this.showProgress,
+    this.showProgress = false,
     this.appBarExtension,
     this.appBarExtensionSize,
     this.snackBar,

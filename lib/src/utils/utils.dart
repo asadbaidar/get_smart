@@ -609,11 +609,13 @@ class WebAPI {
 
   Future<WebResponse<T>> post<T>({
     T Function() builder,
+    bool encrypted = false,
     String path,
     Map<String, dynamic> parameters,
   }) {
     return request<T>(
       builder: builder,
+      encrypted: encrypted,
       path: path,
       method: WebMethod.post,
       parameters: parameters,
@@ -667,6 +669,7 @@ class WebAPI {
 
   Future<WebResponse<T>> request<T>({
     T Function() builder,
+    bool encrypted = false,
     String path,
     WebMethod method,
     Map<String, dynamic> parameters,
@@ -689,6 +692,12 @@ class WebAPI {
           }
           ..validateStatus = (status) => status == 200;
         _cancelToken = CancelToken();
+        if (encrypted)
+          await Future.forEach(
+            parameters.keys,
+            (key) async =>
+                parameters[key] = await parameters[key]?.toString()?.encrypted,
+          );
         DIO.Response response = await dio.request(
           path.pre(this.path?.post("/")),
           queryParameters: method == WebMethod.post ? null : parameters,
@@ -732,6 +741,10 @@ abstract class AppGetController extends MultipleFutureGetController {
 
   void actionToCancel() {
     _cancelWebApis();
+    resetAction();
+  }
+
+  void resetAction() {
     actionResponse = null;
     clearErrors();
     update();
@@ -777,6 +790,9 @@ abstract class AppGetController extends MultipleFutureGetController {
   bool get isAction =>
       actionStatus != null && actionStatus != WebStatus.canceled;
 
+  /// Returns the status of action if succeeded or not
+  bool get isActionSucceeded => actionStatus == WebStatus.succeeded;
+
   /// Returns the [WebStatus] of the ViewModel
   WebStatus status(Object object, WebResponse response) =>
       busy(object) ? WebStatus.processing : response?.status;
@@ -796,8 +812,14 @@ abstract class AppGetController extends MultipleFutureGetController {
   @override
   dynamic get modelError => error(typeName);
 
-  /// Returns the error status of action
+  /// Sets the error for the ViewModel
+  set modelError(value) => setError(value);
+
+  /// Returns the error status of an action
   dynamic get actionError => error(action);
+
+  /// sets the error status of an action
+  set actionError(value) => setErrorForObject(action, value);
 
   /// Marks the ViewModel as busy and calls notify listeners
   @override
