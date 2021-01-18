@@ -441,7 +441,7 @@ extension MapperX on Mapper {
     this<T>(
       fields.firstWhere(
         (it) => this.json[it] != null,
-        orElse: () => fields.first ?? "",
+        orElse: () => fields.takeFirst ?? "",
       ),
       value,
       setter,
@@ -554,6 +554,8 @@ class WebResponse<T> extends WebMappable {
   List<T> results;
 
   T get result => _result ?? (T.toString() == "dynamic" ? success : null);
+
+  set result(value) => _result = value;
 
   get data => results ?? result;
 
@@ -792,6 +794,9 @@ abstract class AppGetController extends MultipleFutureGetController {
 
   /// Returns the status of action if succeeded or not
   bool get isActionSucceeded => actionStatus == WebStatus.succeeded;
+
+  /// Returns the status of action if processing or not
+  bool get isActionProcessing => actionStatus == WebStatus.processing;
 
   /// Returns the [WebStatus] of the ViewModel
   WebStatus status(Object object, WebResponse response) =>
