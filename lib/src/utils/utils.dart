@@ -81,28 +81,18 @@ extension ObjectX on Object {
     return value;
   }
 
-  String get keyName {
-    return toString().split('.').last;
-  }
+  String get keyName => toString().split('.').last;
 
-  String get keyNAME {
-    return keyName.toUpperCase();
-  }
+  String get keyNAME => keyName.toUpperCase();
 
-  String get rawName {
-    return toString();
-  }
+  String get rawName => toString();
 
-  String get rawNAME {
-    return rawName.toUpperCase();
-  }
+  String get rawNAME => rawName.toUpperCase();
 
-  String get typeName {
-    return nameOf(runtimeType);
-  }
+  String get typeName => nameOf(runtimeType);
 
-  T toWebObject<T>(T Function() builder, [List<Object Function()> builders]) {
-    return MapperX.fromData(this).toWebObject<T>(builder, builders);
+  T toWebObject<T>([List<Object Function()> builders]) {
+    return MapperX.fromData(this).toWebObject<T>(builders);
   }
 }
 
@@ -149,11 +139,25 @@ extension StringX on String {
 
   Color get materialAccent => Colors.accents[Random(hashCode).nextInt(15)];
 
-  String get capitalizeAll => isEmpty
-      ? this
-      : length == 1
-          ? toUpperCase()
-          : capitalize;
+  /// Capitalize each word inside string
+  /// Example: your name => Your Name, your name => Your name
+  String get capitalized {
+    return isBlank
+        ? ""
+        : length == 1
+            ? toUpperCase()
+            : split(' ').map((s) => s.capitalizedFirst).join(' ');
+  }
+
+  /// Uppercase first letter inside string and let the others lowercase
+  /// Example: your name => Your name
+  String get capitalizedFirst {
+    return isBlank
+        ? ""
+        : length == 1
+            ? toUpperCase()
+            : this[0].toUpperCase() + substring(1).toLowerCase();
+  }
 
   bool get boolYN => toUpperCase() == "Y";
 
@@ -458,17 +462,21 @@ extension MapperX on Mapper {
     if (value == null) setter(newValue);
   }
 
-  static Mapper fromData(data) {
-    return Mapper.fromJson(data is String ? data.json : data);
-  }
+  static Mapper fromData(data) => Mapper.fromJson(
+        data is String
+            ? data.json
+            : data is Map<dynamic, dynamic>
+                ? data.map((key, value) => MapEntry(key, value))
+                : data,
+      );
 
-  T toWebObject<T>(T Function() builder, [List<Object Function()> builders]) {
-    Mappable.factories.putIfAbsent(T, () => builder);
+  T toWebObject<T>([List<Object Function()> builders]) {
     builders?.forEach((builder) {
       Mappable.factories.putIfAbsent(builder().runtimeType, () => builder);
     });
+    print(Mappable.factories);
     final object = toObject<T>();
-    Mappable.factories.remove(T);
+    print(object);
     builders?.forEach((builder) {
       Mappable.factories.remove(builder().runtimeType);
     });
@@ -508,14 +516,20 @@ abstract class WebMappable with Mappable {
       descriptionKeys,
       _description,
       (v) => _description =
-          v?.toString()?.applyIf(capitalized, (s) => s.capitalizeAll),
+          v?.toString()?.applyIf(capitalized, (s) => s.capitalized),
     );
   }
 
-  @override
-  String toString() {
-    return description;
+  Future get decrypted async {
+    id = await id.decrypted;
+    description = await description.decrypted;
+    return this;
   }
+
+  get builders => [];
+
+  @override
+  String toString() => description;
 }
 
 class AppTileData extends WebMappable {
@@ -543,13 +557,13 @@ class AppTileData extends WebMappable {
 }
 
 class WebResponse<T> extends WebMappable {
-  WebResponse({this.error});
+  WebResponse({this.errorType});
 
-  final DioErrorType error;
+  final DioErrorType errorType;
 
-  String tag;
-  bool success;
-  String message;
+  String tag = "Connection";
+  bool success = false;
+  String message = "Connection failed.";
   T _result;
   List<T> results;
 
@@ -559,17 +573,23 @@ class WebResponse<T> extends WebMappable {
 
   get data => results ?? result;
 
-  WebStatus get status => error == DioErrorType.CANCEL
+  String get error => success == true ? null : message;
+
+  WebStatus get status => errorType == DioErrorType.CANCEL
       ? WebStatus.canceled
       : success == true
           ? WebStatus.succeeded
           : WebStatus.failed;
 
   @override
+  get builders => [() => WebResponse<T>()];
+
+  @override
   void mapping(Mapper map) {
     map("tag", tag, (v) => tag = v ?? "Connection");
-    map("status", success, (v) => success = v ?? false);
-    map("msg", message, (v) => message = v ?? "Connection failed.");
+    map.all(["status", "success"], success, (v) => success = v ?? false);
+    map.all(["msg", "message"], message,
+        (v) => message = v ?? "Connection failed.");
     map<T>("result", results ?? _result, (v) {
       if (v is List) {
         return results = v;
@@ -580,9 +600,7 @@ class WebResponse<T> extends WebMappable {
   }
 
   @override
-  String toString() {
-    return toJsonString();
-  }
+  String toString() => toJsonString();
 }
 
 enum WebMethod { get, post, delete }
@@ -598,11 +616,13 @@ enum WebStatus {
 class WebAPI {
   Future<WebResponse<T>> get<T>({
     T Function() builder,
+    List<Object Function()> builders,
     String path,
     Map<String, dynamic> parameters,
   }) {
     return request<T>(
       builder: builder,
+      builders: builders,
       path: path,
       method: WebMethod.get,
       parameters: parameters,
@@ -611,12 +631,14 @@ class WebAPI {
 
   Future<WebResponse<T>> post<T>({
     T Function() builder,
+    List<Object Function()> builders,
     bool encrypted = false,
     String path,
     Map<String, dynamic> parameters,
   }) {
     return request<T>(
       builder: builder,
+      builders: builders,
       encrypted: encrypted,
       path: path,
       method: WebMethod.post,
@@ -626,11 +648,13 @@ class WebAPI {
 
   Future<WebResponse<T>> delete<T>({
     T Function() builder,
+    List<Object Function()> builders,
     String path,
     Map<String, dynamic> parameters,
   }) {
     return request<T>(
       builder: builder,
+      builders: builders,
       path: path,
       method: WebMethod.delete,
       parameters: parameters,
@@ -671,13 +695,13 @@ class WebAPI {
 
   Future<WebResponse<T>> request<T>({
     T Function() builder,
+    List<Object Function()> builders,
     bool encrypted = false,
     String path,
     WebMethod method,
     Map<String, dynamic> parameters,
   }) async {
     return await scheduleTask<Future<WebResponse<T>>>(() async {
-      var typeMappable = WebResponse<T>().runtimeType;
       var dio = Dio();
       try {
         dio.interceptors.add(LogInterceptor(
@@ -706,17 +730,13 @@ class WebAPI {
           data: parameters,
           cancelToken: _cancelToken,
         );
-        Mappable.factories
-          ..putIfAbsent(T, () => builder)
-          ..putIfAbsent(typeMappable, () => () => WebResponse<T>());
-        var data = response.data;
-        return Mapper.fromJson(data is String ? jsonDecode(data) : data)
-            .toObject<WebResponse<T>>();
+        return (response.data as Object).toWebObject<WebResponse<T>>(
+          [builder, () => WebResponse<T>(), ...(builders ?? [])],
+        );
       } on DioError catch (e) {
-        return WebResponse<T>(error: e.type);
+        return WebResponse<T>(errorType: e.type);
       } finally {
         dio.close();
-        Mappable.factories..remove(T)..remove(typeMappable);
       }
     });
   }
@@ -768,6 +788,7 @@ abstract class AppGetController extends MultipleFutureGetController {
 
   @override
   Map<String, Future Function()> get futuresMap => {
+        typeName: loadPrefs,
         typeName: futureToRun,
         ...futuresToRun,
       };
@@ -797,6 +818,12 @@ abstract class AppGetController extends MultipleFutureGetController {
 
   /// Returns the status of action if processing or not
   bool get isActionProcessing => actionStatus == WebStatus.processing;
+
+  /// Returns the status of action if failed or not
+  bool get isActionFailed => actionStatus == WebStatus.failed;
+
+  /// Returns the error status of action
+  bool get hasActionError => actionError != null;
 
   /// Returns the [WebStatus] of the ViewModel
   WebStatus status(Object object, WebResponse response) =>
@@ -919,7 +946,7 @@ Future<void> loadPrefs() async {
     sharedPrefs = await AppPrefs.getInstance();
   else
     await sharedPrefs.reload();
-  sharedUser = await sharedPrefs.user;
+  sharedUser = await sharedPrefs.user.decrypted;
 }
 
 class AppPrefs {
@@ -936,7 +963,7 @@ class AppPrefs {
   static const path = "skm.Prefs.";
   static const keyUser = path + "User";
 
-  get user => prefs.getString(keyUser)?.toWebObject(() => Object());
+  get user => prefs.getString(keyUser)?.toWebObject([() => Object()]);
 
   set user(user) => prefs.setString(keyUser, user.toJsonString());
 }
