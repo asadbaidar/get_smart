@@ -567,19 +567,28 @@ class WebResponse<T> extends WebMappable {
   T _result;
   List<T> results;
 
-  T get result => _result ?? (T.toString() == "dynamic" ? success : null);
+  T get result => _result ?? (T.toString() == "dynamic" ? isSucceeded : null);
 
   set result(value) => _result = value;
 
   get data => results ?? result;
 
-  String get error => success == true ? null : message;
+  String get error => isSucceeded ? null : message;
 
-  WebStatus get status => errorType == DioErrorType.CANCEL
+  WebStatus get status => isCanceled
       ? WebStatus.canceled
-      : success == true
+      : isSucceeded
           ? WebStatus.succeeded
           : WebStatus.failed;
+
+  /// Returns if succeeded or not
+  bool get isSucceeded => success == true;
+
+  /// Returns if canceled or not
+  bool get isCanceled => errorType == DioErrorType.CANCEL;
+
+  /// Returns if failed or not
+  bool get isFailed => !isSucceeded;
 
   @override
   get builders => [() => WebResponse<T>()];
