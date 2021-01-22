@@ -17,8 +17,6 @@ import 'package:object_mapper/object_mapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// To use the utils defined here, import the [utils.dart] file
-
 extension UrlExt on String {
   void launchUrl() async {
     var url = startsWith(RegExp("^(http|https)://")) ? this : "http://$this";
@@ -80,6 +78,8 @@ extension ObjectX on Object {
     });
     return value;
   }
+
+  Future get future => Future.value(this);
 
   String get keyName => toString().split('.').last;
 
