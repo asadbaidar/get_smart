@@ -467,6 +467,7 @@ class TextFormFieldX extends StatelessWidget {
     this.isDense,
     this.filled,
     this.obscureText,
+    this.enableSuggestions,
     this.maxLength,
     this.minLines,
     this.maxLines = 1,
@@ -499,6 +500,7 @@ class TextFormFieldX extends StatelessWidget {
   final bool isDense;
   final bool filled;
   final bool obscureText;
+  final bool enableSuggestions;
   final int maxLength;
   final int minLines;
   final int maxLines;
@@ -550,8 +552,8 @@ class TextFormFieldX extends StatelessWidget {
         ),
         keyboardType: keyboardType,
         obscureText: _obscureText,
-        enableSuggestions: !_obscureText,
-        autocorrect: !_obscureText,
+        enableSuggestions: enableSuggestions ?? !_obscureText,
+        autocorrect: enableSuggestions ?? !_obscureText,
         textInputAction: textInputAction,
         maxLength: maxLength,
         inputFormatters: inputFilters,
