@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
@@ -138,6 +139,24 @@ extension StringX on String {
   Color get materialPrimary => Colors.primaries[Random(hashCode).nextInt(17)];
 
   Color get materialAccent => Colors.accents[Random(hashCode).nextInt(15)];
+
+  bool isPasswordStrong({int min = 8}) {
+    if (isBlank) return false;
+
+    bool hasUppercase = contains(RegExp(r'[A-Z]'));
+    bool hasLowercase = contains(RegExp(r'[a-z]'));
+    bool hasDigits = contains(RegExp(r'[0-9]'));
+    bool hasSpecialCharacters = contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+    bool hasNoWhitespace = !contains(RegExp(r'[\s]'));
+    bool hasMinLength = length >= min;
+
+    return hasUppercase &&
+        hasLowercase &&
+        hasDigits &&
+        hasSpecialCharacters &&
+        hasNoWhitespace &&
+        hasMinLength;
+  }
 
   /// Capitalize each word inside string
   /// Example: your name => Your Name, your name => Your name
@@ -304,21 +323,46 @@ String nameOf(Type type) => type.toString();
 
 String routeOf(Type type) => "/" + nameOf(type);
 
+extension TextInputTypeX on TextInputType {
+  static TextInputType get numberFirst => Platform.isIOS
+      ? TextInputType.numberWithOptions(
+          signed: true,
+        )
+      : TextInputType.visiblePassword;
+}
+
 extension TextInputFilter on TextInputFormatter {
   static List<TextInputFormatter> get phone => [
-        notEmpty,
+        noWhitespace,
         FilteringTextInputFormatter.allow(
           RegExp(r"^(\+?)[0-9]*"),
+        )
+      ];
+
+  static List<TextInputFormatter> get numberOnly => [
+        noWhitespace,
+        FilteringTextInputFormatter.allow(
+          RegExp(r'[0-9]'),
         )
       ];
 
   static TextInputFormatter get notEmpty =>
       FilteringTextInputFormatter.deny(RegExp(r"^(\s)"));
 
+  static TextInputFormatter get noWhitespace =>
+      FilteringTextInputFormatter.deny(RegExp(r'[\s]'));
+
   static List<TextInputFormatter> get numberAndDash => [
-        notEmpty,
+        noWhitespace,
         FilteringTextInputFormatter.allow(
           RegExp(r"^[0-9]*?\d{1}-|[0-9]*"),
+        )
+      ];
+
+  static List<TextInputFormatter> get mrNumber => [
+        noWhitespace,
+        FilteringTextInputFormatter.allow(
+          RegExp(r'[WANwan-]|[0-9]'),
         )
       ];
 }
