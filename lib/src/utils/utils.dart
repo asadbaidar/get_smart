@@ -19,13 +19,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 extension UrlExt on String {
-  void launchUrl() async {
+  void launchUrl({bool inApp = false}) async {
     var url = startsWith(RegExp("^(http|https)://")) ? this : "http://$this";
     if (await canLaunch(url)) {
       await launch(
         url,
-        forceSafariVC: false,
-        forceWebView: false,
+        forceSafariVC: inApp,
+        forceWebView: inApp,
       );
     }
   }
