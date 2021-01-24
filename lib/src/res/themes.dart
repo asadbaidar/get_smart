@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_smart/src/utils/utils.dart';
+import 'package:get_smart/get_smart.dart';
 
 /// All app themes to be used in the app should be defined here
 class AppTheme {
@@ -13,6 +13,25 @@ class AppTheme {
   static const kBackgroundDark = Color(0xFF172329);
   static const kCanvasColorDark = Color(0xFF26343C);
   static const kPrimaryBackgroundDark = Color(0xFF37474F);
+
+  static const kFontAvenirNext = "AvenirNext";
+  static const kTextAvenirNext = TextTheme(
+    headline5: TextStyle(
+      color: Colors.black,
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+    ),
+    headline6: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    ),
+    bodyText2: TextStyle(
+      fontSize: 11,
+    ),
+    caption: TextStyle(
+      fontSize: 10,
+    ),
+  );
 
   static bool isDark(BuildContext context) =>
       ThemeMode.system == ThemeMode.dark ||
@@ -39,25 +58,38 @@ class AppTheme {
   static ThemeData black(
     BuildContext context, {
     Brightness brightness,
+    String fontFamily,
+    TextTheme textTheme,
   }) =>
       builder(
         context,
         brightness: brightness,
+        fontFamily: fontFamily,
+        textTheme: textTheme,
         accentColorLight: Colors.black,
-        primarySwatchLight: ColorsX.black,
+        primarySwatchLight: MaterialColorsX.black,
         accentColorDark: Colors.white,
-        primarySwatchDark: ColorsX.white,
+        primarySwatchDark: MaterialColorsX.white,
       );
 
   static ThemeData sky(
     BuildContext context, {
     Brightness brightness,
+    String fontFamily,
+    TextTheme textTheme,
   }) =>
-      builder(context, brightness: brightness);
+      builder(
+        context,
+        brightness: brightness,
+        fontFamily: fontFamily,
+        textTheme: textTheme,
+      );
 
   static ThemeData builder(
     BuildContext context, {
     Brightness brightness,
+    String fontFamily,
+    TextTheme textTheme,
     Color accentColorLight = kAccentColor,
     Color primarySwatchLight = kPrimarySwatch,
     Color backgroundLight = kBackgroundLight,
@@ -73,6 +105,8 @@ class AppTheme {
     final isDark = _brightness == Brightness.dark;
     final theme = ThemeData(brightness: _brightness);
     final _accentColor = isDark ? accentColorDark : accentColorLight;
+    final _primaryBackground =
+        isDark ? primaryBackgroundDark : primaryBackgroundLight;
     return ThemeData(
       brightness: _brightness,
       backgroundColor: isDark ? backgroundDark : backgroundLight,
@@ -84,6 +118,8 @@ class AppTheme {
       primaryIconTheme: IconThemeData(color: _accentColor),
       iconTheme: IconThemeData(color: _accentColor),
       buttonColor: _accentColor,
+      fontFamily: fontFamily,
+      textTheme: textTheme,
       buttonTheme: ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
         shape: RoundedRectangleBorder(
@@ -92,12 +128,26 @@ class AppTheme {
       ),
       appBarTheme: AppBarTheme(
         elevation: 1,
-        color: isDark ? primaryBackgroundDark : primaryBackgroundLight,
+        color: _primaryBackground,
       ),
       bottomAppBarTheme: BottomAppBarTheme(
         elevation: 4,
-        color: isDark ? primaryBackgroundDark : primaryBackgroundLight,
+        color: _primaryBackground,
         shape: CircularNotchedRectangle(),
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        elevation: 4,
+        selectedLabelStyle: TextStyle(fontSize: 10),
+        unselectedLabelStyle: TextStyle(fontSize: 9.8),
+        type: BottomNavigationBarType.fixed,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        backgroundColor: _primaryBackground,
+        selectedItemColor: _accentColor,
+        unselectedItemColor: Colors.grey.shade400,
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: _primaryBackground,
       ),
     );
   }
@@ -118,38 +168,4 @@ class AppTheme {
       statusBarColor: Colors.transparent,
     ));
   }
-}
-
-extension ColorsX on Colors {
-  static const MaterialColor black = MaterialColor(
-    0xFF000000,
-    <int, Color>{
-      50: Color(0xFFDDDDDD),
-      100: Color(0xFF797979),
-      200: Color(0xFF424242),
-      300: Color(0xFF303030),
-      400: Color(0xFF222222),
-      500: Color(0xFF000000),
-      600: Color(0xFF000000),
-      700: Color(0xFF000000),
-      800: Color(0xFF000000),
-      900: Color(0xFF000000),
-    },
-  );
-
-  static const MaterialColor white = MaterialColor(
-    0xFF000000,
-    <int, Color>{
-      50: Color(0x1FFFFFFF),
-      100: Color(0x4DFFFFFF),
-      200: Color(0x8AFFFFFF),
-      300: Color(0x99FFFFFF),
-      400: Color(0xB3FFFFFF),
-      500: Color(0xFFFFFFFF),
-      600: Color(0xFFFFFFFF),
-      700: Color(0xFFFFFFFF),
-      800: Color(0xFFFFFFFF),
-      900: Color(0xFFFFFFFF),
-    },
-  );
 }

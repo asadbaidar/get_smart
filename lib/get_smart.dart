@@ -1,5 +1,6 @@
 library get_smart;
 
+export "src/res/colors.dart";
 export "src/res/localizations.dart";
 export "src/res/texts.dart";
 export "src/res/themes.dart";

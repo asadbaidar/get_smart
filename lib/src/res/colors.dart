@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+import 'package:get_smart/get_smart.dart';
+
+extension ColorX on Color {
+  bool get isDark => (299 * red + 587 * green + 114 * blue) / 1000 < 162;
+
+  Color get contrast => isDark ? Colors.white : Colors.black;
+
+  Color get themeAware => isDark
+      ? (AppTheme.isDarkMode ? Colors.white : this)
+      : (AppTheme.isDarkMode ? this : Colors.black);
+
+  MaterialColor get material => this is MaterialColor ? this : null;
+
+  MaterialAccentColor get materialAccent =>
+      this is MaterialAccentColor ? this : null;
+
+  Color get activated => withOpacity(0.05);
+
+  Color get translucent => withOpacity(0.15);
+
+  Color get dimmed => withOpacity(0.2);
+
+  Color get hinted => withOpacity(0.34);
+
+  Color get subbed => withOpacity(0.6);
+
+  Color get highlighted => withOpacity(0.727);
+
+  Color get normal => withOpacity(1);
+}
+
+extension MaterialColorsX on Colors {
+  static const MaterialColor black = MaterialColor(
+    0xFF000000,
+    <int, Color>{
+      50: Color(0xFFDDDDDD),
+      100: Color(0xFF797979),
+      200: Color(0xFF424242),
+      300: Color(0xFF303030),
+      400: Color(0xFF222222),
+      500: Color(0xFF000000),
+      600: Color(0xFF000000),
+      700: Color(0xFF000000),
+      800: Color(0xFF000000),
+      900: Color(0xFF000000),
+    },
+  );
+
+  static const MaterialColor white = MaterialColor(
+    0xFF000000,
+    <int, Color>{
+      50: Color(0x1FFFFFFF),
+      100: Color(0x4DFFFFFF),
+      200: Color(0x8AFFFFFF),
+      300: Color(0x99FFFFFF),
+      400: Color(0xB3FFFFFF),
+      500: Color(0xFFFFFFFF),
+      600: Color(0xFFFFFFFF),
+      700: Color(0xFFFFFFFF),
+      800: Color(0xFFFFFFFF),
+      900: Color(0xFFFFFFFF),
+    },
+  );
+}

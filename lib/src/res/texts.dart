@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_smart/src/res/localizations.dart';
-import 'package:get_smart/src/utils/utils.dart';
+import 'package:get_smart/get_smart.dart';
 import 'package:sprintf/sprintf.dart';
 
 /// Get text keys

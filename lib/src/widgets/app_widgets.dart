@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_smart/src/res/texts.dart';
-import 'package:get_smart/src/utils/utils.dart';
+import 'package:get_smart/get_smart.dart';
 
 class AppTile extends StatelessWidget {
   const AppTile({

@@ -11,7 +11,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_smart/src/res/texts.dart';
-import 'package:get_smart/src/res/themes.dart';
 import 'package:get_stacked/get_stacked.dart';
 import 'package:intl/intl.dart';
 import 'package:object_mapper/object_mapper.dart';
@@ -384,35 +383,6 @@ extension Double on double {
       );
 
   String get formatted => GET.formatter.formatDecimal(toInt());
-}
-
-extension ColorX on Color {
-  bool get isDark => (299 * red + 587 * green + 114 * blue) / 1000 < 162;
-
-  Color get contrast => isDark ? Colors.white : Colors.black;
-
-  Color get themeAware => isDark
-      ? (AppTheme.isDarkMode ? Colors.white : this)
-      : (AppTheme.isDarkMode ? this : Colors.black);
-
-  MaterialColor get material => this is MaterialColor ? this : null;
-
-  MaterialAccentColor get materialAccent =>
-      this is MaterialAccentColor ? this : null;
-
-  Color get activated => withOpacity(0.05);
-
-  Color get translucent => withOpacity(0.15);
-
-  Color get dimmed => withOpacity(0.2);
-
-  Color get hinted => withOpacity(0.34);
-
-  Color get subbed => withOpacity(0.6);
-
-  Color get highlighted => withOpacity(0.727);
-
-  Color get normal => withOpacity(1);
 }
 
 Future<T> scheduleTask<T>(T Function() task) {
