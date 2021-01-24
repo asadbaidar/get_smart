@@ -845,7 +845,7 @@ abstract class AppGetController extends MultipleFutureGetController {
 
   @override
   Map<String, Future Function()> get futuresMap => {
-        nameOf(AppPrefs): AppPrefs.load,
+        nameOf(AppPrefs): appPrefs.reload,
         typeName: futureToRun,
         ...futuresToRun,
       };
@@ -995,23 +995,63 @@ abstract class AppGetController extends MultipleFutureGetController {
   }
 }
 
-AppPrefs sharedPrefs;
+/// Asset directories mapping for easy access.
+/// <p>
+/// ### Usage
+/// ```
+/// IconAsset.my_icon_name.png
+/// ```
+/// <p>
+/// ### How it works
+/// If you want to add new file type extension for assets, then just make a
+/// copy of [png] or any defined type in [AssetX] and add it in the
+/// desired extension for Object class.
+///
+/// To use it, make an enum named Asset at the end and put the same asset
+/// name in that as in the asset directory
+/// i.e for [icon] directory, enum name must be as IconAsset
+/// <p>
+/// ### Some key practices
+///
+/// - Don't add file type extensions in the object of enums meaning no png or
+/// jpg at the end.
+///
+/// - Use the underscore naming convention for all files in asset directory.
+///
+/// - If you want to add new directory in assets, then make a similar enum
+/// with specific name and maps its directory name in [AssetX].
+///
+/// - Also map that directory in [pubspec.yaml] under the assets property.
+extension AssetX on Object {
+  String get svg => "$_name.svg";
+
+  String get png => "$_name.png";
+
+  String get gif => "$_name.gif";
+
+  String get jpg => "$_name.jpg";
+
+  String get jpeg => "$_name.jpeg";
+
+  String _asset([String name]) =>
+      "assets/" +
+      typeName.replaceAll("Asset", "").toLowerCase() +
+      "/${name ?? keyName}";
+
+  String get _name => this is String ? this : _asset();
+
+  String asset(String name) => _asset(name);
+}
+
+AppPrefs appPrefs = AppPrefs();
 
 class AppPrefs {
-  static Future<void> load() async {
-    if (sharedPrefs == null)
-      sharedPrefs = await AppPrefs.getInstance();
+  Future<void> reload() async {
+    if (prefs == null)
+      prefs = await SharedPreferences.getInstance();
     else
-      await sharedPrefs.reload();
+      await prefs.reload();
   }
 
-  static Future<AppPrefs> getInstance() async {
-    return AppPrefs(await SharedPreferences.getInstance());
-  }
-
-  AppPrefs(this.prefs);
-
-  final SharedPreferences prefs;
-
-  Future<void> reload() => prefs.reload();
+  SharedPreferences prefs;
 }
