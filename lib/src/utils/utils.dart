@@ -784,7 +784,11 @@ class WebAPI {
           cancelToken: _cancelToken,
         );
         return (response.data as Object).toWebObject<WebResponse<T>>(
-          [builder, () => WebResponse<T>(), ...(builders ?? [])],
+          [
+            if (builder != null) builder,
+            () => WebResponse<T>(),
+            ...(builders ?? [])
+          ],
         );
       } on DioError catch (e) {
         return WebResponse<T>(errorType: e.type);
@@ -841,7 +845,7 @@ abstract class AppGetController extends MultipleFutureGetController {
 
   @override
   Map<String, Future Function()> get futuresMap => {
-        typeName: loadPrefs,
+        nameOf(AppPrefs): AppPrefs.load,
         typeName: futureToRun,
         ...futuresToRun,
       };
@@ -992,31 +996,22 @@ abstract class AppGetController extends MultipleFutureGetController {
 }
 
 AppPrefs sharedPrefs;
-var sharedUser;
-
-Future<void> loadPrefs() async {
-  if (sharedPrefs == null)
-    sharedPrefs = await AppPrefs.getInstance();
-  else
-    await sharedPrefs.reload();
-  sharedUser = await sharedPrefs.user.decrypted;
-}
 
 class AppPrefs {
-  AppPrefs(this.prefs);
-
-  final SharedPreferences prefs;
-
-  Future<void> reload() => prefs.reload();
+  static Future<void> load() async {
+    if (sharedPrefs == null)
+      sharedPrefs = await AppPrefs.getInstance();
+    else
+      await sharedPrefs.reload();
+  }
 
   static Future<AppPrefs> getInstance() async {
     return AppPrefs(await SharedPreferences.getInstance());
   }
 
-  static const path = "skm.Prefs.";
-  static const keyUser = path + "User";
+  AppPrefs(this.prefs);
 
-  get user => prefs.getString(keyUser)?.toWebObject([() => Object()]);
+  final SharedPreferences prefs;
 
-  set user(user) => prefs.setString(keyUser, user.toJsonString());
+  Future<void> reload() => prefs.reload();
 }
