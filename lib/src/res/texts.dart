@@ -13,7 +13,7 @@ enum GetText {
   recheck,
   succeeded,
   failed,
-  processing,
+  busy,
 }
 
 /// Get text data
@@ -28,7 +28,7 @@ Map<Locale, Map<GetText, String>> _getTextMap = {
     GetText.recheck: "RECHECK",
     GetText.succeeded: "Great. It's all done.",
     GetText.failed: "Something went wrong. Please try again.",
-    GetText.processing: "Please wait. Good things are on the way.",
+    GetText.busy: "Please wait. Good things are on the way.",
   },
 };
 

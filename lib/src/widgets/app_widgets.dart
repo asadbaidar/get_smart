@@ -583,7 +583,7 @@ class ProgressButton extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  final GetText text;
+  final String text;
   final dynamic error;
   final WebStatus status;
   final Function onPressed;
@@ -593,7 +593,7 @@ class ProgressButton extends StatelessWidget {
     return Container(
       height: 44,
       alignment: Alignment.centerLeft,
-      child: status == WebStatus.processing
+      child: status == WebStatus.busy
           ? Row(children: [
               SizedBox(
                 width: 20,
@@ -604,7 +604,7 @@ class ProgressButton extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16),
                   child: Text(
-                    GetText.processing(),
+                    GetText.busy(),
                     style: TextStyle(color: Theme.of(context).accentColor),
                   ),
                 ),
@@ -623,7 +623,7 @@ class ProgressButton extends StatelessWidget {
                               ? GetText.retry()
                               : status == WebStatus.succeeded
                                   ? GetText.ok()
-                                  : text())
+                                  : text)
                           .toUpperCase(),
                     ),
                     onPressed: () {
@@ -681,23 +681,23 @@ class ProgressSnackBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SnackBarX(
-      message: status == WebStatus.processing
-          ? GetText.processing()
+      message: status == WebStatus.busy
+          ? GetText.busy()
           : status == WebStatus.failed
               ? error ?? GetText.failed()
               : success ?? GetText.succeeded(),
-      action: status == WebStatus.processing
+      action: status == WebStatus.busy
           ? GetText.cancel()
           : status == WebStatus.failed
               ? GetText.retry()
               : GetText.ok(),
-      onAction: status == WebStatus.processing
+      onAction: status == WebStatus.busy
           ? onCancel
           : status == WebStatus.failed
               ? onRetry
               : onDone,
       onDismiss: onCancel,
-      showProgress: status == WebStatus.processing,
+      showProgress: status == WebStatus.busy,
       isDismissible: status == WebStatus.failed,
     );
   }
@@ -812,7 +812,7 @@ class Clickable extends MouseRegion {
               : SystemMouseCursors.basic,
           child: GestureDetector(
             onTap: enable == true ? onTap : null,
-            child: child,
+            child: child ?? Container(),
           ),
         );
 }

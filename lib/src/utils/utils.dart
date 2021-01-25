@@ -642,7 +642,7 @@ enum WebMethod { get, post, delete }
 
 enum WebStatus {
   none,
-  processing,
+  busy,
   succeeded,
   failed,
   canceled,
@@ -848,6 +848,9 @@ abstract class AppGetController extends MultipleFutureGetController {
   @override
   bool get isBusy => busy(typeName);
 
+  /// Returns true if any objects still have a busy status.
+  bool get isAnyBusy => anyObjectsBusy;
+
   /// Returns the status of action if operating or not
   bool get isAction =>
       actionStatus != null && actionStatus != WebStatus.canceled;
@@ -855,8 +858,8 @@ abstract class AppGetController extends MultipleFutureGetController {
   /// Returns the status of action if succeeded or not
   bool get isActionSucceeded => actionStatus == WebStatus.succeeded;
 
-  /// Returns the status of action if processing or not
-  bool get isActionProcessing => actionStatus == WebStatus.processing;
+  /// Returns the status of action if busy or not
+  bool get isActionBusy => actionStatus == WebStatus.busy;
 
   /// Returns the status of action if failed or not
   bool get isActionFailed => actionStatus == WebStatus.failed;
@@ -866,7 +869,7 @@ abstract class AppGetController extends MultipleFutureGetController {
 
   /// Returns the [WebStatus] of the ViewModel
   WebStatus status(Object object, WebResponse response) =>
-      busy(object) ? WebStatus.processing : response?.status;
+      busy(object) ? WebStatus.busy : response?.status;
 
   /// Returns the error status of the ViewModel and checks if data are empty
   bool hasErrorOrEmpty([bool isEmpty]) =>
@@ -1023,6 +1026,14 @@ extension AssetX on Object {
   String get _name => this is String ? this : _asset();
 
   String asset(String name) => _asset(name);
+}
+
+extension ContextX on BuildContext {
+  void endEditing() {
+    FocusManager.instance?.primaryFocus?.unfocus();
+    FocusScope.of(this)?.unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+  }
 }
 
 AppPrefs appPrefs = AppPrefs();

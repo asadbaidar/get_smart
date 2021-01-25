@@ -14,6 +14,7 @@ class AppPage extends StatelessWidget {
     this.title,
     this.subtitle,
     this.showProgress = false,
+    this.isInteractive = true,
     this.appBarExtension,
     this.appBarExtensionSize,
     this.snackBar,
@@ -32,6 +33,7 @@ class AppPage extends StatelessWidget {
   final String title;
   final String subtitle;
   final bool showProgress;
+  final bool isInteractive;
   final Widget appBarExtension;
   final double appBarExtensionSize;
   final Widget snackBar;
@@ -44,9 +46,12 @@ class AppPage extends StatelessWidget {
   final FloatingActionButtonLocation floatingActionButtonLocation;
   final GlobalKey<ScaffoldState> _key;
 
+  bool get _isInteractive => isInteractive == true;
+
   @override
   Widget build(BuildContext context) {
     AppTheme.resetSystemChrome(context);
+    if (!_isInteractive) context?.endEditing();
     return Scaffold(
       key: _key,
       extendBody: true,
@@ -70,52 +75,61 @@ class AppPage extends StatelessWidget {
               ? kToolbarHeight + 1 + (appBarExtensionSize ?? 0)
               : 1),
         ),
-        actions: appBarRightItems,
+        actions: _isInteractive ? appBarRightItems : null,
       ),
       bottomNavigationBar: snackBar != null
-          ? bottomAppBar
+          ? _bottomAppBar
           : CrossFade(
               firstChild: bottomSnackBar,
-              secondChild: bottomAppBar,
+              secondChild: _bottomAppBar,
             ),
       body: Scrollbar(
-        child: child ??
-            ListView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              children: [Responsive(children: children)],
-            ),
+        child: Stack(children: [
+          child ??
+              ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [Responsive(children: children)],
+              ),
+          if (!_isInteractive) Clickable(),
+        ]),
       ),
-      floatingActionButton: floatingActionButton,
+      floatingActionButton: _isInteractive ? floatingActionButton : null,
       floatingActionButtonLocation: subtitle?.isBlank ?? true
           ? FloatingActionButtonLocation.endFloat
           : floatingActionButtonLocation,
     );
   }
 
-  Widget get bottomAppBar => (subtitle?.isBlank ?? true) &&
-          (bottomBarLeftItems?.isBlank ?? true) &&
-          (bottomBarRightItems?.isBlank ?? true) &&
-          (bottomBarCenterItems?.isBlank ?? true)
-      ? Container(height: 0)
-      : BottomBar(
-          snackBar: snackBar,
-          leftItems: bottomBarLeftItems,
-          rightItems: bottomBarRightItems,
-          centerItems: subtitle?.isBlank ?? true
-              ? bottomBarCenterItems
-              : [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: AutoSizeText(
-                        subtitle,
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
+  Widget get _bottomAppBar {
+    var _bottomBarLeftItems = _isInteractive ? bottomBarLeftItems ?? [] : [];
+    var _bottomBarRightItems = _isInteractive ? bottomBarRightItems ?? [] : [];
+    var _bottomBarCenterItems =
+        _isInteractive ? bottomBarCenterItems ?? [] : [];
+    return (subtitle?.isBlank ?? true) &&
+            (_bottomBarLeftItems.isBlank) &&
+            (_bottomBarRightItems.isBlank) &&
+            (_bottomBarCenterItems.isBlank)
+        ? Container(height: 0)
+        : BottomBar(
+            snackBar: snackBar,
+            leftItems: _bottomBarLeftItems,
+            rightItems: _bottomBarRightItems,
+            centerItems: subtitle?.isBlank ?? true
+                ? _bottomBarCenterItems
+                : [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: AutoSizeText(
+                          subtitle,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                    ),
-                  )
-                ],
-        );
+                    )
+                  ],
+          );
+  }
 
   static GlobalKey<ScaffoldState> get newKey => GlobalKey<ScaffoldState>();
 }
