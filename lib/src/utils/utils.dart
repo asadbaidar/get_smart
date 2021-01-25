@@ -135,6 +135,18 @@ extension StringX on String {
 
   bool get isNotBlank => !isBlank;
 
+  bool equalsIgnoreCase(String s) => toLowerCase() == s?.toLowerCase();
+
+  String take(int count) => characters.take(count).toString();
+
+  String takeWhile(bool Function(String) predicate) =>
+      characters.takeWhile(predicate).toString();
+
+  String takeLast(int count) => characters.takeLast(count).toString();
+
+  String takeLastWhile(bool Function(String) predicate) =>
+      characters.takeLastWhile(predicate).toString();
+
   Color get materialPrimary => Colors.primaries[Random(hashCode).nextInt(17)];
 
   Color get materialAccent => Colors.accents[Random(hashCode).nextInt(15)];
