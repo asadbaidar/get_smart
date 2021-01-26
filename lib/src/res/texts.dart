@@ -38,7 +38,9 @@ extension LocalizationExt on GetText {
   String call([List<dynamic> arguments]) {
     return this == null
         ? null
-        : _getTextMap[GetLocalizations.current.locale][this]
-            ?.applyIf(arguments?.isNotEmpty, (s) => sprintf(s, arguments));
+        : _getTextMap[GetLocalizations.current.locale][this]?.applyIf(
+            arguments?.isNotEmpty,
+            (s) => sprintf(s, arguments.map((e) => e ?? "").toList()),
+          );
   }
 }
