@@ -10,8 +10,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_smart/src/res/texts.dart';
-import 'package:get_stacked/get_stacked.dart';
 import 'package:intl/intl.dart';
 import 'package:object_mapper/object_mapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -80,6 +78,8 @@ extension ObjectX on Object {
   }
 
   Future get future => Future.value(this);
+
+  String get hash => hashCode.toString();
 
   String get keyName => toString().split('.').last;
 
@@ -373,7 +373,7 @@ extension TextInputFilter on TextInputFormatter {
   static List<TextInputFormatter> get mrNumber => [
         noWhitespace,
         FilteringTextInputFormatter.allow(
-          RegExp(r'[WANwan-]|[0-9]'),
+          RegExp(r'[WINwin-]|[0-9]'),
         )
       ];
 }
@@ -588,7 +588,7 @@ class WebResponse<T> extends WebMappable {
   final DioErrorType errorType;
 
   String tag = "Connection";
-  bool success = false;
+  bool isSucceeded = false;
   String message = "Connection failed.";
   T _result;
   List<T> results;
@@ -601,14 +601,13 @@ class WebResponse<T> extends WebMappable {
 
   String get error => isSucceeded ? null : message;
 
+  String get success => isSucceeded ? message : null;
+
   WebStatus get status => isCanceled
       ? WebStatus.canceled
       : isSucceeded
           ? WebStatus.succeeded
           : WebStatus.failed;
-
-  /// Returns if succeeded or not
-  bool get isSucceeded => success == true;
 
   /// Returns if canceled or not
   bool get isCanceled => errorType == DioErrorType.CANCEL;
@@ -622,7 +621,8 @@ class WebResponse<T> extends WebMappable {
   @override
   void mapping(Mapper map) {
     map("tag", tag, (v) => tag = v ?? "Connection");
-    map.all(["status", "success"], success, (v) => success = v ?? false);
+    map.all(
+        ["status", "success"], isSucceeded, (v) => isSucceeded = v ?? false);
     map.all(["msg", "message"], message,
         (v) => message = v ?? "Connection failed.");
     map<T>("result", results ?? _result, (v) {
@@ -793,191 +793,6 @@ class GET {
 
   static MaterialLocalizations get formatter =>
       MaterialLocalizations.of(Get.context);
-}
-
-abstract class AppGetController extends MultipleFutureGetController {
-  final action = "action";
-  Future Function() actionToRun = () => Future.value();
-  WebResponse actionResponse;
-
-  void actionToCancel() {
-    _cancelWebApis();
-    resetAction();
-  }
-
-  void resetAction() {
-    actionResponse = null;
-    clearErrors();
-    update();
-  }
-
-  @override
-  void onClose() {
-    _cancelWebApis();
-    super.onClose();
-  }
-
-  void _cancelWebApis() {
-    try {
-      webAPIs.forEach((e) => e.cancel());
-    } catch (e) {}
-  }
-
-  List<WebAPI> get webAPIs => [];
-
-  @override
-  Map<String, Future Function()> get futuresMap => {
-        nameOf(AppPrefs): appPrefs.reload,
-        typeName: futureToRun,
-        ...futuresToRun,
-      };
-
-  Map<String, Future Function()> get futuresToRun => {};
-
-  Future futureToRun() => Future.value();
-
-  bool get isDataReady => dataReady(typeName);
-
-  /// Returns the ready status of an Object
-  bool ready(String key) => dataMap[key] != null;
-
-  /// Returns the ready status of the ViewModel
-  bool get isReady => ready(typeName);
-
-  /// Returns the busy status of the ViewModel
-  @override
-  bool get isBusy => busy(typeName);
-
-  /// Returns true if any objects still have a busy status.
-  bool get isAnyBusy => anyObjectsBusy;
-
-  /// Returns the status of action if operating or not
-  bool get isAction =>
-      actionStatus != null && actionStatus != WebStatus.canceled;
-
-  /// Returns the status of action if succeeded or not
-  bool get isActionSucceeded => actionStatus == WebStatus.succeeded;
-
-  /// Returns the status of action if busy or not
-  bool get isActionBusy => actionStatus == WebStatus.busy;
-
-  /// Returns the status of action if failed or not
-  bool get isActionFailed => actionStatus == WebStatus.failed;
-
-  /// Returns the error status of action
-  bool get hasActionError => actionError != null;
-
-  /// Returns the [WebStatus] of the ViewModel
-  WebStatus status(Object object, WebResponse response) =>
-      busy(object) ? WebStatus.busy : response?.status;
-
-  /// Returns the error status of the ViewModel and checks if data are empty
-  bool hasErrorOrEmpty([bool isEmpty]) =>
-      !isBusy && (hasError || ((isEmpty ?? true) && isReady));
-
-  /// Returns the [WebStatus] of action
-  WebStatus get actionStatus => status(action, actionResponse);
-
-  /// Returns the error status of the ViewModel
-  @override
-  bool get hasError => error(typeName) != null;
-
-  /// Returns the error status of the ViewModel
-  @override
-  dynamic get modelError => error(typeName);
-
-  /// Sets the error for the ViewModel
-  set modelError(value) => setError(value);
-
-  /// Returns the error status of an action
-  dynamic get actionError => error(action);
-
-  /// sets the error status of an action
-  set actionError(value) => setErrorForObject(action, value);
-
-  /// Marks the ViewModel as busy and calls notify listeners
-  @override
-  void setBusy(bool value) => setBusyForObject(typeName, value);
-
-  /// Sets the error for the ViewModel
-  @override
-  void setError(dynamic error) => setErrorForObject(typeName, error);
-
-  /// Sets the action to busy, runs the future and then sets it to not busy when complete.
-  ///
-  /// rethrows [Exception] after setting busy to false for object or class
-  Future runBusyAction(
-    Future Function() busyAction, {
-    bool throwException = false,
-  }) async {
-    actionToRun = () async {
-      actionResponse = null;
-      return actionResponse = await runBusyFuture(
-        busyAction(),
-        busyObject: action,
-        throwException: throwException,
-      );
-    };
-    return actionToRun();
-  }
-
-  /// Sets the ViewModel to busy, runs the future and then sets it to not busy when complete.
-  ///
-  /// rethrows [Exception] after setting busy to false for object or class
-  @override
-  Future runBusyFuture(
-    Future busyFuture, {
-    Object busyObject,
-    bool throwException = false,
-  }) async {
-    clearErrors();
-    _setBusyForModelOrObject(true, key: busyObject);
-    try {
-      var value = await runErrorFuture(busyFuture,
-          key: busyObject, throwException: throwException);
-      _setBusyForModelOrObject(false, key: busyObject);
-      return value;
-    } catch (e) {
-      _setBusyForModelOrObject(false, key: busyObject);
-      if (throwException) rethrow;
-      return WebResponse();
-    }
-  }
-
-  @override
-  Future runErrorFuture(Future future,
-      {Object key, bool throwException = false}) async {
-    try {
-      final response = await future;
-      if (response is WebResponse && !(response?.success == true))
-        _setErrorForModelOrObject(
-          response?.message ?? GetText.failed(),
-          key: key,
-        );
-      return response;
-    } catch (e) {
-      _setErrorForModelOrObject(e, key: key);
-      onFutureError(e, key);
-      if (throwException) rethrow;
-      return WebResponse();
-    }
-  }
-
-  void _setBusyForModelOrObject(bool value, {Object key}) {
-    if (key != null) {
-      setBusyForObject(key, value);
-    } else {
-      setBusyForObject(typeName, value);
-    }
-  }
-
-  void _setErrorForModelOrObject(dynamic value, {Object key}) {
-    if (key != null) {
-      setErrorForObject(key, value);
-    } else {
-      setErrorForObject(typeName, value);
-    }
-  }
 }
 
 /// Asset directories mapping for easy access.
