@@ -79,7 +79,7 @@ abstract class GetController extends MultipleFutureGetController {
   }
 
   /// Include all web APIs for cleanup when closed
-  List<WebAPI> get webAPIs => [];
+  List<GetWebAPI> get webAPIs => [];
 
   @override
   Map<String, Future Function()> get futuresMap => {

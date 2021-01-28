@@ -191,9 +191,9 @@ extension StringX on String {
 
   bool get boolYN => toUpperCase() == "Y";
 
-  Future<String> get encrypted async => await Cipher.encrypt(this);
+  Future<String> get encrypted async => await GetCipher.instance.encrypt(this);
 
-  Future<String> get decrypted async => await Cipher.decrypt(this);
+  Future<String> get decrypted async => await GetCipher.instance.decrypt(this);
 
   get json => jsonDecode(this);
 }
@@ -307,7 +307,7 @@ extension Date on DateTime {
         microsecond: 0,
       );
 
-  String get webTimeStamp => WebAPI.timeStamp + inMilliseconds.toString();
+  String get webTimeStamp => GetWebAPI.timeStamp + inMilliseconds.toString();
 }
 
 Future<void> openTimePicker(
@@ -408,57 +408,6 @@ Future<T> profileTask<T>(Future<T> Function() task) async {
   print("${T.toString()}: Finished task "
       "in ${Date.now.inMilliseconds - time}ms.");
   return result;
-}
-
-class AppPlatform {
-  static const channel = const MethodChannel("org.skm.app_flutter");
-
-  static void setup() {
-    channel.setMethodCallHandler((call) async {
-      switch (call.method) {
-        case "navigateTo":
-          var route = call.arguments.toString();
-          if (Get.currentRoute != route)
-            Get.offAllNamed(call.arguments.toString());
-          break;
-      }
-      return null;
-    });
-  }
-
-  static Future<T> invokeMethod<T>(
-    String method, {
-    dynamic arguments,
-    dynamic fallback,
-  }) async {
-    try {
-      return await channel.invokeMethod(method, arguments);
-    } on Exception {
-      return fallback;
-    }
-  }
-}
-
-class Cipher {
-  static Future<String> decrypt(String data) async {
-    return await AppPlatform.invokeMethod(
-      "decrypt",
-      arguments: data ?? "",
-      fallback: data ?? "",
-    );
-  }
-
-  static Future<String> encrypt(String data) async {
-    return await AppPlatform.invokeMethod(
-      "encrypt",
-      arguments: data ?? "",
-      fallback: data ?? "",
-    );
-  }
-
-  static Future<String> get authToken async {
-    return await AppPlatform.invokeMethod("authToken", fallback: "");
-  }
 }
 
 extension MapperX on Mapper {
@@ -638,6 +587,40 @@ class WebResponse<T> extends WebMappable {
   String toString() => toJsonString();
 }
 
+class GetPlatformChannel {
+  static GetPlatformChannel instance = GetPlatformChannel();
+
+  GetPlatformChannel() {
+    init();
+  }
+
+  void init() {}
+
+  MethodChannel get channel => null;
+
+  Future<T> invokeMethod<T>(
+    String method, {
+    dynamic arguments,
+    dynamic fallback,
+  }) async {
+    try {
+      return await channel?.invokeMethod(method, arguments);
+    } on Exception {
+      return fallback;
+    }
+  }
+}
+
+class GetCipher {
+  static GetCipher instance = GetCipher();
+
+  FutureOr<String> decrypt(String data) => data;
+
+  FutureOr<String> encrypt(String data) => data;
+
+  FutureOr<String> get authToken => "";
+}
+
 enum WebMethod { get, post, delete }
 
 enum WebStatus {
@@ -648,7 +631,7 @@ enum WebStatus {
   canceled,
 }
 
-class WebAPI {
+abstract class GetWebAPI {
   Future<WebResponse<T>> get<T>({
     T Function() builder,
     List<Object Function()> builders,
@@ -700,29 +683,17 @@ class WebAPI {
     String path,
     String name,
     Map<String, dynamic> parameters,
-  }) {
-    AppPlatform.invokeMethod(
-      "webDownloadFile",
-      arguments: parameters
-        ..putIfAbsent("path", () => path?.pre(this.path?.post("/")))
-        ..putIfAbsent("name", () => name ?? ""),
-    );
-  }
+  }) =>
+      throw UnimplementedError();
 
   static const currentTime = "CURRENT_TIME";
   static const timeStamp = "DATE_TIME_";
 
-  static const addressABPC =
-      "http://192.168.0.111:7001/skm_app_restapi/webres/v3/";
-
-  static Future<String> get address async {
-    return await AppPlatform.invokeMethod(
-      "webApiAddress",
-      fallback: addressABPC,
-    );
-  }
+  FutureOr<String> get address;
 
   String get path => null;
+
+  FutureOr<String> get authToken => "";
 
   var _cancelToken = CancelToken();
 
@@ -749,7 +720,7 @@ class WebAPI {
           ..receiveTimeout = 60000
           ..method = method.keyNAME
           ..headers = {
-            "auth": await Cipher.authToken,
+            "auth": await authToken,
           }
           ..validateStatus = (status) => status == 200;
         _cancelToken = CancelToken();
