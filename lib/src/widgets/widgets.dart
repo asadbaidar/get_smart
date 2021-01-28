@@ -562,9 +562,9 @@ class TextFormFieldX extends StatelessWidget {
         validator: (v) =>
             _validator(v) ??
             (v.isEmpty
-                ? "Please enter the $_hint"
+                ? GetText.please_enter([_hint])
                 : validateLength == true && v.length != maxLength
-                    ? "Invalid $_hint"
+                    ? GetText.invalid([_hint])
                     : null),
         onTap: readOnly == true ? null : onTap,
         onChanged: onChanged,

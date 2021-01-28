@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:get_smart/get_smart.dart';
 import 'package:responsive_ui/responsive_ui.dart';
 
-/// A responsive scaffold.
+/// A smart scaffold.
 /// All individual pages should be wrapped in it.
-class AppPage extends StatelessWidget {
-  const AppPage({
+class GetScaffold extends StatelessWidget {
+  const GetScaffold({
     this.child,
     this.children,
     this.title,

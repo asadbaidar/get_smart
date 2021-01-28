@@ -14,6 +14,8 @@ enum GetText {
   succeeded,
   failed,
   busy,
+  please_enter,
+  invalid,
 }
 
 /// Get text data
@@ -29,6 +31,8 @@ Map<Locale, Map<GetText, String>> _getTextMap = {
     GetText.succeeded: "Great. It's all done.",
     GetText.failed: "Something went wrong. Please try again.",
     GetText.busy: "Please wait. Good things are on the way.",
+    GetText.please_enter: "Please enter the %s.",
+    GetText.invalid: "Invalid %s.",
   },
 };
 
