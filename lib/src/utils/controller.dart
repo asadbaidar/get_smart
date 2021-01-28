@@ -83,7 +83,7 @@ abstract class GetController extends MultipleFutureGetController {
 
   @override
   Map<String, Future Function()> get futuresMap => {
-        nameOf(GetPrefs): getPrefs.reload,
+        nameOf(GetPrefs): GetPrefs.instance.reload,
         typeName: futureToRun,
         ...futuresToRun,
       };

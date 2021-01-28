@@ -587,40 +587,6 @@ class WebResponse<T> extends WebMappable {
   String toString() => toJsonString();
 }
 
-class GetPlatformChannel {
-  static GetPlatformChannel instance = GetPlatformChannel();
-
-  GetPlatformChannel() {
-    init();
-  }
-
-  void init() {}
-
-  MethodChannel get channel => null;
-
-  Future<T> invokeMethod<T>(
-    String method, {
-    dynamic arguments,
-    dynamic fallback,
-  }) async {
-    try {
-      return await channel?.invokeMethod(method, arguments);
-    } on Exception {
-      return fallback;
-    }
-  }
-}
-
-class GetCipher {
-  static GetCipher instance = GetCipher();
-
-  FutureOr<String> decrypt(String data) => data;
-
-  FutureOr<String> encrypt(String data) => data;
-
-  FutureOr<String> get authToken => "";
-}
-
 enum WebMethod { get, post, delete }
 
 enum WebStatus {
@@ -822,9 +788,44 @@ extension ContextX on BuildContext {
   }
 }
 
-GetPrefs getPrefs = GetPrefs();
+class GetPlatformChannel {
+  static GetPlatformChannel instance = GetPlatformChannel();
+
+  GetPlatformChannel() {
+    init();
+    print("GetPlatformChannel: init");
+  }
+
+  void init() {}
+
+  MethodChannel get channel => null;
+
+  Future<T> invokeMethod<T>(
+    String method, {
+    dynamic arguments,
+    dynamic fallback,
+  }) async {
+    try {
+      return await channel?.invokeMethod(method, arguments);
+    } on Exception {
+      return fallback;
+    }
+  }
+}
+
+class GetCipher {
+  static GetCipher instance = GetCipher();
+
+  FutureOr<String> decrypt(String data) => data;
+
+  FutureOr<String> encrypt(String data) => data;
+
+  FutureOr<String> get authToken => "";
+}
 
 class GetPrefs {
+  static GetPrefs instance = GetPrefs();
+
   Future<void> reload() async {
     if (prefs == null)
       prefs = await SharedPreferences.getInstance();
