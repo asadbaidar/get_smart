@@ -1,6 +1,8 @@
 ## [0.0.1+4]
 
-* redefined the package with bug fixes and new utils
+* bug fixes
+* added utils
+* added button factory
 
 ## [0.0.1+3]
 
