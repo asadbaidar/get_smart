@@ -10,9 +10,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_smart/get_smart.dart';
 import 'package:intl/intl.dart';
 import 'package:object_mapper/object_mapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sprintf/sprintf.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 extension UrlExt on String {
@@ -93,6 +95,16 @@ extension ObjectX on Object {
 
   T toWebObject<T>([List<Object Function()> builders]) {
     return MapperX.fromData(this).toWebObject<T>(builders);
+  }
+
+  /// Return the text from a text map with arguments based on current locale
+  String localized(Map textMap, [List<dynamic> arguments]) {
+    return this == null
+        ? null
+        : textMap[GetLocalizations.current.locale][this]?.applyIf(
+            arguments?.isNotEmpty,
+            (s) => sprintf(s, arguments.map((e) => e ?? "").toList()),
+          );
   }
 }
 
