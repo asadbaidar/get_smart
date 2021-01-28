@@ -98,7 +98,7 @@ extension ObjectX on Object {
   }
 
   /// Return the text from a text map with arguments based on current locale
-  String localized(Map textMap, [List<dynamic> arguments]) {
+  String localized(Map<Locale, Map<dynamic, String>> textMap, [List<dynamic> arguments]) {
     return this == null
         ? null
         : textMap[GetLocalizations.current.locale][this]?.applyIf(
