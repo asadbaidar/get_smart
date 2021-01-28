@@ -851,9 +851,9 @@ extension ContextX on BuildContext {
   }
 }
 
-AppPrefs appPrefs = AppPrefs();
+GetPrefs getPrefs = GetPrefs();
 
-class AppPrefs {
+class GetPrefs {
   Future<void> reload() async {
     if (prefs == null)
       prefs = await SharedPreferences.getInstance();

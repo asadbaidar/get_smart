@@ -7,8 +7,8 @@ extension ColorX on Color {
   Color get contrast => isDark ? Colors.white : Colors.black;
 
   Color get themeAware => isDark
-      ? (AppTheme.isDarkMode ? Colors.white : this)
-      : (AppTheme.isDarkMode ? this : Colors.black);
+      ? (GetTheme.isDarkMode ? Colors.white : this)
+      : (GetTheme.isDarkMode ? this : Colors.black);
 
   MaterialColor get material => this is MaterialColor ? this : null;
 
@@ -30,7 +30,7 @@ extension ColorX on Color {
   Color get normal => withOpacity(1);
 }
 
-extension MaterialColorsX on Colors {
+extension GetColors on Colors {
   static const MaterialColor black = MaterialColor(
     0xFF000000,
     <int, Color>{

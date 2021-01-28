@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_smart/get_smart.dart';
 
 /// All app themes to be used in the app should be defined here
-class AppTheme {
+class GetTheme {
   static const kAccentColor = Color(0xFF2196F3);
   static const kPrimarySwatch = Colors.blue;
   static const kBackgroundLight = Colors.white;
@@ -67,9 +67,9 @@ class AppTheme {
         fontFamily: fontFamily,
         textTheme: textTheme,
         accentColorLight: Colors.black,
-        primarySwatchLight: MaterialColorsX.black,
+        primarySwatchLight: GetColors.black,
         accentColorDark: Colors.white,
-        primarySwatchDark: MaterialColorsX.white,
+        primarySwatchDark: GetColors.white,
       );
 
   static ThemeData sky(
@@ -101,7 +101,7 @@ class AppTheme {
     Color canvasColorDark = kCanvasColorDark,
     Color primaryBackgroundDark = kPrimaryBackgroundDark,
   }) {
-    final _brightness = brightness ?? AppTheme.brightness(context);
+    final _brightness = brightness ?? GetTheme.brightness(context);
     final isDark = _brightness == Brightness.dark;
     final theme = ThemeData(brightness: _brightness);
     final _accentColor = isDark ? accentColorDark : accentColorLight;
@@ -159,7 +159,7 @@ class AppTheme {
       );
 
   static resetSystemChrome(BuildContext context) {
-    var brightness = AppTheme.brightnessInverse(context);
+    var brightness = GetTheme.brightnessInverse(context);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       // systemNavigationBarIconBrightness: brightness,
       statusBarBrightness: brightness,

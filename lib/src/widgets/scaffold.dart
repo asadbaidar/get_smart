@@ -50,7 +50,7 @@ class GetScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppTheme.resetSystemChrome(context);
+    GetTheme.resetSystemChrome(context);
     if (!_isInteractive) context?.endEditing();
     return Scaffold(
       key: _key,
