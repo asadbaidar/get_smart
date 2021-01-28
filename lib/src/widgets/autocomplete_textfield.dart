@@ -416,7 +416,7 @@ class SimpleAutoCompleteTextField extends AutoCompleteTextField<String> {
           ),
           itemSorter: (a, b) => a.compareTo(b),
           itemFilter: (item, query) =>
-              item.toLowerCase().startsWith(query.toLowerCase()),
+              item.toLowerCase().contains(query.toLowerCase()),
           suggestionsAmount: suggestionsAmount,
           submitOnSuggestionTap: submitOnSuggestionTap,
           clearOnSubmit: clearOnSubmit,

@@ -215,7 +215,7 @@ class AppTileHeader extends StatelessWidget {
             bottom: 10,
           ),
           child: Text(
-            text?.toUpperCase() ?? "",
+            text?.uppercase ?? "",
             style: Get.textTheme.caption,
           ),
         ),
@@ -334,7 +334,7 @@ class MessageView extends StatelessWidget {
     var action = error != null
         ? GetText.retry()
         : emptyTitle != null
-            ? GetText.recheck()
+            ? GetText.refresh()
             : this.action;
     return Container(
       alignment: Alignment.center,
@@ -363,9 +363,7 @@ class MessageView extends StatelessWidget {
             ),
           SizedBox(height: 16),
           if (action != null)
-            OutlineButton(
-              borderSide: BorderSide(color: Get.theme.accentColor),
-              highlightedBorderColor: Get.theme.accentColor.subbed,
+            GetButton.outlined(
               child: Text(action),
               onPressed: onAction,
             ),
@@ -509,7 +507,7 @@ class TextFormFieldX extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _hint = hint ?? label.toLowerCase();
+    final _hint = hint ?? label.lowercase;
     final _validator = validator != null ? validator : (v) => null;
     final _readOnly = readOnly == true || onTap != null;
     final _obscureText = obscureText == true;
@@ -615,16 +613,14 @@ class ProgressButton extends StatelessWidget {
                 child: SizedBox(
                   height: 42,
                   width: 120,
-                  child: RaisedButton(
-                    elevation: 2,
-                    highlightElevation: 4,
+                  child: GetButton.elevated(
                     child: Text(
                       (status == WebStatus.failed
                               ? GetText.retry()
                               : status == WebStatus.succeeded
                                   ? GetText.ok()
                                   : text)
-                          .toUpperCase(),
+                          .uppercase,
                     ),
                     onPressed: () {
                       if (status == WebStatus.succeeded)
@@ -668,6 +664,7 @@ class ProgressSnackBar extends StatelessWidget {
     this.onCancel,
     this.onRetry,
     this.onDone,
+    this.withBottomBar,
     Key key,
   }) : super(key: key);
 
@@ -677,6 +674,7 @@ class ProgressSnackBar extends StatelessWidget {
   final Function onCancel;
   final Function onRetry;
   final Function onDone;
+  final bool withBottomBar;
 
   @override
   Widget build(BuildContext context) {
@@ -699,6 +697,7 @@ class ProgressSnackBar extends StatelessWidget {
       onDismiss: onCancel,
       showProgress: status == WebStatus.busy,
       isDismissible: status == WebStatus.failed,
+      withBottomBar: withBottomBar,
     );
   }
 }
@@ -711,6 +710,7 @@ class SnackBarX extends StatelessWidget {
     this.onDismiss,
     this.showProgress = true,
     this.isDismissible = false,
+    this.withBottomBar = false,
     Key key,
   }) : super(key: key);
 
@@ -720,6 +720,7 @@ class SnackBarX extends StatelessWidget {
   final Function onDismiss;
   final bool showProgress;
   final bool isDismissible;
+  final bool withBottomBar;
 
   @override
   Widget build(BuildContext context) {
@@ -738,13 +739,16 @@ class SnackBarX extends StatelessWidget {
                 if (showProgress) LinearProgress(),
               ]),
               GetBar(
+                snackPosition: withBottomBar == true
+                    ? SnackPosition.TOP
+                    : SnackPosition.BOTTOM,
                 animationDuration: Duration(milliseconds: 200),
                 messageText: message == null ? null : Text(message),
                 backgroundColor: Get.theme.appBarTheme.color,
                 mainButton: action == null
                     ? null
                     : FlatButton(
-                        child: Text(action),
+                        child: Text(action.uppercase),
                         onPressed: onAction,
                       ),
               ),
@@ -781,19 +785,30 @@ class BottomBar extends StatelessWidget {
         CrossFade(firstChild: snackBar),
         if (snackBar == null) AppLineSeparator(style: SeparatorStyle.full),
         BottomAppBar(
-          child: Container(
-            height: 44,
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              ..._leftItems,
-              if (_leftItems.length < _rightItems.length)
-                for (int i = 0; i < _rightItems.length - _leftItems.length; i++)
-                  IconButton(icon: const SizedBox(), onPressed: null),
-              ..._centerItems,
-              if (_rightItems.length < _leftItems.length)
-                for (int i = 0; i < _leftItems.length - _rightItems.length; i++)
-                  IconButton(icon: const SizedBox(), onPressed: null),
-              ..._rightItems,
-            ]),
+          child: SafeArea(
+            minimum: EdgeInsets.only(bottom: Get.mediaQuery.viewInsets.bottom),
+            left: false,
+            right: false,
+            top: false,
+            bottom: true,
+            child: Container(
+              height: 44,
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                ..._leftItems,
+                if (_leftItems.length < _rightItems.length)
+                  for (int i = 0;
+                      i < _rightItems.length - _leftItems.length;
+                      i++)
+                    GetButton.icon(),
+                ..._centerItems,
+                if (_rightItems.length < _leftItems.length)
+                  for (int i = 0;
+                      i < _leftItems.length - _rightItems.length;
+                      i++)
+                    GetButton.icon(),
+                ..._rightItems,
+              ]),
+            ),
           ),
         ),
       ],

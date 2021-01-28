@@ -11,5 +11,6 @@ export 'src/utils/route_observer.dart';
 export "src/utils/utils.dart";
 //widgets
 export "src/widgets/autocomplete_textfield.dart";
+export "src/widgets/button.dart";
 export "src/widgets/scaffold.dart";
 export "src/widgets/widgets.dart";

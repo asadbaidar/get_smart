@@ -17,8 +17,8 @@ class GetScaffold extends StatelessWidget {
     this.isInteractive = true,
     this.appBarExtension,
     this.appBarExtensionSize,
-    this.snackBar,
-    this.bottomSnackBar,
+    this.withBottomBar,
+    this.bottomBar,
     this.bottomBarLeftItems,
     this.bottomBarRightItems,
     this.bottomBarCenterItems,
@@ -36,8 +36,8 @@ class GetScaffold extends StatelessWidget {
   final bool isInteractive;
   final Widget appBarExtension;
   final double appBarExtensionSize;
-  final Widget snackBar;
-  final Widget bottomSnackBar;
+  final Widget withBottomBar;
+  final Widget bottomBar;
   final List<Widget> bottomBarLeftItems;
   final List<Widget> bottomBarRightItems;
   final List<Widget> bottomBarCenterItems;
@@ -77,10 +77,10 @@ class GetScaffold extends StatelessWidget {
         ),
         actions: _isInteractive ? appBarRightItems : null,
       ),
-      bottomNavigationBar: snackBar != null
+      bottomNavigationBar: withBottomBar != null
           ? _bottomAppBar
           : CrossFade(
-              firstChild: bottomSnackBar,
+              firstChild: bottomBar,
               secondChild: _bottomAppBar,
             ),
       body: Scrollbar(
@@ -101,9 +101,11 @@ class GetScaffold extends StatelessWidget {
   }
 
   Widget get _bottomAppBar {
-    var _bottomBarLeftItems = _isInteractive ? bottomBarLeftItems ?? [] : [];
-    var _bottomBarRightItems = _isInteractive ? bottomBarRightItems ?? [] : [];
-    var _bottomBarCenterItems =
+    List<Widget> _bottomBarLeftItems =
+        _isInteractive ? bottomBarLeftItems ?? [] : [];
+    List<Widget> _bottomBarRightItems =
+        _isInteractive ? bottomBarRightItems ?? [] : [];
+    List<Widget> _bottomBarCenterItems =
         _isInteractive ? bottomBarCenterItems ?? [] : [];
     return (subtitle?.isBlank ?? true) &&
             (_bottomBarLeftItems.isBlank) &&
@@ -111,7 +113,7 @@ class GetScaffold extends StatelessWidget {
             (_bottomBarCenterItems.isBlank)
         ? Container(height: 0)
         : BottomBar(
-            snackBar: snackBar,
+            snackBar: withBottomBar,
             leftItems: _bottomBarLeftItems,
             rightItems: _bottomBarRightItems,
             centerItems: subtitle?.isBlank ?? true

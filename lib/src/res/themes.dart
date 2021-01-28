@@ -120,6 +120,18 @@ class GetTheme {
       buttonColor: _accentColor,
       fontFamily: fontFamily,
       textTheme: textTheme,
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          elevation: GetButton.defaultElevation(),
+          shape: GetButton.defaultShape(),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          shape: GetButton.defaultShape(),
+          side: GetButton.defaultSide(_accentColor),
+        ),
+      ),
       buttonTheme: ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
         shape: RoundedRectangleBorder(

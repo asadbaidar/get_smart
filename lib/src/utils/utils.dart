@@ -85,11 +85,11 @@ extension ObjectX on Object {
 
   String get keyName => toString().split('.').last;
 
-  String get keyNAME => keyName.toUpperCase();
+  String get keyNAME => keyName.uppercase;
 
   String get rawName => toString();
 
-  String get rawNAME => rawName.toUpperCase();
+  String get rawNAME => rawName.uppercase;
 
   String get typeName => nameOf(runtimeType);
 
@@ -98,7 +98,8 @@ extension ObjectX on Object {
   }
 
   /// Return the text from a text map with arguments based on current locale
-  String localized(Map<Locale, Map<dynamic, String>> textMap, [List<dynamic> arguments]) {
+  String localized(Map<Locale, Map<dynamic, String>> textMap,
+      [List<dynamic> arguments]) {
     return this == null
         ? null
         : textMap[GetLocalizations.current.locale][this]?.applyIf(
@@ -147,7 +148,10 @@ extension StringX on String {
 
   bool get isNotBlank => !isBlank;
 
-  bool equalsIgnoreCase(String s) => toLowerCase() == s?.toLowerCase();
+  bool equalsIgnoreCase(String s) => lowercase == s?.lowercase;
+
+  bool containsIgnoreCase(String s) =>
+      s == null ? false : lowercase.contains(s.lowercase);
 
   String take(int count) => characters.take(count).toString();
 
@@ -181,13 +185,21 @@ extension StringX on String {
         hasMinLength;
   }
 
+  /// Uppercase each word inside string
+  /// Example: your name => YOUR NAME
+  String get uppercase => toUpperCase();
+
+  /// Lowercase each word inside string
+  /// Example: Your Name => your name
+  String get lowercase => toLowerCase();
+
   /// Capitalize each word inside string
-  /// Example: your name => Your Name, your name => Your name
+  /// Example: your name => Your Name
   String get capitalized {
     return isBlank
         ? ""
         : length == 1
-            ? toUpperCase()
+            ? uppercase
             : split(' ').map((s) => s.capitalizedFirst).join(' ');
   }
 
@@ -197,11 +209,11 @@ extension StringX on String {
     return isBlank
         ? ""
         : length == 1
-            ? toUpperCase()
-            : this[0].toUpperCase() + substring(1).toLowerCase();
+            ? uppercase
+            : this[0].uppercase + substring(1).lowercase;
   }
 
-  bool get boolYN => toUpperCase() == "Y";
+  bool get boolYN => equalsIgnoreCase("Y");
 
   Future<String> get encrypted async => await GetCipher.instance.encrypt(this);
 
@@ -348,10 +360,11 @@ String routeOf(Type type) => "/" + nameOf(type);
 
 extension TextInputTypeX on TextInputType {
   static TextInputType get numberFirst => Platform.isIOS
-      ? TextInputType.numberWithOptions(
-          signed: true,
-        )
+      ? TextInputType.numberWithOptions(signed: true)
       : TextInputType.visiblePassword;
+
+  static TextInputType get numberOnly =>
+      TextInputType.numberWithOptions(signed: true);
 }
 
 extension TextInputFilter on TextInputFormatter {
@@ -671,7 +684,7 @@ abstract class GetWebAPI {
 
   String get path => null;
 
-  FutureOr<String> get authToken => "";
+  FutureOr<String> get authToken => GetCipher.instance.authToken;
 
   var _cancelToken = CancelToken();
 
@@ -784,7 +797,7 @@ extension AssetX on Object {
 
   String _asset([String name]) =>
       "assets/" +
-      typeName.replaceAll("Asset", "").toLowerCase() +
+      typeName.replaceAll("Asset", "").lowercase +
       "/${name ?? keyName}";
 
   String get _name => this is String ? this : _asset();
