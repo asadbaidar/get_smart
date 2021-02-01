@@ -51,6 +51,7 @@ class GetButton {
     Key key,
     VoidCallback onPressed,
     VoidCallback onLongPress,
+    Size minimumSize,
     EdgeInsetsGeometry padding,
     double horizontalPadding = 24,
     double verticalPadding,
@@ -61,6 +62,7 @@ class GetButton {
     FocusNode focusNode,
     bool autofocus = false,
     bool round = false,
+    bool enabled = true,
     Clip clipBehavior = Clip.none,
     Widget child,
   }) =>
@@ -74,9 +76,10 @@ class GetButton {
                 : null),
         child: ElevatedButton(
           key: key,
-          onPressed: onPressed,
+          onPressed: enabled ? onPressed : null,
           onLongPress: onLongPress,
           style: ElevatedButton.styleFrom(
+            minimumSize: minimumSize,
             padding: padding ??
                 (horizontalPadding != null || verticalPadding != null
                     ? EdgeInsets.symmetric(
@@ -102,14 +105,16 @@ class GetButton {
     Key key,
     VoidCallback onPressed,
     VoidCallback onLongPress,
+    Size minimumSize,
     EdgeInsetsGeometry padding,
-    double horizontalPadding = 24,
-    double verticalPadding = 11,
+    double horizontalPadding,
+    double verticalPadding,
     EdgeInsetsGeometry margin,
     double horizontalMargin,
     double verticalMargin,
     FocusNode focusNode,
     bool autofocus = false,
+    bool enabled = true,
     Clip clipBehavior = Clip.none,
     Widget child,
   }) =>
@@ -117,15 +122,17 @@ class GetButton {
         key: key,
         onPressed: onPressed,
         onLongPress: onLongPress,
+        minimumSize: minimumSize,
         padding: padding,
         horizontalPadding: horizontalPadding,
         verticalPadding: verticalPadding,
         margin: margin,
         horizontalMargin: horizontalMargin,
         verticalMargin: verticalMargin,
-        round: true,
         focusNode: focusNode,
         autofocus: autofocus,
+        round: true,
+        enabled: enabled,
         clipBehavior: clipBehavior,
         child: child,
       );
@@ -135,6 +142,7 @@ class GetButton {
     Key key,
     VoidCallback onPressed,
     VoidCallback onLongPress,
+    Size minimumSize,
     EdgeInsetsGeometry padding,
     double horizontalPadding = 24,
     double verticalPadding,
@@ -161,6 +169,7 @@ class GetButton {
           onPressed: onPressed,
           onLongPress: onLongPress,
           style: OutlinedButton.styleFrom(
+            minimumSize: minimumSize,
             padding: padding ??
                 (horizontalPadding != null || verticalPadding != null
                     ? EdgeInsets.symmetric(
@@ -186,6 +195,7 @@ class GetButton {
     Key key,
     VoidCallback onPressed,
     VoidCallback onLongPress,
+    Size minimumSize,
     EdgeInsetsGeometry padding,
     double horizontalPadding = 24,
     double verticalPadding = 11,
@@ -201,6 +211,7 @@ class GetButton {
         key: key,
         onPressed: onPressed,
         onLongPress: onLongPress,
+        minimumSize: minimumSize,
         padding: padding,
         horizontalPadding: horizontalPadding,
         verticalPadding: verticalPadding,
@@ -219,6 +230,7 @@ class GetButton {
     Key key,
     VoidCallback onPressed,
     VoidCallback onLongPress,
+    Size minimumSize,
     EdgeInsetsGeometry padding,
     double horizontalPadding = 24,
     double verticalPadding,
@@ -245,6 +257,7 @@ class GetButton {
           onPressed: onPressed,
           onLongPress: onLongPress,
           style: TextButton.styleFrom(
+            minimumSize: minimumSize,
             padding: padding ??
                 (horizontalPadding != null || verticalPadding != null
                     ? EdgeInsets.symmetric(
@@ -270,6 +283,7 @@ class GetButton {
     Key key,
     VoidCallback onPressed,
     VoidCallback onLongPress,
+    Size minimumSize,
     EdgeInsetsGeometry padding,
     double horizontalPadding = 24,
     double verticalPadding,
@@ -285,6 +299,7 @@ class GetButton {
         key: key,
         onPressed: onPressed,
         onLongPress: onLongPress,
+        minimumSize: minimumSize,
         padding: padding,
         horizontalPadding: horizontalPadding,
         verticalPadding: verticalPadding,
@@ -303,6 +318,7 @@ class GetButton {
     Key key,
     VoidCallback onPressed,
     VoidCallback onLongPress,
+    Size minimumSize,
     EdgeInsetsGeometry padding,
     double horizontalPadding,
     double verticalPadding,
@@ -324,6 +340,7 @@ class GetButton {
                 Get.back();
               },
         onLongPress: onLongPress,
+        minimumSize: minimumSize,
         padding: padding,
         horizontalPadding: horizontalPadding,
         verticalPadding: verticalPadding,
@@ -342,6 +359,7 @@ class GetButton {
     String label,
     VoidCallback onPressed,
     VoidCallback onLongPress,
+    Size minimumSize,
     EdgeInsetsGeometry padding,
     double horizontalPadding,
     double verticalPadding,
@@ -357,6 +375,7 @@ class GetButton {
         key: key,
         onPressed: onPressed,
         onLongPress: onLongPress,
+        minimumSize: minimumSize,
         padding: padding,
         horizontalPadding: horizontalPadding,
         verticalPadding: verticalPadding,
@@ -375,6 +394,7 @@ class GetButton {
     Key key,
     VoidCallback onPressed,
     VoidCallback onLongPress,
+    Size minimumSize,
     EdgeInsetsGeometry padding,
     double horizontalPadding,
     double verticalPadding,
@@ -395,6 +415,7 @@ class GetButton {
                 Get.back();
               },
         onLongPress: onLongPress,
+        minimumSize: minimumSize,
         padding: padding,
         horizontalPadding: horizontalPadding,
         verticalPadding: verticalPadding,
@@ -413,6 +434,7 @@ class GetButton {
     String label,
     VoidCallback onPressed,
     VoidCallback onLongPress,
+    Size minimumSize,
     EdgeInsetsGeometry padding,
     double horizontalPadding,
     double verticalPadding,
@@ -428,6 +450,7 @@ class GetButton {
         key: key,
         onPressed: onPressed,
         onLongPress: onLongPress,
+        minimumSize: minimumSize,
         padding: padding,
         horizontalPadding: horizontalPadding,
         verticalPadding: verticalPadding,

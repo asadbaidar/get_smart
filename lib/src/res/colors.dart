@@ -48,7 +48,7 @@ extension GetColors on Colors {
   );
 
   static const MaterialColor white = MaterialColor(
-    0xFF000000,
+    0xFFFFFFFF,
     <int, Color>{
       50: Color(0x1FFFFFFF),
       100: Color(0x4DFFFFFF),
