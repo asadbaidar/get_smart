@@ -1,3 +1,9 @@
+## [0.0.1+5]
+
+* bug fixes related to button and themes
+* added features to scaffold
+* added shimmer progress view
+
 ## [0.0.1+4]
 
 * bug fixes
