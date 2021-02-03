@@ -148,6 +148,8 @@ extension StringX on String {
 
   bool get isNotBlank => !isBlank;
 
+  String get fileType => takeLastWhile((s) => s != ".");
+
   bool equalsIgnoreCase(String s) => lowercase == s?.lowercase;
 
   bool containsIgnoreCase(String s) =>
@@ -794,6 +796,8 @@ extension AssetX on Object {
   String get jpg => "$_name.jpg";
 
   String get jpeg => "$_name.jpeg";
+
+  String get pdf => "$_name.pdf";
 
   String _asset([String name]) =>
       "assets/" +

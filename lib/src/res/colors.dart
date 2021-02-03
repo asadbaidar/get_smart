@@ -31,6 +31,9 @@ extension ColorX on Color {
 }
 
 extension GetColors on Colors {
+  static const black90 = Color(0xFF0F0F0F);
+  static const black93 = Color(0xFF0C0C0C);
+
   static const MaterialColor black = MaterialColor(
     0xFF000000,
     <int, Color>{

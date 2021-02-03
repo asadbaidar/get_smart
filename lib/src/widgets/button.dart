@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -467,10 +468,10 @@ class GetButton {
   /// Create an icon button.
   static Widget icon({
     Key key,
-    double iconSize = 24.0,
+    double iconSize,
     VisualDensity visualDensity,
-    EdgeInsetsGeometry padding = const EdgeInsets.all(8.0),
-    AlignmentGeometry alignment = Alignment.center,
+    EdgeInsetsGeometry padding,
+    AlignmentGeometry alignment,
     double splashRadius,
     Widget icon,
     Color color,
@@ -480,16 +481,21 @@ class GetButton {
     Color splashColor,
     Color disabledColor,
     void Function() onPressed,
-    MouseCursor mouseCursor = SystemMouseCursors.click,
+    MouseCursor mouseCursor,
     FocusNode focusNode,
     bool autofocus = false,
+    bool primary = false,
     String tooltip,
     bool enableFeedback = true,
     BoxConstraints constraints,
   }) =>
       IconButton(
         key: key,
-        iconSize: iconSize ?? 24.0,
+        iconSize: iconSize ??
+            (primary == true
+                ? Get.theme.primaryIconTheme.size
+                : Get.theme.iconTheme.size) ??
+            24.0,
         visualDensity: visualDensity,
         padding: padding ?? const EdgeInsets.all(8.0),
         alignment: alignment ?? Alignment.center,
@@ -508,5 +514,53 @@ class GetButton {
         tooltip: tooltip,
         enableFeedback: enableFeedback ?? true,
         constraints: constraints,
+      );
+
+  /// Create a primary icon button.
+  static Widget primaryIcon({
+    Key key,
+    double iconSize,
+    VisualDensity visualDensity,
+    EdgeInsetsGeometry padding,
+    AlignmentGeometry alignment,
+    double splashRadius,
+    Widget icon,
+    Color color,
+    Color focusColor,
+    Color hoverColor,
+    Color highlightColor,
+    Color splashColor,
+    Color disabledColor,
+    void Function() onPressed,
+    MouseCursor mouseCursor,
+    FocusNode focusNode,
+    bool autofocus = false,
+    bool primary = false,
+    String tooltip,
+    bool enableFeedback = true,
+    BoxConstraints constraints,
+  }) =>
+      GetButton.icon(
+        key: key,
+        iconSize: iconSize,
+        visualDensity: visualDensity,
+        padding: padding,
+        alignment: alignment,
+        splashRadius: splashRadius,
+        icon: icon,
+        color: color,
+        focusColor: focusColor,
+        hoverColor: hoverColor,
+        highlightColor: highlightColor,
+        splashColor: splashColor,
+        disabledColor: disabledColor,
+        onPressed: onPressed,
+        mouseCursor: mouseCursor,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        primary: true,
+        tooltip: tooltip,
+        enableFeedback: enableFeedback,
+        constraints: BoxConstraints.tight(Size.square(40)),
       );
 }

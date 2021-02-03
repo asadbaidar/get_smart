@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_smart/get_smart.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AppTile extends StatelessWidget {
   const AppTile({
@@ -800,7 +801,7 @@ class BottomBar extends StatelessWidget {
                       i < _rightItems.length - _leftItems.length;
                       i++)
                     GetButton.icon(),
-                ..._centerItems,
+                ...(_centerItems.isEmpty ? [Spacer()] : _centerItems),
                 if (_rightItems.length < _leftItems.length)
                   for (int i = 0;
                       i < _leftItems.length - _rightItems.length;
@@ -849,4 +850,67 @@ extension GlobalKeyX<T extends State<StatefulWidget>> on GlobalKey<T> {
   Widget get widget => currentWidget;
 
   T get state => currentState;
+}
+
+class GetShimmer {
+  static Widget article() => Container(
+        color: Get.theme.canvasColor,
+        padding: EdgeInsets.all(24),
+        child: Shimmer.fromColors(
+          baseColor: Get.theme.highlightColor,
+          highlightColor: Get.theme.canvasColor,
+          child: Column(children: [
+            Container(
+              color: Colors.grey,
+              constraints: BoxConstraints.expand(height: 160),
+            ),
+            Container(constraints: BoxConstraints.expand(height: 24)),
+            Container(
+              color: Colors.grey,
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              constraints: BoxConstraints.expand(height: 30),
+            ),
+            Container(constraints: BoxConstraints.expand(height: 24)),
+            Container(
+              color: Colors.grey,
+              margin: EdgeInsets.symmetric(horizontal: 30),
+              constraints: BoxConstraints.expand(height: 30),
+            ),
+            Container(constraints: BoxConstraints.expand(height: 24)),
+            Container(
+              color: Colors.grey,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              constraints: BoxConstraints.expand(height: 30),
+            ),
+            Container(constraints: BoxConstraints.expand(height: 24)),
+            Container(
+              color: Colors.grey,
+              margin: EdgeInsets.symmetric(horizontal: 60),
+              constraints: BoxConstraints.expand(height: 30),
+            ),
+            Container(constraints: BoxConstraints.expand(height: 50)),
+            Container(
+              color: Colors.grey,
+              constraints: BoxConstraints.expand(height: 24),
+            ),
+            Container(constraints: BoxConstraints.expand(height: 16)),
+            Container(
+              color: Colors.grey,
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              constraints: BoxConstraints.expand(height: 24),
+            ),
+            Container(constraints: BoxConstraints.expand(height: 50)),
+            Container(
+              color: Colors.grey,
+              constraints: BoxConstraints.expand(height: 16),
+            ),
+            Container(constraints: BoxConstraints.expand(height: 8)),
+            Container(
+              color: Colors.grey,
+              margin: EdgeInsets.symmetric(horizontal: 8),
+              constraints: BoxConstraints.expand(height: 16),
+            ),
+          ]),
+        ),
+      );
 }

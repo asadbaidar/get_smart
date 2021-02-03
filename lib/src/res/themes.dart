@@ -60,30 +60,40 @@ class GetTheme {
     Brightness brightness,
     String fontFamily,
     TextTheme textTheme,
+    IconThemeData primaryIconTheme,
     ButtonStyle elevatedButtonStyle,
     ButtonStyle outlinedButtonStyle,
+    Brightness primaryBrightness = Brightness.dark,
+    Color primaryBackgroundLight = Colors.black,
+    Color bottomBackgroundLight = Colors.white,
+    Color bottomForegroundLight = Colors.black,
+    Color primaryBackgroundDark = GetColors.black90,
+    Color bottomBackgroundDark = GetColors.black90,
+    Color bottomForegroundDark = Colors.white,
   }) =>
       builder(
         context,
         brightness: brightness,
-        primaryBrightness: Brightness.dark,
         fontFamily: fontFamily,
         textTheme: textTheme,
+        primaryIconTheme: primaryIconTheme,
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
+        primaryBrightness: primaryBrightness,
+        // light theme attributes
+        primaryBackgroundLight: primaryBackgroundLight,
+        bottomBackgroundLight: bottomBackgroundLight,
+        bottomForegroundLight: bottomForegroundLight,
         accentColorLight: Colors.black,
         primarySwatchLight: GetColors.black,
-        bottomForegroundLight: Colors.black,
-        primaryBackgroundLight: Colors.black,
-        bottomBackgroundLight: Colors.white,
         // dark theme attributes
+        primaryBackgroundDark: primaryBackgroundDark,
+        bottomBackgroundDark: bottomBackgroundDark,
+        bottomForegroundDark: bottomForegroundDark,
         accentColorDark: Colors.white,
         primarySwatchDark: GetColors.white,
-        bottomForegroundDark: Colors.white,
-        primaryBackgroundDark: const Color(0xFF0F0F0F),
-        bottomBackgroundDark: const Color(0xFF0F0F0F),
-        backgroundDark: const Color(0xFF0F0F0F),
-        canvasColorDark: const Color(0xFF0C0C0C),
+        backgroundDark: GetColors.black90,
+        canvasColorDark: GetColors.black93,
       );
 
   static ThemeData sky(
@@ -110,6 +120,7 @@ class GetTheme {
     Brightness bottomBrightness,
     String fontFamily,
     TextTheme textTheme,
+    IconThemeData primaryIconTheme,
     ButtonStyle elevatedButtonStyle,
     ButtonStyle outlinedButtonStyle,
     Color accentColorLight = kAccentColor,
@@ -118,7 +129,7 @@ class GetTheme {
     Color canvasColorLight = kCanvasColorLight,
     Color primaryBackgroundLight = kPrimaryBackgroundLight,
     Color bottomBackgroundLight = kPrimaryBackgroundLight,
-    Color bottomForegroundLight = kPrimaryBackgroundLight,
+    Color bottomForegroundLight = kAccentColor,
     Color accentColorDark = kAccentColor,
     Color primarySwatchDark = kPrimarySwatch,
     Color backgroundDark = kBackgroundDark,
@@ -131,10 +142,13 @@ class GetTheme {
     final _primaryBrightness = primaryBrightness ?? _brightness;
     final _bottomBrightness = bottomBrightness ?? _brightness;
     final isDark = _brightness == Brightness.dark;
+    final isDarkPrimary = _primaryBrightness == Brightness.dark;
     final isDarkBottom = _bottomBrightness == Brightness.dark;
     final theme = ThemeData(brightness: _brightness);
     final bottomTheme = ThemeData(brightness: _bottomBrightness);
     final _accentColor = isDark ? accentColorDark : accentColorLight;
+    final _primaryForeground =
+        isDarkPrimary ? accentColorDark : accentColorLight;
     final _bottomForeground =
         isDarkBottom ? bottomForegroundDark : bottomForegroundLight;
     final _primarySwatch = isDark ? primarySwatchDark : primarySwatchLight;
@@ -150,8 +164,15 @@ class GetTheme {
       accentColor: _accentColor,
       hintColor: theme.hintColor.hinted,
       primaryColorBrightness: _primaryBrightness,
-      primaryIconTheme: IconThemeData(color: _accentColor),
-      iconTheme: IconThemeData(color: _accentColor),
+      primaryIconTheme: IconThemeData(
+        color: primaryIconTheme?.color ?? _primaryForeground,
+        opacity: primaryIconTheme?.opacity,
+        size: primaryIconTheme?.size ?? 24.0,
+      ),
+      iconTheme: IconThemeData(
+        color: _accentColor,
+        size: 24.0,
+      ),
       buttonColor: _accentColor,
       fontFamily: fontFamily,
       textTheme: textTheme,
@@ -193,7 +214,7 @@ class GetTheme {
       ),
       bottomAppBarTheme: BottomAppBarTheme(
         elevation: 4,
-        color: _primaryBackground,
+        color: _bottomBackground,
         shape: CircularNotchedRectangle(),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -208,7 +229,7 @@ class GetTheme {
         unselectedItemColor: bottomTheme.hintColor.hinted,
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: _primaryBackground,
+        backgroundColor: _bottomBackground,
       ),
     );
   }

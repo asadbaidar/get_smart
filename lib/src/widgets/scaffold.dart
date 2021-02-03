@@ -14,11 +14,14 @@ class GetScaffold extends StatelessWidget {
     this.title,
     this.subtitle,
     this.showProgress = false,
+    this.hideToolbars = false,
+    this.hideAbleAppBar = false,
     this.isInteractive = true,
     this.appBarExtension,
     this.appBarExtensionSize,
     this.withBottomBar,
     this.bottomBar,
+    this.sliver,
     this.bottomBarLeftItems,
     this.bottomBarRightItems,
     this.bottomBarCenterItems,
@@ -33,11 +36,14 @@ class GetScaffold extends StatelessWidget {
   final String title;
   final String subtitle;
   final bool showProgress;
+  final bool hideToolbars;
+  final bool hideAbleAppBar;
   final bool isInteractive;
   final Widget appBarExtension;
   final double appBarExtensionSize;
   final Widget withBottomBar;
   final Widget bottomBar;
+  final Widget sliver;
   final List<Widget> bottomBarLeftItems;
   final List<Widget> bottomBarRightItems;
   final List<Widget> bottomBarCenterItems;
@@ -48,6 +54,10 @@ class GetScaffold extends StatelessWidget {
 
   bool get _isInteractive => isInteractive == true;
 
+  double get _appBarExtensionSize => (appBarExtension != null
+      ? kToolbarHeight + 1 + (appBarExtensionSize ?? 0)
+      : 1);
+
   @override
   Widget build(BuildContext context) {
     GetTheme.resetSystemChrome(context);
@@ -55,9 +65,58 @@ class GetScaffold extends StatelessWidget {
     return Scaffold(
       key: _key,
       extendBody: true,
-      appBar: AppBar(
+      appBar: sliver != null
+          ? null
+          : hideAbleAppBar == true
+              ? AppBar(
+                  toolbarHeight: Get.mediaQuery.viewInsets.top.abs(),
+                  elevation: hideToolbars ? Get.theme.appBarTheme.elevation : 0,
+                )
+              : _appBar,
+      bottomNavigationBar: withBottomBar != null
+          ? _bottomAppBar
+          : CrossFade(
+              firstChild: hideToolbars ? Container(height: 0) : bottomBar,
+              secondChild: _bottomAppBar,
+            ),
+      body: hideAbleAppBar == true && sliver == null
+          ? Column(
+              children: [
+                _hideAbleAppBar,
+                Expanded(child: _body),
+              ],
+            )
+          : _body,
+      floatingActionButton: _isInteractive ? floatingActionButton : null,
+      floatingActionButtonLocation: subtitle?.isBlank ?? true
+          ? FloatingActionButtonLocation.endFloat
+          : floatingActionButtonLocation,
+    );
+  }
+
+  Widget get _body => Stack(children: [
+        sliver ??
+            Scrollbar(
+              child: child ??
+                  ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: [Responsive(children: children)],
+                  ),
+            ),
+        if (!_isInteractive) Clickable(),
+      ]);
+
+  Widget get _hideAbleAppBar => CrossFade(
+        showFirst: hideToolbars,
+        secondChild: SizedBox(
+          height: kToolbarHeight + _appBarExtensionSize,
+          child: _appBar ?? Container(height: 0),
+        ),
+      );
+
+  Widget get _appBar => AppBar(
         leading: BackButton(onPressed: () {
-          if (Navigator.canPop(context))
+          if (Navigator.canPop(Get.context))
             Get.back();
           else
             SystemNavigator.pop(animated: true);
@@ -71,34 +130,10 @@ class GetScaffold extends StatelessWidget {
               LinearProgress(visible: showProgress),
             ],
           ),
-          preferredSize: Size.fromHeight(appBarExtension != null
-              ? kToolbarHeight + 1 + (appBarExtensionSize ?? 0)
-              : 1),
+          preferredSize: Size.fromHeight(_appBarExtensionSize),
         ),
         actions: _isInteractive ? appBarRightItems : null,
-      ),
-      bottomNavigationBar: withBottomBar != null
-          ? _bottomAppBar
-          : CrossFade(
-              firstChild: bottomBar,
-              secondChild: _bottomAppBar,
-            ),
-      body: Scrollbar(
-        child: Stack(children: [
-          child ??
-              ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: [Responsive(children: children)],
-              ),
-          if (!_isInteractive) Clickable(),
-        ]),
-      ),
-      floatingActionButton: _isInteractive ? floatingActionButton : null,
-      floatingActionButtonLocation: subtitle?.isBlank ?? true
-          ? FloatingActionButtonLocation.endFloat
-          : floatingActionButtonLocation,
-    );
-  }
+      );
 
   Widget get _bottomAppBar {
     List<Widget> _bottomBarLeftItems =
@@ -135,3 +170,23 @@ class GetScaffold extends StatelessWidget {
 
   static GlobalKey<ScaffoldState> get newKey => GlobalKey<ScaffoldState>();
 }
+
+/*
+
+    NestedScrollView(
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          SliverAppBar(
+            title: Text("Hello"),
+            floating: true,
+            forceElevated: innerBoxIsScrolled,
+          ),
+        ];
+      },
+      body: PageView.builder(
+        itemCount: pages.length,
+        itemBuilder: (context, index) => Container(),
+      ),
+    );
+
+*/
