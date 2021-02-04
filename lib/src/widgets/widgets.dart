@@ -1,7 +1,13 @@
+import 'dart:async';
+
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_smart/get_smart.dart';
 import 'package:shimmer/shimmer.dart';
@@ -853,64 +859,230 @@ extension GlobalKeyX<T extends State<StatefulWidget>> on GlobalKey<T> {
 }
 
 class GetShimmer {
-  static Widget article() => Container(
-        color: Get.theme.canvasColor,
-        padding: EdgeInsets.all(24),
-        child: Shimmer.fromColors(
-          baseColor: Get.theme.highlightColor,
-          highlightColor: Get.theme.canvasColor,
-          child: Column(children: [
-            Container(
-              color: Colors.grey,
-              constraints: BoxConstraints.expand(height: 160),
+  static Widget article() => Column(children: [
+        Expanded(
+          child: Container(
+            color: Get.theme.canvasColor,
+            padding: EdgeInsets.all(24),
+            child: SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(),
+              child: Shimmer.fromColors(
+                baseColor: Get.theme.highlightColor,
+                highlightColor: Get.theme.canvasColor,
+                child: Column(children: [
+                  Container(
+                    color: Colors.grey,
+                    constraints: BoxConstraints.expand(height: 160),
+                  ),
+                  Container(constraints: BoxConstraints.expand(height: 24)),
+                  Container(
+                    color: Colors.grey,
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    constraints: BoxConstraints.expand(height: 30),
+                  ),
+                  Container(constraints: BoxConstraints.expand(height: 24)),
+                  Container(
+                    color: Colors.grey,
+                    margin: EdgeInsets.symmetric(horizontal: 30),
+                    constraints: BoxConstraints.expand(height: 30),
+                  ),
+                  Container(constraints: BoxConstraints.expand(height: 24)),
+                  Container(
+                    color: Colors.grey,
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    constraints: BoxConstraints.expand(height: 30),
+                  ),
+                  Container(constraints: BoxConstraints.expand(height: 24)),
+                  Container(
+                    color: Colors.grey,
+                    margin: EdgeInsets.symmetric(horizontal: 60),
+                    constraints: BoxConstraints.expand(height: 30),
+                  ),
+                  Container(constraints: BoxConstraints.expand(height: 50)),
+                  Container(
+                    color: Colors.grey,
+                    constraints: BoxConstraints.expand(height: 24),
+                  ),
+                  Container(constraints: BoxConstraints.expand(height: 16)),
+                  Container(
+                    color: Colors.grey,
+                    margin: EdgeInsets.symmetric(horizontal: 16),
+                    constraints: BoxConstraints.expand(height: 24),
+                  ),
+                  Container(constraints: BoxConstraints.expand(height: 50)),
+                  Container(
+                    color: Colors.grey,
+                    constraints: BoxConstraints.expand(height: 16),
+                  ),
+                  Container(constraints: BoxConstraints.expand(height: 8)),
+                  Container(
+                    color: Colors.grey,
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    constraints: BoxConstraints.expand(height: 16),
+                  ),
+                ]),
+              ),
             ),
-            Container(constraints: BoxConstraints.expand(height: 24)),
-            Container(
-              color: Colors.grey,
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              constraints: BoxConstraints.expand(height: 30),
-            ),
-            Container(constraints: BoxConstraints.expand(height: 24)),
-            Container(
-              color: Colors.grey,
-              margin: EdgeInsets.symmetric(horizontal: 30),
-              constraints: BoxConstraints.expand(height: 30),
-            ),
-            Container(constraints: BoxConstraints.expand(height: 24)),
-            Container(
-              color: Colors.grey,
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              constraints: BoxConstraints.expand(height: 30),
-            ),
-            Container(constraints: BoxConstraints.expand(height: 24)),
-            Container(
-              color: Colors.grey,
-              margin: EdgeInsets.symmetric(horizontal: 60),
-              constraints: BoxConstraints.expand(height: 30),
-            ),
-            Container(constraints: BoxConstraints.expand(height: 50)),
-            Container(
-              color: Colors.grey,
-              constraints: BoxConstraints.expand(height: 24),
-            ),
-            Container(constraints: BoxConstraints.expand(height: 16)),
-            Container(
-              color: Colors.grey,
-              margin: EdgeInsets.symmetric(horizontal: 16),
-              constraints: BoxConstraints.expand(height: 24),
-            ),
-            Container(constraints: BoxConstraints.expand(height: 50)),
-            Container(
-              color: Colors.grey,
-              constraints: BoxConstraints.expand(height: 16),
-            ),
-            Container(constraints: BoxConstraints.expand(height: 8)),
-            Container(
-              color: Colors.grey,
-              margin: EdgeInsets.symmetric(horizontal: 8),
-              constraints: BoxConstraints.expand(height: 16),
-            ),
-          ]),
+          ),
         ),
+      ]);
+
+  static Widget dark() => Column(children: [
+        Expanded(
+          child: Container(
+            color: GetColors.black93,
+            padding: EdgeInsets.only(top: 10),
+            child: SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(),
+              child: Shimmer.fromColors(
+                baseColor: Colors.grey.shade800,
+                highlightColor: GetColors.black93,
+                child: Column(children: [
+                  Container(
+                    color: Colors.grey,
+                    margin: EdgeInsets.symmetric(horizontal: 30),
+                    constraints: BoxConstraints.expand(height: 22),
+                  ),
+                  Container(constraints: BoxConstraints.expand(height: 8)),
+                  Container(
+                    color: Colors.grey,
+                    margin: EdgeInsets.symmetric(horizontal: 36),
+                    constraints: BoxConstraints.expand(height: 10),
+                  ),
+                  Container(constraints: BoxConstraints.expand(height: 8)),
+                  Container(
+                    color: Colors.grey,
+                    margin: EdgeInsets.symmetric(horizontal: 28),
+                    constraints: BoxConstraints.expand(height: 10),
+                  ),
+                ]),
+              ),
+            ),
+          ),
+        ),
+      ]);
+}
+
+class DottedPageView extends StatefulWidget {
+  DottedPageView.builder({
+    this.dotColor = Colors.white38,
+    this.dotActiveColor = Colors.white,
+    this.scrollDirection = Axis.horizontal,
+    this.autoPlay = true,
+    this.reverse = false,
+    PageController controller,
+    this.physics,
+    this.pageSnapping = true,
+    this.onPageChanged,
+    this.itemBuilder,
+    this.itemCount,
+    this.dragStartBehavior = DragStartBehavior.start,
+    this.allowImplicitScrolling = false,
+    this.restorationId,
+    this.clipBehavior = Clip.hardEdge,
+    Key key,
+  })  : _key = key,
+        this.controller = controller ?? PageController();
+
+  final Color dotColor;
+  final Color dotActiveColor;
+  final Axis scrollDirection;
+  final bool autoPlay;
+  final bool reverse;
+  final PageController controller;
+  final ScrollPhysics physics;
+  final bool pageSnapping;
+  final void Function(int) onPageChanged;
+  final IndexedWidgetBuilder itemBuilder;
+  final int itemCount;
+  final DragStartBehavior dragStartBehavior;
+  final bool allowImplicitScrolling;
+  final String restorationId;
+  final Clip clipBehavior;
+  final Key _key;
+
+  @override
+  _DottedPageViewState createState() => _DottedPageViewState();
+}
+
+class _DottedPageViewState extends State<DottedPageView>
+    with SingleTickerProviderStateMixin {
+  static const double duration = 10;
+  final _index = 0.obs;
+  Ticker _ticker;
+  int _elapsed = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.autoPlay == true) {
+      _ticker = createTicker((elapsed) {
+        if (_elapsed != elapsed.inSeconds &&
+            elapsed.inSeconds >= duration &&
+            elapsed.inSeconds % duration == 0) {
+          _elapsed = elapsed.inSeconds;
+          updatePage();
+        }
+      });
+      _ticker?.start();
+    }
+  }
+
+  @override
+  void dispose() {
+    _ticker?.dispose();
+    _ticker = null;
+    super.dispose();
+  }
+
+  void updatePage() {
+    if (widget.controller?.hasClients == true)
+      widget.controller?.animateToPage(
+        _index.value == widget.itemCount - 1 ? 0 : _index.value + 1,
+        duration: Duration(milliseconds: 1500),
+        curve: Curves.easeOut,
       );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        PageView.builder(
+          key: widget._key,
+          scrollDirection: widget.scrollDirection,
+          reverse: widget.reverse,
+          controller: widget.controller,
+          physics: widget.physics,
+          pageSnapping: widget.pageSnapping,
+          onPageChanged: (index) {
+            this._index.value = index;
+            widget.onPageChanged?.call(index);
+          },
+          itemBuilder: widget.itemBuilder,
+          itemCount: widget.itemCount,
+          dragStartBehavior: widget.dragStartBehavior,
+          allowImplicitScrolling: widget.allowImplicitScrolling,
+          restorationId: widget.restorationId,
+          clipBehavior: widget.clipBehavior,
+        ),
+        Obx(
+          () => DotsIndicator(
+            decorator: DotsDecorator(
+              color: widget.dotColor,
+              activeColor: widget.dotActiveColor,
+              size: const Size.square(8),
+              activeSize: const Size.square(8),
+              spacing: EdgeInsets.all(4),
+            ),
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            dotsCount: widget.itemCount,
+            position: _index.toDouble(),
+          ),
+        ),
+      ],
+    );
+  }
 }
