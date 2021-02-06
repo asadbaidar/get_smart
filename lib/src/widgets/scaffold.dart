@@ -13,6 +13,7 @@ class GetScaffold extends StatelessWidget {
     this.children,
     this.title,
     this.subtitle,
+    this.logo,
     this.showProgress = false,
     this.hideToolbars = false,
     this.hideAbleAppBar = false,
@@ -35,6 +36,7 @@ class GetScaffold extends StatelessWidget {
   final List<Widget> children;
   final String title;
   final String subtitle;
+  final Widget logo;
   final bool showProgress;
   final bool hideToolbars;
   final bool hideAbleAppBar;
@@ -115,13 +117,14 @@ class GetScaffold extends StatelessWidget {
       );
 
   Widget get _appBar => AppBar(
+        centerTitle: logo != null,
         leading: BackButton(onPressed: () {
           if (Navigator.canPop(Get.context))
             Get.back();
           else
             SystemNavigator.pop(animated: true);
         }),
-        title: Column(children: [if (title != null) Text(title)]),
+        title: logo ?? Column(children: [if (title != null) Text(title)]),
         bottom: PreferredSize(
           child: Column(
             mainAxisSize: MainAxisSize.min,

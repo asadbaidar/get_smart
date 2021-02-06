@@ -63,6 +63,7 @@ class GetTheme {
     IconThemeData primaryIconTheme,
     ButtonStyle elevatedButtonStyle,
     ButtonStyle outlinedButtonStyle,
+    ButtonStyle textButtonStyle,
     Brightness primaryBrightness = Brightness.dark,
     Color primaryBackgroundLight = Colors.black,
     Color bottomBackgroundLight = Colors.white,
@@ -79,6 +80,7 @@ class GetTheme {
         primaryIconTheme: primaryIconTheme,
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
+        textButtonStyle: textButtonStyle,
         primaryBrightness: primaryBrightness,
         // light theme attributes
         primaryBackgroundLight: primaryBackgroundLight,
@@ -103,6 +105,7 @@ class GetTheme {
     TextTheme textTheme,
     ButtonStyle elevatedButtonStyle,
     ButtonStyle outlinedButtonStyle,
+    ButtonStyle textButtonStyle,
   }) =>
       builder(
         context,
@@ -111,6 +114,7 @@ class GetTheme {
         textTheme: textTheme,
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
+        textButtonStyle: textButtonStyle,
       );
 
   static ThemeData builder(
@@ -123,6 +127,7 @@ class GetTheme {
     IconThemeData primaryIconTheme,
     ButtonStyle elevatedButtonStyle,
     ButtonStyle outlinedButtonStyle,
+    ButtonStyle textButtonStyle,
     Color accentColorLight = kAccentColor,
     Color primarySwatchLight = kPrimarySwatch,
     Color backgroundLight = kBackgroundLight,
@@ -187,6 +192,7 @@ class GetTheme {
           backgroundColor: elevatedButtonStyle?.backgroundColor,
           foregroundColor: elevatedButtonStyle?.foregroundColor,
           textStyle: elevatedButtonStyle?.textStyle,
+          visualDensity: elevatedButtonStyle?.visualDensity,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -200,6 +206,20 @@ class GetTheme {
           backgroundColor: outlinedButtonStyle?.backgroundColor,
           foregroundColor: outlinedButtonStyle?.foregroundColor,
           textStyle: outlinedButtonStyle?.textStyle,
+          visualDensity: outlinedButtonStyle?.visualDensity,
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          shape: textButtonStyle?.shape,
+          side: textButtonStyle?.side,
+          elevation: textButtonStyle?.elevation,
+          minimumSize: textButtonStyle?.minimumSize,
+          padding: textButtonStyle?.padding,
+          backgroundColor: textButtonStyle?.backgroundColor,
+          foregroundColor: textButtonStyle?.foregroundColor,
+          textStyle: textButtonStyle?.textStyle,
+          visualDensity: textButtonStyle?.visualDensity,
         ),
       ),
       buttonTheme: ButtonThemeData(
