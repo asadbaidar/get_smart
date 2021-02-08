@@ -18,6 +18,7 @@ class GetScaffold extends StatelessWidget {
     this.hideToolbars = false,
     this.hideAbleAppBar = false,
     this.isInteractive = true,
+    this.isHome = false,
     this.appBarExtension,
     this.appBarExtensionSize,
     this.withBottomBar,
@@ -41,6 +42,7 @@ class GetScaffold extends StatelessWidget {
   final bool hideToolbars;
   final bool hideAbleAppBar;
   final bool isInteractive;
+  final bool isHome;
   final Widget appBarExtension;
   final double appBarExtensionSize;
   final Widget withBottomBar;
@@ -118,12 +120,14 @@ class GetScaffold extends StatelessWidget {
 
   Widget get _appBar => AppBar(
         centerTitle: logo != null,
-        leading: BackButton(onPressed: () {
-          if (Navigator.canPop(Get.context))
-            Get.back();
-          else
-            SystemNavigator.pop(animated: true);
-        }),
+        leading: isHome != true
+            ? BackButton(onPressed: () {
+                if (GET.canPop)
+                  Get.back();
+                else
+                  SystemNavigator.pop(animated: true);
+              })
+            : null,
         title: logo ?? Column(children: [if (title != null) Text(title)]),
         bottom: PreferredSize(
           child: Column(

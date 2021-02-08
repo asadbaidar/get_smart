@@ -113,6 +113,74 @@ class GetButton {
         ),
       );
 
+  /// Create an elevated button with icon.
+  static Widget elevatedIcon({
+    Key key,
+    VoidCallback onPressed,
+    VoidCallback onLongPress,
+    Size minimumSize,
+    EdgeInsetsGeometry padding,
+    double horizontalPadding = 24,
+    double verticalPadding,
+    EdgeInsetsGeometry margin,
+    double horizontalMargin,
+    double verticalMargin,
+    OutlinedBorder shape,
+    BorderSide side,
+    Color primary,
+    Color onPrimary,
+    Color onSurface,
+    double elevation,
+    TextStyle textStyle,
+    FocusNode focusNode,
+    bool autofocus = false,
+    bool round = false,
+    bool enabled = true,
+    Clip clipBehavior = Clip.none,
+    Widget icon,
+    Widget label,
+  }) =>
+      Container(
+        margin: margin ??
+            (horizontalMargin != null || verticalMargin != null
+                ? EdgeInsets.symmetric(
+                    horizontal: horizontalMargin ?? 0,
+                    vertical: verticalMargin ?? 0,
+                  )
+                : null),
+        child: ElevatedButton.icon(
+          key: key,
+          onPressed: enabled ? onPressed : null,
+          onLongPress: onLongPress,
+          style: ElevatedButton.styleFrom(
+            minimumSize: minimumSize,
+            padding: padding ??
+                (horizontalPadding != null || verticalPadding != null
+                    ? EdgeInsets.symmetric(
+                        horizontal: horizontalPadding ?? 0,
+                        vertical: verticalPadding ?? 0,
+                      )
+                    : null),
+            shape: shape ?? round == true
+                ? RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  )
+                : null,
+            side: side,
+            primary: primary,
+            onPrimary: onPrimary,
+            onSurface: onSurface,
+            elevation: elevation,
+            textStyle: textStyle,
+          ),
+          focusNode: focusNode,
+          autofocus: autofocus ?? false,
+          clipBehavior: clipBehavior ?? Clip.none,
+          icon: icon,
+          label: label,
+        ),
+      );
+
   /// Create an elevated button with fully round corner.
   static Widget roundElevated({
     Key key,

@@ -278,17 +278,22 @@ class IconBox extends StatelessWidget {
 }
 
 class CircularProgress extends StatelessWidget {
-  const CircularProgress({this.size = 14});
+  const CircularProgress({
+    this.size = 14,
+    this.margin = 0,
+  });
 
   final double size;
+  final double margin;
 
   @override
   Widget build(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
+          Container(
             height: size,
             width: size,
+            margin: EdgeInsets.all(margin ?? 0),
             child: CircularProgressIndicator(strokeWidth: 1.4),
           ),
         ],
@@ -1083,6 +1088,67 @@ class _DottedPageViewState extends State<DottedPageView>
           ),
         ),
       ],
+    );
+  }
+}
+
+extension GetBoxDecoration on BoxDecoration {
+  static BoxDecoration only({
+    double top,
+    double bottom,
+    double left,
+    double right,
+    Color color,
+    Color borderColor,
+  }) {
+    var _borderColor = borderColor ?? Get.theme.hintColor.dimmed;
+    return BoxDecoration(
+      color: color ?? Get.theme.backgroundColor,
+      border: Border(
+        top: top != null
+            ? BorderSide(width: top, color: _borderColor)
+            : BorderSide.none,
+        bottom: bottom != null
+            ? BorderSide(width: bottom, color: _borderColor)
+            : BorderSide.none,
+        left: left != null
+            ? BorderSide(width: left, color: _borderColor)
+            : BorderSide.none,
+        right: right != null
+            ? BorderSide(width: right, color: _borderColor)
+            : BorderSide.none,
+      ),
+    );
+  }
+
+  static BoxDecoration symmetric({
+    double vertical,
+    double horizontal,
+    Color color,
+    Color borderColor,
+    double borderWidth,
+  }) {
+    return only(
+      top: vertical,
+      bottom: vertical,
+      left: horizontal,
+      right: horizontal,
+      color: color,
+      borderColor: borderColor,
+    );
+  }
+
+  static BoxDecoration all(
+    double all, {
+    Color color,
+    Color borderColor,
+    double borderWidth,
+  }) {
+    return symmetric(
+      vertical: all,
+      horizontal: all,
+      color: color,
+      borderColor: borderColor,
     );
   }
 }

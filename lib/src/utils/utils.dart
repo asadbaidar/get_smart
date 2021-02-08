@@ -755,6 +755,8 @@ class GET {
     }
   }
 
+  static bool get canPop => Navigator.canPop(Get.context);
+
   static MaterialLocalizations get formatter =>
       MaterialLocalizations.of(Get.context);
 }
