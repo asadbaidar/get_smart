@@ -1,9 +1,6 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:get_smart/get_smart.dart';
-import 'package:responsive_ui/responsive_ui.dart';
 
 /// A smart scaffold.
 /// All individual pages should be wrapped in it.

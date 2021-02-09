@@ -53,13 +53,13 @@ flutter:
   # This adds Flutter specific custom fonts to your application
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-  #  fonts:
-  #    - family: Cairo
-  #      fonts:
-  #        - asset: assets/fonts/Cairo/Cairo-Regular.ttf
-  #        - asset: assets/fonts/Cairo/Cairo-SemiBold.ttf
-  #          weight: 600
-  #        - asset: assets/fonts/Cairo/Cairo-Bold.ttf
-  #          weight: 700
-  #        - asset: assets/fonts/Cairo/Cairo-Black.ttf
-  #          weight: 900
+  #fonts:
+  #  - family: AvenirNext
+  #    fonts:
+  #      - asset: fonts/AvenirNextLTPro-Regular.otf
+  #      - asset: fonts/AvenirNextLTPro-Demi.otf
+  #        weight: 600
+  #      - asset: fonts/AvenirNextLTPro-Bold.otf
+  #        weight: 700
+  #      - asset: fonts/AvenirNextLTPro-Italic.otf
+  #        style: italic

@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:get/get.dart';
 import 'package:get_smart/get_smart.dart';
-import 'package:get_stacked/get_stacked.dart';
 
 /// Multi purpose ViewModel implementation of [GetxController]
 abstract class GetController extends MultipleFutureGetController {

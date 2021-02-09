@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:get_smart/get_smart.dart';
 
 /// All app themes to be used in the app should be defined here
