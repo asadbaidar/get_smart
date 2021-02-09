@@ -3,6 +3,7 @@
 * bug fixes related to button and themes
 * added features to scaffold
 * added shimmer progress view
+* added DottedPageView widget
 
 ## [0.0.1+4]
 
