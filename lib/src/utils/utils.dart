@@ -209,7 +209,7 @@ extension StringX on String {
             : this[0].uppercase + substring(1).lowercase;
   }
 
-  bool get boolYN => equalsIgnoreCase("Y");
+  bool get boolYN => trim().equalsIgnoreCase("Y");
 
   Future<String> get encrypted async => await GetCipher.instance.encrypt(this);
 
