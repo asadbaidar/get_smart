@@ -751,6 +751,9 @@ class GET {
 
   static bool get canPop => Navigator.canPop(Get.context);
 
+  static Future<void> popSystem({bool animated = true}) =>
+      SystemNavigator.pop(animated: animated);
+
   static MaterialLocalizations get formatter =>
       MaterialLocalizations.of(Get.context);
 }
