@@ -457,6 +457,7 @@ class TextFormFieldX extends StatelessWidget {
     this.helper,
     this.prefix,
     this.suffix,
+    this.autovalidateMode,
     this.keyboardType,
     this.inputFilters,
     this.textInputAction,
@@ -469,6 +470,7 @@ class TextFormFieldX extends StatelessWidget {
     this.validator,
     this.readOnly,
     this.validateLength,
+    this.validateEmpty = true,
     this.showCounter,
     this.isDense,
     this.filled,
@@ -491,6 +493,7 @@ class TextFormFieldX extends StatelessWidget {
   final Widget prefix;
   final Widget suffix;
   final TextInputType keyboardType;
+  final AutovalidateMode autovalidateMode;
   final List<TextInputFormatter> inputFilters;
   final TextInputAction textInputAction;
   final TextEditingController controller;
@@ -502,6 +505,7 @@ class TextFormFieldX extends StatelessWidget {
   final String Function(String v) validator;
   final bool readOnly;
   final bool validateLength;
+  final bool validateEmpty;
   final bool showCounter;
   final bool isDense;
   final bool filled;
@@ -528,9 +532,10 @@ class TextFormFieldX extends StatelessWidget {
         initialValue: initialValue,
         focusNode: focusNode,
         controller: controller,
-        autovalidateMode: _validator(controller?.text ?? "") != null
-            ? AutovalidateMode.always
-            : AutovalidateMode.onUserInteraction,
+        autovalidateMode: autovalidateMode ??
+            (_validator(controller?.text ?? "") != null
+                ? AutovalidateMode.always
+                : AutovalidateMode.onUserInteraction),
         readOnly: _readOnly ?? false,
         decoration: InputDecoration(
           prefix: prefix != null
@@ -568,7 +573,7 @@ class TextFormFieldX extends StatelessWidget {
         onSaved: onSaved,
         validator: (v) =>
             _validator(v) ??
-            (v.isEmpty
+            (validateEmpty == true && v.isEmpty
                 ? GetText.please_enter([_hint])
                 : validateLength == true && v.length != maxLength
                     ? GetText.invalid([_hint])
