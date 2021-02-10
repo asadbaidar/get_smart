@@ -1,3 +1,7 @@
+## [0.0.1+6]
+
+* TextFormFieldX added parameters
+
 ## [0.0.1+5]
 
 * bug fixes related to button and themes
