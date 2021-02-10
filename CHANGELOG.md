@@ -1,3 +1,7 @@
+## [0.0.1+7]
+
+* Minor bug fixes
+
 ## [0.0.1+6]
 
 * TextFormFieldX added parameters
