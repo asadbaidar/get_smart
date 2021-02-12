@@ -226,6 +226,7 @@ class GetTheme {
       brightness: _brightness,
       backgroundColor: isDark ? backgroundDark : backgroundLight,
       canvasColor: isDark ? canvasColorDark : canvasColorLight,
+      scaffoldBackgroundColor: isDark ? canvasColorDark : canvasColorLight,
       primarySwatch: _primarySwatch,
       accentColor: _accentColor,
       hintColor: theme.hintColor.hinted,

@@ -23,9 +23,32 @@ class AppTile extends StatelessWidget {
     this.isIconBoxed = true,
     this.isDetailed = true,
     this.padAccessory,
+    this.tintAble,
+    this.destructive,
+    this.density,
     this.onTap,
     Key key,
   }) : super(key: key);
+
+  const AppTile.simpleDense({
+    this.icon,
+    this.title,
+    this.subtitle,
+    this.trailingTop,
+    this.trailingBottom,
+    this.accessory,
+    this.rows,
+    this.color,
+    this.background,
+    this.isIconBoxed = true,
+    this.padAccessory,
+    this.tintAble,
+    this.destructive,
+    this.onTap,
+    Key key,
+  })  : isDetailed = false,
+        density = Density.min,
+        super(key: key);
 
   final IconData icon;
   final String title;
@@ -39,11 +62,16 @@ class AppTile extends StatelessWidget {
   final bool isIconBoxed;
   final bool isDetailed;
   final bool padAccessory;
+  final bool tintAble;
+  final bool destructive;
+  final VisualDensity density;
   final Function onTap;
 
   @override
   Widget build(BuildContext context) {
-    final tintColor = color ?? Get.theme.accentColor;
+    final _tintAble = destructive == true ? true : tintAble ?? false;
+    final tintColor =
+        color ?? destructive == true ? Colors.red : Get.theme.accentColor;
     final isTrailingTop = trailingTop?.notEmpty != null;
     final isTrailingBottom = trailingBottom?.notEmpty != null;
     final accessory = this.accessory ??
@@ -57,6 +85,7 @@ class AppTile extends StatelessWidget {
         child: Column(
           children: [
             ListTile(
+              visualDensity: density,
               contentPadding: EdgeInsets.only(
                 left: 16,
                 right: padAccessory == true ? 16 : 2,
@@ -68,7 +97,12 @@ class AppTile extends StatelessWidget {
                       color: tintColor,
                       withinBox: isIconBoxed,
                     ).adjustForTile,
-              title: title?.notEmpty?.let((it) => Text(it)),
+              title: title?.notEmpty?.let((it) => Text(
+                    it,
+                    style: TextStyle(
+                      color: _tintAble ? tintColor : null,
+                    ),
+                  )),
               subtitle: subtitle?.notEmpty?.let((it) => Text(it)),
               trailing: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -155,6 +189,13 @@ class AppTileSeparator extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
+  const AppTileSeparator.full({Key key}) : this(style: SeparatorStyle.full);
+
+  const AppTileSeparator.noIcon({Key key}) : this(style: SeparatorStyle.noIcon);
+
+  const AppTileSeparator.padIcon({Key key})
+      : this(style: SeparatorStyle.padIcon);
+
   final double margin;
   final SeparatorStyle style;
 
@@ -198,32 +239,56 @@ class AppLineSeparator extends StatelessWidget {
 class AppTileHeader extends StatelessWidget {
   const AppTileHeader({
     this.text,
-    this.withSeparator = true,
+    this.topSeparator = true,
+    this.bottomSeparator = true,
+    this.padding,
+    this.noIcon,
     Key key,
   }) : super(key: key);
 
+  const AppTileHeader.dense({
+    this.text,
+    this.topSeparator = true,
+    this.bottomSeparator = true,
+    this.noIcon = true,
+    Key key,
+  })  : padding = 16,
+        super(key: key);
+
+  const AppTileHeader.noTop({
+    this.text,
+    this.bottomSeparator = true,
+    this.padding,
+    this.noIcon = true,
+    Key key,
+  })  : topSeparator = false,
+        super(key: key);
+
   final String text;
-  final bool withSeparator;
+  final bool topSeparator;
+  final bool bottomSeparator;
+  final bool noIcon;
+  final double padding;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (withSeparator) AppTileSeparator(style: SeparatorStyle.full),
+        if (topSeparator) AppTileSeparator(style: SeparatorStyle.full),
         Container(
           padding: EdgeInsets.only(
-            left: 24,
+            left: noIcon == true ? 16 : 24,
             right: 16,
-            top: 32,
-            bottom: 10,
+            top: padding ?? 28,
+            bottom: 8,
           ),
           child: Text(
             text?.uppercase ?? "",
             style: Get.textTheme.caption,
           ),
         ),
-        if (withSeparator) AppTileSeparator(style: SeparatorStyle.full),
+        if (bottomSeparator) AppTileSeparator(style: SeparatorStyle.full),
       ],
     );
   }
@@ -1250,4 +1315,15 @@ class _AppLifecycleState extends State<AppLifecycle>
         break;
     }
   }
+}
+
+extension Density on VisualDensity {
+  static const VisualDensity min =
+      VisualDensity(horizontal: -4.0, vertical: -4.0);
+
+  static const VisualDensity max =
+      VisualDensity(horizontal: 4.0, vertical: 4.0);
+
+  static const VisualDensity dense =
+      VisualDensity(horizontal: 3.0, vertical: 3.0);
 }
