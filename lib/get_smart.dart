@@ -5,7 +5,6 @@ export "package:auto_size_text/auto_size_text.dart";
 export "package:cupertino_icons/cupertino_icons.dart";
 export "package:dots_indicator/dots_indicator.dart";
 export "package:get/get.dart";
-export "package:get_stacked/get_stacked.dart";
 export "package:intl/intl.dart";
 export "package:object_mapper/object_mapper.dart";
 export "package:responsive_ui/responsive_ui.dart";
@@ -20,6 +19,7 @@ export "src/res/localizations.dart";
 export "src/res/texts.dart";
 export "src/res/themes.dart";
 // utils
+export "src/utils/base_controllers.dart";
 export "src/utils/controller.dart";
 export 'src/utils/route_observer.dart';
 export "src/utils/utils.dart";

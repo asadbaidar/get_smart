@@ -18,8 +18,7 @@ dependencies:
   responsive_ui: ^2.0.1
   object_mapper: ^1.0.0+2
   dio: ^3.0.10
-  get: ^3.24.0
-  get_stacked: ^1.0.8
+  get: ^3.25.4
   shared_preferences: ^0.5.12+4
   cupertino_icons: ^1.0.2
   auto_size_text: ^2.1.0
