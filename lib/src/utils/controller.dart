@@ -296,6 +296,13 @@ abstract class GetController extends MultipleFutureGetController {
     update();
   }
 
+  /// Clears all data and errors
+  void clearAllData() {
+    dataMap.clear();
+    clearErrors();
+    update();
+  }
+
   /// Sets the key to busy, runs the runner and then sets it to not busy
   /// when completed.
   ///

@@ -744,6 +744,7 @@ class ProgressSnackBar extends StatelessWidget {
     this.onRetry,
     this.onDone,
     this.withBottomBar,
+    this.actionColor,
     Key key,
   }) : super(key: key);
 
@@ -754,6 +755,7 @@ class ProgressSnackBar extends StatelessWidget {
   final Function onRetry;
   final Function onDone;
   final bool withBottomBar;
+  final Color actionColor;
 
   @override
   Widget build(BuildContext context) {
@@ -777,6 +779,7 @@ class ProgressSnackBar extends StatelessWidget {
       showProgress: status == WebStatus.busy,
       isDismissible: status == WebStatus.failed,
       withBottomBar: withBottomBar,
+      actionColor: actionColor,
     );
   }
 }
@@ -790,6 +793,7 @@ class SnackBarX extends StatelessWidget {
     this.showProgress = true,
     this.isDismissible = false,
     this.withBottomBar = false,
+    this.actionColor,
     Key key,
   }) : super(key: key);
 
@@ -800,6 +804,7 @@ class SnackBarX extends StatelessWidget {
   final bool showProgress;
   final bool isDismissible;
   final bool withBottomBar;
+  final Color actionColor;
 
   @override
   Widget build(BuildContext context) {
@@ -823,11 +828,12 @@ class SnackBarX extends StatelessWidget {
                     : SnackPosition.BOTTOM,
                 animationDuration: Duration(milliseconds: 200),
                 messageText: message == null ? null : Text(message),
-                backgroundColor: Get.theme.appBarTheme.color,
+                backgroundColor: Get.theme.bottomAppBarTheme.color,
                 mainButton: action == null
                     ? null
                     : FlatButton(
                         child: Text(action.uppercase),
+                        textColor: actionColor,
                         onPressed: onAction,
                       ),
               ),
