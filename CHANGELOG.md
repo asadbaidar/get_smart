@@ -1,3 +1,8 @@
+## [0.0.1+8]
+
+* Minor bug fixes
+* GetX version updated
+
 ## [0.0.1+7]
 
 * Minor bug fixes
