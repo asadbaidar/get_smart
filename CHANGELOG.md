@@ -1,3 +1,7 @@
+## [0.0.2+1]
+
+* GetScaffold bug fixes
+
 ## [0.0.2]
 
 * Bug fixes
