@@ -27,8 +27,30 @@ class AppTile extends StatelessWidget {
     this.destructive,
     this.density,
     this.onTap,
+    this.onPressed,
     Key key,
   }) : super(key: key);
+
+  const AppTile.simple({
+    this.icon,
+    this.title,
+    this.subtitle,
+    this.trailingTop,
+    this.trailingBottom,
+    this.accessory,
+    this.rows,
+    this.color,
+    this.background,
+    this.isIconBoxed = true,
+    this.padAccessory,
+    this.tintAble,
+    this.destructive,
+    this.density,
+    this.onTap,
+    this.onPressed,
+    Key key,
+  })  : isDetailed = false,
+        super(key: key);
 
   const AppTile.simpleDense({
     this.icon,
@@ -45,6 +67,7 @@ class AppTile extends StatelessWidget {
     this.tintAble,
     this.destructive,
     this.onTap,
+    this.onPressed,
     Key key,
   })  : isDetailed = false,
         density = Density.min,
@@ -65,13 +88,16 @@ class AppTile extends StatelessWidget {
   final bool tintAble;
   final bool destructive;
   final VisualDensity density;
-  final Function onTap;
+  @Deprecated('Use onPressed instead. onTap was deprecated after v0.0.2')
+  final void Function() onTap;
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
+    final _onPressed = onTap ?? onPressed;
     final _tintAble = destructive == true ? true : tintAble ?? false;
     final tintColor =
-        color ?? destructive == true ? Colors.red : Get.theme.accentColor;
+        color ?? (destructive == true ? Colors.red : Get.theme.accentColor);
     final isTrailingTop = trailingTop?.notEmpty != null;
     final isTrailingBottom = trailingBottom?.notEmpty != null;
     final accessory = this.accessory ??
@@ -79,7 +105,7 @@ class AppTile extends StatelessWidget {
     return InkWell(
       highlightColor: tintColor?.activated,
       splashColor: tintColor?.translucent,
-      onTap: onTap,
+      onTap: _onPressed,
       child: Ink(
         color: background ?? Get.theme.backgroundColor,
         child: Column(

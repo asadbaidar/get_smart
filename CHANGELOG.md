@@ -1,3 +1,12 @@
+## [0.0.2]
+
+* Bug fixes
+* Example added
+
+## [0.0.1+9]
+
+* AppTile color bug fixed
+
 ## [0.0.1+8]
 
 * Minor bug fixes
