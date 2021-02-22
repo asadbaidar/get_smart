@@ -105,6 +105,7 @@ class GetScaffold extends StatelessWidget {
                   ),
             ),
         if (!_isInteractive) Clickable(),
+        AppLifecycle(onDetached: Get.context.endEditing),
       ]);
 
   Widget get _hideAbleAppBar => CrossFade(
@@ -116,7 +117,7 @@ class GetScaffold extends StatelessWidget {
       );
 
   Widget get _appBar => AppBar(
-        centerTitle: logo != null,
+        centerTitle: _centerTitle,
         leading: isHome != true
             ? BackButton(onPressed: () {
                 if (GET.canPop)
@@ -170,6 +171,20 @@ class GetScaffold extends StatelessWidget {
                     )
                   ],
           );
+  }
+
+  bool get _centerTitle {
+    if (logo != null) return true;
+    if (Get.theme.appBarTheme.centerTitle != null)
+      return Get.theme.appBarTheme.centerTitle;
+    assert(Get.theme.platform != null);
+    switch (Get.theme.platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return appBarRightItems == null || appBarRightItems.length < 2;
+      default:
+        return false;
+    }
   }
 
   static GlobalKey<ScaffoldState> get newKey => GlobalKey<ScaffoldState>();
