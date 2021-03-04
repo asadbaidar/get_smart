@@ -405,6 +405,7 @@ class LinearProgress extends StatelessWidget {
 class MessageView extends StatelessWidget {
   const MessageView({
     this.icon,
+    this.errorIcon,
     this.action,
     this.onAction,
     this.message,
@@ -413,25 +414,26 @@ class MessageView extends StatelessWidget {
   });
 
   final Widget icon;
+  final Widget errorIcon;
   final String action;
-  final Function onAction;
+  final void Function() onAction;
   final String message;
   final String emptyTitle;
   final error;
 
   @override
   Widget build(BuildContext context) {
-    var icon = error != null
-        ? Icon(Icons.cloud_off)
+    final icon = error != null
+        ? (errorIcon ?? Icon(Icons.cloud_off))
         : emptyTitle != null
             ? (this.icon ?? Icon(CupertinoIcons.square_stack_3d_up_slash))
             : this.icon;
-    var message = error != null
+    final message = error != null
         ? error.toString()
         : emptyTitle != null
             ? "Nothing in $emptyTitle"
             : this.message;
-    var action = error != null
+    final action = error != null
         ? GetText.retry()
         : emptyTitle != null
             ? GetText.refresh()

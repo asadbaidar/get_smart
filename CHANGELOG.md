@@ -1,3 +1,8 @@
+## [0.0.2+2]
+
+* Added childerenAtFront in GetScaffold
+* Added errorIcon in MessageView
+
 ## [0.0.2+1]
 
 * GetScaffold bug fixes

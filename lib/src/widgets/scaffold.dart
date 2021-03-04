@@ -21,6 +21,7 @@ class GetScaffold extends StatelessWidget {
     this.withBottomBar,
     this.bottomBar,
     this.sliver,
+    this.childrenAtFront,
     this.bottomBarLeftItems,
     this.bottomBarRightItems,
     this.bottomBarCenterItems,
@@ -45,6 +46,7 @@ class GetScaffold extends StatelessWidget {
   final Widget withBottomBar;
   final Widget bottomBar;
   final Widget sliver;
+  final List<Widget> childrenAtFront;
   final List<Widget> bottomBarLeftItems;
   final List<Widget> bottomBarRightItems;
   final List<Widget> bottomBarCenterItems;
@@ -106,6 +108,7 @@ class GetScaffold extends StatelessWidget {
             ),
         if (!_isInteractive) Clickable(),
         AppLifecycle(onDetached: Get.context.endEditing),
+        ...childrenAtFront ?? [],
       ]);
 
   Widget get _hideAbleAppBar => CrossFade(
