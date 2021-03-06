@@ -1,3 +1,7 @@
+## [0.0.2+4]
+
+* Minor bug fixes
+
 ## [0.0.2+3]
 
 * GetBar mainButton updated to new MaterialSpec

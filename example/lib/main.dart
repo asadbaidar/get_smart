@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
             title: data,
             color: data.materialPrimary,
             isIconBoxed: false,
-            onPressed: () {},
+            onTap: () {},
           );
         },
       ),

@@ -26,7 +26,7 @@ class AppTile extends StatelessWidget {
     this.tintAble,
     this.destructive,
     this.density,
-    this.onPressed,
+    this.onTap,
     Key key,
   }) : super(key: key);
 
@@ -45,7 +45,7 @@ class AppTile extends StatelessWidget {
     this.tintAble,
     this.destructive,
     this.density,
-    this.onPressed,
+    this.onTap,
     Key key,
   })  : isDetailed = false,
         super(key: key);
@@ -64,7 +64,7 @@ class AppTile extends StatelessWidget {
     this.padAccessory,
     this.tintAble,
     this.destructive,
-    this.onPressed,
+    this.onTap,
     Key key,
   })  : isDetailed = false,
         density = Density.min,
@@ -85,7 +85,7 @@ class AppTile extends StatelessWidget {
   final bool tintAble;
   final bool destructive;
   final VisualDensity density;
-  final void Function() onPressed;
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,7 @@ class AppTile extends StatelessWidget {
     return InkWell(
       highlightColor: tintColor?.activated,
       splashColor: tintColor?.translucent,
-      onTap: onPressed,
+      onTap: onTap,
       child: Ink(
         color: background ?? Get.theme.backgroundColor,
         child: Column(
