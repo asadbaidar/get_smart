@@ -26,7 +26,6 @@ class AppTile extends StatelessWidget {
     this.tintAble,
     this.destructive,
     this.density,
-    this.onTap,
     this.onPressed,
     Key key,
   }) : super(key: key);
@@ -46,7 +45,6 @@ class AppTile extends StatelessWidget {
     this.tintAble,
     this.destructive,
     this.density,
-    this.onTap,
     this.onPressed,
     Key key,
   })  : isDetailed = false,
@@ -66,7 +64,6 @@ class AppTile extends StatelessWidget {
     this.padAccessory,
     this.tintAble,
     this.destructive,
-    this.onTap,
     this.onPressed,
     Key key,
   })  : isDetailed = false,
@@ -88,13 +85,10 @@ class AppTile extends StatelessWidget {
   final bool tintAble;
   final bool destructive;
   final VisualDensity density;
-  @Deprecated('Use onPressed instead. onTap was deprecated after v0.0.2')
-  final void Function() onTap;
   final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final _onPressed = onTap ?? onPressed;
     final _tintAble = destructive == true ? true : tintAble ?? false;
     final tintColor =
         color ?? (destructive == true ? Colors.red : Get.theme.accentColor);
@@ -105,7 +99,7 @@ class AppTile extends StatelessWidget {
     return InkWell(
       highlightColor: tintColor?.activated,
       splashColor: tintColor?.translucent,
-      onTap: _onPressed,
+      onTap: onPressed,
       child: Ink(
         color: background ?? Get.theme.backgroundColor,
         child: Column(
@@ -859,9 +853,9 @@ class SnackBarX extends StatelessWidget {
                 backgroundColor: Get.theme.bottomAppBarTheme.color,
                 mainButton: action == null
                     ? null
-                    : FlatButton(
+                    : GetButton.text(
                         child: Text(action.uppercase),
-                        textColor: actionColor,
+                        primary: actionColor,
                         onPressed: onAction,
                       ),
               ),

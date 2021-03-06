@@ -1,3 +1,7 @@
+## [0.0.2+3]
+
+* GetBar mainButton updated to new MaterialSpec
+
 ## [0.0.2+2]
 
 * Added childerenAtFront in GetScaffold
