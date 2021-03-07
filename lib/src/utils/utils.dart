@@ -857,12 +857,14 @@ class GetCipher {
 class GetPrefs {
   static GetPrefs instance = GetPrefs();
 
-  Future<void> reload() async {
-    if (prefs == null)
-      prefs = await SharedPreferences.getInstance();
-    else
-      await prefs.reload();
-  }
-
-  SharedPreferences prefs;
+  /// Override it to reload prefs.
+  ///
+  /// For example:
+  ///```
+  /// if (prefs == null)
+  ///   prefs = await SharedPreferences.getInstance();
+  /// else
+  ///   await prefs.reload();
+  /// ```
+  Future<void> reload() async {}
 }

@@ -5,7 +5,6 @@ export "package:get/get.dart";
 export "package:intl/intl.dart";
 export "package:object_mapper/object_mapper.dart";
 export "package:responsive_ui/responsive_ui.dart";
-export "package:shared_preferences/shared_preferences.dart";
 export "package:shimmer/shimmer.dart";
 export "package:sprintf/sprintf.dart";
 export "package:url_launcher/url_launcher.dart";
