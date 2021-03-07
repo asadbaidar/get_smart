@@ -469,8 +469,8 @@ class MessageView extends StatelessWidget {
   }
 }
 
-class DismissibleX extends StatelessWidget {
-  const DismissibleX({
+class DismissibleX extends StatefulWidget {
+  DismissibleX({
     this.enabled,
     this.direction,
     this.onDismissed,
@@ -484,18 +484,28 @@ class DismissibleX extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    return enabled
-        ? Dismissible(
-            key: const Key('dismissible'),
-            direction: direction,
-            onDismissed: onDismissed,
-            background: Container(),
-            secondaryBackground: Container(),
-            child: child,
-          )
-        : child;
-  }
+  _DismissibleXState createState() => _DismissibleXState();
+}
+
+class _DismissibleXState extends State<DismissibleX> {
+  var dismissed = false;
+
+  @override
+  Widget build(BuildContext context) => dismissed
+      ? Container(height: 0)
+      : (widget.enabled
+          ? Dismissible(
+              key: const Key('dismissible'),
+              direction: widget.direction,
+              onDismissed: (direction) {
+                widget.onDismissed?.call(direction);
+                if (mounted) setState(() => dismissed = true);
+              },
+              background: Container(),
+              secondaryBackground: Container(),
+              child: widget.child,
+            )
+          : widget.child);
 }
 
 class SwipeRefresh extends RefreshIndicator {
@@ -836,7 +846,7 @@ class SnackBarX extends StatelessWidget {
         DismissibleX(
           enabled: isDismissible,
           direction: DismissDirection.down,
-          onDismissed: (direction) => onDismiss(),
+          onDismissed: (direction) => onDismiss?.call(),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

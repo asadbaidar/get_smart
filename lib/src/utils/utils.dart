@@ -754,6 +754,9 @@ class GET {
   static Future<void> popSystem({bool animated = true}) =>
       SystemNavigator.pop(animated: animated);
 
+  static void backUntil(String route) =>
+      Get.until((r) => r.settings.name == route);
+
   static MaterialLocalizations get formatter =>
       MaterialLocalizations.of(Get.context);
 }
