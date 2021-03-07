@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -1295,7 +1296,8 @@ class AppLifecycle extends StatefulWidget {
   /// another activity is focused, such as a split-screen app, a phone call,
   /// a picture-in-picture app, a system dialog, or another window.
   ///
-  /// Apps in this state should assume that they may be [paused] at any time.
+  /// Apps in this state should assume that they may be
+  /// [AppLifecycleState.paused] at any time.
   final void Function() onInactive;
 
   /// The application is not currently visible to the user, not responding to
@@ -1355,13 +1357,19 @@ class _AppLifecycleState extends State<AppLifecycle>
   }
 }
 
-extension Density on VisualDensity {
-  static const VisualDensity min =
-      VisualDensity(horizontal: -4.0, vertical: -4.0);
+abstract class Density {
+  static const VisualDensity min = const VisualDensity(
+    horizontal: -4.0,
+    vertical: -4.0,
+  );
 
-  static const VisualDensity max =
-      VisualDensity(horizontal: 4.0, vertical: 4.0);
+  static const VisualDensity max = const VisualDensity(
+    horizontal: 4.0,
+    vertical: 4.0,
+  );
 
-  static const VisualDensity dense =
-      VisualDensity(horizontal: 3.0, vertical: 3.0);
+  static const VisualDensity dense = const VisualDensity(
+    horizontal: 3.0,
+    vertical: 3.0,
+  );
 }

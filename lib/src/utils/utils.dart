@@ -775,7 +775,7 @@ class GET {
 ///
 /// To use it, make an enum named Asset at the end and put the same asset
 /// name in that as in the asset directory
-/// i.e for [icon] directory, enum name must be as IconAsset
+/// i.e for icon directory, enum name must be as IconAsset
 /// <p>
 /// ### Some key practices
 ///
@@ -787,7 +787,7 @@ class GET {
 /// - If you want to add new directory in assets, then make a similar enum
 /// with specific name and maps its directory name in [AssetX].
 ///
-/// - Also map that directory in [pubspec.yaml] under the assets property.
+/// - Also map that directory in `pubspec.yaml` under the assets property.
 extension AssetX on Object {
   String get svg => "$_name.svg";
 

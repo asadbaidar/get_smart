@@ -30,11 +30,11 @@ extension ColorX on Color {
   Color get normal => withOpacity(1);
 }
 
-extension GetColors on Colors {
-  static const black90 = Color(0xFF131313);
-  static const black93 = Color(0xFF0C0C0C);
+abstract class GetColors {
+  static const black90 = const Color(0xFF131313);
+  static const black93 = const Color(0xFF0C0C0C);
 
-  static const MaterialColor black = MaterialColor(
+  static const MaterialColor black = const MaterialColor(
     0xFF000000,
     <int, Color>{
       50: Color(0xFFDDDDDD),
@@ -50,7 +50,7 @@ extension GetColors on Colors {
     },
   );
 
-  static const MaterialColor white = MaterialColor(
+  static const MaterialColor white = const MaterialColor(
     0xFFFFFFFF,
     <int, Color>{
       50: Color(0x1FFFFFFF),

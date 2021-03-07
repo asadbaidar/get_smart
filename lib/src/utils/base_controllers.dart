@@ -20,7 +20,8 @@ class BaseGetController extends GetxController {
 
   bool get disposed => _disposed;
 
-  /// Returns the busy status for an object if it exists. Returns false if not present
+  /// Returns the busy status for an object if it exists.
+  /// Returns false if not present
   bool busy(Object object) => _busyStates[object.hashCode] ?? false;
 
   dynamic error(Object object) => _errorStates[object.hashCode];
