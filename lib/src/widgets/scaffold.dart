@@ -12,6 +12,7 @@ class GetScaffold extends StatelessWidget {
     this.subtitle,
     this.logo,
     this.showProgress = false,
+    this.showScrollbar = true,
     this.hideToolbars = false,
     this.hideAbleAppBar = false,
     this.isInteractive = true,
@@ -37,6 +38,7 @@ class GetScaffold extends StatelessWidget {
   final String subtitle;
   final Widget logo;
   final bool showProgress;
+  final bool showScrollbar;
   final bool hideToolbars;
   final bool hideAbleAppBar;
   final bool isInteractive;
@@ -97,15 +99,15 @@ class GetScaffold extends StatelessWidget {
     );
   }
 
+  Widget get _child =>
+      child ??
+      ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [Responsive(children: children)],
+      );
+
   Widget get _body => Stack(children: [
-        sliver ??
-            Scrollbar(
-              child: child ??
-                  ListView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    children: [Responsive(children: children)],
-                  ),
-            ),
+        sliver ?? (showScrollbar == true ? Scrollbar(child: _child) : _child),
         if (!_isInteractive) Clickable(),
         AppLifecycle(onDetached: Get.context.endEditing),
         ...childrenAtFront ?? [],
@@ -156,7 +158,8 @@ class GetScaffold extends StatelessWidget {
             (_bottomBarCenterItems.isBlank)
         ? Container(height: 0)
         : BottomBar(
-            snackBar: withBottomBar,
+            visible: !hideToolbars,
+            topChild: withBottomBar,
             leftItems: _bottomBarLeftItems,
             rightItems: _bottomBarRightItems,
             centerItems: subtitle?.isBlank ?? true

@@ -61,9 +61,7 @@ extension ObjectX on Object {
     return (condition == true) ? apply(this) : this;
   }
 
-  T let<T>(T Function(dynamic) apply) {
-    return apply(this);
-  }
+  R let<T, R>(R Function(T) apply) => apply(this as T);
 
   T applyFor<T>(int times, T Function(T) apply) {
     var value = this;

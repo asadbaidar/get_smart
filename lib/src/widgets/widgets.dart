@@ -384,17 +384,33 @@ class CircularProgress extends StatelessWidget {
 }
 
 class LinearProgress extends StatelessWidget {
-  const LinearProgress({this.visible = true});
+  const LinearProgress({
+    this.visible = true,
+    this.height = 1,
+    this.color,
+    this.value,
+  });
+
+  const LinearProgress.standard({
+    this.visible = true,
+    this.value,
+  })  : color = Colors.blue,
+        height = 2.4;
 
   final bool visible;
+  final Color color;
+  final double height;
+  final double value;
 
   @override
   Widget build(BuildContext context) => visible ?? true
       ? LinearProgressIndicator(
-          minHeight: 1,
+          minHeight: height ?? 1,
           backgroundColor: Colors.transparent,
+          valueColor: color?.let((it) => AlwaysStoppedAnimation<Color>(it)),
+          value: value,
         )
-      : Container(height: 1);
+      : Container(height: height ?? 1);
 }
 
 class MessageView extends StatelessWidget {
@@ -883,14 +899,16 @@ class BottomBar extends StatelessWidget {
     this.leftItems,
     this.rightItems,
     this.centerItems,
-    this.snackBar,
+    this.topChild,
+    this.visible = true,
     Key key,
   }) : super(key: key);
 
   final List<Widget> leftItems;
   final List<Widget> rightItems;
   final List<Widget> centerItems;
-  final Widget snackBar;
+  final Widget topChild;
+  final bool visible;
 
   @override
   Widget build(BuildContext context) {
@@ -900,35 +918,37 @@ class BottomBar extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CrossFade(firstChild: snackBar),
-        if (snackBar == null) AppLineSeparator(style: SeparatorStyle.full),
-        BottomAppBar(
-          child: SafeArea(
-            minimum: EdgeInsets.only(bottom: Get.mediaQuery.viewInsets.bottom),
-            left: false,
-            right: false,
-            top: false,
-            bottom: true,
-            child: Container(
-              height: 44,
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
-                ..._leftItems,
-                if (_leftItems.length < _rightItems.length)
-                  for (int i = 0;
-                      i < _rightItems.length - _leftItems.length;
-                      i++)
-                    GetButton.icon(),
-                ...(_centerItems.isEmpty ? [Spacer()] : _centerItems),
-                if (_rightItems.length < _leftItems.length)
-                  for (int i = 0;
-                      i < _leftItems.length - _rightItems.length;
-                      i++)
-                    GetButton.icon(),
-                ..._rightItems,
-              ]),
+        CrossFade(firstChild: topChild),
+        if (topChild == null) AppLineSeparator(style: SeparatorStyle.full),
+        if (visible ?? true)
+          BottomAppBar(
+            child: SafeArea(
+              minimum:
+                  EdgeInsets.only(bottom: Get.mediaQuery.viewInsets.bottom),
+              left: false,
+              right: false,
+              top: false,
+              bottom: true,
+              child: Container(
+                height: 44,
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  ..._leftItems,
+                  if (_leftItems.length < _rightItems.length)
+                    for (int i = 0;
+                        i < _rightItems.length - _leftItems.length;
+                        i++)
+                      GetButton.icon(),
+                  ...(_centerItems.isEmpty ? [Spacer()] : _centerItems),
+                  if (_rightItems.length < _leftItems.length)
+                    for (int i = 0;
+                        i < _leftItems.length - _rightItems.length;
+                        i++)
+                      GetButton.icon(),
+                  ..._rightItems,
+                ]),
+              ),
             ),
           ),
-        ),
       ],
     );
   }
