@@ -112,6 +112,21 @@ extension Int on int {
   DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(this);
 
   String get formatted => GET.formatter.formatDecimal(this);
+
+  String get formattedSeconds {
+    var duration = seconds;
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final minutes = duration.inMinutes.remainder(60);
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$minutes:$twoDigitSeconds";
+  }
+
+  String formattedDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
 }
 
 extension StringX on String {
