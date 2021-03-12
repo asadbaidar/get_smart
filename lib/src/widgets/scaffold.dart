@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
 
 /// A smart scaffold.
@@ -125,10 +124,10 @@ class GetScaffold extends StatelessWidget {
         centerTitle: _centerTitle,
         leading: isHome != true
             ? BackButton(onPressed: () {
-                if (GET.canPop)
+                if (Get.canPop)
                   Get.back();
                 else
-                  SystemNavigator.pop(animated: true);
+                  Get.popSystem();
               })
             : null,
         title: logo ?? Column(children: [if (title != null) Text(title)]),

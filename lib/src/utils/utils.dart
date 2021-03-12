@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as DIO;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -111,7 +111,7 @@ extension Num on num {
 
   DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(this);
 
-  String get formatted => GET.formatter.formatDecimal(this);
+  String get formatted => Get.formatter.formatDecimal(this);
 
   String padLeft(
     int width, {
@@ -397,7 +397,7 @@ String nameOf(Type type) => type.toString();
 String routeOf(Type type) => "/" + nameOf(type);
 
 extension TextInputTypeX on TextInputType {
-  static TextInputType get numberFirst => Platform.isIOS
+  static TextInputType get numberFirst => Get.isIOS
       ? TextInputType.numberWithOptions(signed: true)
       : TextInputType.visiblePassword;
 
@@ -457,7 +457,7 @@ extension Double on double {
         color: color,
       );
 
-  String get formatted => GET.formatter.formatDecimal(toInt());
+  String get formatted => Get.formatter.formatDecimal(toInt());
 }
 
 Future<T> scheduleTask<T>(T Function() task) {
@@ -781,26 +781,35 @@ abstract class GetWebAPI {
   }
 }
 
-class GET {
-  static S find<S>({String tag}) {
+extension GetInterfaceX on GetInterface {
+  TargetPlatform get platform => theme.platform;
+
+  bool get isIOS => platform == TargetPlatform.iOS;
+
+  bool get isAndroid => platform == TargetPlatform.android;
+
+  bool get isWeb => kIsWeb;
+
+  bool get canPop => Navigator.canPop(context);
+
+  Future<void> popSystem({bool animated = true}) =>
+      SystemNavigator.pop(animated: animated);
+
+  void backUntil(String route) => until((r) => r.settings.name == route);
+
+  MaterialLocalizations get formatter => MaterialLocalizations.of(context);
+
+  S findIfExist<S>({String tag}) {
     try {
-      return Get.find<S>(tag: tag);
+      return find<S>(tag: tag);
     } catch (e) {
-      print(e);
       return null;
     }
   }
+}
 
-  static bool get canPop => Navigator.canPop(Get.context);
-
-  static Future<void> popSystem({bool animated = true}) =>
-      SystemNavigator.pop(animated: animated);
-
-  static void backUntil(String route) =>
-      Get.until((r) => r.settings.name == route);
-
-  static MaterialLocalizations get formatter =>
-      MaterialLocalizations.of(Get.context);
+abstract class GET {
+  static S find<S>({String tag}) => Get.findIfExist()<S>(tag: tag);
 }
 
 /// Asset directories mapping for easy access.
