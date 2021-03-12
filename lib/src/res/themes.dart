@@ -255,6 +255,7 @@ class GetTheme {
           foregroundColor: elevatedButtonStyle?.foregroundColor,
           textStyle: elevatedButtonStyle?.textStyle,
           visualDensity: elevatedButtonStyle?.visualDensity,
+          tapTargetSize: elevatedButtonStyle?.tapTargetSize,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -269,6 +270,7 @@ class GetTheme {
           foregroundColor: outlinedButtonStyle?.foregroundColor,
           textStyle: outlinedButtonStyle?.textStyle,
           visualDensity: outlinedButtonStyle?.visualDensity,
+          tapTargetSize: outlinedButtonStyle?.tapTargetSize,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -282,6 +284,7 @@ class GetTheme {
           foregroundColor: textButtonStyle?.foregroundColor,
           textStyle: textButtonStyle?.textStyle,
           visualDensity: textButtonStyle?.visualDensity,
+          tapTargetSize: textButtonStyle?.tapTargetSize,
         ),
       ),
       buttonTheme: ButtonThemeData(

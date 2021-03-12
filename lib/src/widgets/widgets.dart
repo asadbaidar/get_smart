@@ -239,6 +239,13 @@ class AppLineSeparator extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
+  const AppLineSeparator.full({Key key}) : this(style: SeparatorStyle.full);
+
+  const AppLineSeparator.noIcon({Key key}) : this(style: SeparatorStyle.noIcon);
+
+  const AppLineSeparator.padIcon({Key key})
+      : this(style: SeparatorStyle.padIcon);
+
   final double margin;
   final SeparatorStyle style;
 
