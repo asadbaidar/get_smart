@@ -10,6 +10,7 @@ class GetScaffold extends StatelessWidget {
     this.title,
     this.subtitle,
     this.logo,
+    this.extendBody = true,
     this.showProgress = false,
     this.showScrollbar = true,
     this.hideToolbars = false,
@@ -36,6 +37,7 @@ class GetScaffold extends StatelessWidget {
   final String title;
   final String subtitle;
   final Widget logo;
+  final bool extendBody;
   final bool showProgress;
   final bool showScrollbar;
   final bool hideToolbars;
@@ -68,7 +70,7 @@ class GetScaffold extends StatelessWidget {
     if (!_isInteractive) context?.endEditing();
     return Scaffold(
       key: _key,
-      extendBody: true,
+      extendBody: extendBody,
       appBar: sliver != null
           ? null
           : hideAbleAppBar == true
