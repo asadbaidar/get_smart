@@ -1,3 +1,7 @@
+## [0.0.2+6]
+
+* Added duration formatted properties
+
 ## [0.0.2+5]
 
 * Minor bug fixes
