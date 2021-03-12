@@ -101,7 +101,7 @@ extension ObjectX on Object {
   }
 }
 
-extension Int on int {
+extension Num on num {
   void repeatsFor<T>(Function apply) {
     if (this > 0)
       for (int i = 0; i < this; i++) {
@@ -113,20 +113,49 @@ extension Int on int {
 
   String get formatted => GET.formatter.formatDecimal(this);
 
-  String get formattedSeconds {
-    var duration = seconds;
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    final minutes = duration.inMinutes.remainder(60);
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$minutes:$twoDigitSeconds";
+  String padLeft(
+    int width, {
+    String withPadding = "0",
+    bool doIf = true,
+  }) =>
+      width <= 0
+          ? ""
+          : doIf == true
+              ? toString().padLeft(width, withPadding)
+              : toString();
+}
+
+extension DurationX on Duration {
+  String formatted({
+    int hoursWidth = 2,
+    int minutesWidth = 2,
+    int secondsWidth = 2,
+    bool hoursAlways = true,
+  }) {
+    var _hoursWidth = hoursAlways == true || inHours > 0 ? hoursWidth : 0;
+    var _secondsWidth = minutesWidth > 0 ? secondsWidth : 0;
+    String hours = inHours
+        .padLeft(_hoursWidth)
+        .post(":", doIf: _hoursWidth > 0 && minutesWidth > 0);
+    String minutes = inMinutes
+        .remainder(60)
+        .padLeft(minutesWidth)
+        .post(":", doIf: minutesWidth > 0 && _secondsWidth > 0);
+    String seconds = inSeconds.remainder(60).padLeft(_secondsWidth);
+    return hours + minutes + seconds;
   }
 
-  String formattedDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
-  }
+  String get formatted0mSS => formatted(hoursWidth: 0, minutesWidth: 1);
+
+  String get formatted0mmSS => formatted(hoursWidth: 0);
+
+  String get formattedHmm => formatted(hoursWidth: 1, secondsWidth: 0);
+
+  String get formattedHmmSS => formatted(hoursWidth: 1);
+
+  String get formattedHHmm => formatted(secondsWidth: 0);
+
+  String get formattedHHmmSS => formatted();
 }
 
 extension StringX on String {
