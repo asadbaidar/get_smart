@@ -1,3 +1,11 @@
+## [0.0.2+8]
+
+* bug fixes
+
+## [0.0.2+7]
+
+* added platform properties
+
 ## [0.0.2+6]
 
 * Added duration formatted properties

@@ -799,17 +799,19 @@ extension GetInterfaceX on GetInterface {
 
   MaterialLocalizations get formatter => MaterialLocalizations.of(context);
 
-  S findIfExist<S>({String tag}) {
+  /// Finds an Instance of the required Class <[S]>(or [tag])
+  /// Returns null if not found.
+  S findIt<S>({String tag}) {
     try {
-      return find<S>(tag: tag);
+      return GetInstance().find<S>(tag: tag);
     } catch (e) {
       return null;
     }
   }
-}
 
-abstract class GET {
-  static S find<S>({String tag}) => Get.findIfExist()<S>(tag: tag);
+  /// Deprecated method. Please use [findIt] instead.
+  @Deprecated("Please use `Get.findIt` instead.")
+  S find<S>({String tag}) => null;
 }
 
 /// Asset directories mapping for easy access.
