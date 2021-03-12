@@ -1,6 +1,6 @@
 ## [0.0.2+8]
 
-* bug fixes
+* windows platform supported
 
 ## [0.0.2+7]
 
