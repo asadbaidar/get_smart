@@ -314,6 +314,8 @@ abstract class GetController extends MultipleFutureGetController {
   /// Sets the key to busy, runs the runner and then sets it to not busy
   /// when completed.
   ///
+  /// key: by default `typeName`, if null, status will be update in default key
+  ///
   /// rethrows [Exception] after setting busy to false by key
   Future runBusyRunner(
     Future Function() busyAction, {
