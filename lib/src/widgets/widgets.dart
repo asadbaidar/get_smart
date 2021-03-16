@@ -1233,10 +1233,13 @@ extension GetBoxDecoration on BoxDecoration {
     double right,
     Color color,
     Color borderColor,
+    double borderRadius,
   }) {
     var _borderColor = borderColor ?? Get.theme.hintColor.dimmed;
     return BoxDecoration(
       color: color ?? Get.theme.backgroundColor,
+      borderRadius:
+          borderRadius == null ? null : BorderRadius.circular(borderRadius),
       border: Border(
         top: top != null
             ? BorderSide(width: top, color: _borderColor)
@@ -1260,6 +1263,7 @@ extension GetBoxDecoration on BoxDecoration {
     Color color,
     Color borderColor,
     double borderWidth,
+    double borderRadius,
   }) {
     return only(
       top: vertical,
@@ -1268,6 +1272,7 @@ extension GetBoxDecoration on BoxDecoration {
       right: horizontal,
       color: color,
       borderColor: borderColor,
+      borderRadius: borderRadius,
     );
   }
 
@@ -1276,15 +1281,39 @@ extension GetBoxDecoration on BoxDecoration {
     Color color,
     Color borderColor,
     double borderWidth,
+    double borderRadius,
   }) {
     return symmetric(
       vertical: all,
       horizontal: all,
       color: color,
       borderColor: borderColor,
+      borderRadius: borderRadius,
     );
   }
 }
+
+/* TODO:
+         Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.all(50),
+                  padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1.5),
+                  child: Text(
+                    "34Y",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Get.theme.accentColor, fontSize: 9),
+                  ),
+                  decoration: GetBoxDecoration.all(
+                    1,
+                    color: Colors.transparent, //Get.theme.accentColor,
+                    borderColor: Get.theme.accentColor,
+                    borderRadius: 5,
+                  ),
+                ),
+              ],
+            )
+*/
 
 /// States that an application can be in.
 ///

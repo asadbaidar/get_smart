@@ -38,6 +38,9 @@ class BaseGetController extends GetxController {
   // Returns true if any objects still have a busy status that is true.
   bool get anyObjectsBusy => _busyStates.values.any((busy) => busy);
 
+  // Returns true if any objects still have a error status.
+  bool get anyError => _errorStates.values.firstWhere((error) => error != null);
+
   /// Marks the viewmodel as busy and calls notify listeners
   void setBusy(bool value) {
     setBusyForObject(this, value);

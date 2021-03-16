@@ -180,6 +180,26 @@ extension StringX on String {
     );
   }
 
+  String take([int count = 1]) => characters.take(count).toString();
+
+  String takeWhile(bool Function(String) predicate) =>
+      characters.takeWhile(predicate).toString();
+
+  String takeLast([int count = 1]) => characters.takeLast(count).toString();
+
+  String takeLastWhile(bool Function(String) predicate) =>
+      characters.takeLastWhile(predicate).toString();
+
+  String skip([int count = 1]) => characters.skip(count).toString();
+
+  String skipWhile(bool Function(String) predicate) =>
+      characters.skipWhile(predicate).toString();
+
+  String skipLast([int count = 1]) => characters.skipLast(count).toString();
+
+  String skipLastWhile(bool Function(String) predicate) =>
+      characters.skipLastWhile(predicate).toString();
+
   String get notEmpty => isEmpty ? null : this;
 
   bool get isNotBlank => !isBlank;
@@ -190,16 +210,6 @@ extension StringX on String {
 
   bool containsIgnoreCase(String s) =>
       s == null ? false : lowercase.contains(s.lowercase);
-
-  String take(int count) => characters.take(count).toString();
-
-  String takeWhile(bool Function(String) predicate) =>
-      characters.takeWhile(predicate).toString();
-
-  String takeLast(int count) => characters.takeLast(count).toString();
-
-  String takeLastWhile(bool Function(String) predicate) =>
-      characters.takeLastWhile(predicate).toString();
 
   Color get materialPrimary => Colors.primaries[Random(hashCode).nextInt(17)];
 
@@ -258,6 +268,10 @@ extension StringX on String {
   Future<String> get decrypted async => await GetCipher.instance.decrypt(this);
 
   get json => jsonDecode(this);
+
+  int get asInt => int.tryParse(this) ?? 0;
+
+  double get asDouble => double.tryParse(this) ?? 0.0;
 }
 
 extension Bool on bool {

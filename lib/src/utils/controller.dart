@@ -98,6 +98,14 @@ abstract class GetController extends MultipleFutureGetController {
   /// Returns true if any objects still have a busy status.
   bool get isAnyBusy => anyObjectsBusy;
 
+  /// Returns true if all objects have succeeded.
+  bool get isAllSucceeded => dataMap.keys.every((k) => succeeded(k));
+
+  /// Returns data for any object which did not succeed.
+  WebResponse get anyNotSucceeded =>
+      data(dataMap.keys.firstWhere((k) => !succeeded(k))) ?? WebResponse()
+        ..isSucceeded = true;
+
   /// Returns the data ready status of the action if no error occurred
   bool get isActionDataReady => dataReady(actionName);
 
@@ -253,7 +261,7 @@ abstract class GetController extends MultipleFutureGetController {
       runnerMap[key.hash] ?? () => Future.value();
 
   /// Returns the data by key
-  WebResponse data(Object key) => dataMap[key.hash];
+  WebResponse data(Object key) => key == null ? null : dataMap[key.hash];
 
   /// Returns the success message by key
   dynamic success(Object key) => data(key)?.success;
