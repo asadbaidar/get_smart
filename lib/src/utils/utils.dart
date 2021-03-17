@@ -625,12 +625,10 @@ class WebResponse<T> extends WebMappable {
   String tag = "Connection";
   bool isSucceeded = false;
   String message = "Connection failed.";
-  T _result;
+  T result;
   List<T> results;
 
-  T get result => _result ?? (T.toString() == "dynamic" ? isSucceeded : null);
-
-  set result(value) => _result = value;
+  // ?? (T.toString() == "dynamic" ? isSucceeded : null);
 
   get data => results ?? result;
 
@@ -660,11 +658,11 @@ class WebResponse<T> extends WebMappable {
         ["status", "success"], isSucceeded, (v) => isSucceeded = v ?? false);
     map.all(["msg", "message"], message,
         (v) => message = v ?? "Connection failed.");
-    map<T>("result", results ?? _result, (v) {
+    map<T>("result", results ?? result, (v) {
       if (v is List) {
         return results = v;
       } else {
-        return _result = v;
+        return result = v;
       }
     });
   }
