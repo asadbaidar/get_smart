@@ -57,11 +57,13 @@ extension ListX<E> on List<E> {
 }
 
 extension ObjectX on Object {
+  R let<T, R>(R Function(T) apply) => apply(this as T);
+
+  R apply<R>(R Function() apply) => apply();
+
   T applyIf<T>(bool condition, T Function(T) apply) {
     return (condition == true) ? apply(this) : this;
   }
-
-  R let<T, R>(R Function(T) apply) => apply(this as T);
 
   T applyFor<T>(int times, T Function(T) apply) {
     var value = this;
@@ -582,6 +584,13 @@ abstract class WebMappable with Mappable {
 
   @override
   String toString() => description;
+
+  var isExpanded = false;
+
+  bool toggleExpand() => isExpanded = !isExpanded;
+
+  IconData get expandedIcon =>
+      isExpanded ? Icons.expand_less : Icons.expand_more;
 }
 
 class AppTileData extends WebMappable {

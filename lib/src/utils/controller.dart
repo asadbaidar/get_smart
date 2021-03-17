@@ -301,6 +301,7 @@ abstract class GetController extends MultipleFutureGetController {
   void clearData([key]) {
     setDataFor(key ?? typeName, null);
     clearErrors();
+    clearBusy();
     update();
   }
 
@@ -308,6 +309,7 @@ abstract class GetController extends MultipleFutureGetController {
   void clearAllData() {
     dataMap.clear();
     clearErrors();
+    clearBusy();
     update();
   }
 

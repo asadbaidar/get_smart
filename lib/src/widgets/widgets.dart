@@ -164,12 +164,16 @@ class AppTileRow extends StatelessWidget {
     this.icon,
     this.text,
     this.hint,
+    this.maxLines = 2,
+    this.expanded = false,
     Key key,
   }) : super(key: key);
 
   final IconData icon;
   final String text;
   final String hint;
+  final int maxLines;
+  final bool expanded;
 
   @override
   Widget build(BuildContext context) {
@@ -189,10 +193,14 @@ class AppTileRow extends StatelessWidget {
                 ),
               if (icon != null) SizedBox(width: 16),
               Flexible(
-                child: Text(
-                  text ?? hint,
-                  style: Get.textTheme.caption.apply(
-                    color: text == null ? Get.theme.hintColor : null,
+                child: CrossFade(
+                  firstChild: Text(
+                    textData,
+                    style: Get.textTheme.caption.apply(
+                      color: text == null ? Get.theme.hintColor : null,
+                    ),
+                    maxLines: expanded == true ? null : maxLines,
+                    overflow: expanded == true ? null : TextOverflow.ellipsis,
                   ),
                 ),
               ),
