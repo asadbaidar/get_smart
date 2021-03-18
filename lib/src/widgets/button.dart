@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get_smart/get_smart.dart';
 
-/// The factory class class for buttons whose style are defined by a
+/// The factory class for buttons whose style are defined by a
 /// [ButtonStyle] object.
 
 /// Buttons included are:
@@ -12,7 +12,7 @@ import 'package:get_smart/get_smart.dart';
 ///  * [ElevatedButton], a filled ButtonStyleButton whose material elevates when pressed.
 ///  * [OutlinedButton], similar to [TextButton], but with an outline.
 ///  * [IconButton], A material design icon button.
-class GetButton {
+abstract class GetButton {
   static MaterialStateProperty<double> defaultElevation([
     double elevation = 2,
   ]) =>

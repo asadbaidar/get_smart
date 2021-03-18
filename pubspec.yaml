@@ -2,7 +2,7 @@ name: get_smart
 description: A package of widgets and utils to make flutter easy and smart.
 homepage: https://github.com/asadbaidar/get_smart
 
-version: 0.0.3+1
+version: 0.0.3+2
 
 environment:
   sdk: ">=2.10.0 <3.0.0"
@@ -14,8 +14,6 @@ dependencies:
   # Dependencies
   intl: ^0.16.1
   sprintf: ^5.0.0
-  responsive_ui: ^2.0.1
-  object_mapper: ^1.0.0+2
   dio: ^3.0.10
   get: ^3.26.0
   cupertino_icons: ^1.0.0

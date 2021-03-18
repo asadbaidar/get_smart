@@ -106,7 +106,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.3+1"
+    version: "0.0.3+2"
   http_parser:
     dependency: transitive
     description:
@@ -142,13 +142,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0-nullsafety.6"
-  object_mapper:
-    dependency: transitive
-    description:
-      name: object_mapper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0+2"
   path:
     dependency: transitive
     description:
@@ -163,13 +156,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
-  responsive_ui:
-    dependency: transitive
-    description:
-      name: responsive_ui
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   shimmer:
     dependency: transitive
     description:

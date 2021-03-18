@@ -1,18 +1,10 @@
 library get_smart;
 
+// mapper
+export "src/mapper/get_mapper.dart";
 // res
-export "src/res/colors.dart";
-export "src/res/localizations.dart";
-export "src/res/packages.dart";
-export "src/res/texts.dart";
-export "src/res/themes.dart";
+export "src/res/get_res.dart";
 // utils
-export "src/utils/base_controllers.dart";
-export "src/utils/controller.dart";
-export 'src/utils/route_observer.dart';
-export "src/utils/utils.dart";
+export "src/utils/get_utils.dart";
 //widgets
-export "src/widgets/autocomplete_textfield.dart";
-export "src/widgets/button.dart";
-export "src/widgets/scaffold.dart";
-export "src/widgets/widgets.dart";
+export "src/widgets/get_widgets.dart";

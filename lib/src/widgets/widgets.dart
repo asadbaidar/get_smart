@@ -1004,7 +1004,7 @@ extension GlobalKeyX<T extends State<StatefulWidget>> on GlobalKey<T> {
   T get state => currentState;
 }
 
-class GetShimmer {
+abstract class GetShimmer {
   static Widget article() => Column(children: [
         Expanded(
           child: Container(
