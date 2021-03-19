@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
+
 import '../enumerable.dart';
 import '../transformable.dart';
 
 class DateUnit extends Enumerable<int> {
   final int rawValue;
+
   const DateUnit({@required this.rawValue});
 
   //
@@ -21,6 +23,7 @@ class DateUnit extends Enumerable<int> {
 
 class DateTransform implements Transformable<DateTime, double> {
   DateUnit unit;
+
   DateTransform({this.unit = DateUnit.seconds});
 
   //
