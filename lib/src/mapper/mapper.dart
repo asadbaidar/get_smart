@@ -126,7 +126,7 @@ class Mapper {
     switch (type) {
       // List
       case ValueType.list:
-        final list = List();
+        final list = [];
 
         for (int i = 0; i < value.length; i++) {
           final item = _itemBuilder<T>(value[i], MappingType.toJson);
