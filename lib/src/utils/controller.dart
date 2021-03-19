@@ -17,7 +17,7 @@ abstract class GetController extends MultipleFutureGetController {
 
   void _initialiseData() {
     if (dataMap == null) {
-      _dataMap = Map<String, dynamic>();
+      _dataMap = {};
     }
     _futuresCompleted = 0;
   }

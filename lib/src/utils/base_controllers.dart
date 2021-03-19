@@ -5,8 +5,8 @@ import 'package:get_smart/get_smart.dart';
 
 /// Contains ViewModel functionality for busy state management
 class BaseGetController extends GetxController {
-  Map<int, bool> _busyStates = Map<int, bool>();
-  Map<int, dynamic> _errorStates = Map<int, dynamic>();
+  Map<int, bool> _busyStates = {};
+  Map<int, dynamic> _errorStates = {};
 
   bool _initialised = false;
 
@@ -289,7 +289,7 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
 
   void _initialiseData() {
     if (_dataMap == null) {
-      _dataMap = Map<String, dynamic>();
+      _dataMap = {};
     }
 
     _futuresCompleted = 0;
@@ -357,9 +357,9 @@ abstract class MultipleStreamGetController extends _MultiDataSourceGetController
       _streamsSubscriptions[key];
 
   void initialise() {
-    _dataMap = Map<String, dynamic>();
+    _dataMap = {};
     clearErrors();
-    _streamsSubscriptions = Map<String, StreamSubscription>();
+    _streamsSubscriptions = {};
 
     if (!changeSource) {
       update();
