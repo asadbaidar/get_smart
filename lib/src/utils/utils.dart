@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as DIO;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -53,6 +54,13 @@ extension ListX<E> on List<E> {
       return null;
     }
     return it.current;
+  }
+
+  E takeFirstWhere(bool test(E element)) {
+    for (E element in this) {
+      if (test(element)) return element;
+    }
+    return null;
   }
 }
 
@@ -591,36 +599,54 @@ abstract class WebMappable with Mappable {
 
   IconData get expandedIcon =>
       isExpanded ? Icons.expand_less : Icons.expand_more;
+
+  var isChecked = false;
+
+  bool toggleChecked() => isChecked = !isChecked;
 }
 
 class AppTileData extends WebMappable {
   AppTileData({
     this.icon,
+    this.header,
     this.title,
     this.subtitle,
     this.trailingTop,
     this.trailingBottom,
-    this.subTiles,
+    this.subTiles = const [],
     this.color,
-    this.isDetailed,
+    this.isDetailed = false,
+    this.isHeader = false,
     this.onTap,
   });
 
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final String trailingTop;
-  final String trailingBottom;
-  final List<AppTileData> subTiles;
-  final Color color;
-  final bool isDetailed;
-  final Function onTap;
+  IconData icon;
+  dynamic header;
+  String title;
+  String subtitle;
+  String trailingTop;
+  String trailingBottom;
+  List<AppTileData> subTiles;
+  Color color;
+  bool isDetailed;
+  bool isHeader;
+  Function onTap;
+
+  bool get hasSubTiles => subTiles.isNotEmpty == true;
 }
 
 class WebResponse<T> extends WebMappable {
-  WebResponse({this.errorType});
+  WebResponse();
 
-  final DioErrorType errorType;
+  WebResponse.dio([this.dioError]);
+
+  WebResponse.error([String message]) : message = message;
+
+  WebResponse.success([String message])
+      : message = message,
+        isSucceeded = true;
+
+  DioErrorType dioError;
 
   String tag = "Connection";
   bool isSucceeded = false;
@@ -643,7 +669,7 @@ class WebResponse<T> extends WebMappable {
           : WebStatus.failed;
 
   /// Returns if canceled or not
-  bool get isCanceled => errorType == DioErrorType.CANCEL;
+  bool get isCanceled => dioError == DioErrorType.CANCEL;
 
   /// Returns if failed or not
   bool get isFailed => !isSucceeded;
@@ -794,7 +820,7 @@ abstract class GetWebAPI {
           ],
         );
       } on DioError catch (e) {
-        return WebResponse<T>(errorType: e.type);
+        return WebResponse<T>.dio(e.type);
       } finally {
         dio.close();
       }

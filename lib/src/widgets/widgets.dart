@@ -24,6 +24,8 @@ class AppTile extends StatelessWidget {
     this.isIconBoxed = true,
     this.isDetailed = true,
     this.padAccessory,
+    this.showAccessory,
+    this.tintAccessory,
     this.tintAble,
     this.destructive,
     this.density,
@@ -43,6 +45,8 @@ class AppTile extends StatelessWidget {
     this.background,
     this.isIconBoxed = true,
     this.padAccessory,
+    this.showAccessory,
+    this.tintAccessory,
     this.tintAble,
     this.destructive,
     this.density,
@@ -63,6 +67,8 @@ class AppTile extends StatelessWidget {
     this.background,
     this.isIconBoxed = true,
     this.padAccessory,
+    this.showAccessory,
+    this.tintAccessory,
     this.tintAble,
     this.destructive,
     this.onTap,
@@ -83,6 +89,8 @@ class AppTile extends StatelessWidget {
   final bool isIconBoxed;
   final bool isDetailed;
   final bool padAccessory;
+  final bool showAccessory;
+  final bool tintAccessory;
   final bool tintAble;
   final bool destructive;
   final VisualDensity density;
@@ -90,13 +98,14 @@ class AppTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _tintAble = destructive == true ? true : tintAble ?? false;
+    final _tintAble = destructive == true ? true : (tintAble ?? false);
     final tintColor =
         color ?? (destructive == true ? Colors.red : Get.theme.accentColor);
     final isTrailingTop = trailingTop?.notEmpty != null;
     final isTrailingBottom = trailingBottom?.notEmpty != null;
     final accessory = this.accessory ??
         (isDetailed == true ? const Icon(Icons.chevron_right) : null);
+    final showAccessory = accessory != null && (this.showAccessory ?? true);
     return InkWell(
       highlightColor: tintColor?.activated,
       splashColor: tintColor?.translucent,
@@ -142,12 +151,16 @@ class AppTile extends StatelessWidget {
                           Text(trailingBottom, style: Get.textTheme.caption),
                       ],
                     ),
-                  if (accessory != null)
+                  if (showAccessory)
                     IconTheme(
-                      data: IconThemeData(color: Get.theme.hintColor),
+                      data: IconThemeData(
+                        color: tintAccessory == true
+                            ? tintColor
+                            : Get.theme.hintColor,
+                      ),
                       child: accessory,
                     ),
-                  if (accessory == null) SizedBox(width: 14),
+                  if (showAccessory) SizedBox(width: 14),
                 ],
               ),
             ),
