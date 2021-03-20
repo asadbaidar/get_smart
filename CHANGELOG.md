@@ -1,3 +1,7 @@
+## [0.0.3+7]
+
+* bug fixes
+
 ## [0.0.3+6]
 
 * few utils added
