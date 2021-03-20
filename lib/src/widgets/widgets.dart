@@ -562,6 +562,7 @@ class SwipeRefresh extends RefreshIndicator {
           key: key,
           child: child,
           onRefresh: onRefresh,
+          color: Get.theme.primaryIconTheme.color,
           backgroundColor: Get.theme.appBarTheme.color,
         );
 
