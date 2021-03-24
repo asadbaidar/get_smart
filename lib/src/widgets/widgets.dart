@@ -10,6 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_smart/get_smart.dart';
 
+import '../../get_smart.dart';
+
 class AppTile extends StatelessWidget {
   const AppTile({
     this.icon,
@@ -29,6 +31,8 @@ class AppTile extends StatelessWidget {
     this.tintAble,
     this.destructive,
     this.density,
+    this.horizontalPadding,
+    this.verticalPadding,
     this.onTap,
     Key key,
   }) : super(key: key);
@@ -50,6 +54,8 @@ class AppTile extends StatelessWidget {
     this.tintAble,
     this.destructive,
     this.density,
+    this.horizontalPadding,
+    this.verticalPadding,
     this.onTap,
     Key key,
   })  : isDetailed = false,
@@ -71,6 +77,8 @@ class AppTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.destructive,
+    this.horizontalPadding,
+    this.verticalPadding,
     this.onTap,
     Key key,
   })  : isDetailed = false,
@@ -93,6 +101,8 @@ class AppTile extends StatelessWidget {
   final bool tintAccessory;
   final bool tintAble;
   final bool destructive;
+  final double horizontalPadding;
+  final double verticalPadding;
   final VisualDensity density;
   final void Function() onTap;
 
@@ -117,8 +127,10 @@ class AppTile extends StatelessWidget {
             ListTile(
               visualDensity: density,
               contentPadding: EdgeInsets.only(
-                left: 16,
-                right: padAccessory == true ? 16 : 2,
+                left: horizontalPadding ?? 16,
+                right: padAccessory == true ? (horizontalPadding ?? 16) : 2,
+                top: verticalPadding ?? 0,
+                bottom: verticalPadding ?? 0,
               ),
               leading: icon == null
                   ? null
@@ -160,7 +172,8 @@ class AppTile extends StatelessWidget {
                       ),
                       child: accessory,
                     ),
-                  if (showAccessory) SizedBox(width: 14),
+                  if (!showAccessory && padAccessory != true)
+                    SizedBox(width: 14)
                 ],
               ),
             ),
@@ -663,7 +676,7 @@ class TextFormFieldX extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _hint = hint ?? label.lowercase;
+    final _hint = hint ?? label?.lowercase ?? GetText.value().lowercase;
     final _validator = validator != null ? validator : (v) => null;
     final _readOnly = readOnly == true || onTap != null;
     final _obscureText = obscureText == true;
