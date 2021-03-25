@@ -69,6 +69,8 @@ extension ObjectX on Object {
 
   R apply<R>(R Function() apply) => apply();
 
+  void lets(void Function() apply) => apply();
+
   T applyIf<T>(bool condition, T Function(T) apply) {
     return (condition == true) ? apply(this) : this;
   }
@@ -546,7 +548,7 @@ extension MapperX on Mapper {
   }
 }
 
-abstract class WebMappable with Mappable {
+abstract class WebMappable with Mappable, Comparable<WebMappable> {
   DateTime currentTime;
   String _id;
   String _description;
@@ -582,16 +584,48 @@ abstract class WebMappable with Mappable {
     );
   }
 
+  get builders => [];
+
   Future get decrypted async {
     id = await id.decrypted;
     description = await description.decrypted;
     return this;
   }
 
-  get builders => [];
+  bool get isEmpty => id.isEmpty && description.isEmpty;
+
+  bool get isNotEmpty => id.isNotEmpty && description.isNotEmpty;
 
   @override
   String toString() => description;
+
+  @override
+  int compareTo(WebMappable other) => comparable.compareTo(other.comparable);
+
+  int operator >(WebMappable other) => compareTo(other);
+
+  int operator <(WebMappable other) => other.compareTo(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) return false;
+    return other is WebMappable &&
+        (identical(other, this) || equatable.equalsIgnoreCase(other.equatable));
+  }
+
+  @override
+  int get hashCode => identityHashCode(equatable.lowercase);
+
+  String get equatable => id;
+
+  String get containable => id + description;
+
+  Comparable get comparable => toString();
+
+  bool contains(object) => containable.contains(object.toString());
+
+  bool containsIgnoreCase(object) =>
+      containable.containsIgnoreCase(object.toString());
 
   var isExpanded = false;
 

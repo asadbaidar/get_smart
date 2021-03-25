@@ -1,3 +1,8 @@
+## [0.0.3+9]
+
+* AutoCompleteTextField bug fixes
+* Added GetBottomSheet
+
 ## [0.0.3+8]
 
 * bug fixes
