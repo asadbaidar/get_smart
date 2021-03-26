@@ -21,6 +21,7 @@ class GetScaffold extends StatelessWidget {
     this.appBarExtensionSize,
     this.withBottomBar,
     this.bottomBar,
+    this.bottomSheet,
     this.sliver,
     this.childrenAtFront,
     this.bottomBarLeftItems,
@@ -48,6 +49,7 @@ class GetScaffold extends StatelessWidget {
   final double appBarExtensionSize;
   final Widget withBottomBar;
   final Widget bottomBar;
+  final Widget bottomSheet;
   final Widget sliver;
   final List<Widget> childrenAtFront;
   final List<Widget> bottomBarLeftItems;
@@ -97,6 +99,7 @@ class GetScaffold extends StatelessWidget {
       floatingActionButtonLocation: subtitle?.isBlank ?? true
           ? FloatingActionButtonLocation.endFloat
           : floatingActionButtonLocation,
+      bottomSheet: bottomSheet,
     );
   }
 

@@ -13,6 +13,8 @@ class GetBottomSheet extends StatelessWidget {
     this.bottomActions,
     this.contentPadding,
     this.minHeight,
+    this.showHandle = true,
+    this.centerTitle,
     Key key,
   }) : super(key: key);
 
@@ -23,6 +25,8 @@ class GetBottomSheet extends StatelessWidget {
   final List<Widget> bottomActions;
   final EdgeInsetsGeometry contentPadding;
   final double minHeight;
+  final bool showHandle;
+  final bool centerTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -36,39 +40,46 @@ class GetBottomSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AppBar(
-            automaticallyImplyLeading: false,
-            title: title,
-            backgroundColor: Colors.transparent,
-            actionsIconTheme: context.theme.iconTheme,
-            brightness: context.theme.brightness,
-            iconTheme: context.theme.iconTheme,
-            elevation: 0,
-            textTheme: context.textTheme,
-            primary: false,
-            actions: topActions,
-            leading: leadingAction,
-          ),
+          if (showHandle) RoundedHandle() else SizedBox(height: 6),
+          if (title != null ||
+              topActions?.isNotEmpty == true ||
+              leadingAction != null)
+            AppBar(
+              automaticallyImplyLeading: false,
+              title: title,
+              backgroundColor: Colors.transparent,
+              actionsIconTheme: context.theme.iconTheme,
+              brightness: context.theme.brightness,
+              iconTheme: context.theme.iconTheme,
+              toolbarHeight: 44,
+              elevation: 0,
+              centerTitle: centerTitle,
+              textTheme: context.textTheme,
+              primary: false,
+              actions: topActions,
+              leading: leadingAction,
+            ),
           Column(children: [
-            Padding(
-              padding: contentPadding ?? EdgeInsets.symmetric(horizontal: 16),
-              child: content,
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(height: minHeight),
-                  if (bottomActions?.isNotEmpty == true)
-                    ...bottomActions.expand(
-                      (element) => [SizedBox(width: 6), element],
-                    )
-                ],
+            if (content != null)
+              Padding(
+                padding: contentPadding ?? EdgeInsets.symmetric(horizontal: 16),
+                child: content,
               ),
-            ),
-            SizedBox(height: 8),
+            if (bottomActions?.isNotEmpty == true || minHeight != null)
+              Padding(
+                padding: const EdgeInsets.only(left: 8, top: 20, right: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(height: minHeight),
+                    if (bottomActions?.isNotEmpty == true)
+                      ...bottomActions.expand(
+                        (element) => [SizedBox(width: 6), element],
+                      )
+                  ],
+                ),
+              ),
+            SizedBox(height: 16),
           ]),
         ],
       ),
@@ -81,8 +92,6 @@ extension GetBottomSheetX on GetInterface {
     Widget sheet, {
     Color backgroundColor,
     double elevation,
-    bool persistent = true,
-    ShapeBorder shape,
     Clip clipBehavior,
     Color barrierColor,
     bool ignoreSafeArea,
@@ -101,8 +110,6 @@ extension GetBottomSheetX on GetInterface {
       sheet,
       backgroundColor: backgroundColor,
       elevation: elevation,
-      persistent: persistent,
-      shape: shape,
       clipBehavior: clipBehavior,
       barrierColor: barrierColor,
       ignoreSafeArea: ignoreSafeArea,
@@ -117,4 +124,28 @@ extension GetBottomSheetX on GetInterface {
       onDismiss?.call(value);
     });
   }
+}
+
+class RoundedHandle extends StatelessWidget {
+  const RoundedHandle({Key key, this.color}) : super(key: key);
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: 4,
+            width: 34,
+            margin: EdgeInsets.only(top: 9),
+            decoration: ShapeDecoration(
+              color: (color ?? context.theme.hintColor).withAlpha(50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+              ),
+            ),
+          ),
+        ],
+      );
 }
