@@ -349,22 +349,41 @@ extension Date on DateTime {
     int millisecond,
     int microsecond,
     TimeOfDay timeOfDay,
-  }) {
-    return DateTime(
-      year ?? this.year,
-      month ?? this.month,
-      day ?? this.day,
-      hour ?? timeOfDay?.hour ?? this.hour,
-      minute ?? timeOfDay?.minute ?? this.minute,
-      second ?? this.second,
-      millisecond ?? this.millisecond,
-      microsecond ?? this.microsecond,
-    );
-  }
+  }) =>
+      DateTime(
+        year ?? this.year,
+        month ?? this.month,
+        day ?? this.day,
+        hour ?? timeOfDay?.hour ?? this.hour,
+        minute ?? timeOfDay?.minute ?? this.minute,
+        second ?? this.second,
+        millisecond ?? this.millisecond,
+        microsecond ?? this.microsecond,
+      );
+
+  DateTime settingDate(DateTime date) => DateTime(
+        date.year,
+        date.month,
+        date.day,
+        hour,
+        minute,
+        second,
+        millisecond,
+        microsecond,
+      );
+
+  DateTime settingTime(DateTime time) => DateTime(
+        year,
+        month,
+        day,
+        time.hour,
+        time.minute,
+        time.second,
+        time.millisecond,
+        time.microsecond,
+      );
 
   static DateTime get now => DateTime.now();
-
-  String get formatDMMMy => DateFormat("dd-MMM-yyyy").format(this);
 
   String get formatEMMMdy => DateFormat.yMMMEd().format(this);
 
@@ -382,7 +401,15 @@ extension Date on DateTime {
 
   String get formatMMMdy => DateFormat.yMMMd().format(this);
 
+  String get formatDMMMy => DateFormat("dd-MMM-yyyy").format(this);
+
   String get formatHma => DateFormat("h:mm a").format(this);
+
+  String get formatDMMy => DateFormat("dd-MM-yyyy").format(this);
+
+  String get formatHm => DateFormat.Hm().format(this);
+
+  String get formatDMMyHm => "$formatDMMy $formatHm";
 
   int get inMilliseconds => millisecondsSinceEpoch;
 

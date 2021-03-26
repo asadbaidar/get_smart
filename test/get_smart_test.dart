@@ -9,4 +9,21 @@ void main() {
     expect(text.surround("*", doFor: 3), "***hello***");
     expect(text.surround("*", doIf: false), "hello");
   });
+  test('Test DateFormatX:', () {
+    final date = Date.from(
+      day: 1,
+      month: 2,
+      year: 2021,
+      hour: 1,
+      minute: 10,
+      second: 0,
+      microsecond: 0,
+      millisecond: 0,
+    );
+    var time = Date.from(hour: 1, minute: 20);
+    expect(date.settingTime(time).formatDMMyHm, "01-02-2021 01:20");
+    expect(date.settingTime(time).formatHm, "01:20");
+    expect(date.formatHm, "01:10");
+    expect(date.formatDMMy, "01-02-2021");
+  });
 }

@@ -1,3 +1,7 @@
+## [0.0.4]
+
+* bug fixes
+
 ## [0.0.3+9]
 
 * AutoCompleteTextField bug fixes
