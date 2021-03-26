@@ -78,7 +78,7 @@ class GetBottomSheet extends StatelessWidget {
 
 extension GetBottomSheetX on GetInterface {
   void modalBottomSheet(
-    Widget bottomsheet, {
+    Widget sheet, {
     Color backgroundColor,
     double elevation,
     bool persistent = true,
@@ -98,7 +98,7 @@ extension GetBottomSheetX on GetInterface {
   }) async {
     await onShow?.call();
     bottomSheet(
-      bottomsheet,
+      sheet,
       backgroundColor: backgroundColor,
       elevation: elevation,
       persistent: persistent,
