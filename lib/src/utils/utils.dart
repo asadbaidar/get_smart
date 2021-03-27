@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
@@ -223,9 +224,11 @@ extension StringX on String {
   bool containsIgnoreCase(String s) =>
       s == null ? false : lowercase.contains(s.lowercase);
 
-  Color get materialPrimary => Colors.primaries[Random(hashCode).nextInt(17)];
+  Color get materialPrimary =>
+      Colors.primaries[Random(hashCode).nextInt(Colors.primaries.length)];
 
-  Color get materialAccent => Colors.accents[Random(hashCode).nextInt(15)];
+  Color get materialAccent =>
+      Colors.accents[Random(hashCode).nextInt(Colors.accents.length)];
 
   bool isPasswordStrong({int min = 8}) {
     if (isBlank) return false;
@@ -284,6 +287,18 @@ extension StringX on String {
   int get asInt => int.tryParse(this) ?? 0;
 
   double get asDouble => double.tryParse(this) ?? 0.0;
+
+  List<int> get asUTF8 => utf8.encode(this);
+}
+
+extension RandomX on Random {
+  /// Generates a cryptographically secure random nonce
+  String nonce([int length = 32]) {
+    final charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    return List.generate(length, (_) => charset[nextInt(charset.length)])
+        .join();
+  }
 }
 
 extension Bool on bool {
@@ -664,6 +679,34 @@ abstract class WebMappable with Mappable, Comparable<WebMappable> {
   var isChecked = false;
 
   bool toggleChecked() => isChecked = !isChecked;
+}
+
+class StackList<T> {
+  final Queue<T> _underlyingQueue;
+
+  StackList() : _underlyingQueue = Queue<T>();
+
+  int get length => _underlyingQueue.length;
+
+  bool get isEmpty => _underlyingQueue.isEmpty;
+
+  bool get isNotEmpty => _underlyingQueue.isNotEmpty;
+
+  void clear() => _underlyingQueue.clear();
+
+  T peek() {
+    if (isEmpty) return null;
+    return _underlyingQueue.last;
+  }
+
+  T pop() {
+    if (isEmpty) return null;
+    final T lastElement = _underlyingQueue.last;
+    _underlyingQueue.removeLast();
+    return lastElement;
+  }
+
+  void push(final T element) => _underlyingQueue.addLast(element);
 }
 
 class AppTileData extends WebMappable {
