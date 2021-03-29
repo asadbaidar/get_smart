@@ -1,3 +1,7 @@
+## [0.0.4+1]
+
+* Added GetDateFormat utils
+
 ## [0.0.4]
 
 * bug fixes
