@@ -5,12 +5,12 @@ import '../enumerable.dart';
 import '../transformable.dart';
 
 class DateUnit extends Enumerable<int> {
-  final int rawValue;
+  static const seconds = const DateUnit(rawValue: 1000);
+  static const milliseconds = const DateUnit(rawValue: 1);
 
   const DateUnit({@required this.rawValue});
 
-  static const seconds = const DateUnit(rawValue: 1000);
-  static const milliseconds = const DateUnit(rawValue: 1);
+  final int rawValue;
 
   double addScale(double interval) {
     return interval * rawValue;
@@ -22,13 +22,13 @@ class DateUnit extends Enumerable<int> {
 }
 
 class DateTransform implements Transformable<DateTime, double> {
-  DateUnit unit;
-  DateFormat format;
-
   DateTransform({
     this.unit = DateUnit.seconds,
     this.format,
   });
+
+  final DateUnit unit;
+  final DateFormat format;
 
   @override
   DateTime fromJson(value) {
