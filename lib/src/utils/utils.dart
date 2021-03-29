@@ -400,31 +400,31 @@ extension Date on DateTime {
 
   static DateTime get now => DateTime.now();
 
-  String get formatEMMMdy => DateFormat.yMMMEd().format(this);
+  String get formatEMMMdy => GetDateFormat.inEMMMdy.format(this);
 
-  String get formatEEEEMMMMdy => DateFormat.yMMMMEEEEd().format(this);
+  String get formatEEEEMMMMdy => GetDateFormat.inEEEEMMMMdy.format(this);
 
-  String get formatEMMMdyHma => "$formatEMMMdy, $formatHma";
+  String get formatEMMMdyHma => GetDateFormat.inEMMMdyHma.format(this);
 
-  String get formatEEEEMMMMdyHma => "$formatEEEEMMMMdy, $formatHma";
+  String get formatEEEEMMMMdyHma => GetDateFormat.inEEEEMMMMdyHma.format(this);
 
-  String get formatMMMMdy => DateFormat.yMMMMd().format(this);
+  String get formatMMMMdy => GetDateFormat.inMMMMdy.format(this);
 
-  String get formatMMMMd => DateFormat.MMMMd().format(this);
+  String get formatMMMMd => GetDateFormat.inMMMMd.format(this);
 
-  String get formatMMMd => DateFormat.MMMd().format(this);
+  String get formatMMMd => GetDateFormat.inMMMd.format(this);
 
-  String get formatMMMdy => DateFormat.yMMMd().format(this);
+  String get formatMMMdy => GetDateFormat.inMMMdy.format(this);
 
-  String get formatDMMMy => DateFormat("dd-MMM-yyyy").format(this);
+  String get formatDMMMy => GetDateFormat.inDMMMy.format(this);
 
-  String get formatHma => DateFormat("h:mm a").format(this);
+  String get formatHma => GetDateFormat.inHma.format(this);
 
-  String get formatDMMy => DateFormat("dd-MM-yyyy").format(this);
+  String get formatDMMy => GetDateFormat.inDMMy.format(this);
 
-  String get formatHm => DateFormat.Hm().format(this);
+  String get formatHm => GetDateFormat.inHm.format(this);
 
-  String get formatDMMyHm => "$formatDMMy $formatHm";
+  String get formatDMMyHm => GetDateFormat.inDMMyHm.format(this);
 
   int get inMilliseconds => millisecondsSinceEpoch;
 
@@ -438,6 +438,44 @@ extension Date on DateTime {
       );
 
   String get webTimeStamp => GetWebAPI.timeStamp + inMilliseconds.toString();
+}
+
+extension GetDateFormat on DateFormat {
+  static DateFormat get inEMMMdy => DateFormat.yMMMEd();
+
+  static DateFormat get inEEEEMMMMdy => DateFormat.yMMMMEEEEd();
+
+  static DateFormat get inEMMMdyHma => inEMMMdy.add(inHma, ", ");
+
+  static DateFormat get inEEEEMMMMdyHma => inEEEEMMMMdy.add(inHma, ", ");
+
+  static DateFormat get inMMMMdy => DateFormat.yMMMMd();
+
+  static DateFormat get inMMMMd => DateFormat.MMMMd();
+
+  static DateFormat get inMMMd => DateFormat.MMMd();
+
+  static DateFormat get inMMMdy => DateFormat.yMMMd();
+
+  static DateFormat get inDMMMy => DateFormat("dd-MMM-yyyy");
+
+  static DateFormat get inHma => DateFormat("h:mm a");
+
+  static DateFormat get inDMMy => DateFormat("dd-MM-yyyy");
+
+  static DateFormat get inHm => DateFormat.Hm();
+
+  static DateFormat get inDMMyHm => inDMMy.add_Hm();
+
+  /// Add [format] to this instance as a pattern.
+  ///
+  /// If there was a previous pattern, then this appends to it, separating the
+  /// two by [separator].  [format] is first looked up in our list of
+  /// known skeletons.  If it's found there, then use the corresponding pattern
+  /// for this locale.  If it's not, then treat [format] as an explicit
+  /// pattern.
+  DateFormat add(DateFormat format, [String separator = ' ']) =>
+      addPattern(format.pattern, separator);
 }
 
 Future<void> openTimePicker(
