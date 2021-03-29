@@ -16,8 +16,14 @@ enum GetText {
   failed_server,
   busy,
   please_enter,
+  please_wait,
   invalid,
   value,
+  location_denied_permanently,
+  location_denied,
+  location_disabled,
+  location_mocked,
+  location_error,
 }
 
 /// Get text data
@@ -37,8 +43,16 @@ Map<Locale, Map<GetText, String>> _getTextMap = {
         "Sorry, Something went wrong on our end. Please try later.",
     GetText.busy: "Please wait. Good things are on the way.",
     GetText.please_enter: "Please enter the %s.",
+    GetText.please_wait: "Please wait...",
     GetText.invalid: "Invalid %s.",
     GetText.value: "Value",
+    GetText.location_denied_permanently:
+        "Location permission is denied permanently. Please turn it on from the app settings.",
+    GetText.location_denied: "Location permission is denied.",
+    GetText.location_disabled: "Location services are disabled.",
+    GetText.location_mocked:
+        "Mock location detected. Please turn it off to continue.",
+    GetText.location_error: "Unable to get location.",
   },
 };
 
