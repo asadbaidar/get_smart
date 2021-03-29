@@ -717,6 +717,8 @@ abstract class WebMappable with Mappable, Comparable<WebMappable> {
   var isChecked = false;
 
   bool toggleChecked() => isChecked = !isChecked;
+
+  Color get color => description.materialAccent;
 }
 
 class StackList<T> {
@@ -756,11 +758,11 @@ class AppTileData extends WebMappable {
     this.trailingTop,
     this.trailingBottom,
     this.subTiles = const [],
-    this.color,
+    Color color,
     this.isDetailed = false,
     this.isHeader = false,
     this.onTap,
-  });
+  }) : _color = color;
 
   IconData icon;
   dynamic header;
@@ -769,12 +771,15 @@ class AppTileData extends WebMappable {
   String trailingTop;
   String trailingBottom;
   List<AppTileData> subTiles;
-  Color color;
+  Color _color;
   bool isDetailed;
   bool isHeader;
   Function onTap;
 
   bool get hasSubTiles => subTiles.isNotEmpty == true;
+
+  @override
+  Color get color => _color ?? title?.materialAccent ?? super.color;
 }
 
 class WebResponse<T> extends WebMappable {
