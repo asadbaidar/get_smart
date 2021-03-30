@@ -340,17 +340,19 @@ extension Date on DateTime {
     int millisecond,
     int microsecond,
     TimeOfDay timeOfDay,
+    DateTime date,
+    DateTime time,
   }) {
     final now = Date.now;
     return DateTime(
-      year ?? now.year,
-      month ?? now.month,
-      day ?? now.day,
-      hour ?? timeOfDay?.hour ?? now.hour,
-      minute ?? timeOfDay?.minute ?? now.minute,
-      second ?? now.second,
-      millisecond ?? now.millisecond,
-      microsecond ?? now.microsecond,
+      year ?? date?.year ?? now.year,
+      month ?? date?.month ?? now.month,
+      day ?? date?.day ?? now.day,
+      hour ?? time?.hour ?? timeOfDay?.hour ?? now.hour,
+      minute ?? time?.minute ?? timeOfDay?.minute ?? now.minute,
+      second ?? time?.second ?? now.second,
+      millisecond ?? time?.millisecond ?? now.millisecond,
+      microsecond ?? time?.microsecond ?? now.microsecond,
     );
   }
 
@@ -364,38 +366,18 @@ extension Date on DateTime {
     int millisecond,
     int microsecond,
     TimeOfDay timeOfDay,
+    DateTime date,
+    DateTime time,
   }) =>
       DateTime(
-        year ?? this.year,
-        month ?? this.month,
-        day ?? this.day,
-        hour ?? timeOfDay?.hour ?? this.hour,
-        minute ?? timeOfDay?.minute ?? this.minute,
-        second ?? this.second,
-        millisecond ?? this.millisecond,
-        microsecond ?? this.microsecond,
-      );
-
-  DateTime settingDate(DateTime date) => DateTime(
-        date.year,
-        date.month,
-        date.day,
-        hour,
-        minute,
-        second,
-        millisecond,
-        microsecond,
-      );
-
-  DateTime settingTime(DateTime time) => DateTime(
-        year,
-        month,
-        day,
-        time.hour,
-        time.minute,
-        time.second,
-        time.millisecond,
-        time.microsecond,
+        year ?? date?.year ?? this.year,
+        month ?? date?.month ?? this.month,
+        day ?? date?.day ?? this.day,
+        hour ?? time?.hour ?? timeOfDay?.hour ?? this.hour,
+        minute ?? time?.minute ?? timeOfDay?.minute ?? this.minute,
+        second ?? time?.second ?? this.second,
+        millisecond ?? time?.millisecond ?? this.millisecond,
+        microsecond ?? time?.microsecond ?? this.microsecond,
       );
 
   static DateTime get now => DateTime.now();
@@ -415,6 +397,12 @@ extension Date on DateTime {
   String get formatMMMd => GetDateFormat.inMMMd.format(this);
 
   String get formatMMMdy => GetDateFormat.inMMMdy.format(this);
+
+  String get formatMMMdyHma => GetDateFormat.inMMMdyHma.format(this);
+
+  String get formatMdy => GetDateFormat.inMdy.format(this);
+
+  String get formatMdyHma => GetDateFormat.inMdyHma.format(this);
 
   String get formatDMMMy => GetDateFormat.inDMMMy.format(this);
 
@@ -457,6 +445,12 @@ extension GetDateFormat on DateFormat {
 
   static DateFormat get inMMMdy => DateFormat.yMMMd();
 
+  static DateFormat get inMMMdyHma => inMMMdy.add(inHma, ", ");
+
+  static DateFormat get inMdy => DateFormat.yMd();
+
+  static DateFormat get inMdyHma => inMdy.add(inHma, ", ");
+
   static DateFormat get inDMMMy => DateFormat("dd-MMM-yyyy");
 
   static DateFormat get inHma => DateFormat("h:mm a");
@@ -478,24 +472,80 @@ extension GetDateFormat on DateFormat {
       addPattern(format.pattern, separator);
 }
 
-Future<void> openTimePicker(
-  BuildContext context, {
-  DateTime withTime,
-  TimePickerEntryMode entryMode,
-  String cancelText,
-  String confirmText,
-  String helpText,
-  Function(DateTime time) onPick,
-}) async {
-  var time = await showTimePicker(
-    context: context,
-    initialEntryMode: entryMode ?? TimePickerEntryMode.input,
-    cancelText: cancelText,
-    confirmText: confirmText,
-    helpText: helpText,
-    initialTime: withTime?.timeOfDay ?? TimeOfDay.now(),
-  );
-  onPick(withTime?.setting(timeOfDay: time) ?? Date.from(timeOfDay: time));
+extension GetDateTimePickerX on GetInterface {
+  Future<void> timePicker({
+    DateTime withTime,
+    String cancelText,
+    String confirmText,
+    String helpText,
+    TimePickerEntryMode entryMode = TimePickerEntryMode.input,
+    TransitionBuilder builder,
+    bool useRootNavigator = true,
+    RouteSettings routeSettings,
+    Function(DateTime time) onPick,
+  }) async {
+    var time = await showTimePicker(
+      context: context,
+      initialTime: withTime?.timeOfDay ?? TimeOfDay.now(),
+      cancelText: cancelText,
+      confirmText: confirmText,
+      helpText: helpText,
+      initialEntryMode: entryMode ?? TimePickerEntryMode.input,
+      builder: builder,
+      useRootNavigator: useRootNavigator,
+      routeSettings: routeSettings,
+    );
+    onPick(time == null && withTime == null
+        ? null
+        : (withTime?.setting(timeOfDay: time) ?? Date.from(timeOfDay: time)));
+  }
+
+  Future<void> datePicker({
+    DateTime withDate,
+    DateTime minDate,
+    DateTime maxDate,
+    DateTime currentDate,
+    String cancelText,
+    String confirmText,
+    String helpText,
+    String errorFormatText,
+    String errorInvalidText,
+    String fieldHintText,
+    String fieldLabelText,
+    DatePickerEntryMode entryMode = DatePickerEntryMode.calendar,
+    DatePickerMode calenderMode = DatePickerMode.day,
+    SelectableDayPredicate selectableDayPredicate,
+    Locale locale,
+    bool useRootNavigator = true,
+    RouteSettings routeSettings,
+    TransitionBuilder builder,
+    Function(DateTime date) onPick,
+  }) async {
+    var date = await showDatePicker(
+      context: context,
+      initialDate: withDate ?? Date.now,
+      firstDate: minDate ?? Date.from(year: 2000),
+      lastDate: maxDate ?? Date.now,
+      currentDate: currentDate,
+      cancelText: cancelText,
+      confirmText: confirmText,
+      helpText: helpText,
+      errorFormatText: errorFormatText,
+      errorInvalidText: errorInvalidText,
+      fieldHintText: fieldHintText,
+      fieldLabelText: fieldLabelText,
+      initialEntryMode: entryMode ?? DatePickerEntryMode.calendar,
+      initialDatePickerMode: calenderMode ?? DatePickerMode.day,
+      selectableDayPredicate: selectableDayPredicate,
+      locale: locale,
+      useRootNavigator: useRootNavigator,
+      routeSettings: routeSettings,
+      builder: builder,
+    );
+    onPick(date == null && withDate == null
+        ? null
+        : (withDate?.setting(date: date) ?? date));
+  }
 }
 
 String nameOf(Type type) => type.toString();
