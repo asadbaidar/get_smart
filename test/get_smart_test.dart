@@ -21,8 +21,8 @@ void main() {
       millisecond: 0,
     );
     var time = Date.from(hour: 18, minute: 20);
-    expect(date.settingTime(time).formatDMMyHm, "01-02-2021 18:20");
-    expect(date.settingTime(time).formatHm, "18:20");
+    expect(date.setting(time: time).formatDMMyHm, "01-02-2021 18:20");
+    expect(date.setting(time: time).formatHm, "18:20");
     expect(date.formatHm, "01:10");
     expect(date.formatDMMy, "01-02-2021");
   });
