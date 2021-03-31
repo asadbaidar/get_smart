@@ -426,6 +426,12 @@ extension Date on DateTime {
       );
 
   String get webTimeStamp => GetWebAPI.timeStamp + inMilliseconds.toString();
+
+  bool operator >(DateTime other) =>
+      other != null && this != null ? isAfter(other) : false;
+
+  bool operator <(DateTime other) =>
+      other != null && this != null ? other.isAfter(this) : false;
 }
 
 extension GetDateFormat on DateFormat {

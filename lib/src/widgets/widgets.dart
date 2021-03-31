@@ -61,6 +61,30 @@ class AppTile extends StatelessWidget {
   })  : isDetailed = false,
         super(key: key);
 
+  const AppTile.plain({
+    this.icon,
+    this.title,
+    this.subtitle,
+    this.trailingTop,
+    this.trailingBottom,
+    this.accessory,
+    this.rows,
+    this.color,
+    this.padAccessory,
+    this.showAccessory,
+    this.tintAccessory,
+    this.tintAble,
+    this.destructive,
+    this.density,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.onTap,
+    Key key,
+  })  : isDetailed = false,
+        isIconBoxed = false,
+        background = Colors.transparent,
+        super(key: key);
+
   const AppTile.simpleDense({
     this.icon,
     this.title,
@@ -604,13 +628,14 @@ class CrossFade extends AnimatedCrossFade {
         );
 }
 
-class TextFormFieldX extends StatelessWidget {
-  const TextFormFieldX({
-    this.initialValue,
+class GetTextField extends StatelessWidget {
+  const GetTextField({
+    this.text,
     this.label,
     this.hint,
     this.error,
     this.helper,
+    this.hintIcon,
     this.prefix,
     this.suffix,
     this.autovalidateMode,
@@ -625,6 +650,7 @@ class TextFormFieldX extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.readOnly,
+    this.tapOnly = true,
     this.validateLength,
     this.validateEmpty = true,
     this.showCounter,
@@ -638,14 +664,73 @@ class TextFormFieldX extends StatelessWidget {
     this.margin,
     this.padding,
     this.background,
+    this.textCapitalization = TextCapitalization.none,
+    this.style,
+    this.textAlign = TextAlign.start,
+    this.textAlignVertical,
+    this.autofocus = false,
+    this.expands = false,
+    this.toolbarOptions,
+    this.showCursor,
+    this.obscuringCharacter = "•",
+    this.smartDashesType,
+    this.smartQuotesType,
+    this.maxLengthEnforced = true,
+    this.onEditingComplete,
+    this.enabled = true,
+    this.cursorWidth = 2.0,
+    this.cursorHeight,
+    this.cursorRadius,
+    this.cursorColor,
+    this.keyboardBrightness,
+    this.scrollPadding = const EdgeInsets.all(20.0),
+    this.enableInteractiveSelection = true,
+    this.selectionControls,
+    this.buildCounter,
+    this.scrollPhysics,
+    this.autofillHints,
+    this.icon,
+    this.labelStyle,
+    this.helperStyle,
+    this.helperMaxLines,
+    this.hintStyle,
+    this.hintMaxLines,
+    this.errorStyle,
+    this.errorMaxLines,
+    this.floatingLabelBehavior = FloatingLabelBehavior.auto,
+    this.isCollapsed = false,
+    this.contentPadding,
+    this.prefixIcon,
+    this.prefixIconConstraints,
+    this.prefixText,
+    this.prefixStyle,
+    this.suffixIcon,
+    this.suffixText,
+    this.suffixStyle,
+    this.suffixIconConstraints,
+    this.counter,
+    this.counterText,
+    this.counterStyle,
+    this.fillColor,
+    this.focusColor,
+    this.hoverColor,
+    this.errorBorder,
+    this.focusedBorder,
+    this.focusedErrorBorder,
+    this.disabledBorder,
+    this.enabledBorder,
+    this.border,
+    this.semanticCounterText,
+    this.alignLabelWithHint,
     Key key,
   }) : super(key: key);
 
-  final String initialValue;
+  final String text;
   final String label;
   final String hint;
   final String error;
   final String helper;
+  final Widget hintIcon;
   final Widget prefix;
   final Widget suffix;
   final TextInputType keyboardType;
@@ -660,6 +745,7 @@ class TextFormFieldX extends StatelessWidget {
   final void Function(String v) onChanged;
   final String Function(String v) validator;
   final bool readOnly;
+  final bool tapOnly;
   final bool validateLength;
   final bool validateEmpty;
   final bool showCounter;
@@ -673,37 +759,114 @@ class TextFormFieldX extends StatelessWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
   final Color background;
+  final TextCapitalization textCapitalization;
+  final TextStyle style;
+  final TextAlign textAlign;
+  final TextAlignVertical textAlignVertical;
+  final bool autofocus;
+  final bool expands;
+  final ToolbarOptions toolbarOptions;
+  final bool showCursor;
+  final String obscuringCharacter;
+  final SmartDashesType smartDashesType;
+  final SmartQuotesType smartQuotesType;
+  final bool maxLengthEnforced;
+  final VoidCallback onEditingComplete;
+  final bool enabled;
+  final double cursorWidth;
+  final double cursorHeight;
+  final Radius cursorRadius;
+  final Color cursorColor;
+  final Brightness keyboardBrightness;
+  final EdgeInsets scrollPadding;
+  final bool enableInteractiveSelection;
+  final TextSelectionControls selectionControls;
+  final InputCounterWidgetBuilder buildCounter;
+  final ScrollPhysics scrollPhysics;
+  final Iterable<String> autofillHints;
+  final Widget icon;
+  final TextStyle labelStyle;
+  final TextStyle helperStyle;
+  final int helperMaxLines;
+  final TextStyle hintStyle;
+  final int hintMaxLines;
+  final TextStyle errorStyle;
+  final int errorMaxLines;
+  final FloatingLabelBehavior floatingLabelBehavior;
+  final bool isCollapsed;
+  final EdgeInsetsGeometry contentPadding;
+  final Widget prefixIcon;
+  final BoxConstraints prefixIconConstraints;
+  final String prefixText;
+  final TextStyle prefixStyle;
+  final Widget suffixIcon;
+  final String suffixText;
+  final TextStyle suffixStyle;
+  final BoxConstraints suffixIconConstraints;
+  final Widget counter;
+  final String counterText;
+  final TextStyle counterStyle;
+  final Color fillColor;
+  final Color focusColor;
+  final Color hoverColor;
+  final InputBorder errorBorder;
+  final InputBorder focusedBorder;
+  final InputBorder focusedErrorBorder;
+  final InputBorder disabledBorder;
+  final InputBorder enabledBorder;
+  final InputBorder border;
+  final String semanticCounterText;
+  final bool alignLabelWithHint;
+
+  get _hint => hint ?? label?.lowercase ?? GetText.value().lowercase;
+
+  get _validator => validator != null ? validator : (v) => null;
+
+  String _validate(String v) =>
+      _validator(v) ??
+      (validateEmpty == true && v.isEmpty
+          ? GetText.please_enter([_hint])
+          : validateLength == true && v.length != maxLength
+              ? GetText.invalid([_hint])
+              : null);
 
   @override
   Widget build(BuildContext context) {
-    final _hint = hint ?? label?.lowercase ?? GetText.value().lowercase;
-    final _validator = validator != null ? validator : (v) => null;
-    final _readOnly = readOnly == true || onTap != null;
+    final _readOnly = readOnly == true || ((tapOnly ?? true) && onTap != null);
     final _obscureText = obscureText == true;
+    final _controller = controller ?? TextEditingController(text: text);
     return Container(
       padding: padding ?? EdgeInsets.zero,
       margin: margin ?? EdgeInsets.zero,
       color: background ?? Colors.transparent,
       child: TextFormField(
-        initialValue: initialValue,
         focusNode: focusNode,
-        controller: controller,
+        controller: _controller,
         autovalidateMode: autovalidateMode ??
-            (_validator(controller?.text ?? "") != null
+            ((validator != null
+                    ? _validator(_controller.text) != null
+                    : _controller.text.isNotEmpty)
                 ? AutovalidateMode.always
                 : AutovalidateMode.onUserInteraction),
-        readOnly: _readOnly ?? false,
+        readOnly: _readOnly,
         decoration: InputDecoration(
-          prefix: prefix != null
-              ? Padding(
-                  padding: const EdgeInsets.only(right: 6),
-                  child: IconTheme(
-                    data: Get.theme.iconTheme.copyWith(
-                      size: 16,
-                      color: Get.theme.hintColor,
-                    ),
-                    child: prefix,
-                  ),
+          prefix: prefix != null || hintIcon != null
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (prefix != null) prefix,
+                    if (hintIcon != null)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 6),
+                        child: IconTheme(
+                          data: context.theme.iconTheme.copyWith(
+                            size: 16,
+                            color: context.theme.hintColor,
+                          ),
+                          child: hintIcon,
+                        ),
+                      ),
+                  ],
                 )
               : null,
           isDense: isDense,
@@ -711,11 +874,42 @@ class TextFormFieldX extends StatelessWidget {
           labelText: label,
           hintText: hint,
           helperText: helper ?? " ",
-          helperMaxLines: 10,
-          errorMaxLines: 10,
+          helperMaxLines: helperMaxLines ?? 10,
+          errorMaxLines: errorMaxLines ?? 10,
           errorText: error,
           suffix: suffix,
-          counterText: showCounter ?? true ? null : "",
+          counterText: showCounter ?? true ? counterText : "",
+          icon: icon,
+          labelStyle: labelStyle,
+          helperStyle: helperStyle,
+          hintStyle: hintStyle,
+          hintMaxLines: hintMaxLines,
+          errorStyle: errorStyle,
+          floatingLabelBehavior:
+              floatingLabelBehavior ?? FloatingLabelBehavior.auto,
+          isCollapsed: isCollapsed ?? false,
+          contentPadding: contentPadding,
+          prefixIcon: prefixIcon,
+          prefixIconConstraints: prefixIconConstraints,
+          prefixText: prefixText,
+          prefixStyle: prefixStyle,
+          suffixIcon: suffixIcon,
+          suffixText: suffixText,
+          suffixStyle: suffixStyle,
+          suffixIconConstraints: suffixIconConstraints,
+          counter: showCounter ?? true ? counter : null,
+          counterStyle: counterStyle,
+          fillColor: fillColor,
+          focusColor: focusColor,
+          hoverColor: hoverColor,
+          errorBorder: errorBorder,
+          focusedBorder: focusedBorder,
+          focusedErrorBorder: focusedErrorBorder,
+          disabledBorder: disabledBorder,
+          enabledBorder: enabledBorder,
+          border: border,
+          semanticCounterText: semanticCounterText,
+          alignLabelWithHint: alignLabelWithHint,
         ),
         keyboardType: keyboardType,
         obscureText: _obscureText,
@@ -727,16 +921,34 @@ class TextFormFieldX extends StatelessWidget {
         minLines: minLines,
         maxLines: maxLines,
         onSaved: onSaved,
-        validator: (v) =>
-            _validator(v) ??
-            (validateEmpty == true && v.isEmpty
-                ? GetText.please_enter([_hint])
-                : validateLength == true && v.length != maxLength
-                    ? GetText.invalid([_hint])
-                    : null),
+        validator: _validate,
         onTap: readOnly == true ? null : onTap,
         onChanged: onChanged,
         onFieldSubmitted: onSubmitted,
+        textCapitalization: textCapitalization ?? TextCapitalization.none,
+        style: style,
+        textAlign: textAlign ?? TextAlign.start,
+        autofocus: autofocus ?? false,
+        expands: expands ?? false,
+        toolbarOptions: toolbarOptions,
+        showCursor: showCursor,
+        obscuringCharacter: obscuringCharacter ?? "•",
+        smartDashesType: smartDashesType,
+        smartQuotesType: smartQuotesType,
+        maxLengthEnforced: maxLengthEnforced ?? true,
+        onEditingComplete: onEditingComplete,
+        enabled: enabled ?? true,
+        cursorWidth: cursorWidth ?? 2.0,
+        cursorHeight: cursorHeight,
+        cursorRadius: cursorRadius,
+        cursorColor: cursorColor,
+        keyboardAppearance: keyboardBrightness,
+        scrollPadding: scrollPadding ?? const EdgeInsets.all(20.0),
+        enableInteractiveSelection: enableInteractiveSelection ?? true,
+        selectionControls: selectionControls,
+        buildCounter: buildCounter,
+        scrollPhysics: scrollPhysics,
+        autofillHints: autofillHints,
       ),
     );
   }
