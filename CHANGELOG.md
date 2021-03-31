@@ -1,3 +1,7 @@
+## [0.0.4+5]
+
+* Text fields optimized
+
 ## [0.0.4+4]
 
 * bug fixes
