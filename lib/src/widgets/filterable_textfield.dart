@@ -40,7 +40,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   /// Item height for suggestions list
   final double itemHeight;
 
-  /// GlobalKey used to enable addSuggestion etc
+  /// GlobalKey used to enable addItem etc
   final GlobalKey<GetFilterableTextFieldState<T>> key;
 
   /// Call textSubmitted on suggestion tap, itemSubmitted will be called no matter what
@@ -61,6 +61,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   final List<TextInputFormatter> inputFilters;
   final int minLength;
   final bool readOnly;
+  final bool validateEmpty;
 
   final TextStyle style;
   final TextInputType keyboardType;
@@ -78,8 +79,8 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
 
   GetFilterableTextField({
     @required this.key,
-    @required this.items,
     @required this.itemSubmitted,
+    this.items,
     this.itemBuilder,
     this.itemSorter,
     this.itemFilter,
@@ -104,6 +105,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
     this.textCapitalization = TextCapitalization.sentences,
     this.minLength = 0,
     this.readOnly = false,
+    this.validateEmpty = false,
     TextEditingController controller,
     FocusNode focusNode,
     this.nextFocusNode,
@@ -144,7 +146,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   List<T> _items;
 
-  List<T> get items => _items ?? widget.items;
+  List<T> get items => _items ?? widget.items ?? [];
 
   String _error;
 
@@ -166,7 +168,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   double get itemHeight => widget.itemHeight;
 
-  bool get submitOnSuggestionTap => widget.submitOnItemTap;
+  bool get submitOnItemTap => widget.submitOnItemTap;
 
   bool get clearOnSubmit => widget.clearOnSubmit;
 
@@ -174,11 +176,13 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   bool get disableFiltering => widget.disableFiltering;
 
-  bool get onlySubmitSuggestion => widget.onlyAcceptItem;
+  bool get onlyAcceptItem => widget.onlyAcceptItem;
 
   int get minLength => widget.minLength;
 
   bool get readOnly => widget.readOnly;
+
+  bool get validateEmpty => widget.validateEmpty;
 
   List<TextInputFormatter> get inputFilters => widget.inputFilters;
 
@@ -197,7 +201,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   FocusNode get nextFocusNode => widget.nextFocusNode;
 
   OverlayEntry itemsOverlayEntry;
-  List<T> filteredSuggestions = [];
+  List<T> filteredItems = [];
   String currentText = "";
 
   void initState() {
@@ -211,12 +215,13 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     if (onFocusChanged != null) {
       onFocusChanged(focusNode.hasFocus);
     }
-
+    print(focusNode.toStringDeep());
     if (!focusNode.hasFocus) {
+      print("Focus not");
       triggerItemSubmitted();
       setError(null);
       currentText = "";
-      filteredSuggestions = [];
+      filteredItems = [];
       updateOverlay();
     } else if (!(currentText == "" || currentText == null)) {
       updateOverlay(query: currentText, withoutFilter: showAllOnFocus);
@@ -255,11 +260,9 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   void triggerItemSubmitted() {
     if (!readOnly &&
-        onlySubmitSuggestion &&
-        !filteredSuggestions
-            .map((it) => it.toString())
-            .contains(controller.text)) {
-      var item = filteredSuggestions?.takeFirst;
+        onlyAcceptItem &&
+        !filteredItems.map((it) => it.toString()).contains(controller.text)) {
+      var item = filteredItems?.takeFirst;
       controller.text = item?.toString();
       if (item == null)
         clear();
@@ -280,23 +283,23 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     updateOverlay(query: currentText);
   }
 
-  void addItem(T suggestion) {
-    items.add(suggestion);
+  void addItem(T item) {
+    items.add(item);
     updateOverlay(query: currentText);
   }
 
-  void removeItem(T suggestion) {
-    if (items.remove(suggestion)) updateOverlay(query: currentText);
+  void removeItem(T item) {
+    if (items.remove(item)) updateOverlay(query: currentText);
   }
 
-  void updateItems(List<T> suggestions) {
-    this._items = suggestions;
+  void updateItems(List<T> items) {
+    this._items = items;
     updateOverlay(query: currentText);
   }
 
   Future<void> updateOverlay({String query, bool withoutFilter = false}) async {
     print("updateOverlay");
-    filteredSuggestions = withoutFilter == true
+    filteredItems = withoutFilter == true
         ? items
         : await getItems(items, itemSorter, itemFilter, itemCount, query);
     if (itemsOverlayEntry == null) {
@@ -305,6 +308,8 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
       final height = textFieldSize.height;
       itemsOverlayEntry = OverlayEntry(builder: (context) {
         print("OverlayEntry");
+        print(focusNode.toStringDeep());
+        if (!focusNode.hasFocus) clearOverlay();
         return Positioned(
           width: width,
           child: CompositedTransformFollower(
@@ -313,38 +318,36 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
             offset: Offset(0.0, (height - 24).abs()),
             child: SizedBox(
               width: width,
-              height: filteredSuggestions.length > visibleCount
+              height: filteredItems.length > visibleCount
                   ? (visibleCount * itemHeight).toDouble() + 6
                   : null,
               child: Card(
                 child: Scrollbar(
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
-                    itemCount: filteredSuggestions.length,
+                    itemCount: filteredItems.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      final suggestion = filteredSuggestions[index];
+                      final item = filteredItems[index];
                       return Row(children: [
                         Expanded(
                           child: itemBuilder(
                             context,
-                            suggestion,
+                            item,
                             () => setState(() {
-                              if (submitOnSuggestionTap) {
-                                String newText = suggestion.toString();
+                              if (submitOnItemTap) {
+                                String newText = item.toString();
                                 controller.text = newText;
+                                itemSubmitted(item);
                                 focusNode.unfocus();
-                                itemSubmitted(suggestion);
-                                removeError();
-                                if (clearOnSubmit) {
-                                  clear();
-                                }
+                                clearOverlay();
+                                if (clearOnSubmit) clear();
                               } else {
-                                String newText = suggestion.toString();
+                                String newText = item.toString();
                                 controller.text = newText;
                                 textChanged(newText);
-                                removeError();
                               }
+                              removeError();
                             }),
                           ),
                         )
@@ -385,21 +388,20 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   @override
   void deactivate() {
     print("$runtimeType deactivate");
-    itemsOverlayEntry?.remove();
+    clearOverlay();
     super.deactivate();
+  }
+
+  void clearOverlay() {
+    itemsOverlayEntry?.remove();
+    itemsOverlayEntry = null;
   }
 
   @override
   void dispose() {
     print("$runtimeType dispose");
-    // if we created our own focus node and controller, dispose of them
-    // otherwise, let the caller dispose of their own instances
-    if (focusNode == null) {
-      focusNode.dispose();
-    }
-    if (controller == null) {
-      controller.dispose();
-    }
+    focusNode?.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -414,6 +416,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
         helper: helper,
         error: error,
         style: style,
+        validateEmpty: validateEmpty,
         readOnly: readOnly,
         tapOnly: disableFiltering,
         inputFilters: inputFilters,
