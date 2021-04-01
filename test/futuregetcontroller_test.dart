@@ -41,7 +41,7 @@ class TestMultipleFutureGetController extends MultipleFutureGetController {
   int numberToReturn = 5;
 
   @override
-  Map<String, Future Function()> get futuresMap => {
+  Map<Object, Future Function()> get futuresMap => {
         NumberDelayFuture: getNumberAfterDelay,
         StringDelayFuture: getStringAfterDelay,
       };

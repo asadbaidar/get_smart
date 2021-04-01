@@ -282,7 +282,7 @@ abstract class FutureGetController<T> extends _SingleDataSourceGetController<T>
 /// Provides functionality for a ViewModel to run and fetch data using multiple future
 abstract class MultipleFutureGetController extends _MultiDataSourceGetController
     implements Initialisable {
-  Map<String, Future Function()> get futuresMap;
+  Map<Object, Future Function()> get futuresMap;
 
   Completer _futuresCompleter;
   int _futuresCompleted;

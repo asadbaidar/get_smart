@@ -80,7 +80,7 @@ abstract class GetController extends MultipleFutureGetController {
   List<GetWebAPI> get webAPIs => [];
 
   @override
-  Map<String, Future Function()> get futuresMap => {
+  Map<Object, Future Function()> get futuresMap => {
         nameOf(GetPrefs): GetPrefs.instance.reload,
         typeName: futureToRun,
         ...futuresToRun,
@@ -90,7 +90,7 @@ abstract class GetController extends MultipleFutureGetController {
   Future refreshData() => initialise();
 
   /// Multiple futures to run at the startup
-  Map<dynamic, Future Function()> get futuresToRun => {};
+  Map<Object, Future Function()> get futuresToRun => {};
 
   /// Single future to run at the startup
   Future futureToRun() => Future.value();
@@ -267,7 +267,7 @@ abstract class GetController extends MultipleFutureGetController {
   dynamic success(Object key) => data(key)?.success;
 
   /// Returns the data ready status by key even if error occurred
-  bool ready(String key) => data(key) != null;
+  bool ready(key) => data(key) != null;
 
   /// Returns the data ready status by key even if no error occurred
   @override
@@ -321,7 +321,7 @@ abstract class GetController extends MultipleFutureGetController {
   /// rethrows [Exception] after setting busy to false by key
   Future runBusyRunner(
     Future Function() busyAction, {
-    dynamic key,
+    Object key,
     bool throwException = false,
   }) {
     var _key = key ?? typeName;
