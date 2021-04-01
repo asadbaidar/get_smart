@@ -212,12 +212,11 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   }
 
   void focusListener() {
+    print("Focus ${focusNode.hasFocus}");
     if (onFocusChanged != null) {
       onFocusChanged(focusNode.hasFocus);
     }
-    print(focusNode.toStringDeep());
     if (!focusNode.hasFocus) {
-      print("Focus not");
       triggerItemSubmitted();
       setError(null);
       currentText = "";
@@ -298,7 +297,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   }
 
   Future<void> updateOverlay({String query, bool withoutFilter = false}) async {
-    print("updateOverlay");
+    print("updateOverlay NoFilter $withoutFilter Focus ${focusNode.hasFocus}");
     filteredItems = withoutFilter == true
         ? items
         : await getItems(items, itemSorter, itemFilter, itemCount, query);
@@ -307,8 +306,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
       final width = textFieldSize.width;
       final height = textFieldSize.height;
       itemsOverlayEntry = OverlayEntry(builder: (context) {
-        print("OverlayEntry");
-        print(focusNode.toStringDeep());
+        print("OverlayEntryFocus ${focusNode.hasFocus}");
         if (!focusNode.hasFocus) clearOverlay();
         return Positioned(
           width: width,
@@ -421,12 +419,15 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
         tapOnly: disableFiltering,
         inputFilters: inputFilters,
         textCapitalization: textCapitalization,
-        keyboardType: keyboardType,
+        keyboardType:
+            showAllOnFocus ? TextInputType.visiblePassword : keyboardType,
         focusNode: focusNode,
         controller: controller,
         textInputAction: textInputAction,
+        enableSuggestions: !showAllOnFocus,
         onChanged: (v) {
           currentText = v;
+          print("onChanged");
           updateOverlay(query: v);
           if (textChanged != null) textChanged(v);
           removeError();

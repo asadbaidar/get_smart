@@ -33,6 +33,8 @@ class AppTile extends StatelessWidget {
     this.density,
     this.horizontalPadding,
     this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
     this.onTap,
     Key key,
   }) : super(key: key);
@@ -56,6 +58,8 @@ class AppTile extends StatelessWidget {
     this.density,
     this.horizontalPadding,
     this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
     this.onTap,
     Key key,
   })  : isDetailed = false,
@@ -78,6 +82,8 @@ class AppTile extends StatelessWidget {
     this.density,
     this.horizontalPadding,
     this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
     this.onTap,
     Key key,
   })  : isDetailed = false,
@@ -103,6 +109,8 @@ class AppTile extends StatelessWidget {
     this.destructive,
     this.horizontalPadding,
     this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
     this.onTap,
     Key key,
   })  : isDetailed = false,
@@ -127,6 +135,8 @@ class AppTile extends StatelessWidget {
   final bool destructive;
   final double horizontalPadding;
   final double verticalPadding;
+  final double topPadding;
+  final double bottomPadding;
   final VisualDensity density;
   final void Function() onTap;
 
@@ -153,8 +163,8 @@ class AppTile extends StatelessWidget {
               contentPadding: EdgeInsets.only(
                 left: horizontalPadding ?? 16,
                 right: padAccessory == true ? (horizontalPadding ?? 16) : 2,
-                top: verticalPadding ?? 0,
-                bottom: verticalPadding ?? 0,
+                top: verticalPadding ?? topPadding ?? 0,
+                bottom: verticalPadding ?? bottomPadding ?? 0,
               ),
               leading: icon == null
                   ? null
