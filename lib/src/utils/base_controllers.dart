@@ -236,7 +236,7 @@ class _MultiDataSourceGetController extends DynamicSourceGetController {
 
   Map<String, dynamic> get dataMap => _dataMap;
 
-  bool dataReady(String key) => _dataMap[key] != null && (error(key) == null);
+  bool dataReady(Object key) => _dataMap[key] != null && (error(key) == null);
 }
 
 /// Provides functionality for a ViewModel that's sole purpose it is to fetch data using a [Future]
@@ -333,9 +333,9 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
     }
   }
 
-  void onError({String key, error}) {}
+  void onError({Object key, error}) {}
 
-  void onData(String key) {}
+  void onData(Object key) {}
 }
 
 /// Provides functionality for a ViewModel to run and fetch data using multiple streams
