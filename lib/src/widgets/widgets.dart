@@ -690,7 +690,7 @@ class GetTextField extends StatelessWidget {
     this.obscuringCharacter = "•",
     this.smartDashesType,
     this.smartQuotesType,
-    this.maxLengthEnforced = true,
+    this.maxLengthEnforcement = true,
     this.onEditingComplete,
     this.enabled = true,
     this.cursorWidth = 2.0,
@@ -785,7 +785,7 @@ class GetTextField extends StatelessWidget {
   final String obscuringCharacter;
   final SmartDashesType smartDashesType;
   final SmartQuotesType smartQuotesType;
-  final bool maxLengthEnforced;
+  final bool maxLengthEnforcement;
   final VoidCallback onEditingComplete;
   final bool enabled;
   final double cursorWidth;
@@ -950,7 +950,7 @@ class GetTextField extends StatelessWidget {
         obscuringCharacter: obscuringCharacter ?? "•",
         smartDashesType: smartDashesType,
         smartQuotesType: smartQuotesType,
-        maxLengthEnforced: maxLengthEnforced ?? true,
+        //maxLengthEnforced: maxLengthEnforcement ?? true,
         onEditingComplete: onEditingComplete,
         enabled: enabled ?? true,
         cursorWidth: cursorWidth ?? 2.0,
