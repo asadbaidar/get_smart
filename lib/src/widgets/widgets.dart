@@ -40,6 +40,33 @@ class AppTile extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
+  const AppTile.detailed({
+    this.icon,
+    this.title,
+    this.subtitle,
+    this.trailingTop,
+    this.trailingBottom,
+    this.accessory,
+    this.rows,
+    this.color,
+    this.background,
+    this.isIconBoxed = true,
+    this.isDetailed = true,
+    this.padAccessory,
+    this.showAccessory,
+    this.tintAccessory,
+    this.tintAble,
+    this.destructive,
+    this.enabled,
+    this.density,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
+    this.onTap,
+    Key key,
+  }) : super(key: key);
+
   const AppTile.simple({
     this.icon,
     this.title,
@@ -51,6 +78,7 @@ class AppTile extends StatelessWidget {
     this.color,
     this.background,
     this.isIconBoxed = true,
+    this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
     this.tintAccessory,
@@ -64,35 +92,7 @@ class AppTile extends StatelessWidget {
     this.bottomPadding,
     this.onTap,
     Key key,
-  })  : isDetailed = false,
-        super(key: key);
-
-  const AppTile.plain({
-    this.icon,
-    this.title,
-    this.subtitle,
-    this.trailingTop,
-    this.trailingBottom,
-    this.accessory,
-    this.rows,
-    this.color,
-    this.padAccessory,
-    this.showAccessory,
-    this.tintAccessory,
-    this.tintAble,
-    this.destructive,
-    this.enabled,
-    this.density,
-    this.horizontalPadding,
-    this.verticalPadding,
-    this.topPadding,
-    this.bottomPadding,
-    this.onTap,
-    Key key,
-  })  : isDetailed = false,
-        isIconBoxed = false,
-        background = Colors.transparent,
-        super(key: key);
+  }) : super(key: key);
 
   const AppTile.simpleDense({
     this.icon,
@@ -105,21 +105,48 @@ class AppTile extends StatelessWidget {
     this.color,
     this.background,
     this.isIconBoxed = true,
+    this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
     this.destructive,
     this.enabled,
+    this.density = Density.min,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
     this.bottomPadding,
     this.onTap,
     Key key,
-  })  : isDetailed = false,
-        density = Density.min,
-        super(key: key);
+  }) : super(key: key);
+
+  const AppTile.plain({
+    this.icon,
+    this.title,
+    this.subtitle,
+    this.trailingTop,
+    this.trailingBottom,
+    this.accessory,
+    this.rows,
+    this.color,
+    this.background = Colors.transparent,
+    this.isIconBoxed = false,
+    this.isDetailed = false,
+    this.padAccessory,
+    this.showAccessory,
+    this.tintAccessory,
+    this.tintAble,
+    this.destructive,
+    this.enabled,
+    this.density,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
+    this.onTap,
+    Key key,
+  }) : super(key: key);
 
   final IconData icon;
   final String title;
@@ -149,7 +176,7 @@ class AppTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final _tintAble = destructive == true ? true : (tintAble ?? false);
     final tintColor =
-        color ?? (destructive == true ? Colors.red : Get.theme.accentColor);
+        color ?? (destructive == true ? Colors.red : context.theme.accentColor);
     final isTrailingTop = trailingTop?.notEmpty != null;
     final isTrailingBottom = trailingBottom?.notEmpty != null;
     final accessory = this.accessory ??
@@ -160,7 +187,7 @@ class AppTile extends StatelessWidget {
       splashColor: tintColor?.translucent,
       onTap: (enabled ?? true) ? onTap : null,
       child: Ink(
-        color: background ?? Get.theme.backgroundColor,
+        color: background ?? context.theme.backgroundColor,
         child: Column(
           children: [
             ListTile(
@@ -177,7 +204,7 @@ class AppTile extends StatelessWidget {
                       icon: icon,
                       color: tintColor,
                       withinBox: isIconBoxed,
-                    ).adjustForTile,
+                    ).adjustHorizontally,
               title: title?.notEmpty?.let((it) => Text(
                     it,
                     style: TextStyle(
@@ -207,7 +234,7 @@ class AppTile extends StatelessWidget {
                       data: IconThemeData(
                         color: tintAccessory == true
                             ? tintColor
-                            : Get.theme.hintColor,
+                            : context.theme.hintColor,
                       ),
                       child: accessory,
                     ),
@@ -229,40 +256,69 @@ class AppTileRow extends StatelessWidget {
     this.icon,
     this.text,
     this.hint,
+    this.color,
+    this.background,
     this.maxLines = 2,
     this.expanded = false,
+    this.standalone = false,
+    this.isIconBoxed = false,
+    Key key,
+  }) : super(key: key);
+
+  const AppTileRow.standalone({
+    this.icon,
+    this.text,
+    this.hint,
+    this.color,
+    this.background,
+    this.maxLines = 2,
+    this.expanded = false,
+    this.isIconBoxed = false,
+    this.standalone = true,
     Key key,
   }) : super(key: key);
 
   final IconData icon;
   final String text;
   final String hint;
+  final Color color;
+  final Color background;
   final int maxLines;
   final bool expanded;
+  final bool standalone;
+  final bool isIconBoxed;
 
   @override
   Widget build(BuildContext context) {
     var textData = text ?? hint;
+    var tintColor = color ?? context.theme.primaryIconTheme.color;
     return textData == null
         ? Container()
-        : Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        : Container(
+            color: standalone == true
+                ? (background ?? context.theme.backgroundColor)
+                : null,
+            padding: EdgeInsets.only(
+              top: standalone == true ? 16 : 0,
+              left: 16,
+              right: 16,
+              bottom: 16,
+            ),
             child: Row(children: [
               if (icon != null)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Icon(
-                    icon,
-                    color: Get.theme.primaryIconTheme.color,
-                  ),
-                ),
+                IconBox(
+                  icon: icon,
+                  color: tintColor,
+                  withinBox: isIconBoxed,
+                  small: true,
+                ).adjustHorizontally,
               if (icon != null) SizedBox(width: 16),
               Flexible(
                 child: CrossFade(
                   firstChild: Text(
                     textData,
-                    style: Get.textTheme.caption.apply(
-                      color: text == null ? Get.theme.hintColor : null,
+                    style: context.textTheme.caption.apply(
+                      color: text == null ? context.theme.hintColor : null,
                     ),
                     maxLines: expanded == true ? null : maxLines,
                     overflow: expanded == true ? null : TextOverflow.ellipsis,
@@ -396,46 +452,56 @@ class AppTileHeader extends StatelessWidget {
 }
 
 class IconBox extends StatelessWidget {
-  static const double height = 40;
-  static const double width = 40;
-  static const double size = 30;
-  static const double iconSize = 18;
+  static const double boxHeight = 40;
+  static const double boxWidth = 40;
+  static const double boxSize = 30;
+  static const double iconSmall = 24;
+  static const double iconNormal = 30;
+  static const double iconBoxed = 18;
 
   const IconBox({
     this.color,
     this.icon,
     this.withinBox = true,
+    this.small = true,
     Key key,
   }) : super(key: key);
 
   final Color color;
   final IconData icon;
   final bool withinBox;
+  final bool small;
 
   @override
   Widget build(BuildContext context) {
     return withinBox == true
         ? Container(
-            height: size,
-            width: size,
-            decoration: size.circularDecoration(color: color),
+            height: boxSize,
+            width: boxSize,
+            decoration: boxSize.circularDecoration(color: color),
             child: Icon(
               icon,
-              size: iconSize,
+              size: iconBoxed,
               color: color.contrast,
             ),
           )
         : Icon(
             icon,
-            size: size,
+            size: small == true ? iconSmall : iconNormal,
             color: color,
           );
   }
 
   Widget get adjustForTile => Container(
         alignment: Alignment.center,
-        height: height,
-        width: width,
+        height: boxHeight,
+        width: boxWidth,
+        child: this,
+      );
+
+  Widget get adjustHorizontally => Container(
+        alignment: Alignment.center,
+        width: boxWidth,
         child: this,
       );
 }

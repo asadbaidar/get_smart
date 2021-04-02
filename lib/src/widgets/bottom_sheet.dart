@@ -15,6 +15,7 @@ class GetBottomSheet extends StatelessWidget {
     this.minHeight,
     this.showHandle = true,
     this.centerTitle,
+    this.rounded = true,
     Key key,
   }) : super(key: key);
 
@@ -27,6 +28,7 @@ class GetBottomSheet extends StatelessWidget {
   final double minHeight;
   final bool showHandle;
   final bool centerTitle;
+  final bool rounded;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,9 @@ class GetBottomSheet extends StatelessWidget {
       decoration: ShapeDecoration(
         color: context.theme.backgroundColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular((rounded ?? true) ? 12 : 0),
+          ),
         ),
       ),
       child: Column(
