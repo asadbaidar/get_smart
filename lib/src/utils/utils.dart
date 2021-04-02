@@ -808,6 +808,7 @@ class StackList<T> {
 class AppTileData extends WebMappable {
   AppTileData({
     this.icon,
+    this.accessory,
     this.header,
     this.title,
     this.subtitle,
@@ -817,10 +818,12 @@ class AppTileData extends WebMappable {
     Color color,
     this.isDetailed = false,
     this.isHeader = false,
+    this.padAccessory,
     this.onTap,
   }) : _color = color;
 
   IconData icon;
+  IconData accessory;
   dynamic header;
   String title;
   String subtitle;
@@ -830,6 +833,7 @@ class AppTileData extends WebMappable {
   Color _color;
   bool isDetailed;
   bool isHeader;
+  bool padAccessory;
   Function onTap;
 
   bool get hasSubTiles => subTiles.isNotEmpty == true;

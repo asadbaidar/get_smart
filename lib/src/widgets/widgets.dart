@@ -30,6 +30,7 @@ class AppTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.destructive,
+    this.enabled,
     this.density,
     this.horizontalPadding,
     this.verticalPadding,
@@ -55,6 +56,7 @@ class AppTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.destructive,
+    this.enabled,
     this.density,
     this.horizontalPadding,
     this.verticalPadding,
@@ -79,6 +81,7 @@ class AppTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.destructive,
+    this.enabled,
     this.density,
     this.horizontalPadding,
     this.verticalPadding,
@@ -107,6 +110,7 @@ class AppTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.destructive,
+    this.enabled,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
@@ -133,6 +137,7 @@ class AppTile extends StatelessWidget {
   final bool tintAccessory;
   final bool tintAble;
   final bool destructive;
+  final bool enabled;
   final double horizontalPadding;
   final double verticalPadding;
   final double topPadding;
@@ -153,7 +158,7 @@ class AppTile extends StatelessWidget {
     return InkWell(
       highlightColor: tintColor?.activated,
       splashColor: tintColor?.translucent,
-      onTap: onTap,
+      onTap: enabled == true ? onTap : null,
       child: Ink(
         color: background ?? Get.theme.backgroundColor,
         child: Column(
