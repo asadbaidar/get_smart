@@ -158,7 +158,7 @@ class AppTile extends StatelessWidget {
     return InkWell(
       highlightColor: tintColor?.activated,
       splashColor: tintColor?.translucent,
-      onTap: enabled == true ? onTap : null,
+      onTap: (enabled ?? true) ? onTap : null,
       child: Ink(
         color: background ?? Get.theme.backgroundColor,
         child: Column(
