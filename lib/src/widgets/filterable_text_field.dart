@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
+import 'package:get_smart/src/widgets/text_field.dart';
 
 typedef Widget GetFilterItemBuilder<T>(
     BuildContext context, T data, Function onTap);
