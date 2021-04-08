@@ -12,6 +12,8 @@ typedef InputEventCallback<T>(T data);
 
 typedef StringCallback(String data);
 
+/// Build on top of TextFormField, extending its capabilities to get
+/// the list options to select from and filtering based on text entered.
 class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   /// Callback to filter item: return true or false depending on input text
   final Filter<T> itemFilter;
