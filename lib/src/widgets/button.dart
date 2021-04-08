@@ -687,7 +687,7 @@ abstract class GetButton {
         visualDensity: visualDensity,
         padding: padding ?? const EdgeInsets.all(8.0),
         alignment: alignment ?? Alignment.center,
-        splashRadius: splashRadius,
+        splashRadius: splashRadius ?? 20,
         icon: icon ?? const SizedBox(),
         color: color,
         focusColor: focusColor,
@@ -701,7 +701,7 @@ abstract class GetButton {
         autofocus: autofocus ?? false,
         tooltip: tooltip,
         enableFeedback: enableFeedback ?? true,
-        constraints: constraints,
+        constraints: constraints ?? BoxConstraints(),
       );
 
   /// Create a primary icon button.
@@ -750,6 +750,6 @@ abstract class GetButton {
         enabled: enabled,
         tooltip: tooltip,
         enableFeedback: enableFeedback,
-        constraints: BoxConstraints.tight(Size.square(40)),
+        constraints: constraints,
       );
 }
