@@ -1,8 +1,33 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
 
-/// All app themes to be used in the app should be defined here
+/// Theme extension
+///
+/// Default material specs:
+/// ```
+/// NAME         SIZE  WEIGHT  SPACING
+/// headline1    96.0  light   -1.5
+/// headline2    60.0  light   -0.5
+/// headline3    48.0  regular  0.0
+/// headline4    34.0  regular  0.25
+/// headline5    24.0  regular  0.0
+/// headline6    20.0  medium   0.15
+/// subtitle1    16.0  regular  0.15
+/// subtitle2    14.0  medium   0.1
+/// bodyText1    16.0  regular  0.5
+/// bodyText2    14.0  regular  0.25
+/// button       14.0  medium   1.25
+/// caption      12.0  regular  0.4
+/// overline     10.0  regular  1.5
+///
+/// "light" = `FontWeight.w300`
+/// "regular" = `FontWeight.w400`
+/// "medium" = `FontWeight.w500`
+/// ```
 class GetTheme {
   static const kAccentColor = Color(0xFF2196F3);
   static const kPrimarySwatch = Colors.blue;
@@ -13,25 +38,12 @@ class GetTheme {
   static const kCanvasColorDark = Color(0xFF26343C);
   static const kPrimaryBackgroundDark = Color(0xFF37474F);
 
-  // NAME         SIZE  WEIGHT  SPACING
-  // headline1    96.0  light   -1.5
-  // headline2    60.0  light   -0.5
-  // headline3    48.0  regular  0.0
-  // headline4    34.0  regular  0.25
-  // headline5    24.0  regular  0.0
-  // headline6    20.0  medium   0.15
-  // subtitle1    16.0  regular  0.15
-  // subtitle2    14.0  medium   0.1
-  // bodyText1    16.0  regular  0.5
-  // bodyText2    14.0  regular  0.25
-  // button       14.0  medium   1.25
-  // caption      12.0  regular  0.4
-  // overline     10.0  regular  1.5
-  //
-  // "light" = `FontWeight.w300`
-  // "regular" = `FontWeight.w400`
-  // "medium" = `FontWeight.w500`
-
+  static final kErrorTextStyle = ui.TextStyle(
+    color: Colors.red,
+    fontSize: 13.0,
+    fontFamily: "monospace",
+    fontWeight: FontWeight.bold,
+  );
   static const kFontAvenirNext = "AvenirNext";
   static const kTextAvenirNext = TextTheme(
     headline1: TextStyle(
@@ -325,7 +337,13 @@ class GetTheme {
         child: child,
       );
 
+  static setErrorStyle({Color backgroundColor, ui.TextStyle textStyle}) {
+    RenderErrorBox.backgroundColor = backgroundColor ?? kBackgroundLight;
+    RenderErrorBox.textStyle = textStyle ?? kErrorTextStyle;
+  }
+
   static resetSystemChrome(BuildContext context) {
+    setErrorStyle(backgroundColor: context.theme.backgroundColor);
     var brightness = GetTheme.brightnessInverse(context);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       // systemNavigationBarIconBrightness: brightness,

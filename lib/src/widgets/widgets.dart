@@ -462,7 +462,7 @@ class IconBox extends StatelessWidget {
     this.color,
     this.icon,
     this.withinBox = true,
-    this.small = true,
+    this.small,
     Key key,
   }) : super(key: key);
 

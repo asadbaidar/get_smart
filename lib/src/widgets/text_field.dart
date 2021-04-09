@@ -215,8 +215,16 @@ class GetTextField extends StatelessWidget {
 
   bool get _obscureText => obscureText == true;
 
+  String _tryValidator(String v) {
+    try {
+      return _validator(v);
+    } catch (_) {
+      return null;
+    }
+  }
+
   String _validate(String v) =>
-      _validator(v) ??
+      _tryValidator(v) ??
       (validateEmpty == true && v.isEmpty
           ? GetText.please_enter([_hint])
           : validateLength == true && v.length != maxLength
@@ -225,7 +233,7 @@ class GetTextField extends StatelessWidget {
 
   AutovalidateMode get _autovalidateMode =>
       autovalidateMode ??
-      ((validator != null ? _validator(_text) != null : _text.isNotEmpty)
+      ((validator != null ? _tryValidator(_text) != null : _text.isNotEmpty)
           ? AutovalidateMode.always
           : AutovalidateMode.onUserInteraction);
 
