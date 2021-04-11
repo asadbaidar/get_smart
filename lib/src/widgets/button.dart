@@ -674,21 +674,44 @@ abstract class GetButton {
     bool primary = false,
     bool enabled = true,
     String tooltip,
+    String label,
+    TextStyle labelStyle,
     bool enableFeedback = true,
     BoxConstraints constraints,
   }) =>
       IconButton(
         key: key,
         iconSize: iconSize ??
-            (primary == true
-                ? Get.theme.primaryIconTheme.size
-                : Get.theme.iconTheme.size) ??
+            (label != null
+                ? 20.0
+                : primary == true
+                    ? Get.theme.primaryIconTheme.size
+                    : Get.theme.iconTheme.size) ??
             24.0,
         visualDensity: visualDensity,
-        padding: padding ?? const EdgeInsets.all(8.0),
+        padding: padding ??
+            (label != null
+                ? const EdgeInsets.symmetric(vertical: 8)
+                : const EdgeInsets.all(8)),
         alignment: alignment ?? Alignment.center,
-        splashRadius: splashRadius ?? 20,
-        icon: icon ?? const SizedBox(),
+        splashRadius: splashRadius ?? (label != null ? 24 : 20),
+        icon: label != null
+            ? Column(
+                children: [
+                  SizedBox(
+                    height: iconSize == null ? 4 : (24 - iconSize).abs(),
+                  ),
+                  icon,
+                  SizedBox(height: 2.5),
+                  Expanded(
+                    child: Text(
+                      label,
+                      style: labelStyle ?? TextStyle(fontSize: 9),
+                    ),
+                  ),
+                ],
+              )
+            : (icon ?? const SizedBox()),
         color: color,
         focusColor: focusColor,
         hoverColor: hoverColor,
@@ -701,7 +724,10 @@ abstract class GetButton {
         autofocus: autofocus ?? false,
         tooltip: tooltip,
         enableFeedback: enableFeedback ?? true,
-        constraints: constraints ?? BoxConstraints(),
+        constraints: constraints ??
+            (label != null
+                ? BoxConstraints.expand(width: 40)
+                : BoxConstraints()),
       );
 
   /// Create a primary icon button.
@@ -725,6 +751,8 @@ abstract class GetButton {
     bool autofocus = false,
     bool enabled = true,
     String tooltip,
+    String label,
+    TextStyle labelStyle,
     bool enableFeedback = true,
     BoxConstraints constraints,
   }) =>
@@ -749,6 +777,8 @@ abstract class GetButton {
         primary: true,
         enabled: enabled,
         tooltip: tooltip,
+        label: label,
+        labelStyle: labelStyle,
         enableFeedback: enableFeedback,
         constraints: constraints,
       );
