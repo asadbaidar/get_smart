@@ -1430,3 +1430,46 @@ abstract class Density {
     vertical: 3.0,
   );
 }
+
+class GetSearchDelegate extends SearchDelegate {
+  GetSearchDelegate({
+    String hint,
+  }) : super(searchFieldLabel: hint);
+
+  @override
+  Widget buildLeading(BuildContext context) => BackButton();
+
+  @override
+  Widget buildSuggestions(BuildContext context) => buildResults(context);
+
+  @override
+  ThemeData appBarTheme(BuildContext context) => GetTheme.black(
+        context,
+        brightness: Brightness.dark,
+      ).copyWith(
+        appBarTheme: context.theme.appBarTheme,
+        scaffoldBackgroundColor: context.theme.scaffoldBackgroundColor,
+        inputDecorationTheme: InputDecorationTheme(
+          border: InputBorder.none,
+        ),
+      );
+
+  @override
+  List<Widget> buildActions(BuildContext context) => [
+        if (query.trim().isNotEmpty)
+          GetButton.icon(
+            icon: Icon(CupertinoIcons.clear_circled_solid),
+            onPressed: clear,
+          )
+      ];
+
+  @override
+  Widget buildResults(BuildContext context) => Theme(
+        data: context.theme,
+        child: query.trim().isEmpty ? Container() : getResults(context),
+      );
+
+  void clear() => query = "";
+
+  Widget getResults(BuildContext context) => Container();
+}
