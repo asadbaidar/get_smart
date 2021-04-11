@@ -9,14 +9,16 @@ class GetScaffold extends StatelessWidget {
     this.children,
     this.title,
     this.subtitle,
-    this.logo,
+    this.customTitle,
+    this.backgroundColor,
     this.extendBody = true,
     this.showProgress = false,
     this.showScrollbar = true,
     this.hideToolbars = false,
     this.hideAbleAppBar = false,
     this.isInteractive = true,
-    this.isHome = false,
+    this.hideAppBarLeading = false,
+    this.appBarLeading,
     this.appBarExtension,
     this.appBarExtensionSize,
     this.withBottomBar,
@@ -37,14 +39,16 @@ class GetScaffold extends StatelessWidget {
   final List<Widget> children;
   final String title;
   final String subtitle;
-  final Widget logo;
+  final Widget customTitle;
+  final Color backgroundColor;
   final bool extendBody;
   final bool showProgress;
   final bool showScrollbar;
   final bool hideToolbars;
   final bool hideAbleAppBar;
   final bool isInteractive;
-  final bool isHome;
+  final bool hideAppBarLeading;
+  final Widget appBarLeading;
   final Widget appBarExtension;
   final double appBarExtensionSize;
   final Widget withBottomBar;
@@ -73,6 +77,7 @@ class GetScaffold extends StatelessWidget {
     return Scaffold(
       key: _key,
       extendBody: extendBody,
+      backgroundColor: backgroundColor,
       appBar: sliver != null
           ? null
           : hideAbleAppBar == true
@@ -127,15 +132,18 @@ class GetScaffold extends StatelessWidget {
 
   Widget get _appBar => AppBar(
         centerTitle: _centerTitle,
-        leading: isHome != true
-            ? BackButton(onPressed: () {
-                if (Get.canPop)
-                  Get.back();
-                else
-                  Get.popSystem();
-              })
-            : null,
-        title: logo ?? Column(children: [if (title != null) Text(title)]),
+        automaticallyImplyLeading: false,
+        leading: hideAppBarLeading == true
+            ? null
+            : appBarLeading ??
+                BackButton(onPressed: () {
+                  if (Get.canPop)
+                    Get.back();
+                  else
+                    Get.popSystem();
+                }),
+        title:
+            customTitle ?? Column(children: [if (title != null) Text(title)]),
         bottom: PreferredSize(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -184,7 +192,7 @@ class GetScaffold extends StatelessWidget {
   }
 
   bool get _centerTitle {
-    if (logo != null) return true;
+    if (customTitle != null) return true;
     if (Get.theme.appBarTheme.centerTitle != null)
       return Get.theme.appBarTheme.centerTitle;
     assert(Get.theme.platform != null);

@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetScaffold(
-      isHome: true,
+      hideAppBarLeading: true,
       title: "Get Smart Home",
       child: ListView.separated(
         itemCount: items.length,

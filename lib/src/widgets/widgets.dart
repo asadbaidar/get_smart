@@ -965,7 +965,7 @@ class BottomBar extends StatelessWidget {
 class Clickable extends MouseRegion {
   Clickable({
     bool enable = true,
-    Function onTap,
+    Function() onTap,
     Widget child,
   }) : super(
           cursor: enable == true && onTap != null

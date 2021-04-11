@@ -354,3 +354,7 @@ class GetTheme {
     ));
   }
 }
+
+extension GetInterfaceTheme on GetInterface {
+  TextTheme get primaryTextTheme => theme.primaryTextTheme;
+}
