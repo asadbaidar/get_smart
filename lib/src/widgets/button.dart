@@ -678,57 +678,63 @@ abstract class GetButton {
     TextStyle labelStyle,
     bool enableFeedback = true,
     BoxConstraints constraints,
-  }) =>
-      IconButton(
-        key: key,
-        iconSize: iconSize ??
-            (label != null
-                ? 20.0
-                : primary == true
-                    ? Get.theme.primaryIconTheme.size
-                    : Get.theme.iconTheme.size) ??
-            24.0,
-        visualDensity: visualDensity,
-        padding: padding ??
-            (label != null
-                ? const EdgeInsets.symmetric(vertical: 8)
-                : const EdgeInsets.all(8)),
-        alignment: alignment ?? Alignment.center,
-        splashRadius: splashRadius ?? (label != null ? 24 : 20),
-        icon: label != null
-            ? Column(
-                children: [
-                  SizedBox(
-                    height: iconSize == null ? 4 : (24 - iconSize).abs(),
+  }) {
+    var _color = primary == true
+        ? Get.theme.primaryIconTheme.color
+        : Get.theme.iconTheme.color;
+    return IconButton(
+      key: key,
+      iconSize: iconSize ??
+          (label != null
+              ? 20.0
+              : primary == true
+                  ? Get.theme.primaryIconTheme.size
+                  : Get.theme.iconTheme.size) ??
+          24.0,
+      visualDensity: visualDensity,
+      padding: padding ??
+          (label != null
+              ? const EdgeInsets.symmetric(vertical: 8)
+              : const EdgeInsets.all(8)),
+      alignment: alignment ?? Alignment.center,
+      splashRadius: splashRadius ?? (label != null ? 24 : 20),
+      icon: label != null
+          ? Column(
+              children: [
+                SizedBox(
+                  height: iconSize == null ? 4 : (24 - iconSize).abs(),
+                ),
+                icon,
+                SizedBox(height: 2.5),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: labelStyle ??
+                        TextStyle(
+                          fontSize: 9,
+                          color: enabled == true ? null : _color?.subbed,
+                        ),
                   ),
-                  icon,
-                  SizedBox(height: 2.5),
-                  Expanded(
-                    child: Text(
-                      label,
-                      style: labelStyle ?? TextStyle(fontSize: 9),
-                    ),
-                  ),
-                ],
-              )
-            : (icon ?? const SizedBox()),
-        color: color,
-        focusColor: focusColor,
-        hoverColor: hoverColor,
-        highlightColor: highlightColor,
-        splashColor: splashColor,
-        disabledColor: disabledColor,
-        onPressed: (enabled ?? true) ? onPressed : null,
-        mouseCursor: mouseCursor ?? SystemMouseCursors.click,
-        focusNode: focusNode,
-        autofocus: autofocus ?? false,
-        tooltip: tooltip,
-        enableFeedback: enableFeedback ?? true,
-        constraints: constraints ??
-            (label != null
-                ? BoxConstraints.expand(width: 40)
-                : BoxConstraints()),
-      );
+                ),
+              ],
+            )
+          : (icon ?? const SizedBox()),
+      color: color,
+      focusColor: focusColor,
+      hoverColor: hoverColor,
+      highlightColor: highlightColor,
+      splashColor: splashColor,
+      disabledColor: disabledColor ?? _color?.hinted,
+      onPressed: (enabled ?? true) ? onPressed : null,
+      mouseCursor: mouseCursor ?? SystemMouseCursors.click,
+      focusNode: focusNode,
+      autofocus: autofocus ?? false,
+      tooltip: tooltip,
+      enableFeedback: enableFeedback ?? true,
+      constraints: constraints ??
+          (label != null ? BoxConstraints.expand(width: 40) : BoxConstraints()),
+    );
+  }
 
   /// Create a primary icon button.
   static Widget primaryIcon({

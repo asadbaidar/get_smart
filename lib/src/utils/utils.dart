@@ -49,6 +49,13 @@ extension TextStyleX on TextStyle {
 }
 
 extension ListX<E> on List<E> {
+  E get(int index) {
+    if (index < length) {
+      return this[index];
+    }
+    return null;
+  }
+  
   E get takeFirst {
     Iterator<E> it = iterator;
     if (!it.moveNext()) {
@@ -553,6 +560,8 @@ extension GetDateTimePickerX on GetInterface {
         : (withDate?.setting(date: date) ?? date));
   }
 }
+
+T castIf<T>(value) => value is T ? value : null;
 
 String nameOf(Type type) => type.toString();
 
