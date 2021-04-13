@@ -622,8 +622,9 @@ extension Double on double {
   String get formatted => Get.formatter.formatDecimal(toInt());
 }
 
-Future<T> scheduleTask<T>(T Function() task) {
-  return SchedulerBinding.instance.scheduleTask(task, Priority.animation);
+Future<T> scheduleTask<T>(FutureOr<T> Function() task) async {
+  return await SchedulerBinding.instance
+      .scheduleTask<FutureOr<T>>(task, Priority.animation);
 }
 
 Future<T> profileTask<T>(Future<T> Function() task) async {
@@ -989,50 +990,49 @@ abstract class GetWebAPI {
     String path,
     WebMethod method,
     Map<String, dynamic> parameters,
-  }) async {
-    return await scheduleTask<Future<WebResponse<T>>>(() async {
-      var dio = Dio();
-      try {
-        dio.interceptors.add(LogInterceptor(
-          requestBody: true,
-          responseBody: true,
-        ));
-        dio.options
-          ..baseUrl = await address
-          ..connectTimeout = 30000
-          ..receiveTimeout = 60000
-          ..method = method.keyNAME
-          ..headers = {
-            "auth": await authToken,
-          }
-          ..validateStatus = (status) => status == 200;
-        _cancelToken = CancelToken();
-        if (encrypted)
-          await Future.forEach(
-            parameters.keys,
-            (key) async =>
-                parameters[key] = await parameters[key]?.toString()?.encrypted,
+  }) async =>
+      scheduleTask(() async {
+        var dio = Dio();
+        try {
+          dio.interceptors.add(LogInterceptor(
+            requestBody: true,
+            responseBody: true,
+          ));
+          dio.options
+            ..baseUrl = await address
+            ..connectTimeout = 30000
+            ..receiveTimeout = 60000
+            ..method = method.keyNAME
+            ..headers = {
+              "auth": await authToken,
+            }
+            ..validateStatus = (status) => status == 200;
+          _cancelToken = CancelToken();
+          if (encrypted)
+            await Future.forEach(
+              parameters.keys,
+              (key) async => parameters[key] =
+                  await parameters[key]?.toString()?.encrypted,
+            );
+          DIO.Response response = await dio.request(
+            path.pre(this.path?.post("/")),
+            queryParameters: method == WebMethod.post ? null : parameters,
+            data: parameters,
+            cancelToken: _cancelToken,
           );
-        DIO.Response response = await dio.request(
-          path.pre(this.path?.post("/")),
-          queryParameters: method == WebMethod.post ? null : parameters,
-          data: parameters,
-          cancelToken: _cancelToken,
-        );
-        return (response.data as Object).toWebObject<WebResponse<T>>(
-          [
-            if (builder != null) builder,
-            () => WebResponse<T>(),
-            ...(builders ?? [])
-          ],
-        );
-      } on DioError catch (e) {
-        return WebResponse<T>.dio(e.type);
-      } finally {
-        dio.close();
-      }
-    });
-  }
+          return (response.data as Object).toWebObject<WebResponse<T>>(
+            [
+              if (builder != null) builder,
+              () => WebResponse<T>(),
+              ...(builders ?? [])
+            ],
+          );
+        } on DioError catch (e) {
+          return WebResponse<T>.dio(e.type);
+        } finally {
+          dio.close();
+        }
+      });
 }
 
 extension GetInterfaceX on GetInterface {

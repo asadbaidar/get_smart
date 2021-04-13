@@ -18,6 +18,7 @@ class GetScaffold extends StatelessWidget {
     this.hideAbleAppBar = false,
     this.isInteractive = true,
     this.hideAppBarLeading = false,
+    this.progressBar,
     this.appBarLeading,
     this.appBarExtension,
     this.appBarExtensionSize,
@@ -48,6 +49,7 @@ class GetScaffold extends StatelessWidget {
   final bool hideAbleAppBar;
   final bool isInteractive;
   final bool hideAppBarLeading;
+  final LinearProgress progressBar;
   final Widget appBarLeading;
   final Widget appBarExtension;
   final double appBarExtensionSize;
@@ -66,9 +68,11 @@ class GetScaffold extends StatelessWidget {
 
   bool get _isInteractive => isInteractive == true;
 
+  double get _progressBarHeight => progressBar?.height ?? 1;
+
   double get _appBarExtensionSize => (appBarExtension != null
-      ? kToolbarHeight + 1 + (appBarExtensionSize ?? 0)
-      : 1);
+      ? kToolbarHeight + _progressBarHeight + (appBarExtensionSize ?? 0)
+      : _progressBarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +116,7 @@ class GetScaffold extends StatelessWidget {
       child ??
       ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        children: [Responsive(children: children)],
+        children: [Responsive(children: children ?? [])],
       );
 
   Widget get _body => Stack(children: [
@@ -149,7 +153,7 @@ class GetScaffold extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (appBarExtension != null) appBarExtension,
-              LinearProgress(visible: showProgress),
+              progressBar ?? LinearProgress(visible: showProgress),
             ],
           ),
           preferredSize: Size.fromHeight(_appBarExtensionSize),

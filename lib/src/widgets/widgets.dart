@@ -538,9 +538,10 @@ class LinearProgress extends StatelessWidget {
 
   const LinearProgress.standard({
     this.visible = true,
+    this.height = 2.4,
+    this.color = Colors.blue,
     this.value,
-  })  : color = Colors.blue,
-        height = 2.4;
+  });
 
   final bool visible;
   final Color color;
