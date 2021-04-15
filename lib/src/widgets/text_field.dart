@@ -11,7 +11,7 @@ class GetTextField extends StatelessWidget {
     this.controller,
     this.autovalidateMode,
     this.keyboardType,
-    this.inputFilters,
+    this.inputFormatters,
     this.textInputAction,
     this.focusNode,
     this.onTap,
@@ -115,7 +115,7 @@ class GetTextField extends StatelessWidget {
 
   final TextInputType keyboardType;
   final AutovalidateMode autovalidateMode;
-  final List<TextInputFormatter> inputFilters;
+  final List<TextInputFormatter> inputFormatters;
   final TextInputAction textInputAction;
   final FocusNode focusNode;
   final Function onTap;
@@ -244,7 +244,9 @@ class GetTextField extends StatelessWidget {
               ? TextEditingController.fromValue(
                   TextEditingValue(
                     text: controlledText ?? "",
-                    composing: TextRange.collapsed(controlledText?.length ?? 0),
+                    selection: TextSelection.fromPosition(TextPosition(
+                      offset: controlledText?.length ?? 0,
+                    )),
                   ),
                 )
               : null);
@@ -288,7 +290,7 @@ class GetTextField extends StatelessWidget {
           autocorrect: enableSuggestions ?? !_obscureText,
           textInputAction: textInputAction,
           maxLength: maxLength,
-          inputFormatters: inputFilters,
+          inputFormatters: inputFormatters,
           minLines: minLines,
           maxLines: maxLines,
           onSaved: onSaved,

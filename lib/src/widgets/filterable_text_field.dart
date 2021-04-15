@@ -61,7 +61,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   /// Don't accept simple text, only suggestion item
   final bool onlyAcceptItem;
 
-  final List<TextInputFormatter> inputFilters;
+  final List<TextInputFormatter> inputFormatters;
   final int minLength;
   final bool readOnly;
   final bool validateEmpty;
@@ -87,7 +87,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
     this.itemBuilder,
     this.itemSorter,
     this.itemFilter,
-    this.inputFilters,
+    this.inputFormatters,
     this.style,
     this.label,
     this.helper,
@@ -187,7 +187,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   bool get validateEmpty => widget.validateEmpty;
 
-  List<TextInputFormatter> get inputFilters => widget.inputFilters;
+  List<TextInputFormatter> get inputFormatters => widget.inputFormatters;
 
   TextCapitalization get textCapitalization => widget.textCapitalization;
 
@@ -300,6 +300,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   }
 
   Future<void> updateOverlay({String query, bool withoutFilter = false}) async {
+    if (!mounted) return;
     print("updateOverlay NoFilter $withoutFilter Focus ${focusNode.hasFocus}");
     filteredItems = withoutFilter == true
         ? items
@@ -420,7 +421,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
         validateEmpty: validateEmpty,
         readOnly: readOnly,
         tapOnly: disableFiltering,
-        inputFilters: inputFilters,
+        inputFormatters: inputFormatters,
         textCapitalization: textCapitalization,
         keyboardType:
             showAllOnFocus ? TextInputType.visiblePassword : keyboardType,

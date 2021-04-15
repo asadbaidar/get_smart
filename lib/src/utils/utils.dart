@@ -55,7 +55,7 @@ extension ListX<E> on List<E> {
     }
     return null;
   }
-  
+
   E get takeFirst {
     Iterator<E> it = iterator;
     if (!it.moveNext()) {
