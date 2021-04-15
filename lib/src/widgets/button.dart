@@ -673,19 +673,23 @@ abstract class GetButton {
     bool autofocus = false,
     bool primary = false,
     bool enabled = true,
+    bool mini = false,
+    bool tintLabel = true,
     String tooltip,
     String label,
     TextStyle labelStyle,
     bool enableFeedback = true,
     BoxConstraints constraints,
   }) {
+    var labeled = label != null;
+    var labeledOrMini = labeled || mini == true;
     var _color = primary == true
         ? Get.theme.primaryIconTheme.color
         : Get.theme.iconTheme.color;
     return IconButton(
       key: key,
       iconSize: iconSize ??
-          (label != null
+          (labeledOrMini
               ? 20.0
               : primary == true
                   ? Get.theme.primaryIconTheme.size
@@ -693,26 +697,30 @@ abstract class GetButton {
           24.0,
       visualDensity: visualDensity,
       padding: padding ??
-          (label != null
-              ? const EdgeInsets.symmetric(vertical: 8)
+          (labeled
+              ? EdgeInsets.symmetric(vertical: mini ? 4 : 8)
               : const EdgeInsets.all(8)),
       alignment: alignment ?? Alignment.center,
-      splashRadius: splashRadius ?? (label != null ? 24 : 20),
-      icon: label != null
+      splashRadius: splashRadius ?? (labeled ? 24 : 20),
+      icon: labeled
           ? Column(
               children: [
                 SizedBox(
-                  height: iconSize == null ? 4 : (24 - iconSize).abs(),
+                  height: iconSize == null
+                      ? (mini ? 2 : 4)
+                      : ((mini ? 22 : 24) - iconSize).abs(),
                 ),
                 icon,
-                SizedBox(height: 2.5),
+                SizedBox(height: mini ? 2 : 2.5),
                 Expanded(
                   child: Text(
                     label,
                     style: labelStyle ??
                         TextStyle(
                           fontSize: 9,
-                          color: enabled == true ? null : _color?.subbed,
+                          color: enabled == true
+                              ? (tintLabel == true ? _color : null)
+                              : _color?.subbed,
                         ),
                   ),
                 ),
@@ -732,7 +740,7 @@ abstract class GetButton {
       tooltip: tooltip,
       enableFeedback: enableFeedback ?? true,
       constraints: constraints ??
-          (label != null ? BoxConstraints.expand(width: 40) : BoxConstraints()),
+          (labeled ? BoxConstraints.expand(width: 40) : BoxConstraints()),
     );
   }
 
@@ -756,6 +764,8 @@ abstract class GetButton {
     FocusNode focusNode,
     bool autofocus = false,
     bool enabled = true,
+    bool mini = false,
+    bool tintLabel = true,
     String tooltip,
     String label,
     TextStyle labelStyle,
@@ -782,6 +792,65 @@ abstract class GetButton {
         autofocus: autofocus,
         primary: true,
         enabled: enabled,
+        mini: mini,
+        tintLabel: tintLabel,
+        tooltip: tooltip,
+        label: label,
+        labelStyle: labelStyle,
+        enableFeedback: enableFeedback,
+        constraints: constraints,
+      );
+
+  /// Create a mini icon button.
+  static Widget miniIcon({
+    Key key,
+    double iconSize,
+    VisualDensity visualDensity,
+    EdgeInsetsGeometry padding,
+    AlignmentGeometry alignment,
+    double splashRadius,
+    Widget icon,
+    Color color,
+    Color focusColor,
+    Color hoverColor,
+    Color highlightColor,
+    Color splashColor,
+    Color disabledColor,
+    void Function() onPressed,
+    MouseCursor mouseCursor,
+    FocusNode focusNode,
+    bool autofocus = false,
+    bool primary = false,
+    bool enabled = true,
+    bool tintLabel = true,
+    String tooltip,
+    String label,
+    TextStyle labelStyle,
+    bool enableFeedback = true,
+    BoxConstraints constraints,
+  }) =>
+      GetButton.icon(
+        key: key,
+        iconSize: iconSize,
+        visualDensity: visualDensity,
+        padding: padding,
+        alignment: alignment,
+        splashRadius: splashRadius,
+        icon: icon,
+        color: color,
+        focusColor: focusColor,
+        hoverColor: hoverColor,
+        highlightColor: highlightColor,
+        splashColor: splashColor,
+        disabledColor: disabledColor,
+        onPressed: onPressed,
+        mouseCursor: mouseCursor,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        primary: primary,
+        enabled: enabled,
+        mini: true,
+        tintLabel: tintLabel,
         tooltip: tooltip,
         label: label,
         labelStyle: labelStyle,
