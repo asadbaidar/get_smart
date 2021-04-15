@@ -6,28 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
 
 /// Theme extension
-///
-/// Default material specs:
-/// ```
-/// NAME         SIZE  WEIGHT  SPACING
-/// headline1    96.0  light   -1.5
-/// headline2    60.0  light   -0.5
-/// headline3    48.0  regular  0.0
-/// headline4    34.0  regular  0.25
-/// headline5    24.0  regular  0.0
-/// headline6    20.0  medium   0.15
-/// subtitle1    16.0  regular  0.15
-/// subtitle2    14.0  medium   0.1
-/// bodyText1    16.0  regular  0.5
-/// bodyText2    14.0  regular  0.25
-/// button       14.0  medium   1.25
-/// caption      12.0  regular  0.4
-/// overline     10.0  regular  1.5
-///
-/// "light" = `FontWeight.w300`
-/// "regular" = `FontWeight.w400`
-/// "medium" = `FontWeight.w500`
-/// ```
 class GetTheme {
   static const kAccentColor = Color(0xFF2196F3);
   static const kPrimarySwatch = Colors.blue;
@@ -43,67 +21,6 @@ class GetTheme {
     fontSize: 13.0,
     fontFamily: "monospace",
     fontWeight: FontWeight.bold,
-  );
-  static const kFontAvenirNext = "AvenirNext";
-  static const kTextAvenirNext = TextTheme(
-    headline1: TextStyle(
-      fontSize: 80,
-      fontWeight: FontWeight.w600,
-      fontFamily: kFontAvenirNext,
-    ),
-    headline2: TextStyle(
-      fontSize: 50,
-      fontWeight: FontWeight.w600,
-      fontFamily: kFontAvenirNext,
-    ),
-    headline3: TextStyle(
-      fontSize: 40,
-      fontWeight: FontWeight.w600,
-      fontFamily: kFontAvenirNext,
-    ),
-    headline4: TextStyle(
-      fontSize: 28,
-      fontWeight: FontWeight.w600,
-      fontFamily: kFontAvenirNext,
-    ),
-    headline5: TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.w600,
-      fontFamily: kFontAvenirNext,
-    ),
-    headline6: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-      fontFamily: kFontAvenirNext,
-    ),
-    bodyText1: TextStyle(
-      fontSize: 15,
-      fontFamily: kFontAvenirNext,
-    ),
-    bodyText2: TextStyle(
-      fontSize: 11,
-      fontFamily: kFontAvenirNext,
-    ),
-    subtitle1: TextStyle(
-      fontSize: 14,
-      fontFamily: kFontAvenirNext,
-    ),
-    subtitle2: TextStyle(
-      fontSize: 10,
-      fontFamily: kFontAvenirNext,
-    ),
-    caption: TextStyle(
-      fontSize: 10,
-      fontFamily: kFontAvenirNext,
-    ),
-    overline: TextStyle(
-      fontSize: 8,
-      fontFamily: kFontAvenirNext,
-    ),
-    button: TextStyle(
-      fontSize: 15,
-      fontFamily: kFontAvenirNext,
-    ),
   );
 
   static bool isDark(BuildContext context) =>
@@ -357,4 +274,95 @@ class GetTheme {
 
 extension GetInterfaceTheme on GetInterface {
   TextTheme get primaryTextTheme => theme.primaryTextTheme;
+}
+
+/// Font extension
+///
+/// Default material specs:
+/// ```
+/// NAME         SIZE  WEIGHT  SPACING
+/// headline1    96.0  light   -1.5
+/// headline2    60.0  light   -0.5
+/// headline3    48.0  regular  0.0
+/// headline4    34.0  regular  0.25
+/// headline5    24.0  regular  0.0
+/// headline6    20.0  medium   0.15
+/// subtitle1    16.0  regular  0.15
+/// subtitle2    14.0  medium   0.1
+/// bodyText1    16.0  regular  0.5
+/// bodyText2    14.0  regular  0.25
+/// button       14.0  medium   1.25
+/// caption      12.0  regular  0.4
+/// overline     10.0  regular  1.5
+///
+/// "light" = `FontWeight.w300`
+/// "regular" = `FontWeight.w400`
+/// "medium" = `FontWeight.w500`
+/// ```
+class GetFont {
+  static const kAvenirNext = "AvenirNext";
+  static const kDietDidot = "DietDidot";
+  static final kAvenirNextTextTheme = textTheme(fontFamily: kAvenirNext);
+  static final kDietDidotTextTheme = textTheme(fontFamily: kDietDidot);
+
+  static TextTheme textTheme({String fontFamily}) => TextTheme(
+        headline1: TextStyle(
+          fontSize: 80,
+          fontWeight: FontWeight.w600,
+          fontFamily: fontFamily,
+        ),
+        headline2: TextStyle(
+          fontSize: 50,
+          fontWeight: FontWeight.w600,
+          fontFamily: fontFamily,
+        ),
+        headline3: TextStyle(
+          fontSize: 40,
+          fontWeight: FontWeight.w600,
+          fontFamily: fontFamily,
+        ),
+        headline4: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.w600,
+          fontFamily: fontFamily,
+        ),
+        headline5: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          fontFamily: fontFamily,
+        ),
+        headline6: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          fontFamily: fontFamily,
+        ),
+        bodyText1: TextStyle(
+          fontSize: 15,
+          fontFamily: fontFamily,
+        ),
+        bodyText2: TextStyle(
+          fontSize: 11,
+          fontFamily: fontFamily,
+        ),
+        subtitle1: TextStyle(
+          fontSize: 14,
+          fontFamily: fontFamily,
+        ),
+        subtitle2: TextStyle(
+          fontSize: 10,
+          fontFamily: fontFamily,
+        ),
+        caption: TextStyle(
+          fontSize: 10,
+          fontFamily: fontFamily,
+        ),
+        overline: TextStyle(
+          fontSize: 8,
+          fontFamily: fontFamily,
+        ),
+        button: TextStyle(
+          fontSize: 15,
+          fontFamily: fontFamily,
+        ),
+      );
 }
