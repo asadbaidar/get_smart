@@ -300,10 +300,12 @@ extension GetInterfaceTheme on GetInterface {
 /// "medium" = `FontWeight.w500`
 /// ```
 class GetFont {
-  static const kAvenirNext = "AvenirNext";
-  static const kDietDidot = "DietDidot";
-  static final kAvenirNextTextTheme = textTheme(fontFamily: kAvenirNext);
-  static final kDietDidotTextTheme = textTheme(fontFamily: kDietDidot);
+  static const avenirNext = "AvenirNext";
+  static const dietDidot = "DietDidot";
+  static const stoneSerif = "StoneSerif";
+  static final avenirNextTextTheme = textTheme(fontFamily: avenirNext);
+  static final dietDidotTextTheme = textTheme(fontFamily: dietDidot);
+  static final stoneSerifTextTheme = textTheme(fontFamily: stoneSerif);
 
   static TextTheme textTheme({String fontFamily}) => TextTheme(
         headline1: TextStyle(
@@ -327,7 +329,7 @@ class GetFont {
           fontFamily: fontFamily,
         ),
         headline5: TextStyle(
-          fontSize: 20,
+          fontSize: 19,
           fontWeight: FontWeight.w600,
           fontFamily: fontFamily,
         ),
