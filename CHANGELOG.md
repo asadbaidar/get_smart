@@ -1,3 +1,7 @@
+## [0.0.6]
+
+* Null safety
+
 ## [0.0.5+9]
 
 * Bug fixes

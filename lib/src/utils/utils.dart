@@ -890,7 +890,7 @@ class WebResponse<T> extends WebMappable {
           : WebStatus.failed;
 
   /// Returns if canceled or not
-  bool get isCanceled => dioError == DioErrorType.CANCEL;
+  bool get isCanceled => dioError == DioErrorType.cancel;
 
   /// Returns if failed or not
   bool get isFailed => !isSucceeded;
