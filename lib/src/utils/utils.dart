@@ -746,21 +746,25 @@ abstract class WebMappable with Mappable, Comparable<WebMappable> {
   String toString() => description;
 
   @override
-  int compareTo(WebMappable other) => comparable.compareTo(other.comparable);
+  int compareTo(WebMappable other) => other?.comparable == null
+      ? 0
+      : comparable?.compareTo(other.comparable) ?? 0;
 
-  int operator >(WebMappable other) => compareTo(other);
+  int operator >(WebMappable other) => this == null ? 0 : compareTo(other);
 
-  int operator <(WebMappable other) => other.compareTo(this);
+  int operator <(WebMappable other) => other?.compareTo(this) ?? 0;
 
   @override
   bool operator ==(Object other) {
+    if (other == null) return false;
     if (other.runtimeType != runtimeType) return false;
     return other is WebMappable &&
-        (identical(other, this) || equatable.equalsIgnoreCase(other.equatable));
+        (identical(other, this) ||
+            equatable?.equalsIgnoreCase(other.equatable) == true);
   }
 
   @override
-  int get hashCode => identityHashCode(equatable.lowercase);
+  int get hashCode => identityHashCode(equatable?.lowercase);
 
   String get equatable => id;
 
@@ -768,10 +772,10 @@ abstract class WebMappable with Mappable, Comparable<WebMappable> {
 
   Comparable get comparable => toString();
 
-  bool contains(object) => containable.contains(object.toString());
+  bool contains(object) => containable?.contains(object?.toString()) ?? false;
 
   bool containsIgnoreCase(object) =>
-      containable.containsIgnoreCase(object.toString());
+      containable?.containsIgnoreCase(object?.toString()) ?? false;
 
   var isExpanded = false;
 
