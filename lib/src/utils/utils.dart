@@ -133,7 +133,7 @@ extension Num on num {
 
   String get formatted => Get.formatter.formatDecimal(this);
 
-  bool inRange([int start = 0, int end]) => this >= start && this < end;
+  bool inRange(int start, int end) => this >= start && this < end;
 
   String padLeft(
     int width, {
