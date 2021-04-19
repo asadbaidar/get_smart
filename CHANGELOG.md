@@ -1,6 +1,6 @@
-## [0.1.0]
+## [0.0.6]
 
-* Null safety
+* Updated dependencies
 
 ## [0.0.5+9]
 
