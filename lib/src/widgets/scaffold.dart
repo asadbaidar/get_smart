@@ -11,6 +11,7 @@ class GetScaffold extends StatelessWidget {
     this.subtitle,
     this.customTitle,
     this.backgroundColor,
+    this.centerTitle,
     this.extendBody = true,
     this.showProgress = false,
     this.showScrollbar = true,
@@ -42,6 +43,7 @@ class GetScaffold extends StatelessWidget {
   final String subtitle;
   final Widget customTitle;
   final Color backgroundColor;
+  final bool centerTitle;
   final bool extendBody;
   final bool showProgress;
   final bool showScrollbar;
@@ -196,11 +198,12 @@ class GetScaffold extends StatelessWidget {
   }
 
   bool get _centerTitle {
+    if (centerTitle != null) return centerTitle;
     if (customTitle != null) return true;
     if (Get.theme.appBarTheme.centerTitle != null)
       return Get.theme.appBarTheme.centerTitle;
-    assert(Get.theme.platform != null);
-    switch (Get.theme.platform) {
+    assert(Get.platform != null);
+    switch (Get.platform) {
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return appBarRightItems == null || appBarRightItems.length < 2;

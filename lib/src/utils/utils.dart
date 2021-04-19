@@ -110,15 +110,18 @@ extension ObjectX on Object {
   }
 
   /// Return the text from a text map with arguments based on current locale
-  String localized(Map<Locale, Map<dynamic, String>> textMap,
-      [List<dynamic> arguments]) {
-    return this == null
-        ? null
-        : textMap[GetLocalizations.current.locale][this]?.applyIf(
-            arguments?.isNotEmpty,
-            (s) => sprintf(s, arguments.map((e) => e ?? "").toList()),
-          );
-  }
+  String localized(
+    Map<Locale, Map<dynamic, String>> textMap, [
+    List<dynamic> arguments,
+  ]) =>
+      this == null
+          ? null
+          : textMap[GetLocalizations.current?.locale ?? ""]
+              ?.let((Map<dynamic, String> _) => _[this])
+              ?.applyIf(
+                arguments?.isNotEmpty,
+                (s) => sprintf(s, arguments.map((e) => e ?? "").toList()),
+              );
 }
 
 extension Num on num {
