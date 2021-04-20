@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -988,6 +989,14 @@ extension FocusNodeX on FocusNode {
 
 extension WidgetX on Widget {
   WidgetSpan get widgetSpan => WidgetSpan(child: this);
+}
+
+extension GetDiagnosticable on Diagnosticable {
+  S use<S>(S dependency,
+          {String tag,
+          bool permanent = false,
+          InstanceBuilderCallback<S> builder}) =>
+      Get.put<S>(dependency, tag: typeName + (tag ?? ""), permanent: permanent);
 }
 
 extension GlobalKeyX<T extends State<StatefulWidget>> on GlobalKey<T> {

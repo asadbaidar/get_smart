@@ -105,7 +105,7 @@ extension ObjectX on Object {
 
   String get typeName => nameOf(runtimeType);
 
-  T toWebObject<T>([List<Object Function()> builders]) {
+  T mapObject<T>([List<Object Function()> builders]) {
     return MapperX.fromData(this).toWebObject<T>(builders);
   }
 
@@ -682,7 +682,9 @@ extension MapperX on Mapper {
             ? data.json
             : data is Map<dynamic, dynamic>
                 ? data.map((key, value) => MapEntry(key, value))
-                : data,
+                : data is Map<String, dynamic>
+                    ? data
+                    : {},
       );
 
   T toWebObject<T>([List<Object Function()> builders]) {
@@ -1038,7 +1040,7 @@ abstract class GetWebAPI {
             data: parameters,
             cancelToken: _cancelToken,
           );
-          return (response.data as Object).toWebObject<WebResponse<T>>(
+          return (response.data as Object).mapObject<WebResponse<T>>(
             [
               if (builder != null) builder,
               () => WebResponse<T>(),
@@ -1070,6 +1072,12 @@ extension GetInterfaceX on GetInterface {
   void backUntil(String route) => until((r) => r.settings.name == route);
 
   MaterialLocalizations get formatter => MaterialLocalizations.of(context);
+
+  /// give current arguments
+  Object get $arguments => arguments;
+
+  T mapArguments<T>([List<Object Function()> builders]) =>
+      $arguments?.mapObject<T>(builders);
 
   /// Finds an Instance of the required Class <[S]>(or [tag])
   /// Returns null if not found.
