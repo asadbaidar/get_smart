@@ -14,8 +14,10 @@ import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
 
 extension UrlExt on String {
-  void launchUrl({bool inApp = false}) async {
-    var url = startsWith(RegExp("^(http|https)://")) ? this : "http://$this";
+  void launchUrl({bool inApp = false, bool httpOnly = false}) async {
+    var url = !httpOnly || startsWith(RegExp("^(http|https)://"))
+        ? this
+        : "http://$this";
     if (await canLaunch(url)) {
       await launch(
         url,
