@@ -5,7 +5,6 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as DIO;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -23,6 +22,8 @@ extension UrlExt on String {
         url,
         forceSafariVC: inApp,
         forceWebView: inApp,
+        statusBarBrightness:
+            GetTheme.isDarkMode ? Brightness.dark : Brightness.light,
       );
     }
   }
