@@ -225,6 +225,7 @@ class GetTheme {
       appBarTheme: AppBarTheme(
         elevation: 1,
         color: _primaryBackground,
+        brightness: _primaryBrightness,
       ),
       bottomAppBarTheme: BottomAppBarTheme(
         elevation: 4,
