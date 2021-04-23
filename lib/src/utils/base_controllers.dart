@@ -22,7 +22,7 @@ class BaseGetController extends GetxController {
 
   /// Returns the busy status for an object if it exists.
   /// Returns false if not present
-  bool busy(Object object) => _busyStates[object.hashCode] ?? false;
+  bool busy(Object? object) => _busyStates[object.hashCode] ?? false;
 
   dynamic error(Object object) => _errorStates[object.hashCode];
 
@@ -39,7 +39,8 @@ class BaseGetController extends GetxController {
   bool get anyObjectsBusy => _busyStates.values.any((busy) => busy);
 
   // Returns true if any objects still have a error status.
-  bool get anyError => _errorStates.values.firstWhere((error) => error != null);
+  bool? get anyError =>
+      _errorStates.values.firstWhere((error) => error != null);
 
   /// Marks the viewmodel as busy and calls notify listeners
   void setBusy(bool value) {
@@ -66,7 +67,7 @@ class BaseGetController extends GetxController {
 
   /// Sets the busy state for the object equal to the value passed in and notifies Listeners
   /// If you're using a primitive type the value SHOULD NOT BE CHANGED, since Hashcode uses == value
-  void setBusyForObject(Object object, bool value) {
+  void setBusyForObject(Object? object, bool value) {
     _busyStates[object.hashCode] = value;
     update();
   }
@@ -79,13 +80,13 @@ class BaseGetController extends GetxController {
   }
 
   /// Function that is called when a future throws an error
-  void onFutureError(dynamic error, Object key) {}
+  void onFutureError(dynamic error, Object? key) {}
 
   /// Sets the ViewModel to busy, runs the future and then sets it to not busy when complete.
   ///
   /// rethrows [Exception] after setting busy to false for object or class
   Future runBusyFuture(Future busyFuture,
-      {Object busyObject, bool throwException = false}) async {
+      {Object? busyObject, bool throwException = false}) async {
     _setBusyForModelOrObject(true, busyObject: busyObject);
     try {
       var value = await runErrorFuture(busyFuture,
@@ -99,7 +100,7 @@ class BaseGetController extends GetxController {
   }
 
   Future runErrorFuture(Future future,
-      {Object key, bool throwException = false}) async {
+      {Object? key, bool throwException = false}) async {
     try {
       return await future;
     } catch (e) {
@@ -121,7 +122,7 @@ class BaseGetController extends GetxController {
     _onModelReadyCalled = value;
   }
 
-  void _setBusyForModelOrObject(bool value, {Object busyObject}) {
+  void _setBusyForModelOrObject(bool value, {Object? busyObject}) {
     if (busyObject != null) {
       setBusyForObject(busyObject, value);
     } else {
@@ -129,7 +130,7 @@ class BaseGetController extends GetxController {
     }
   }
 
-  void _setErrorForModelOrObject(dynamic value, {Object key}) {
+  void _setErrorForModelOrObject(dynamic value, {Object? key}) {
     if (key != null) {
       setErrorForObject(key, value);
     } else {
@@ -161,7 +162,7 @@ class BaseGetController extends GetxController {
   }
 
   @override
-  void update([List<Object> ids, bool condition = true]) {
+  void update([List<Object>? ids, bool condition = true]) {
     if (!disposed) {
       super.update();
     } else {
@@ -196,7 +197,7 @@ class BaseGetController extends GetxController {
     super.onReady();
     if (this is DynamicSourceGetController) {
       var controller = this as DynamicSourceGetController;
-      if (controller.changeSource ?? false) {
+      if (controller.changeSource) {
         _initialiseSpecialControllers();
       }
     }
@@ -219,24 +220,25 @@ class DynamicSourceGetController<T> extends BaseGetController {
 }
 
 class _SingleDataSourceGetController<T> extends DynamicSourceGetController {
-  T _data;
+  T? _data;
 
-  T get data => _data;
+  T? get data => _data;
 
   dynamic _error;
 
   @override
-  dynamic error([Object object]) => _error;
+  dynamic error([Object? object]) => _error;
 
   bool get dataReady => _data != null && !hasError;
 }
 
 class _MultiDataSourceGetController extends DynamicSourceGetController {
-  Map<String, dynamic> _dataMap;
+  Map<String, dynamic>? _dataMap;
 
-  Map<String, dynamic> get dataMap => _dataMap;
+  Map<String, dynamic>? get dataMap => _dataMap;
 
-  bool dataReady(Object key) => _dataMap[key] != null && (error(key) == null);
+  bool dataReady(Object key) =>
+      _dataMap![key as String] != null && (error(key) == null);
 }
 
 /// Provides functionality for a ViewModel that's sole purpose it is to fetch data using a [Future]
@@ -244,7 +246,7 @@ abstract class FutureGetController<T> extends _SingleDataSourceGetController<T>
     implements Initialisable {
   /// The future that fetches the data and sets the view to busy
   @Deprecated('Use the futureToRun function')
-  Future<T> get future => null;
+  Future<T>? get future => null;
 
   Future<T> futureToRun();
 
@@ -256,14 +258,14 @@ abstract class FutureGetController<T> extends _SingleDataSourceGetController<T>
     setBusy(true);
     update();
 
-    _data = await runBusyFuture(futureToRun(), throwException: true)
+    _data = await (runBusyFuture(futureToRun(), throwException: true)
         .catchError((error) {
       setError(error);
       _error = error;
       setBusy(false);
       onError(error);
       update();
-    });
+    }) as FutureOr<T?>);
 
     if (_data != null) {
       onData(_data);
@@ -276,7 +278,7 @@ abstract class FutureGetController<T> extends _SingleDataSourceGetController<T>
   void onError(error) {}
 
   /// Called after the data has been set
-  void onData(T data) {}
+  void onData(T? data) {}
 }
 
 /// Provides functionality for a ViewModel to run and fetch data using multiple future
@@ -284,8 +286,8 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
     implements Initialisable {
   Map<Object, Future Function()> get futuresMap;
 
-  Completer _futuresCompleter;
-  int _futuresCompleted;
+  late Completer _futuresCompleter;
+  int _futuresCompleted = 0;
 
   void _initialiseData() {
     if (_dataMap == null) {
@@ -304,9 +306,9 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
     update();
 
     for (var key in futuresMap.keys) {
-      runBusyFuture(futuresMap[key](), busyObject: key, throwException: true)
+      runBusyFuture(futuresMap[key]!(), busyObject: key, throwException: true)
           .then((futureData) {
-        _dataMap[key] = futureData;
+        _dataMap![key as String] = futureData;
         setBusyForObject(key, false);
         update();
         onData(key);
@@ -333,7 +335,7 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
     }
   }
 
-  void onError({Object key, error}) {}
+  void onError({Object? key, error}) {}
 
   void onData(Object key) {}
 
@@ -348,15 +350,15 @@ abstract class MultipleStreamGetController extends _MultiDataSourceGetController
   // if a lifecyle event isn't defined we use the default ones here
   Map<String, StreamData> get streamsMap;
 
-  Map<String, StreamSubscription> _streamsSubscriptions;
+  Map<String, StreamSubscription>? _streamsSubscriptions;
 
   @visibleForTesting
-  Map<String, StreamSubscription> get streamsSubscriptions =>
+  Map<String, StreamSubscription>? get streamsSubscriptions =>
       _streamsSubscriptions;
 
   /// Returns the stream subscription associated with the key
-  StreamSubscription getSubscriptionForKey(String key) =>
-      _streamsSubscriptions[key];
+  StreamSubscription? getSubscriptionForKey(String key) =>
+      _streamsSubscriptions![key];
 
   void initialise() {
     _dataMap = {};
@@ -369,38 +371,38 @@ abstract class MultipleStreamGetController extends _MultiDataSourceGetController
 
     for (var key in streamsMap.keys) {
       // If a lifecycle function isn't supplied, we fallback to default
-      _streamsSubscriptions[key] = streamsMap[key].stream.listen(
+      _streamsSubscriptions![key] = streamsMap[key]!.stream.listen(
         (incomingData) {
           setErrorForObject(key, null);
           update();
           // Extra security in case transformData isnt sent
-          var interceptedData = streamsMap[key].transformData == null
+          var interceptedData = streamsMap[key]!.transformData == null
               ? transformData(key, incomingData)
-              : streamsMap[key].transformData(incomingData);
+              : streamsMap[key]!.transformData!(incomingData);
 
           if (interceptedData != null) {
-            _dataMap[key] = interceptedData;
+            _dataMap![key] = interceptedData;
           } else {
-            _dataMap[key] = incomingData;
+            _dataMap![key] = incomingData;
           }
 
           update();
-          streamsMap[key].onData != null
-              ? streamsMap[key].onData(_dataMap[key])
-              : onData(key, _dataMap[key]);
+          streamsMap[key]!.onData != null
+              ? streamsMap[key]!.onData!(_dataMap![key])
+              : onData(key, _dataMap![key]);
         },
         onError: (error) {
           setErrorForObject(key, error);
-          _dataMap[key] = null;
+          _dataMap![key] = null;
 
-          streamsMap[key].onError != null
-              ? streamsMap[key].onError(error)
+          streamsMap[key]!.onError != null
+              ? streamsMap[key]!.onError!(error)
               : onError(key, error);
           update();
         },
       );
-      streamsMap[key].onSubscribed != null
-          ? streamsMap[key].onSubscribed()
+      streamsMap[key]!.onSubscribed != null
+          ? streamsMap[key]!.onSubscribed!()
           : onSubscribed(key);
       changeSource = false;
     }
@@ -412,7 +414,7 @@ abstract class MultipleStreamGetController extends _MultiDataSourceGetController
     _disposeAllSubscriptions();
 
     if (clearOldData) {
-      dataMap.clear();
+      dataMap!.clear();
       clearErrors();
     }
 
@@ -440,12 +442,12 @@ abstract class MultipleStreamGetController extends _MultiDataSourceGetController
 
   void _disposeAllSubscriptions() {
     if (_streamsSubscriptions != null) {
-      for (var key in _streamsSubscriptions.keys) {
-        _streamsSubscriptions[key].cancel();
+      for (var key in _streamsSubscriptions!.keys) {
+        _streamsSubscriptions![key]!.cancel();
         onCancel(key);
       }
 
-      _streamsSubscriptions.clear();
+      _streamsSubscriptions!.clear();
     }
   }
 }
@@ -455,9 +457,9 @@ abstract class StreamGetController<T> extends _SingleDataSourceGetController<T>
   /// Stream to listen to
   Stream<T> get stream;
 
-  StreamSubscription get streamSubscription => _streamSubscription;
+  StreamSubscription? get streamSubscription => _streamSubscription;
 
-  StreamSubscription _streamSubscription;
+  StreamSubscription? _streamSubscription;
 
   @override
   void notifySourceChanged({bool clearOldData = false}) {
@@ -479,8 +481,9 @@ abstract class StreamGetController<T> extends _SingleDataSourceGetController<T>
         _error = null;
         update();
         // Extra security in case transformData isnt sent
-        var interceptedData =
-            transformData == null ? incomingData : transformData(incomingData);
+        var interceptedData = transformData(incomingData) == null
+            ? incomingData
+            : transformData(incomingData);
 
         if (interceptedData != null) {
           _data = interceptedData;
@@ -505,7 +508,7 @@ abstract class StreamGetController<T> extends _SingleDataSourceGetController<T>
   }
 
   /// Called before the notifyListeners is called when data has been set
-  void onData(T data) {}
+  void onData(T? data) {}
 
   /// Called when the stream is listened too
   void onSubscribed() {}
@@ -522,7 +525,7 @@ abstract class StreamGetController<T> extends _SingleDataSourceGetController<T>
 
   @override
   onClose() {
-    _streamSubscription.cancel();
+    _streamSubscription!.cancel();
     onCancel();
 
     super.onClose();
@@ -536,22 +539,22 @@ class StreamData<T> extends _SingleDataSourceGetController<T> {
   ///
   /// notifyListeners is called before this so no need to call in here unless you're
   /// running additional logic and setting a separate value.
-  Function onData;
+  Function? onData;
 
   /// Called after the stream has been listened too
-  Function onSubscribed;
+  Function? onSubscribed;
 
   /// Called when an error is placed on the stream
-  Function onError;
+  Function? onError;
 
   /// Called when the stream is cancelled
-  Function onCancel;
+  Function? onCancel;
 
   /// Allows you to modify the data before it's set as the new data for the model
   ///
   /// This can be used to modify the data if required. If nothhing is returned the data
   /// won't be set.
-  Function transformData;
+  Function? transformData;
 
   StreamData(
     this.stream, {
@@ -562,7 +565,7 @@ class StreamData<T> extends _SingleDataSourceGetController<T> {
     this.transformData,
   });
 
-  StreamSubscription _streamSubscription;
+  late StreamSubscription _streamSubscription;
 
   void initialise() {
     _streamSubscription = stream.listen(
@@ -572,7 +575,7 @@ class StreamData<T> extends _SingleDataSourceGetController<T> {
         update();
         // Extra security in case transformData isnt sent
         var interceptedData =
-            transformData == null ? incomingData : transformData(incomingData);
+            transformData == null ? incomingData : transformData!(incomingData);
 
         if (interceptedData != null) {
           _data = interceptedData;
@@ -581,23 +584,23 @@ class StreamData<T> extends _SingleDataSourceGetController<T> {
         }
 
         update();
-        onData(_data);
+        onData!(_data);
       },
       onError: (error) {
         setError(error);
         _data = null;
-        onError(error);
+        onError!(error);
         update();
       },
     );
 
-    onSubscribed();
+    onSubscribed!();
   }
 
   @override
   onClose() {
     _streamSubscription.cancel();
-    onCancel();
+    onCancel!();
 
     super.onClose();
   }

@@ -16,18 +16,18 @@ class GetBottomSheet extends StatelessWidget {
     this.showHandle = true,
     this.centerTitle,
     this.rounded = true,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  final Widget title;
-  final Widget content;
-  final Widget leadingAction;
-  final List<Widget> topActions;
-  final List<Widget> bottomActions;
-  final EdgeInsetsGeometry contentPadding;
-  final double minHeight;
+  final Widget? title;
+  final Widget? content;
+  final Widget? leadingAction;
+  final List<Widget>? topActions;
+  final List<Widget>? bottomActions;
+  final EdgeInsetsGeometry? contentPadding;
+  final double? minHeight;
   final bool showHandle;
-  final bool centerTitle;
+  final bool? centerTitle;
   final bool rounded;
 
   @override
@@ -79,7 +79,7 @@ class GetBottomSheet extends StatelessWidget {
                       children: [
                         SizedBox(height: minHeight),
                         if (bottomActions?.isNotEmpty == true)
-                          ...bottomActions.expand(
+                          ...bottomActions!.expand(
                             (element) => [SizedBox(width: 6), element],
                           )
                       ],
@@ -96,20 +96,20 @@ class GetBottomSheet extends StatelessWidget {
 extension GetBottomSheetX on GetInterface {
   void modalBottomSheet(
     Widget sheet, {
-    Color backgroundColor,
-    double elevation,
-    Clip clipBehavior,
-    Color barrierColor,
-    bool ignoreSafeArea,
+    Color? backgroundColor,
+    double? elevation,
+    Clip? clipBehavior,
+    Color? barrierColor,
+    bool? ignoreSafeArea,
     bool isScrollControlled = false,
     bool useRootNavigator = false,
     bool isDismissible = true,
     bool enableDrag = true,
-    RouteSettings settings,
-    Duration enterBottomSheetDuration,
-    Duration exitBottomSheetDuration,
-    void Function(dynamic v) onDismiss,
-    FutureOr Function() onShow,
+    RouteSettings? settings,
+    Duration? enterBottomSheetDuration,
+    Duration? exitBottomSheetDuration,
+    void Function(dynamic v)? onDismiss,
+    FutureOr Function()? onShow,
   }) async {
     await onShow?.call();
     bottomSheet(
@@ -133,9 +133,9 @@ extension GetBottomSheetX on GetInterface {
 }
 
 class RoundedHandle extends StatelessWidget {
-  const RoundedHandle({Key key, this.color}) : super(key: key);
+  const RoundedHandle({Key? key, this.color}) : super(key: key);
 
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) => Row(

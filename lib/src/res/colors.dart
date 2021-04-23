@@ -10,10 +10,10 @@ extension ColorX on Color {
       ? (GetTheme.isDarkMode ? Colors.white : this)
       : (GetTheme.isDarkMode ? this : Colors.black);
 
-  MaterialColor get material => this is MaterialColor ? this : null;
+  MaterialColor? get material => this is MaterialColor ? this as MaterialColor? : null;
 
-  MaterialAccentColor get materialAccent =>
-      this is MaterialAccentColor ? this : null;
+  MaterialAccentColor? get materialAccent =>
+      this is MaterialAccentColor ? this as MaterialAccentColor? : null;
 
   Color get activated => withOpacity(0.05);
 

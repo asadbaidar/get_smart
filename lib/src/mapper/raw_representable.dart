@@ -1,10 +1,12 @@
 import 'mappable.dart';
 
 abstract class RawRepresentable<RawValue> {
+  const RawRepresentable({required this.rawValue});
+
   final RawValue rawValue;
 
-  factory RawRepresentable(Type type, RawValue rawValue) {
-    var constructor = Mappable.factories[type];
+  static RawRepresentable? getInstance(Type type, rawValue) {
+    final constructor = Mappable.factories[type];
     if (constructor == null) return null;
     return constructor(rawValue);
   }

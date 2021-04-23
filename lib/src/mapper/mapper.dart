@@ -6,19 +6,19 @@ enum MappingType { fromJson, toJson }
 enum ValueType { unknown, list, map, numeric, string, bool, dynamic }
 
 class Mapper {
-  MappingType _mappingType;
-  Map<String, dynamic> json;
+  MappingType? _mappingType;
+  Map<String, dynamic>? json;
 
   // Constructor
   Mapper();
 
   Mapper.fromJson(this.json);
 
-  T toObject<T>() {
+  T? toObject<T>() {
     _mappingType = MappingType.fromJson;
 
     // Initialize an instance of T
-    var instance = Mappable(T);
+    final instance = Mappable.getInstance(T);
     if (instance == null) return null;
 
     // Call mapping for assigning value
@@ -27,7 +27,7 @@ class Mapper {
     return instance as T;
   }
 
-  Map<String, dynamic> toJson(Mappable object) {
+  Map<String, dynamic>? toJson(Mappable object) {
     json = {};
     _mappingType = MappingType.toJson;
 
@@ -39,8 +39,12 @@ class Mapper {
 
   /// This method will be used when a class
   /// implements the [Mappable.mapping] method
-  dynamic call<T>(String field, dynamic value, MappingSetter setter,
-      [Transformable transform]) {
+  dynamic call<T>(
+    String field,
+    dynamic value,
+    MappingSetter setter, [
+    Transformable? transform,
+  ]) {
     switch (_mappingType) {
       case MappingType.fromJson:
         _fromJson<T>(field, value, setter, transform);
@@ -49,12 +53,14 @@ class Mapper {
       case MappingType.toJson:
         _toJson<T>(field, value, setter, transform);
         break;
+      default:
+        break;
     }
   }
 
   _fromJson<T>(String field, dynamic value, MappingSetter setter,
-      [Transformable transform]) {
-    var v = json[field];
+      [Transformable? transform]) {
+    var v = json![field];
     final type = _getValueType(v);
 
     // Transform
@@ -62,7 +68,7 @@ class Mapper {
       if (type == ValueType.list) {
         assert(
             T.toString() != "dynamic", "Missing type at mapping for `$field`");
-        final List<T> list = [];
+        final List<T?> list = [];
         for (int i = 0; i < v.length; i++) {
           final item = transform.fromJson(v[i]);
           list.add(item);
@@ -81,7 +87,7 @@ class Mapper {
       case ValueType.list:
         // Return it-self, if T is not set
         if (T.toString() == "dynamic") return setter(v);
-        final List<T> list = [];
+        final List<T?> list = [];
 
         for (int i = 0; i < v.length; i++) {
           final item = _itemBuilder<T>(v[i], MappingType.fromJson);
@@ -102,7 +108,7 @@ class Mapper {
   }
 
   _toJson<T>(String field, dynamic value, MappingSetter setter,
-      [Transformable transform]) {
+      [Transformable? transform]) {
     if (value == null) return;
 
     final type = _getValueType(value);
@@ -115,10 +121,10 @@ class Mapper {
           final item = transform.toJson(value[i]);
           list.add(item);
         }
-        this.json[field] = list;
+        this.json![field] = list;
       } else {
         value = transform.toJson(value);
-        this.json[field] = value;
+        this.json![field] = value;
       }
       return;
     }
@@ -133,20 +139,20 @@ class Mapper {
           list.add(item);
         }
 
-        this.json[field] = list;
+        this.json![field] = list;
         break;
 
       // Map
       case ValueType.map:
-        this.json[field] = value;
+        this.json![field] = value;
         break;
 
       default:
         if (value is Mappable) {
-          this.json[field] = value.toJson();
+          this.json![field] = value.toJson();
           return;
         }
-        this.json[field] = value;
+        this.json![field] = value;
     }
   }
 

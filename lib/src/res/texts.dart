@@ -59,5 +59,5 @@ Map<Locale, Map<GetText, String>> _getTextMap = {
 /// Extending GetText for localization support
 extension GetTextX on GetText {
   /// Return the text from [GetText] map based on current locale
-  String call([List<dynamic> arguments]) => localized(_getTextMap, arguments);
+  String call([List<dynamic>? arguments]) => localized(_getTextMap, arguments);
 }

@@ -22,8 +22,8 @@ class GetLocalizations {
 
   final Locale locale;
 
-  static GetLocalizations get current {
-    return Localizations.of<GetLocalizations>(Get.context, GetLocalizations);
+  static GetLocalizations? get current {
+    return Localizations.of<GetLocalizations>(Get.context!, GetLocalizations);
   }
 }
 

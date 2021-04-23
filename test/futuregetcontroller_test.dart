@@ -19,7 +19,7 @@ class TestFutureGetController extends FutureGetController<int> {
   }
 
   @override
-  void onData(int data) {
+  void onData(int? data) {
     dataCalled = true;
   }
 }
@@ -130,8 +130,8 @@ void main() {
       var futureGetController = TestMultipleFutureGetController();
       await futureGetController.initialise();
 
-      expect(futureGetController.dataMap[NumberDelayFuture], 5);
-      expect(futureGetController.dataMap[StringDelayFuture], 'String data');
+      expect(futureGetController.dataMap![NumberDelayFuture], 5);
+      expect(futureGetController.dataMap![StringDelayFuture], 'String data');
     });
 
     test(
@@ -150,8 +150,8 @@ void main() {
       var futureGetController = TestMultipleFutureGetController(failOne: true);
       await futureGetController.initialise();
 
-      expect(futureGetController.dataMap[NumberDelayFuture], null);
-      expect(futureGetController.dataMap[StringDelayFuture], 'String data');
+      expect(futureGetController.dataMap![NumberDelayFuture], null);
+      expect(futureGetController.dataMap![StringDelayFuture], 'String data');
     });
 
     test('When multiple futures run the key should be set to indicate busy',
@@ -209,11 +209,11 @@ void main() {
       test('notifySourceChanged - When called should re-run Future', () async {
         var futureGetController = TestMultipleFutureGetController();
         await futureGetController.initialise();
-        expect(futureGetController.dataMap[NumberDelayFuture], 5);
+        expect(futureGetController.dataMap![NumberDelayFuture], 5);
         futureGetController.numberToReturn = 10;
         futureGetController.notifySourceChanged();
         await futureGetController.initialise();
-        expect(futureGetController.dataMap[NumberDelayFuture], 10);
+        expect(futureGetController.dataMap![NumberDelayFuture], 10);
       });
     });
   });

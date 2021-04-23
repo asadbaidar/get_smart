@@ -6,14 +6,14 @@ import 'package:get_smart/get_smart.dart';
 abstract class GetController extends MultipleFutureGetController {
   final actionName = "action";
 
-  Map<String, dynamic> get dataMap => _dataMap;
-  Map<String, dynamic> _dataMap;
+  Map<String, dynamic>? get dataMap => _dataMap;
+  Map<String, dynamic>? _dataMap;
 
   Map<dynamic, Future Function()> get runnerMap => _runnerMap;
   Map<dynamic, Future Function()> _runnerMap = {};
 
-  Completer _futuresCompleter;
-  int _futuresCompleted;
+  late Completer _futuresCompleter;
+  int _futuresCompleted = 0;
 
   void _initialiseData() {
     if (dataMap == null) {
@@ -33,7 +33,7 @@ abstract class GetController extends MultipleFutureGetController {
 
     for (var key in futuresMap.keys) {
       runBusyFuture(
-        futuresMap[key](),
+        futuresMap[key]!(),
         busyObject: key,
         throwException: true,
       ).then((futureData) {
@@ -100,11 +100,11 @@ abstract class GetController extends MultipleFutureGetController {
   bool get isAnyBusy => anyObjectsBusy;
 
   /// Returns true if all objects have succeeded.
-  bool get isAllSucceeded => dataMap.keys.every((k) => succeeded(k));
+  bool get isAllSucceeded => dataMap!.keys.every((k) => succeeded(k));
 
   /// Returns data for any object which did not succeed.
   WebResponse get anyNotSucceeded =>
-      data(dataMap.keys.firstWhere((k) => !succeeded(k))) ?? WebResponse()
+      data(dataMap!.keys.firstWhere((k) => !succeeded(k))) ?? WebResponse()
         ..isSucceeded = true;
 
   /// Returns the data ready status of the action if no error occurred
@@ -132,7 +132,7 @@ abstract class GetController extends MultipleFutureGetController {
   bool get hasActionError => hasErrorFor(actionName);
 
   /// Returns the [WebStatus] of action
-  WebStatus get actionStatus => status(actionName);
+  WebStatus? get actionStatus => status(actionName);
 
   /// Returns the success status of an action
   dynamic get actionSuccess => success(actionName);
@@ -144,7 +144,7 @@ abstract class GetController extends MultipleFutureGetController {
   set actionError(value) => setErrorFor(actionName, value);
 
   /// Returns the data of the action
-  WebResponse get actionData => data(actionName);
+  WebResponse? get actionData => data(actionName);
 
   /// Sets the data of the action
   set actionData(value) => setDataFor(actionName, value);
@@ -186,7 +186,7 @@ abstract class GetController extends MultipleFutureGetController {
   bool get isBusy => busy(typeName);
 
   /// Returns the error status of the ViewModel and checks if condition valid
-  bool hasErrorOr([bool condition]) =>
+  bool hasErrorOr([bool? condition]) =>
       !isBusy && (hasError || ((condition ?? true) && isReady));
 
   /// Returns the error status of the ViewModel
@@ -201,7 +201,7 @@ abstract class GetController extends MultipleFutureGetController {
   set modelError(value) => setError(value);
 
   /// Returns the data of the ViewModel
-  WebResponse get modelData => data(typeName);
+  WebResponse? get modelData => data(typeName);
 
   /// Sets the data for the ViewModel
   set modelData(value) => setData(value);
@@ -225,7 +225,7 @@ abstract class GetController extends MultipleFutureGetController {
   bool get isFailed => failed(typeName);
 
   /// Returns the [WebStatus] of the ViewModel
-  WebStatus get modelStatus => status(typeName);
+  WebStatus? get modelStatus => status(typeName);
 
   /// Returns the success message of the ViewModel
   dynamic get modelSuccess => success(typeName);
@@ -251,7 +251,7 @@ abstract class GetController extends MultipleFutureGetController {
   void setErrorFor(key, value) => setErrorForObject(key, value);
 
   /// Sets the data by key
-  void setDataFor(Object key, value) => dataMap[key.hash] = value;
+  void setDataFor(Object key, value) => dataMap![key.hash] = value;
 
   /// Sets the runner by key
   void setRunnerFor(Object key, Future Function() value) =>
@@ -262,7 +262,7 @@ abstract class GetController extends MultipleFutureGetController {
       runnerMap[key.hash] ?? () => Future.value();
 
   /// Returns the data by key
-  WebResponse data(Object key) => key == null ? null : dataMap[key.hash];
+  WebResponse? data(Object key) => dataMap?[key.hash];
 
   /// Returns the success message by key
   dynamic success(Object key) => data(key)?.success;
@@ -275,7 +275,7 @@ abstract class GetController extends MultipleFutureGetController {
   bool dataReady(key) => ready(key) && !hasErrorFor(key);
 
   /// Returns the [WebStatus] by key
-  WebStatus status(key) => busy(key) ? WebStatus.busy : data(key)?.status;
+  WebStatus? status(key) => busy(key) ? WebStatus.busy : data(key)?.status;
 
   /// Returns the status by key if started or not
   bool started(key) => status(key) != null && status(key) != WebStatus.canceled;
@@ -308,7 +308,7 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Clears all data and errors
   void clearAllData() {
-    dataMap.clear();
+    dataMap!.clear();
     clearErrors();
     clearBusy();
     update();
@@ -322,7 +322,7 @@ abstract class GetController extends MultipleFutureGetController {
   /// rethrows [Exception] after setting busy to false by key
   Future runBusyRunner(
     Future Function() busyAction, {
-    Object key,
+    Object? key,
     bool throwException = false,
   }) {
     var _key = key ?? typeName;
@@ -344,7 +344,7 @@ abstract class GetController extends MultipleFutureGetController {
   @override
   Future runBusyFuture(
     Future busyFuture, {
-    Object busyObject,
+    Object? busyObject,
     bool throwException = false,
   }) async {
     clearErrors();
@@ -369,7 +369,7 @@ abstract class GetController extends MultipleFutureGetController {
   @override
   Future runErrorFuture(
     Future future, {
-    Object key,
+    Object? key,
     bool throwException = false,
   }) async {
     final _key = key ?? typeName;

@@ -52,14 +52,14 @@ extension TextStyleX on TextStyle {
 }
 
 extension ListX<E> on List<E> {
-  E get(int index) {
+  E? get(int index) {
     if (index < length) {
       return this[index];
     }
     return null;
   }
 
-  E get takeFirst {
+  E? get takeFirst {
     Iterator<E> it = iterator;
     if (!it.moveNext()) {
       return null;
@@ -67,7 +67,7 @@ extension ListX<E> on List<E> {
     return it.current;
   }
 
-  E takeFirstWhere(bool test(E element)) {
+  E? takeFirstWhere(bool test(E element)) {
     for (E element in this) {
       if (test(element)) return element;
     }
@@ -82,16 +82,16 @@ extension ObjectX on Object {
 
   void lets(void Function() apply) => apply();
 
-  T applyIf<T>(bool condition, T Function(T) apply) {
-    return (condition == true) ? apply(this) : this;
+  T? applyIf<T>(bool? condition, T Function(T) apply) {
+    return (condition == true) ? apply(this as T) : this as T?;
   }
 
-  T applyFor<T>(int times, T Function(T) apply) {
-    var value = this;
+  T? applyFor<T>(int times, T Function(T?) apply) {
+    Object? value = this;
     (times ?? 0).repeatsFor(() {
-      value = apply(value);
+      value = apply(value as T?);
     });
-    return value;
+    return value as T?;
   }
 
   Future get future => Future.value(this);
@@ -108,23 +108,22 @@ extension ObjectX on Object {
 
   String get typeName => nameOf(runtimeType);
 
-  T mapObject<T>([List<Object Function()> builders]) {
+  T mapObject<T>([List<Object? Function()>? builders]) {
     return MapperX.fromData(this).toWebObject<T>(builders);
   }
 
   /// Return the text from a text map with arguments based on current locale
   String localized(
     Map<Locale, Map<dynamic, String>> textMap, [
-    List<dynamic> arguments,
+    List<dynamic>? arguments,
   ]) =>
-      this == null
-          ? null
-          : textMap[GetLocalizations.current?.locale ?? ""]
-              ?.let((Map<dynamic, String> _) => _[this])
-              ?.applyIf(
-                arguments?.isNotEmpty,
-                (s) => sprintf(s, arguments.map((e) => e ?? "").toList()),
-              );
+      textMap[GetLocalizations.current?.locale ?? GetLocalizations.english]
+          ?.let((Map<dynamic, String> _) => _[this])
+          ?.applyIf(
+            arguments?.isNotEmpty,
+            (s) => sprintf(s, arguments!.map((e) => e ?? "").toList()),
+          ) ??
+      "";
 }
 
 extension Num on num {
@@ -135,9 +134,9 @@ extension Num on num {
       }
   }
 
-  DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(this);
+  DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(this as int);
 
-  String get formatted => Get.formatter.formatDecimal(this);
+  String get formatted => Get.formatter.formatDecimal(this as int);
 
   bool inRange(int start, int end) => this >= start && this < end;
 
@@ -164,11 +163,11 @@ extension DurationX on Duration {
     var _secondsWidth = minutesWidth > 0 ? secondsWidth : 0;
     String hours = inHours
         .padLeft(_hoursWidth)
-        .post(":", doIf: _hoursWidth > 0 && minutesWidth > 0);
+        .post(":", doIf: _hoursWidth > 0 && minutesWidth > 0)!;
     String minutes = inMinutes
         .remainder(60)
         .padLeft(minutesWidth)
-        .post(":", doIf: minutesWidth > 0 && _secondsWidth > 0);
+        .post(":", doIf: minutesWidth > 0 && _secondsWidth > 0)!;
     String seconds = inSeconds.remainder(60).padLeft(_secondsWidth);
     return hours + minutes + seconds;
   }
@@ -187,24 +186,24 @@ extension DurationX on Duration {
 }
 
 extension StringX on String {
-  String pre(String pre, {int doFor = 1, bool doIf = true}) {
+  String? pre(String? pre, {int doFor = 1, bool doIf = true}) {
     return applyFor(
       doIf == true && pre != null ? doFor : 0,
-      (s) => pre + s,
+      (s) => pre! + s!,
     );
   }
 
-  String post(String post, {int doFor = 1, bool doIf = true}) {
+  String? post(String post, {int doFor = 1, bool doIf = true}) {
     return applyFor(
       doIf == true && post != null ? doFor : 0,
-      (s) => s + post,
+      (s) => s! + post,
     );
   }
 
-  String surround(String surround, {int doFor = 1, bool doIf = true}) {
+  String? surround(String surround, {int doFor = 1, bool doIf = true}) {
     return applyFor(
       doIf == true && surround != null ? doFor : 0,
-      (s) => s.pre(surround).post(surround),
+      ((s) => s!.pre(surround)!.post(surround)!) as String Function(String?),
     );
   }
 
@@ -228,9 +227,9 @@ extension StringX on String {
   String skipLastWhile(bool Function(String) predicate) =>
       characters.skipLastWhile(predicate).toString();
 
-  String get notEmpty => isEmpty ? null : this;
+  String? get notEmpty => isEmpty ? null : this;
 
-  bool get isNotBlank => !isBlank;
+  bool get isNotBlank => !isBlank!;
 
   String get fileType => takeLastWhile((s) => s != ".");
 
@@ -246,7 +245,7 @@ extension StringX on String {
       Colors.accents[Random(hashCode).nextInt(Colors.accents.length)];
 
   bool isPasswordStrong({int min = 8}) {
-    if (isBlank) return false;
+    if (isBlank!) return false;
 
     bool hasUppercase = contains(RegExp(r'[A-Z]'));
     bool hasLowercase = contains(RegExp(r'[a-z]'));
@@ -274,7 +273,7 @@ extension StringX on String {
   /// Capitalize each word inside string
   /// Example: your name => Your Name
   String get capitalized {
-    return isBlank
+    return isBlank!
         ? ""
         : length == 1
             ? uppercase
@@ -284,7 +283,7 @@ extension StringX on String {
   /// Uppercase first letter inside string and let the others lowercase
   /// Example: your name => Your name
   String get capitalizedFirst {
-    return isBlank
+    return isBlank!
         ? ""
         : length == 1
             ? uppercase
@@ -346,17 +345,17 @@ class BoolTransform implements Transformable<bool, String> {
 
 extension Date on DateTime {
   static DateTime from({
-    int year,
-    int month,
-    int day,
-    int hour,
-    int minute,
-    int second,
-    int millisecond,
-    int microsecond,
-    TimeOfDay timeOfDay,
-    DateTime date,
-    DateTime time,
+    int? year,
+    int? month,
+    int? day,
+    int? hour,
+    int? minute,
+    int? second,
+    int? millisecond,
+    int? microsecond,
+    TimeOfDay? timeOfDay,
+    DateTime? date,
+    DateTime? time,
   }) {
     final now = Date.now;
     return DateTime(
@@ -372,17 +371,17 @@ extension Date on DateTime {
   }
 
   DateTime setting({
-    int year,
-    int month,
-    int day,
-    int hour,
-    int minute,
-    int second,
-    int millisecond,
-    int microsecond,
-    TimeOfDay timeOfDay,
-    DateTime date,
-    DateTime time,
+    int? year,
+    int? month,
+    int? day,
+    int? hour,
+    int? minute,
+    int? second,
+    int? millisecond,
+    int? microsecond,
+    TimeOfDay? timeOfDay,
+    DateTime? date,
+    DateTime? time,
   }) =>
       DateTime(
         year ?? date?.year ?? this.year,
@@ -495,18 +494,18 @@ extension GetDateFormat on DateFormat {
 
 extension GetDateTimePickerX on GetInterface {
   Future<void> timePicker({
-    DateTime withTime,
-    String cancelText,
-    String confirmText,
-    String helpText,
+    DateTime? withTime,
+    String? cancelText,
+    String? confirmText,
+    String? helpText,
     TimePickerEntryMode entryMode = TimePickerEntryMode.input,
-    TransitionBuilder builder,
+    TransitionBuilder? builder,
     bool useRootNavigator = true,
-    RouteSettings routeSettings,
-    Function(DateTime time) onPick,
+    RouteSettings? routeSettings,
+    required Function(DateTime? time) onPick,
   }) async {
     var time = await showTimePicker(
-      context: context,
+      context: context!,
       initialTime: withTime?.timeOfDay ?? TimeOfDay.now(),
       cancelText: cancelText,
       confirmText: confirmText,
@@ -522,28 +521,28 @@ extension GetDateTimePickerX on GetInterface {
   }
 
   Future<void> datePicker({
-    DateTime withDate,
-    DateTime minDate,
-    DateTime maxDate,
-    DateTime currentDate,
-    String cancelText,
-    String confirmText,
-    String helpText,
-    String errorFormatText,
-    String errorInvalidText,
-    String fieldHintText,
-    String fieldLabelText,
+    DateTime? withDate,
+    DateTime? minDate,
+    DateTime? maxDate,
+    DateTime? currentDate,
+    String? cancelText,
+    String? confirmText,
+    String? helpText,
+    String? errorFormatText,
+    String? errorInvalidText,
+    String? fieldHintText,
+    String? fieldLabelText,
     DatePickerEntryMode entryMode = DatePickerEntryMode.calendar,
     DatePickerMode calenderMode = DatePickerMode.day,
-    SelectableDayPredicate selectableDayPredicate,
-    Locale locale,
+    SelectableDayPredicate? selectableDayPredicate,
+    Locale? locale,
     bool useRootNavigator = true,
-    RouteSettings routeSettings,
-    TransitionBuilder builder,
-    Function(DateTime date) onPick,
+    RouteSettings? routeSettings,
+    TransitionBuilder? builder,
+    required Function(DateTime? date) onPick,
   }) async {
     var date = await showDatePicker(
-      context: context,
+      context: context!,
       initialDate: withDate ?? Date.now,
       firstDate: minDate ?? Date.from(year: 2000),
       lastDate: maxDate ?? Date.now,
@@ -569,7 +568,7 @@ extension GetDateTimePickerX on GetInterface {
   }
 }
 
-T castIf<T>(value) => value is T ? value : null;
+T? castIf<T>(value) => value is T ? value : null;
 
 String nameOf(Type type) => type.toString();
 
@@ -631,7 +630,7 @@ extension Double on double {
 
   BorderRadius get circular => BorderRadius.circular(radius);
 
-  BoxDecoration circularDecoration({Color color}) => BoxDecoration(
+  BoxDecoration circularDecoration({Color? color}) => BoxDecoration(
         borderRadius: circular,
         color: color,
       );
@@ -640,8 +639,8 @@ extension Double on double {
 }
 
 Future<T> scheduleTask<T>(FutureOr<T> Function() task) async {
-  return await SchedulerBinding.instance
-      .scheduleTask<FutureOr<T>>(task, Priority.animation);
+  return await (SchedulerBinding.instance!
+      .scheduleTask<FutureOr<T>>(task, Priority.animation) as FutureOr<T>);
 }
 
 Future<T> profileTask<T>(Future<T> Function() task) async {
@@ -658,11 +657,11 @@ extension MapperX on Mapper {
     List<String> fields,
     dynamic value,
     MappingSetter setter, [
-    Transformable transform,
+    Transformable? transform,
   ]) {
     this<T>(
       fields.firstWhere(
-        (it) => this.json[it] != null,
+        (it) => this.json![it] != null,
         orElse: () => fields.takeFirst ?? "",
       ),
       value,
@@ -690,7 +689,7 @@ extension MapperX on Mapper {
                     : {},
       );
 
-  T toWebObject<T>([List<Object Function()> builders]) {
+  T toWebObject<T>([List<Object? Function()>? builders]) {
     builders?.forEach((builder) {
       Mappable.factories.putIfAbsent(builder().runtimeType, () => builder);
     });
@@ -705,9 +704,9 @@ extension MapperX on Mapper {
 }
 
 abstract class WebMappable with Mappable, Comparable<WebMappable> {
-  DateTime currentTime;
-  String _id;
-  String _description;
+  DateTime? currentTime;
+  String? _id;
+  String? _description;
 
   String get id => _id ?? idFallback ?? "";
 
@@ -717,9 +716,9 @@ abstract class WebMappable with Mappable, Comparable<WebMappable> {
 
   set description(String description) => _description = description;
 
-  String get idFallback => null;
+  String? get idFallback => null;
 
-  String get descriptionFallback => null;
+  String? get descriptionFallback => null;
 
   List<String> get idKeys => ["ID"];
 
@@ -814,12 +813,12 @@ class StackList<T> {
 
   void clear() => _underlyingQueue.clear();
 
-  T peek() {
+  T? peek() {
     if (isEmpty) return null;
     return _underlyingQueue.last;
   }
 
-  T pop() {
+  T? pop() {
     if (isEmpty) return null;
     final T lastElement = _underlyingQueue.last;
     _underlyingQueue.removeLast();
@@ -839,26 +838,26 @@ class AppTileData extends WebMappable {
     this.trailingTop,
     this.trailingBottom,
     this.subTiles = const [],
-    Color color,
+    Color? color,
     this.isDetailed = false,
     this.isHeader = false,
     this.padAccessory,
     this.onTap,
   }) : _color = color;
 
-  IconData icon;
-  IconData accessory;
+  IconData? icon;
+  IconData? accessory;
   dynamic header;
-  String title;
-  String subtitle;
-  String trailingTop;
-  String trailingBottom;
+  String? title;
+  String? subtitle;
+  String? trailingTop;
+  String? trailingBottom;
   List<AppTileData> subTiles;
-  Color _color;
+  Color? _color;
   bool isDetailed;
   bool isHeader;
-  bool padAccessory;
-  Function onTap;
+  bool? padAccessory;
+  Function? onTap;
 
   bool get hasSubTiles => subTiles.isNotEmpty == true;
 
@@ -871,27 +870,27 @@ class WebResponse<T> extends WebMappable {
 
   WebResponse.dio([this.dioError]);
 
-  WebResponse.error([String message]) : message = message;
+  WebResponse.error([String? message]) : message = message;
 
-  WebResponse.success([String message])
+  WebResponse.success([String? message])
       : message = message,
         isSucceeded = true;
 
-  DioErrorType dioError;
+  DioErrorType? dioError;
 
   String tag = "Connection";
   bool isSucceeded = false;
-  String message = "Connection failed.";
-  T result;
-  List<T> results;
+  String? message = "Connection failed.";
+  T? result;
+  List<T>? results;
 
   // ?? (T.toString() == "dynamic" ? isSucceeded : null);
 
   get data => results ?? result;
 
-  String get error => isSucceeded ? null : message;
+  String? get error => isSucceeded ? null : message;
 
-  String get success => isSucceeded ? message : null;
+  String? get success => isSucceeded ? message : null;
 
   WebStatus get status => isCanceled
       ? WebStatus.canceled
@@ -917,7 +916,7 @@ class WebResponse<T> extends WebMappable {
         (v) => message = v ?? "Connection failed.");
     map<T>("result", results ?? result, (v) {
       if (v is List) {
-        return results = v;
+        return results = v as List<T>?;
       } else {
         return result = v;
       }
@@ -940,10 +939,10 @@ enum WebStatus {
 
 abstract class GetWebAPI {
   Future<WebResponse<T>> get<T>({
-    T Function() builder,
-    List<Object Function()> builders,
-    String path,
-    Map<String, dynamic> parameters,
+    T Function()? builder,
+    List<Object Function()>? builders,
+    String? path,
+    Map<String, dynamic>? parameters,
   }) {
     return request<T>(
       builder: builder,
@@ -955,11 +954,11 @@ abstract class GetWebAPI {
   }
 
   Future<WebResponse<T>> post<T>({
-    T Function() builder,
-    List<Object Function()> builders,
+    T Function()? builder,
+    List<Object Function()>? builders,
     bool encrypted = false,
-    String path,
-    Map<String, dynamic> parameters,
+    String? path,
+    Map<String, dynamic>? parameters,
   }) {
     return request<T>(
       builder: builder,
@@ -972,10 +971,10 @@ abstract class GetWebAPI {
   }
 
   Future<WebResponse<T>> delete<T>({
-    T Function() builder,
-    List<Object Function()> builders,
-    String path,
-    Map<String, dynamic> parameters,
+    T Function()? builder,
+    List<Object Function()>? builders,
+    String? path,
+    Map<String, dynamic>? parameters,
   }) {
     return request<T>(
       builder: builder,
@@ -987,9 +986,9 @@ abstract class GetWebAPI {
   }
 
   void download<T>({
-    String path,
-    String name,
-    Map<String, dynamic> parameters,
+    String? path,
+    String? name,
+    Map<String, dynamic>? parameters,
   }) =>
       throw UnimplementedError();
 
@@ -998,7 +997,7 @@ abstract class GetWebAPI {
 
   FutureOr<String> get address;
 
-  String get path => null;
+  String? get path => null;
 
   FutureOr<String> get authToken => GetCipher.instance.authToken;
 
@@ -1007,12 +1006,12 @@ abstract class GetWebAPI {
   void cancel() => _cancelToken.cancel();
 
   Future<WebResponse<T>> request<T>({
-    T Function() builder,
-    List<Object Function()> builders,
+    T Function()? builder,
+    List<Object Function()>? builders,
     bool encrypted = false,
-    String path,
-    WebMethod method,
-    Map<String, dynamic> parameters,
+    String? path,
+    WebMethod? method,
+    Map<String, dynamic>? parameters,
   }) async =>
       scheduleTask(() async {
         var dio = Dio();
@@ -1025,7 +1024,7 @@ abstract class GetWebAPI {
             ..baseUrl = await address
             ..connectTimeout = 30000
             ..receiveTimeout = 60000
-            ..method = method.keyNAME
+            ..method = method!.keyNAME
             ..headers = {
               "auth": await authToken,
             }
@@ -1033,12 +1032,12 @@ abstract class GetWebAPI {
           _cancelToken = CancelToken();
           if (encrypted)
             await Future.forEach(
-              parameters.keys,
-              (key) async => parameters[key] =
+              parameters!.keys,
+              (dynamic key) async => parameters[key] =
                   await parameters[key]?.toString()?.encrypted,
             );
           DIO.Response response = await dio.request(
-            path.pre(this.path?.post("/")),
+            path!.pre(this.path?.post("/"))!,
             queryParameters: method == WebMethod.post ? null : parameters,
             data: parameters,
             cancelToken: _cancelToken,
@@ -1067,27 +1066,27 @@ extension GetInterfaceX on GetInterface {
 
   bool get isWeb => kIsWeb;
 
-  bool get canPop => Navigator.canPop(context);
+  bool get canPop => Navigator.canPop(context!);
 
   Future<void> popSystem({bool animated = true}) =>
       SystemNavigator.pop(animated: animated);
 
-  Future<bool> maybePop<T extends Object>([T result]) =>
-      Navigator.maybePop<T>(context, result);
+  Future<bool> maybePop<T extends Object>([T? result]) =>
+      Navigator.maybePop<T>(context!, result);
 
   void backUntil(String route) => until((r) => r.settings.name == route);
 
-  MaterialLocalizations get formatter => MaterialLocalizations.of(context);
+  MaterialLocalizations get formatter => MaterialLocalizations.of(context!);
 
   /// give current arguments
-  Object get $arguments => arguments;
+  Object? get $arguments => arguments;
 
-  T mapArguments<T>([List<Object Function()> builders]) =>
+  T? mapArguments<T>([List<Object Function()>? builders]) =>
       $arguments?.mapObject<T>(builders);
 
   /// Finds an Instance of the required Class <[S]>(or [tag])
   /// Returns null if not found.
-  S findIt<S>({String tag}) {
+  S? findIt<S>({String? tag}) {
     try {
       return GetInstance().find<S>(tag: tag);
     } catch (e) {
@@ -1097,7 +1096,7 @@ extension GetInterfaceX on GetInterface {
 
   /// Deprecated method. Please use [findIt] instead.
   @Deprecated("Please use `Get.findIt` instead.")
-  S find<S>({String tag}) => null;
+  S? find<S>({String? tag}) => null;
 }
 
 /// Asset directories mapping for easy access.
@@ -1140,12 +1139,12 @@ extension AssetX on Object {
 
   String get pdf => "$_name.pdf";
 
-  String _asset([String name]) =>
+  String _asset([String? name]) =>
       "assets/" +
       typeName.replaceAll("Asset", "").lowercase +
       "/${name ?? keyName}";
 
-  String get _name => this is String ? this : _asset();
+  String get _name => this is String ? this as String : _asset();
 
   String asset(String name) => _asset(name);
 }
@@ -1168,9 +1167,9 @@ class GetPlatformChannel {
 
   void init() {}
 
-  MethodChannel get channel => null;
+  MethodChannel? get channel => null;
 
-  Future<T> invokeMethod<T>(
+  Future<T?> invokeMethod<T>(
     String method, {
     dynamic arguments,
     dynamic fallback,

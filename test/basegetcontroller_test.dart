@@ -5,7 +5,7 @@ class TestGetController extends BaseGetController {
   bool onErrorCalled = false;
 
   Future runFuture(
-      {String busyKey, bool fail = false, bool throwException = false}) {
+      {String? busyKey, bool fail = false, bool throwException = false}) {
     return runBusyFuture(
       _futureToRun(fail),
       busyObject: busyKey,
@@ -14,7 +14,7 @@ class TestGetController extends BaseGetController {
   }
 
   Future runTestErrorFuture(
-      {String key, bool fail = false, bool throwException = false}) {
+      {String? key, bool fail = false, bool throwException = false}) {
     return runErrorFuture(
       _futureToRun(fail),
       key: key,

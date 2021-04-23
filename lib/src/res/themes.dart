@@ -23,9 +23,9 @@ class GetTheme {
     fontWeight: FontWeight.bold,
   );
 
-  static bool isDark(BuildContext context) =>
+  static bool isDark(BuildContext? context) =>
       ThemeMode.system == ThemeMode.dark ||
-      MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+      MediaQuery.platformBrightnessOf(context!) == Brightness.dark;
 
   static bool get isDarkMode => isDark(Get.context);
 
@@ -47,13 +47,13 @@ class GetTheme {
 
   static ThemeData black(
     BuildContext context, {
-    Brightness brightness,
-    String fontFamily,
-    TextTheme textTheme,
-    IconThemeData primaryIconTheme,
-    ButtonStyle elevatedButtonStyle,
-    ButtonStyle outlinedButtonStyle,
-    ButtonStyle textButtonStyle,
+    Brightness? brightness,
+    String? fontFamily,
+    TextTheme? textTheme,
+    IconThemeData? primaryIconTheme,
+    ButtonStyle? elevatedButtonStyle,
+    ButtonStyle? outlinedButtonStyle,
+    ButtonStyle? textButtonStyle,
     Brightness primaryBrightness = Brightness.dark,
     Color primaryBackgroundLight = Colors.black,
     Color bottomBackgroundLight = Colors.white,
@@ -90,12 +90,12 @@ class GetTheme {
 
   static ThemeData sky(
     BuildContext context, {
-    Brightness brightness,
-    String fontFamily,
-    TextTheme textTheme,
-    ButtonStyle elevatedButtonStyle,
-    ButtonStyle outlinedButtonStyle,
-    ButtonStyle textButtonStyle,
+    Brightness? brightness,
+    String? fontFamily,
+    TextTheme? textTheme,
+    ButtonStyle? elevatedButtonStyle,
+    ButtonStyle? outlinedButtonStyle,
+    ButtonStyle? textButtonStyle,
   }) =>
       builder(
         context,
@@ -109,15 +109,15 @@ class GetTheme {
 
   static ThemeData builder(
     BuildContext context, {
-    Brightness brightness,
-    Brightness primaryBrightness,
-    Brightness bottomBrightness,
-    String fontFamily,
-    TextTheme textTheme,
-    IconThemeData primaryIconTheme,
-    ButtonStyle elevatedButtonStyle,
-    ButtonStyle outlinedButtonStyle,
-    ButtonStyle textButtonStyle,
+    Brightness? brightness,
+    Brightness? primaryBrightness,
+    Brightness? bottomBrightness,
+    String? fontFamily,
+    TextTheme? textTheme,
+    IconThemeData? primaryIconTheme,
+    ButtonStyle? elevatedButtonStyle,
+    ButtonStyle? outlinedButtonStyle,
+    ButtonStyle? textButtonStyle,
     Color accentColorLight = kAccentColor,
     Color primarySwatchLight = kPrimarySwatch,
     Color backgroundLight = kBackgroundLight,
@@ -156,7 +156,7 @@ class GetTheme {
       backgroundColor: isDark ? backgroundDark : backgroundLight,
       canvasColor: isDark ? canvasColorDark : canvasColorLight,
       scaffoldBackgroundColor: isDark ? canvasColorDark : canvasColorLight,
-      primarySwatch: _primarySwatch,
+      primarySwatch: _primarySwatch as MaterialColor?,
       accentColor: _accentColor,
       hintColor: theme.hintColor.hinted,
       primaryColorBrightness: _primaryBrightness,
@@ -255,7 +255,7 @@ class GetTheme {
         child: child,
       );
 
-  static setErrorStyle({Color backgroundColor, ui.TextStyle textStyle}) {
+  static setErrorStyle({Color? backgroundColor, ui.TextStyle? textStyle}) {
     RenderErrorBox.backgroundColor = backgroundColor ?? kBackgroundLight;
     RenderErrorBox.textStyle = textStyle ?? kErrorTextStyle;
   }
@@ -308,7 +308,7 @@ class GetFont {
   static final dietDidotTextTheme = textTheme(fontFamily: dietDidot);
   static final stoneSerifTextTheme = textTheme(fontFamily: stoneSerif);
 
-  static TextTheme textTheme({String fontFamily}) => TextTheme(
+  static TextTheme textTheme({String? fontFamily}) => TextTheme(
         headline1: TextStyle(
           fontSize: 80,
           fontWeight: FontWeight.w600,
