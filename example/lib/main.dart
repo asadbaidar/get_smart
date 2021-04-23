@@ -34,9 +34,9 @@ class AppRoute {
 }
 
 class LoginPage extends StatelessWidget {
-  final formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> get form => use(GlobalKey<FormState>());
 
-  bool get isValid => true; //formKey.state?.validate() == true;
+  bool get isValid => form.state.validate() == true;
 
   @override
   Widget build(BuildContext context) => GetScaffold(
@@ -47,7 +47,7 @@ class LoginPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(26),
             child: Form(
-              // key: formKey,
+              key: form,
               child: Column(children: [
                 GetTextField(
                   label: "Email",
