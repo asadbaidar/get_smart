@@ -1072,6 +1072,9 @@ extension GetInterfaceX on GetInterface {
   Future<void> popSystem({bool animated = true}) =>
       SystemNavigator.pop(animated: animated);
 
+  Future<bool> maybePop<T extends Object>([T result]) =>
+      Navigator.maybePop<T>(context, result);
+
   void backUntil(String route) => until((r) => r.settings.name == route);
 
   MaterialLocalizations get formatter => MaterialLocalizations.of(context);

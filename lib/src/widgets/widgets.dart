@@ -866,42 +866,43 @@ class SnackBarX extends StatelessWidget {
   final Color actionColor;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        DismissibleX(
-          enabled: isDismissible,
-          direction: DismissDirection.down,
-          onDismissed: (direction) => onDismiss?.call(),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Stack(children: [
-                AppLineSeparator(style: SeparatorStyle.full),
-                if (showProgress) LinearProgress(),
-              ]),
-              GetBar(
-                snackPosition: withBottomBar == true
-                    ? SnackPosition.TOP
-                    : SnackPosition.BOTTOM,
-                animationDuration: Duration(milliseconds: 200),
-                messageText: message == null ? null : Text(message),
-                backgroundColor: Get.theme.bottomAppBarTheme.color,
-                mainButton: action == null
-                    ? null
-                    : GetButton.text(
-                        child: Text(action.uppercase),
-                        primary: actionColor,
-                        onPressed: onAction,
-                      ),
+  Widget build(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          DismissibleX(
+            enabled: isDismissible,
+            direction: DismissDirection.down,
+            onDismissed: (direction) => onDismiss?.call(),
+            child: Container(
+              color: Get.theme.bottomAppBarTheme.color,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(children: [
+                    AppLineSeparator(style: SeparatorStyle.full),
+                    if (showProgress) LinearProgress(),
+                  ]),
+                  GetBar(
+                    snackPosition: withBottomBar == true
+                        ? SnackPosition.TOP
+                        : SnackPosition.BOTTOM,
+                    animationDuration: Duration(milliseconds: 200),
+                    messageText: message == null ? null : Text(message),
+                    backgroundColor: Get.theme.bottomAppBarTheme.color,
+                    mainButton: action == null
+                        ? null
+                        : GetButton.text(
+                            child: Text(action.uppercase),
+                            primary: actionColor,
+                            onPressed: onAction,
+                          ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }
 
 class BottomBar extends StatelessWidget {

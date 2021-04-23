@@ -141,13 +141,7 @@ class GetScaffold extends StatelessWidget {
         automaticallyImplyLeading: false,
         leading: hideAppBarLeading == true
             ? null
-            : appBarLeading ??
-                BackButton(onPressed: () {
-                  if (Get.canPop)
-                    Get.back();
-                  else
-                    Get.popSystem();
-                }),
+            : appBarLeading ?? GetButton.back(),
         title:
             customTitle ?? Column(children: [if (title != null) Text(title)]),
         bottom: PreferredSize(

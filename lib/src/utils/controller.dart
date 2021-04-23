@@ -61,6 +61,7 @@ abstract class GetController extends MultipleFutureGetController {
     if (_futuresCompleted == futuresMap.length &&
         !_futuresCompleter.isCompleted) {
       _futuresCompleter.complete();
+      onDataReady();
     }
   }
 

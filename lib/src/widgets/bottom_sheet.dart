@@ -31,64 +31,66 @@ class GetBottomSheet extends StatelessWidget {
   final bool rounded;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: ShapeDecoration(
-        color: context.theme.backgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular((rounded ?? true) ? 12 : 0),
+  Widget build(BuildContext context) => Container(
+        decoration: ShapeDecoration(
+          color: context.theme.backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular((rounded ?? true) ? 12 : 0),
+            ),
           ),
         ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (showHandle) RoundedHandle() else SizedBox(height: 6),
-          if (title != null ||
-              topActions?.isNotEmpty == true ||
-              leadingAction != null)
-            AppBar(
-              automaticallyImplyLeading: false,
-              title: title,
-              backgroundColor: Colors.transparent,
-              actionsIconTheme: context.theme.iconTheme,
-              brightness: context.theme.brightness,
-              iconTheme: context.theme.iconTheme,
-              toolbarHeight: 44,
-              elevation: 0,
-              centerTitle: centerTitle,
-              textTheme: context.textTheme,
-              primary: false,
-              actions: topActions,
-              leading: leadingAction,
-            ),
-          Column(children: [
-            if (content != null)
-              Padding(
-                padding: contentPadding ?? EdgeInsets.symmetric(horizontal: 16),
-                child: content,
-              ),
-            if (bottomActions?.isNotEmpty == true || minHeight != null)
-              Padding(
-                padding: const EdgeInsets.only(left: 8, top: 20, right: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(height: minHeight),
-                    if (bottomActions?.isNotEmpty == true)
-                      ...bottomActions.expand(
-                        (element) => [SizedBox(width: 6), element],
-                      )
-                  ],
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (showHandle) RoundedHandle() else SizedBox(height: 6),
+              if (title != null ||
+                  topActions?.isNotEmpty == true ||
+                  leadingAction != null)
+                AppBar(
+                  automaticallyImplyLeading: false,
+                  title: title,
+                  backgroundColor: Colors.transparent,
+                  actionsIconTheme: context.theme.iconTheme,
+                  brightness: context.theme.brightness,
+                  iconTheme: context.theme.iconTheme,
+                  toolbarHeight: 44,
+                  elevation: 0,
+                  centerTitle: centerTitle,
+                  textTheme: context.textTheme,
+                  primary: false,
+                  actions: topActions,
+                  leading: leadingAction,
                 ),
-              ),
-            SizedBox(height: 16),
-          ]),
-        ],
-      ),
-    );
-  }
+              Column(children: [
+                if (content != null)
+                  Padding(
+                    padding:
+                        contentPadding ?? EdgeInsets.symmetric(horizontal: 16),
+                    child: content,
+                  ),
+                if (bottomActions?.isNotEmpty == true || minHeight != null)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, top: 20, right: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(height: minHeight),
+                        if (bottomActions?.isNotEmpty == true)
+                          ...bottomActions.expand(
+                            (element) => [SizedBox(width: 6), element],
+                          )
+                      ],
+                    ),
+                  ),
+                SizedBox(height: 16),
+              ]),
+            ],
+          ),
+        ),
+      );
 }
 
 extension GetBottomSheetX on GetInterface {

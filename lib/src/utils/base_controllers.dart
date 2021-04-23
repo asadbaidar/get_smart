@@ -336,6 +336,8 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
   void onError({Object key, error}) {}
 
   void onData(Object key) {}
+
+  void onDataReady() {}
 }
 
 /// Provides functionality for a ViewModel to run and fetch data using multiple streams

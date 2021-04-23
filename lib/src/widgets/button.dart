@@ -857,4 +857,15 @@ abstract class GetButton {
         enableFeedback: enableFeedback,
         constraints: constraints,
       );
+
+  static Widget back({
+    Color color,
+    VoidCallback onPressed,
+  }) =>
+      icon(
+        icon: const BackButtonIcon(),
+        color: color,
+        tooltip: MaterialLocalizations.of(Get.context).backButtonTooltip,
+        onPressed: () => Get.canPop ? Get.back() : Get.popSystem(),
+      );
 }
