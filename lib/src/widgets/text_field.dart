@@ -46,7 +46,7 @@ class GetTextField extends StatelessWidget {
     this.obscuringCharacter = "•",
     this.smartDashesType,
     this.smartQuotesType,
-    this.maxLengthEnforcement = true,
+    this.maxLengthEnforcement,
     this.onEditingComplete,
     this.enabled = true,
     this.cursorWidth = 2.0,
@@ -150,7 +150,7 @@ class GetTextField extends StatelessWidget {
   final String obscuringCharacter;
   final SmartDashesType? smartDashesType;
   final SmartQuotesType? smartQuotesType;
-  final bool maxLengthEnforcement;
+  final MaxLengthEnforcement? maxLengthEnforcement;
   final VoidCallback? onEditingComplete;
   final bool enabled;
   final double cursorWidth;
@@ -205,19 +205,18 @@ class GetTextField extends StatelessWidget {
   final String? semanticCounterText;
   final bool? alignLabelWithHint;
 
-  String get _hint => hint ?? label?.lowercase ?? GetText.value()!.lowercase;
+  String get _hint => hint ?? label?.lowercase ?? GetText.value().lowercase;
 
-  String? Function(String? v)? get _validator =>
-      validator != null ? validator : (v) => null;
+  String? Function(String? v) get _validator =>
+      validator != null ? validator! : (v) => null;
 
-  bool get _readOnly =>
-      readOnly == true || ((tapOnly ?? true) && onTap != null);
+  bool get _readOnly => readOnly == true || (tapOnly && onTap != null);
 
   bool get _obscureText => obscureText == true;
 
   String? _tryValidator(String? v) {
     try {
-      return _validator!(v);
+      return _validator(v);
     } catch (_) {
       return null;
     }
@@ -240,7 +239,7 @@ class GetTextField extends StatelessWidget {
   TextEditingController? get _controller => initialText != null
       ? null
       : controller ??
-          (autoControlled ?? true
+          (autoControlled
               ? TextEditingController.fromValue(
                   TextEditingValue(
                     text: controlledText ?? "",
@@ -298,26 +297,26 @@ class GetTextField extends StatelessWidget {
           onTap: readOnly == true ? null : onTap as void Function()?,
           onChanged: onChanged,
           onFieldSubmitted: onSubmitted,
-          textCapitalization: textCapitalization ?? TextCapitalization.none,
+          textCapitalization: textCapitalization,
           style: style,
-          textAlign: textAlign ?? TextAlign.start,
-          autofocus: autofocus ?? false,
-          expands: expands ?? false,
+          textAlign: textAlign,
+          autofocus: autofocus,
+          expands: expands,
           toolbarOptions: toolbarOptions,
           showCursor: showCursor,
-          obscuringCharacter: obscuringCharacter ?? "•",
+          obscuringCharacter: obscuringCharacter,
           smartDashesType: smartDashesType,
           smartQuotesType: smartQuotesType,
-          //maxLengthEnforced: maxLengthEnforcement ?? true,
+          maxLengthEnforcement: maxLengthEnforcement,
           onEditingComplete: onEditingComplete,
-          enabled: enabled ?? true,
-          cursorWidth: cursorWidth ?? 2.0,
+          enabled: enabled,
+          cursorWidth: cursorWidth,
           cursorHeight: cursorHeight,
           cursorRadius: cursorRadius,
           cursorColor: cursorColor,
           keyboardAppearance: keyboardBrightness,
-          scrollPadding: scrollPadding ?? const EdgeInsets.all(20.0),
-          enableInteractiveSelection: enableInteractiveSelection ?? true,
+          scrollPadding: scrollPadding,
+          enableInteractiveSelection: enableInteractiveSelection,
           selectionControls: selectionControls,
           buildCounter: buildCounter,
           scrollPhysics: scrollPhysics,
@@ -340,9 +339,8 @@ class GetTextField extends StatelessWidget {
             hintStyle: hintStyle,
             hintMaxLines: hintMaxLines,
             errorStyle: errorStyle,
-            floatingLabelBehavior:
-                floatingLabelBehavior ?? FloatingLabelBehavior.auto,
-            isCollapsed: isCollapsed ?? false,
+            floatingLabelBehavior: floatingLabelBehavior,
+            isCollapsed: isCollapsed,
             contentPadding: contentPadding,
             prefixIcon: prefixIcon,
             prefixIconConstraints: prefixIconConstraints,

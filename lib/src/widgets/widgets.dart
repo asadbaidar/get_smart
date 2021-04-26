@@ -183,8 +183,8 @@ class AppTile extends StatelessWidget {
         (isDetailed == true ? const Icon(Icons.chevron_right) : null);
     final showAccessory = accessory != null && (this.showAccessory ?? true);
     return InkWell(
-      highlightColor: tintColor?.activated,
-      splashColor: tintColor?.translucent,
+      highlightColor: tintColor.activated,
+      splashColor: tintColor.translucent,
       onTap: (enabled ?? true) ? onTap : null,
       child: Ink(
         color: background ?? context.theme.backgroundColor,
@@ -205,13 +205,13 @@ class AppTile extends StatelessWidget {
                       color: tintColor,
                       withinBox: isIconBoxed,
                     ).adjustHorizontally,
-              title: title?.notEmpty?.let((dynamic it) => Text(
+              title: title?.notEmpty?.mapIt((it) => Text(
                     it,
                     style: TextStyle(
                       color: _tintAble ? tintColor : null,
                     ),
                   )),
-              subtitle: subtitle?.notEmpty?.let((dynamic it) => Text(it)),
+              subtitle: subtitle?.notEmpty?.mapIt((it) => Text(it)),
               trailing: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
@@ -526,7 +526,7 @@ class CircularProgress extends StatelessWidget {
           Container(
             height: size,
             width: size,
-            margin: EdgeInsets.all(margin ?? 0),
+            margin: EdgeInsets.all(margin),
             child: CircularProgressIndicator(strokeWidth: 1.4),
           ),
         ],
@@ -554,15 +554,14 @@ class LinearProgress extends StatelessWidget {
   final double? value;
 
   @override
-  Widget build(BuildContext context) => visible ?? true
+  Widget build(BuildContext context) => visible
       ? LinearProgressIndicator(
-          minHeight: height ?? 1,
+          minHeight: height,
           backgroundColor: Colors.transparent,
-          valueColor:
-              color?.let((dynamic it) => AlwaysStoppedAnimation<Color>(it)),
+          valueColor: color?.mapIt((it) => AlwaysStoppedAnimation<Color>(it)),
           value: value,
         )
-      : Container(height: height ?? 1);
+      : Container(height: height);
 }
 
 class MessageView extends StatelessWidget {
@@ -745,7 +744,7 @@ class ProgressButton extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16),
                   child: Text(
-                    GetText.busy()!,
+                    GetText.busy(),
                     style: TextStyle(color: Theme.of(context).accentColor),
                   ),
                 ),
@@ -779,7 +778,7 @@ class ProgressButton extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(
-                      error ?? GetText.failed()!,
+                      error ?? GetText.failed(),
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
@@ -789,7 +788,7 @@ class ProgressButton extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(
-                      GetText.succeeded()!,
+                      GetText.succeeded(),
                       style: TextStyle(color: Colors.green),
                     ),
                   ),
@@ -936,7 +935,7 @@ class BottomBar extends StatelessWidget {
       children: [
         CrossFade(firstChild: topChild),
         if (topChild == null) AppLineSeparator(style: SeparatorStyle.full),
-        if (visible ?? true)
+        if (visible)
           BottomAppBar(
             child: SafeArea(
               minimum:
@@ -1191,10 +1190,10 @@ class _DottedPageViewState extends State<DottedPageView>
   }
 
   void updatePage() {
-    if (widget.controller?.hasClients == true)
-      widget.controller?.animateToPage(
+    if (widget.controller.hasClients)
+      widget.controller.animateToPage(
         _index.value == widget.itemCount! - 1 ? 0 : _index.value + 1,
-        duration: Duration(milliseconds: 1500),
+        duration: 1500.milliseconds,
         curve: Curves.easeOut,
       );
   }

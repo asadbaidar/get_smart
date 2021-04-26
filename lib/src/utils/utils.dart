@@ -76,7 +76,11 @@ extension ListX<E> on List<E> {
 }
 
 extension ObjectX on Object {
-  R let<T, R>(R Function(T) apply) => apply(this as T);
+  R mapTo<T, R>(R Function(T it) apply) => apply(this as T);
+
+  R mapIt<T, R>(R Function(dynamic it) apply) => apply(this);
+
+  T let<T>(T Function(T) apply) => apply(this as T);
 
   R apply<R>(R Function() apply) => apply();
 
@@ -118,7 +122,7 @@ extension ObjectX on Object {
     List<dynamic>? arguments,
   ]) =>
       textMap[GetLocalizations.current?.locale ?? GetLocalizations.english]
-          ?.let((Map<dynamic, String> _) => _[this])
+          ?.mapTo((Map<dynamic, String> it) => it[this])
           ?.applyIf(
             arguments?.isNotEmpty,
             (s) => sprintf(s, arguments!.map((e) => e ?? "").toList()),

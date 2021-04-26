@@ -79,7 +79,7 @@ class GetScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GetTheme.resetSystemChrome(context);
-    if (!_isInteractive) context?.endEditing();
+    if (!_isInteractive) context.endEditing();
     return Scaffold(
       key: _key,
       extendBody: extendBody,
@@ -132,7 +132,7 @@ class GetScaffold extends StatelessWidget {
         showFirst: hideToolbars,
         secondChild: SizedBox(
           height: kToolbarHeight + _appBarExtensionSize,
-          child: _appBar ?? Container(height: 0),
+          child: _appBar,
         ),
       );
 
@@ -196,7 +196,6 @@ class GetScaffold extends StatelessWidget {
     if (customTitle != null) return true;
     if (Get.theme.appBarTheme.centerTitle != null)
       return Get.theme.appBarTheme.centerTitle;
-    assert(Get.platform != null);
     switch (Get.platform) {
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

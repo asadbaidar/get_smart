@@ -36,7 +36,7 @@ class GetBottomSheet extends StatelessWidget {
           color: context.theme.backgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              top: Radius.circular((rounded ?? true) ? 12 : 0),
+              top: Radius.circular((rounded) ? 12 : 0),
             ),
           ),
         ),
