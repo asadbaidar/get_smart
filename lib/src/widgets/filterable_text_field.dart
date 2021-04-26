@@ -4,13 +4,13 @@ import 'package:get_smart/get_smart.dart';
 import 'package:get_smart/src/widgets/text_field.dart';
 
 typedef Widget GetFilterItemBuilder<T>(
-    BuildContext context, T data, Function onTap);
+    BuildContext context, T? data, void Function()? onTap);
 
-typedef bool Filter<T>(T data, String query);
+typedef bool Filter<T>(T? data, String query);
 
-typedef InputEventCallback<T>(T data);
+typedef InputEventCallback<T>(T? data);
 
-typedef StringCallback(String data);
+typedef StringCallback(String? data);
 
 /// Build on top of TextFormField, extending its capabilities to get
 /// the list options to select from and filtering based on text entered.
@@ -19,7 +19,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   final Filter<T>? itemFilter;
 
   /// Callback to sort items in the form (a of type <T>, b of type <T>)
-  final Comparator<T>? itemSorter;
+  final Comparator<T?>? itemSorter;
 
   /// Callback on input text changed, this is a string
   final StringCallback? textChanged;
@@ -122,9 +122,10 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
         itemBuilder: itemBuilder ??
             ((_, data, onTap) => AppTile.simpleDense(
                   title: data.toString(),
-                  onTap: onTap as void Function()?,
+                  onTap: onTap,
                 )),
-        itemSorter: itemSorter ?? (a, b) => a.compareTo(b),
+        itemSorter:
+            itemSorter ?? (a, b) => a?.compareTo(b?.toString() ?? "") ?? 0,
         itemFilter: disableFiltering == true
             ? (_, __) => true
             : (itemFilter ??
@@ -209,9 +210,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   void initState() {
     super.initState();
-    if (this.controller != null && this.controller.text != null) {
-      currentText = this.controller.text;
-    }
+    currentText = controller.text;
   }
 
   void focusListener() {
@@ -225,15 +224,12 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
       currentText = "";
       filteredItems = [];
       updateOverlay();
-    } else if (!(currentText == "" || currentText == null)) {
+    } else if (currentText.isNotEmpty) {
       updateOverlay(query: currentText, withoutFilter: showAllOnFocus);
     }
   }
 
-  bool get isTextEmpty {
-    final text = controller?.text?.trim();
-    return text == null || text.isEmpty;
-  }
+  bool get isTextEmpty => controller.text.trim().isEmpty;
 
   void removeError({bool focus: false}) {
     if (error != null) setError(null, focus: focus);
@@ -241,7 +237,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   void setError(String? errorText, {bool focus: false}) {
     setState(() => _error = errorText);
-    if (focus) focusNode?.requestFocus();
+    if (focus) focusNode.requestFocus();
   }
 
   void triggerSubmitted([submittedText]) {
@@ -257,15 +253,15 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     }
 
     if (textInputAction == TextInputAction.next)
-      focusNode?.forward(to: nextFocusNode);
+      focusNode.forward(to: nextFocusNode);
   }
 
   void triggerItemSubmitted() {
     if (!readOnly &&
         onlyAcceptItem &&
         !filteredItems.map((it) => it.toString()).contains(controller.text)) {
-      var item = filteredItems?.takeFirst;
-      controller.text = item?.toString();
+      var item = filteredItems.takeFirst;
+      controller.text = item?.toString() ?? "";
       if (item == null)
         clear();
       else
@@ -299,7 +295,8 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     updateOverlay(query: currentText);
   }
 
-  Future<void> updateOverlay({String? query, bool withoutFilter = false}) async {
+  Future<void> updateOverlay(
+      {String? query, bool withoutFilter = false}) async {
     if (!mounted) return;
     print("updateOverlay NoFilter $withoutFilter Focus ${focusNode.hasFocus}");
     filteredItems = withoutFilter == true
@@ -402,8 +399,8 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   @override
   void dispose() {
     print("$runtimeType dispose");
-    focusNode?.dispose();
-    controller?.dispose();
+    focusNode.dispose();
+    controller.dispose();
     super.dispose();
   }
 

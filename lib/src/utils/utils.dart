@@ -86,9 +86,9 @@ extension ObjectX on Object {
     return (condition == true) ? apply(this as T) : this as T?;
   }
 
-  T? applyFor<T>(int times, T Function(T?) apply) {
+  T? applyFor<T>(int times, T? Function(T?) apply) {
     Object? value = this;
-    (times ?? 0).repeatsFor(() {
+    times.repeatsFor(() {
       value = apply(value as T?);
     });
     return value as T?;
@@ -108,7 +108,7 @@ extension ObjectX on Object {
 
   String get typeName => nameOf(runtimeType);
 
-  T mapObject<T>([List<Object? Function()>? builders]) {
+  T? mapObject<T>([List<Object? Function()>? builders]) {
     return MapperX.fromData(this).toWebObject<T>(builders);
   }
 
@@ -193,17 +193,17 @@ extension StringX on String {
     );
   }
 
-  String? post(String post, {int doFor = 1, bool doIf = true}) {
+  String? post(String? post, {int doFor = 1, bool doIf = true}) {
     return applyFor(
       doIf == true && post != null ? doFor : 0,
-      (s) => s! + post,
+      (s) => s! + post!,
     );
   }
 
-  String? surround(String surround, {int doFor = 1, bool doIf = true}) {
+  String? surround(String? surround, {int doFor = 1, bool doIf = true}) {
     return applyFor(
       doIf == true && surround != null ? doFor : 0,
-      ((s) => s!.pre(surround)!.post(surround)!) as String Function(String?),
+      (s) => s?.pre(surround)?.post(surround),
     );
   }
 
@@ -233,9 +233,9 @@ extension StringX on String {
 
   String get fileType => takeLastWhile((s) => s != ".");
 
-  bool equalsIgnoreCase(String s) => lowercase == s?.lowercase;
+  bool equalsIgnoreCase(String? s) => lowercase == s?.lowercase;
 
-  bool containsIgnoreCase(String s) =>
+  bool containsIgnoreCase(String? s) =>
       s == null ? false : lowercase.contains(s.lowercase);
 
   Color get materialPrimary =>
@@ -337,7 +337,7 @@ class BoolTransform implements Transformable<bool, String> {
   }
 
   @override
-  String toJson(bool value) {
+  String toJson(bool? value) {
     if (value == null) return fallback.stringYN;
     return value.stringYN;
   }
@@ -441,11 +441,9 @@ extension Date on DateTime {
 
   String get webTimeStamp => GetWebAPI.timeStamp + inMilliseconds.toString();
 
-  bool operator >(DateTime other) =>
-      other != null && this != null ? isAfter(other) : false;
+  bool operator >(DateTime other) => isAfter(other);
 
-  bool operator <(DateTime other) =>
-      other != null && this != null ? other.isAfter(this) : false;
+  bool operator <(DateTime other) => other.isAfter(this);
 }
 
 extension GetDateFormat on DateFormat {
@@ -510,7 +508,7 @@ extension GetDateTimePickerX on GetInterface {
       cancelText: cancelText,
       confirmText: confirmText,
       helpText: helpText,
-      initialEntryMode: entryMode ?? TimePickerEntryMode.input,
+      initialEntryMode: entryMode,
       builder: builder,
       useRootNavigator: useRootNavigator,
       routeSettings: routeSettings,
@@ -554,8 +552,8 @@ extension GetDateTimePickerX on GetInterface {
       errorInvalidText: errorInvalidText,
       fieldHintText: fieldHintText,
       fieldLabelText: fieldLabelText,
-      initialEntryMode: entryMode ?? DatePickerEntryMode.calendar,
-      initialDatePickerMode: calenderMode ?? DatePickerMode.day,
+      initialEntryMode: entryMode,
+      initialDatePickerMode: calenderMode,
       selectableDayPredicate: selectableDayPredicate,
       locale: locale,
       useRootNavigator: useRootNavigator,
@@ -689,7 +687,7 @@ extension MapperX on Mapper {
                     : {},
       );
 
-  T toWebObject<T>([List<Object? Function()>? builders]) {
+  T? toWebObject<T>([List<Object? Function()>? builders]) {
     builders?.forEach((builder) {
       Mappable.factories.putIfAbsent(builder().runtimeType, () => builder);
     });
@@ -735,7 +733,7 @@ abstract class WebMappable with Mappable, Comparable<WebMappable> {
       descriptionKeys,
       _description,
       (v) => _description =
-          v?.toString()?.applyIf(capitalized, (s) => s.capitalized),
+          v?.toString().applyIf(capitalized, (s) => s.capitalized),
     );
   }
 
@@ -755,17 +753,16 @@ abstract class WebMappable with Mappable, Comparable<WebMappable> {
   String toString() => description;
 
   @override
-  int compareTo(WebMappable other) => other?.comparable == null
+  int compareTo(WebMappable other) => other.comparable == null
       ? 0
       : comparable?.compareTo(other.comparable) ?? 0;
 
-  int operator >(WebMappable other) => this == null ? 0 : compareTo(other);
+  int operator >(WebMappable other) => compareTo(other);
 
-  int operator <(WebMappable other) => other?.compareTo(this) ?? 0;
+  int operator <(WebMappable other) => other.compareTo(this);
 
   @override
   bool operator ==(Object other) {
-    if (other == null) return false;
     if (other.runtimeType != runtimeType) return false;
     return other is WebMappable &&
         (identical(other, this) ||
@@ -775,16 +772,17 @@ abstract class WebMappable with Mappable, Comparable<WebMappable> {
   @override
   int get hashCode => identityHashCode(equatable?.lowercase);
 
-  String get equatable => id;
+  String? get equatable => id;
 
-  String get containable => id + description;
+  String? get containable => id + description;
 
-  Comparable get comparable => toString();
+  Comparable? get comparable => toString();
 
-  bool contains(object) => containable?.contains(object?.toString()) ?? false;
+  bool contains(object) =>
+      containable?.contains(object?.toString() ?? "") ?? false;
 
   bool containsIgnoreCase(object) =>
-      containable?.containsIgnoreCase(object?.toString()) ?? false;
+      containable?.containsIgnoreCase(object?.toString() ?? "") ?? false;
 
   var isExpanded = false;
 
@@ -916,9 +914,9 @@ class WebResponse<T> extends WebMappable {
         (v) => message = v ?? "Connection failed.");
     map<T>("result", results ?? result, (v) {
       if (v is List) {
-        return results = v as List<T>?;
+        results = v as List<T>?;
       } else {
-        return result = v;
+        result = v;
       }
     });
   }
@@ -938,7 +936,7 @@ enum WebStatus {
 }
 
 abstract class GetWebAPI {
-  Future<WebResponse<T>> get<T>({
+  Future<WebResponse<T>?> get<T>({
     T Function()? builder,
     List<Object Function()>? builders,
     String? path,
@@ -953,7 +951,7 @@ abstract class GetWebAPI {
     );
   }
 
-  Future<WebResponse<T>> post<T>({
+  Future<WebResponse<T>?> post<T>({
     T Function()? builder,
     List<Object Function()>? builders,
     bool encrypted = false,
@@ -970,7 +968,7 @@ abstract class GetWebAPI {
     );
   }
 
-  Future<WebResponse<T>> delete<T>({
+  Future<WebResponse<T>?> delete<T>({
     T Function()? builder,
     List<Object Function()>? builders,
     String? path,
@@ -1005,7 +1003,7 @@ abstract class GetWebAPI {
 
   void cancel() => _cancelToken.cancel();
 
-  Future<WebResponse<T>> request<T>({
+  Future<WebResponse<T>?> request<T>({
     T Function()? builder,
     List<Object Function()>? builders,
     bool encrypted = false,
@@ -1033,8 +1031,8 @@ abstract class GetWebAPI {
           if (encrypted)
             await Future.forEach(
               parameters!.keys,
-              (dynamic key) async => parameters[key] =
-                  await parameters[key]?.toString()?.encrypted,
+              (dynamic key) async =>
+                  parameters[key] = await parameters[key]?.toString().encrypted,
             );
           DIO.Response response = await dio.request(
             path!.pre(this.path?.post("/"))!,
@@ -1042,7 +1040,7 @@ abstract class GetWebAPI {
             data: parameters,
             cancelToken: _cancelToken,
           );
-          return (response.data as Object).mapObject<WebResponse<T>>(
+          return (response.data as Object?)?.mapObject<WebResponse<T>>(
             [
               if (builder != null) builder,
               () => WebResponse<T>(),
@@ -1151,8 +1149,8 @@ extension AssetX on Object {
 
 extension ContextX on BuildContext {
   void endEditing() {
-    FocusManager.instance?.primaryFocus?.unfocus();
-    FocusScope.of(this)?.unfocus();
+    FocusManager.instance.primaryFocus?.unfocus();
+    FocusScope.of(this).unfocus();
     SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 }
