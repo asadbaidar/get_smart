@@ -1,4 +1,4 @@
-import 'package:example/src/home_page.dart';
+import 'package:example/src/home/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
