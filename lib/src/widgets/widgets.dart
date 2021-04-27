@@ -14,7 +14,7 @@ import '../../get_smart.dart';
 
 class AppTile extends StatelessWidget {
   const AppTile({
-    this.icon,
+    this.leading,
     this.title,
     this.subtitle,
     this.trailingTop,
@@ -37,11 +37,12 @@ class AppTile extends StatelessWidget {
     this.topPadding,
     this.bottomPadding,
     this.onTap,
+    this.onTapLeading,
     Key? key,
   }) : super(key: key);
 
   const AppTile.detailed({
-    this.icon,
+    this.leading,
     this.title,
     this.subtitle,
     this.trailingTop,
@@ -64,11 +65,12 @@ class AppTile extends StatelessWidget {
     this.topPadding,
     this.bottomPadding,
     this.onTap,
+    this.onTapLeading,
     Key? key,
   }) : super(key: key);
 
   const AppTile.simple({
-    this.icon,
+    this.leading,
     this.title,
     this.subtitle,
     this.trailingTop,
@@ -91,11 +93,12 @@ class AppTile extends StatelessWidget {
     this.topPadding,
     this.bottomPadding,
     this.onTap,
+    this.onTapLeading,
     Key? key,
   }) : super(key: key);
 
   const AppTile.simpleDense({
-    this.icon,
+    this.leading,
     this.title,
     this.subtitle,
     this.trailingTop,
@@ -118,11 +121,12 @@ class AppTile extends StatelessWidget {
     this.topPadding,
     this.bottomPadding,
     this.onTap,
+    this.onTapLeading,
     Key? key,
   }) : super(key: key);
 
   const AppTile.plain({
-    this.icon,
+    this.leading,
     this.title,
     this.subtitle,
     this.trailingTop,
@@ -145,10 +149,11 @@ class AppTile extends StatelessWidget {
     this.topPadding,
     this.bottomPadding,
     this.onTap,
+    this.onTapLeading,
     Key? key,
   }) : super(key: key);
 
-  final IconData? icon;
+  final Widget? leading;
   final String? title;
   final String? subtitle;
   final String? trailingTop;
@@ -171,6 +176,7 @@ class AppTile extends StatelessWidget {
   final double? bottomPadding;
   final VisualDensity? density;
   final void Function()? onTap;
+  final void Function()? onTapLeading;
 
   @override
   Widget build(BuildContext context) {
@@ -198,12 +204,13 @@ class AppTile extends StatelessWidget {
                 top: verticalPadding ?? topPadding ?? 0,
                 bottom: verticalPadding ?? bottomPadding ?? 0,
               ),
-              leading: icon == null
+              leading: leading == null
                   ? null
-                  : IconBox(
-                      icon: icon,
+                  : BoxedView(
+                      child: leading!,
                       color: tintColor,
                       withinBox: isIconBoxed,
+                      onTap: onTapLeading,
                     ).adjustHorizontally,
               title: title?.notEmpty?.mapIt((it) => Text(
                     it,
@@ -253,7 +260,7 @@ class AppTile extends StatelessWidget {
 
 class AppTileRow extends StatelessWidget {
   const AppTileRow({
-    this.icon,
+    this.leading,
     this.text,
     this.hint,
     this.color,
@@ -262,11 +269,12 @@ class AppTileRow extends StatelessWidget {
     this.expanded = false,
     this.standalone = false,
     this.isIconBoxed = false,
+    this.onTapLeading,
     Key? key,
   }) : super(key: key);
 
   const AppTileRow.standalone({
-    this.icon,
+    this.leading,
     this.text,
     this.hint,
     this.color,
@@ -275,10 +283,11 @@ class AppTileRow extends StatelessWidget {
     this.expanded = false,
     this.isIconBoxed = false,
     this.standalone = true,
+    this.onTapLeading,
     Key? key,
   }) : super(key: key);
 
-  final IconData? icon;
+  final Widget? leading;
   final String? text;
   final String? hint;
   final Color? color;
@@ -287,6 +296,7 @@ class AppTileRow extends StatelessWidget {
   final bool expanded;
   final bool standalone;
   final bool isIconBoxed;
+  final void Function()? onTapLeading;
 
   @override
   Widget build(BuildContext context) {
@@ -305,14 +315,15 @@ class AppTileRow extends StatelessWidget {
               bottom: 16,
             ),
             child: Row(children: [
-              if (icon != null)
-                IconBox(
-                  icon: icon,
+              if (leading != null)
+                BoxedView(
+                  child: leading!,
                   color: tintColor,
                   withinBox: isIconBoxed,
                   small: true,
+                  onTap: onTapLeading,
                 ).adjustHorizontally,
-              if (icon != null) SizedBox(width: 16),
+              if (leading != null) SizedBox(width: 16),
               Flexible(
                 child: CrossFade(
                   firstChild: Text(
@@ -455,46 +466,75 @@ class AppTileHeader extends StatelessWidget {
   }
 }
 
-class IconBox extends StatelessWidget {
+class BoxedView extends StatelessWidget {
   static const double boxHeight = 40;
   static const double boxWidth = 40;
   static const double boxSize = 30;
-  static const double iconSmall = 24;
-  static const double iconNormal = 30;
-  static const double iconBoxed = 18;
 
-  const IconBox({
+  const BoxedView({
+    required this.child,
     this.color,
-    this.icon,
     this.withinBox = true,
     this.small,
+    this.onTap,
     Key? key,
   }) : super(key: key);
 
+  final Widget child;
   final Color? color;
-  final IconData? icon;
   final bool withinBox;
   final bool? small;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return withinBox == true
-        ? Container(
-            height: boxSize,
-            width: boxSize,
-            decoration: boxSize.circularDecoration(color: color),
-            child: Icon(
-              icon,
-              size: iconBoxed,
-              color: color!.contrast,
-            ),
-          )
-        : Icon(
-            icon,
-            size: small == true ? iconSmall : iconNormal,
-            color: color,
-          );
+    final splash = withinBox ? color?.darker : color?.translucent;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: _size?.borderRadius,
+      highlightColor: splash?.activated,
+      splashColor: splash,
+      child: Ink(
+        height: _size,
+        width: _size,
+        decoration: _size?.circularDecoration(color: color),
+        child: Container(
+          alignment: Alignment.center,
+          child: _text(boxed: withinBox) ?? _child(boxed: withinBox),
+        ),
+      ),
+    );
   }
+
+  double? get _size => withinBox ? boxSize : null;
+
+  Widget? _text({bool boxed = false}) => castIf<Text>(child)?.mapTo(
+        (Text it) => Text(
+          it.data ?? "",
+          textAlign: TextAlign.center,
+          style: GoogleFonts.voltaire(
+            fontSize: boxed
+                ? 17
+                : small == true
+                    ? 18
+                    : 24,
+            color: boxed ? color?.contrast : color,
+            // fontWeight: FontWeight.w100,
+          ),
+        ),
+      );
+
+  Widget _child({bool boxed = false}) => IconTheme(
+        child: child,
+        data: IconThemeData(
+          size: boxed
+              ? 18
+              : small == true
+                  ? 24
+                  : 30,
+          color: boxed ? color?.contrast : color,
+        ),
+      );
 
   Widget get adjustForTile => Container(
         alignment: Alignment.center,

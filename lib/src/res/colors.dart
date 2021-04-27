@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -6,11 +8,16 @@ extension ColorX on Color {
 
   Color get contrast => isDark ? Colors.white : Colors.black;
 
+  Color get darker => withBlue(max(blue - 50, 0))
+      .withGreen(max(green - 50, 0))
+      .withRed(max(red - 50, 0));
+
   Color get themeAware => isDark
       ? (GetTheme.isDarkMode ? Colors.white : this)
       : (GetTheme.isDarkMode ? this : Colors.black);
 
-  MaterialColor? get material => this is MaterialColor ? this as MaterialColor? : null;
+  MaterialColor? get material =>
+      this is MaterialColor ? this as MaterialColor? : null;
 
   MaterialAccentColor? get materialAccent =>
       this is MaterialAccentColor ? this as MaterialAccentColor? : null;

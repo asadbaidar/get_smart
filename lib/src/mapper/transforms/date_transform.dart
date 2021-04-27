@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:get_smart/get_smart.dart';
 
 import '../enumerable.dart';

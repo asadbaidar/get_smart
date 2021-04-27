@@ -630,10 +630,10 @@ extension Double on double {
 
   double get radius => this * 0.2237;
 
-  BorderRadius get circular => BorderRadius.circular(radius);
+  BorderRadius get borderRadius => BorderRadius.circular(radius);
 
   BoxDecoration circularDecoration({Color? color}) => BoxDecoration(
-        borderRadius: circular,
+        borderRadius: borderRadius,
         color: color,
       );
 
@@ -722,9 +722,9 @@ abstract class WebMappable with Mappable, Comparable<WebMappable> {
 
   String? get descriptionFallback => null;
 
-  List<String> get idKeys => ["ID"];
+  List<String> get idKeys => ["ID", "id"];
 
-  List<String> get descriptionKeys => ["DESCRIPTION"];
+  List<String> get descriptionKeys => ["DESCRIPTION", "description"];
 
   bool get capitalized => false;
 
