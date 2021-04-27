@@ -258,14 +258,14 @@ abstract class FutureGetController<T> extends _SingleDataSourceGetController<T>
     setBusy(true);
     update();
 
-    _data = await (runBusyFuture(futureToRun(), throwException: true)
+    _data = await runBusyFuture(futureToRun(), throwException: true)
         .catchError((error) {
       setError(error);
       _error = error;
       setBusy(false);
       onError(error);
       update();
-    }) as FutureOr<T?>);
+    });
 
     if (_data != null) {
       onData(_data);
