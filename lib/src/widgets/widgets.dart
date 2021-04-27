@@ -23,7 +23,7 @@ class AppTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
-    this.isIconBoxed = true,
+    this.isLeadingBoxed = true,
     this.isDetailed = true,
     this.padAccessory,
     this.showAccessory,
@@ -51,7 +51,7 @@ class AppTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
-    this.isIconBoxed = true,
+    this.isLeadingBoxed = true,
     this.isDetailed = true,
     this.padAccessory,
     this.showAccessory,
@@ -79,7 +79,7 @@ class AppTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
-    this.isIconBoxed = true,
+    this.isLeadingBoxed = true,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -107,7 +107,7 @@ class AppTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
-    this.isIconBoxed = true,
+    this.isLeadingBoxed = true,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -135,7 +135,7 @@ class AppTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background = Colors.transparent,
-    this.isIconBoxed = false,
+    this.isLeadingBoxed = false,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -162,7 +162,7 @@ class AppTile extends StatelessWidget {
   final List<Widget>? rows;
   final Color? color;
   final Color? background;
-  final bool isIconBoxed;
+  final bool isLeadingBoxed;
   final bool isDetailed;
   final bool? padAccessory;
   final bool? showAccessory;
@@ -209,7 +209,7 @@ class AppTile extends StatelessWidget {
                   : BoxedView(
                       child: leading!,
                       color: tintColor,
-                      withinBox: isIconBoxed,
+                      withinBox: isLeadingBoxed,
                       onTap: onTapLeading,
                     ).adjustHorizontally,
               title: title?.notEmpty?.mapIt((it) => Text(
