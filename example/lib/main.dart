@@ -1,9 +1,16 @@
+import 'package:example/src/home/api.dart';
 import 'package:example/src/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
-void main() => runApp(App());
+GetIsolate background;
+
+Future<void> main() async {
+  background = GetIsolate();
+  await background.init();
+  runApp(App());
+}
 
 class App extends StatelessWidget {
   @override
