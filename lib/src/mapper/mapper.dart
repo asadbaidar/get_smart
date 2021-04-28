@@ -1,18 +1,31 @@
+import 'package:get_smart/get_smart.dart';
+import 'package:get_smart/src/mapper/transforms/mapper_transform.dart';
+
 import 'mappable.dart';
-import 'transformable.dart';
+import 'transforms/transformable.dart';
 
 typedef void MappingSetter(dynamic value);
 enum MappingType { fromJson, toJson }
 enum ValueType { unknown, list, map, numeric, string, bool, dynamic }
 
 class Mapper {
-  MappingType? _mappingType;
-  Map<String, dynamic>? json;
+  MappingType _mappingType = MappingType.fromJson;
+  Map<String, dynamic> json = {};
 
   // Constructor
   Mapper();
 
   Mapper.fromJson(this.json);
+
+  factory Mapper.fromData(data) => Mapper.fromJson(
+        data is String
+            ? data.json
+            : data is Map<dynamic, dynamic>
+                ? data.map((key, value) => MapEntry(key, value))
+                : data is Map<String, dynamic>
+                    ? data
+                    : {},
+      );
 
   T? toObject<T>() {
     _mappingType = MappingType.fromJson;
@@ -25,6 +38,20 @@ class Mapper {
     instance.mapping(this);
 
     return instance as T;
+  }
+
+  T? toMappable<T extends Mappable>({T? as, List<Function>? builders}) {
+    var _builders = as?.builders ?? builders;
+    _builders?.forEach((builder) {
+      Mappable.factories.putIfAbsent(builder().runtimeType, () => builder);
+    });
+    print(Mappable.factories);
+    final object = toObject<T>();
+    print(object);
+    _builders?.forEach((builder) {
+      Mappable.factories.remove(builder().runtimeType);
+    });
+    return object;
   }
 
   Map<String, dynamic>? toJson(Mappable object) {
@@ -40,11 +67,15 @@ class Mapper {
   /// This method will be used when a class
   /// implements the [Mappable.mapping] method
   dynamic call<T>(
-    String field,
+    List<String> fields,
     dynamic value,
     MappingSetter setter, [
     Transformable? transform,
   ]) {
+    final field = fields.firstWhere(
+      (it) => json[it] != null,
+      orElse: () => fields.takeFirst ?? "",
+    );
     switch (_mappingType) {
       case MappingType.fromJson:
         _fromJson<T>(field, value, setter, transform);
@@ -60,12 +91,14 @@ class Mapper {
 
   _fromJson<T>(String field, dynamic value, MappingSetter setter,
       [Transformable? transform]) {
-    var v = json![field];
+    var v = json[field];
     final type = _getValueType(v);
 
     // Transform
     if (transform != null) {
-      if (type == ValueType.list) {
+      if (transform is MapperTransform) {
+        setter(transform.fromJson(v != null ? v : json));
+      } else if (type == ValueType.list) {
         assert(
             T.toString() != "dynamic", "Missing type at mapping for `$field`");
         final List<T?> list = [];
@@ -121,10 +154,10 @@ class Mapper {
           final item = transform.toJson(value[i]);
           list.add(item);
         }
-        this.json![field] = list;
+        this.json[field] = list;
       } else {
         value = transform.toJson(value);
-        this.json![field] = value;
+        this.json[field] = value;
       }
       return;
     }
@@ -139,20 +172,20 @@ class Mapper {
           list.add(item);
         }
 
-        this.json![field] = list;
+        this.json[field] = list;
         break;
 
       // Map
       case ValueType.map:
-        this.json![field] = value;
+        this.json[field] = value;
         break;
 
       default:
         if (value is Mappable) {
-          this.json![field] = value.toJson();
+          this.json[field] = value.toJson();
           return;
         }
-        this.json![field] = value;
+        this.json[field] = value;
     }
   }
 

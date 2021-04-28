@@ -3,13 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:get_smart/get_smart.dart';
 
 class Api {
-  Future<WebResponse<Alphabet>> getAlphabets() {
+  Future<GetResult<Alphabet>> getAlphabets() {
     return compute(parseData, Alphabet());
   }
 
-  static WebResponse<T> parseData<T extends WebMappable>(T builder) {
-    return WebResponse<T>.success()
-      ..results = data.map((e) => e.mapObject<T>(builder.builders)).toList();
+  static GetResult<T> parseData<T extends GetObject>(T mappable) {
+    return GetResult<T>.success()
+      ..list = data.map((e) => e.getObject<T>(as: mappable)).toList();
   }
 }
 

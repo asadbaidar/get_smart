@@ -86,15 +86,15 @@ class BaseGetController extends GetxController {
   ///
   /// rethrows [Exception] after setting busy to false for object or class
   Future runBusyFuture(Future busyFuture,
-      {Object? busyObject, bool throwException = false}) async {
-    _setBusyForModelOrObject(true, busyObject: busyObject);
+      {Object? key, bool throwException = false}) async {
+    _setBusyForModelOrObject(true, busyObject: key);
     try {
       var value = await runErrorFuture(busyFuture,
-          key: busyObject, throwException: throwException);
-      _setBusyForModelOrObject(false, busyObject: busyObject);
+          key: key, throwException: throwException);
+      _setBusyForModelOrObject(false, busyObject: key);
       return value;
     } catch (e) {
-      _setBusyForModelOrObject(false, busyObject: busyObject);
+      _setBusyForModelOrObject(false, busyObject: key);
       if (throwException) rethrow;
     }
   }
@@ -306,7 +306,7 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
     update();
 
     for (var key in futuresMap.keys) {
-      runBusyFuture(futuresMap[key]!(), busyObject: key, throwException: true)
+      runBusyFuture(futuresMap[key]!(), key: key, throwException: true)
           .then((futureData) {
         _dataMap![key as String] = futureData;
         setBusyForObject(key, false);

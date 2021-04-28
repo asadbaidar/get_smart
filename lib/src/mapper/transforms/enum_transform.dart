@@ -1,6 +1,4 @@
-import '../enumerable.dart';
-import '../raw_representable.dart';
-import '../transformable.dart';
+import 'package:get_smart/get_smart.dart';
 
 class EnumTransform<Object extends Enumerable, JSON>
     with Transformable<Object?, JSON?> {

@@ -23,7 +23,7 @@ class App extends StatelessWidget {
 }
 
 class AppRoute {
-  static final login = routeOf(LoginPage);
+  static final login = $route(LoginPage);
 
   static List<GetPage> get pages => [
         GetPage(

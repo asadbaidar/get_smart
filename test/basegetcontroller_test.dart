@@ -8,7 +8,7 @@ class TestGetController extends BaseGetController {
       {String? busyKey, bool fail = false, bool throwException = false}) {
     return runBusyFuture(
       _futureToRun(fail),
-      busyObject: busyKey,
+      key: busyKey,
       throwException: throwException,
     );
   }

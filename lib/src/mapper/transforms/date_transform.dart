@@ -1,8 +1,5 @@
 import 'package:get_smart/get_smart.dart';
 
-import '../enumerable.dart';
-import '../transformable.dart';
-
 class DateUnit extends Enumerable<int> {
   static const seconds = const DateUnit(rawValue: 1000);
   static const milliseconds = const DateUnit(rawValue: 1);

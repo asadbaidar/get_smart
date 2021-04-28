@@ -34,7 +34,7 @@ abstract class GetController extends MultipleFutureGetController {
     for (var key in futuresMap.keys) {
       runBusyFuture(
         futuresMap[key]!(),
-        busyObject: key,
+        key: key,
         throwException: true,
       ).then((futureData) {
         setDataFor(key, futureData);
@@ -82,7 +82,7 @@ abstract class GetController extends MultipleFutureGetController {
 
   @override
   Map<Object, Future Function()> get futuresMap => {
-        nameOf(GetPrefs): GetPrefs.instance.reload,
+        $name(GetPrefs): GetPrefs.instance.reload,
         typeName: futureToRun,
         ...futuresToRun,
       };
@@ -103,8 +103,8 @@ abstract class GetController extends MultipleFutureGetController {
   bool get isAllSucceeded => dataMap!.keys.every((k) => succeeded(k));
 
   /// Returns data for any object which did not succeed.
-  WebResponse get anyNotSucceeded =>
-      data(dataMap!.keys.firstWhere((k) => !succeeded(k))) ?? WebResponse()
+  GetResult get anyNotSucceeded =>
+      data(dataMap!.keys.firstWhere((k) => !succeeded(k))) ?? GetResult()
         ..isSucceeded = true;
 
   /// Returns the data ready status of the action if no error occurred
@@ -131,8 +131,8 @@ abstract class GetController extends MultipleFutureGetController {
   /// Returns the error status of action
   bool get hasActionError => hasErrorFor(actionName);
 
-  /// Returns the [WebStatus] of action
-  WebStatus? get actionStatus => status(actionName);
+  /// Returns the [GetStatus] of action
+  GetStatus? get actionStatus => status(actionName);
 
   /// Returns the success status of an action
   dynamic get actionSuccess => success(actionName);
@@ -144,7 +144,7 @@ abstract class GetController extends MultipleFutureGetController {
   set actionError(value) => setErrorFor(actionName, value);
 
   /// Returns the data of the action
-  WebResponse? get actionData => data(actionName);
+  GetResult? get actionData => data(actionName);
 
   /// Sets the data of the action
   set actionData(value) => setDataFor(actionName, value);
@@ -201,7 +201,7 @@ abstract class GetController extends MultipleFutureGetController {
   set modelError(value) => setError(value);
 
   /// Returns the data of the ViewModel
-  WebResponse? get modelData => data(typeName);
+  GetResult? get modelData => data(typeName);
 
   /// Sets the data for the ViewModel
   set modelData(value) => setData(value);
@@ -224,8 +224,8 @@ abstract class GetController extends MultipleFutureGetController {
   /// Returns the status of ViewModel if failed or not
   bool get isFailed => failed(typeName);
 
-  /// Returns the [WebStatus] of the ViewModel
-  WebStatus? get modelStatus => status(typeName);
+  /// Returns the [GetStatus] of the ViewModel
+  GetStatus? get modelStatus => status(typeName);
 
   /// Returns the success message of the ViewModel
   dynamic get modelSuccess => success(typeName);
@@ -262,7 +262,7 @@ abstract class GetController extends MultipleFutureGetController {
       runnerMap[key.hash] ?? () => Future.value();
 
   /// Returns the data by key
-  WebResponse? data(Object key) => dataMap?[key.hash];
+  GetResult? data(Object key) => dataMap?[key.hash];
 
   /// Returns the success message by key
   dynamic success(Object key) => data(key)?.success;
@@ -274,20 +274,20 @@ abstract class GetController extends MultipleFutureGetController {
   @override
   bool dataReady(key) => ready(key) && !hasErrorFor(key);
 
-  /// Returns the [WebStatus] by key
-  WebStatus? status(key) => busy(key) ? WebStatus.busy : data(key)?.status;
+  /// Returns the [GetStatus] by key
+  GetStatus? status(key) => busy(key) ? GetStatus.busy : data(key)?.status;
 
   /// Returns the status by key if started or not
-  bool started(key) => status(key) != null && status(key) != WebStatus.canceled;
+  bool started(key) => status(key) != null && status(key) != GetStatus.canceled;
 
   /// Returns the status by key if succeeded or not
-  bool succeeded(key) => status(key) == WebStatus.succeeded;
+  bool succeeded(key) => status(key) == GetStatus.succeeded;
 
   /// Returns the status by key if busy/succeeded or not
   bool busyOrSucceeded(key) => busy(key) || succeeded(key);
 
   /// Returns the status by key if failed or not
-  bool failed(key) => status(key) == WebStatus.failed;
+  bool failed(key) => status(key) == GetStatus.failed;
 
   /// Returns the error status by key
   bool hasErrorFor(key) => error(key) != null;
@@ -330,7 +330,7 @@ abstract class GetController extends MultipleFutureGetController {
       setDataFor(_key, null);
       return await runBusyFuture(
         busyAction(),
-        busyObject: _key,
+        key: _key,
         throwException: throwException,
       );
     };
@@ -344,16 +344,16 @@ abstract class GetController extends MultipleFutureGetController {
   @override
   Future runBusyFuture(
     Future busyFuture, {
-    Object? busyObject,
+    Object? key,
     bool throwException = false,
   }) async {
     clearErrors();
-    final _key = busyObject ?? typeName;
+    final _key = key ?? typeName;
     setBusyFor(_key, true);
     try {
       var value = await runErrorFuture(
         busyFuture,
-        key: busyObject,
+        key: key,
         throwException: throwException,
       );
       setDataFor(_key, value);
@@ -362,7 +362,7 @@ abstract class GetController extends MultipleFutureGetController {
     } catch (e) {
       setBusyFor(_key, false);
       if (throwException) rethrow;
-      return WebResponse();
+      return GetResult();
     }
   }
 
@@ -374,15 +374,15 @@ abstract class GetController extends MultipleFutureGetController {
   }) async {
     final _key = key ?? typeName;
     try {
-      final response = await future;
-      if (response is WebResponse && response.error != null)
-        setErrorFor(_key, response.error);
-      return response;
+      final result = await future;
+      if (result is GetResult && result.error != null)
+        setErrorFor(_key, result.error);
+      return result;
     } catch (e) {
       setErrorFor(_key, e);
       onFutureError(e, _key);
       if (throwException) rethrow;
-      return WebResponse();
+      return GetResult();
     }
   }
 }

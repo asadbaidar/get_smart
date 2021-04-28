@@ -10,7 +10,42 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_smart/get_smart.dart';
 
-import '../../get_smart.dart';
+class GetTileData extends GetObject {
+  GetTileData({
+    this.icon,
+    this.accessory,
+    this.header,
+    this.title,
+    this.subtitle,
+    this.trailingTop,
+    this.trailingBottom,
+    this.subTiles = const [],
+    Color? color,
+    this.isDetailed = false,
+    this.isHeader = false,
+    this.padAccessory,
+    this.onTap,
+  }) : _color = color;
+
+  IconData? icon;
+  IconData? accessory;
+  dynamic header;
+  String? title;
+  String? subtitle;
+  String? trailingTop;
+  String? trailingBottom;
+  List<GetTileData> subTiles;
+  Color? _color;
+  bool isDetailed;
+  bool isHeader;
+  bool? padAccessory;
+  Function? onTap;
+
+  bool get hasSubTiles => subTiles.isNotEmpty == true;
+
+  @override
+  Color get color => _color ?? title?.materialAccent ?? super.color;
+}
 
 class AppTile extends StatelessWidget {
   const AppTile({
@@ -491,13 +526,13 @@ class BoxedView extends StatelessWidget {
     final splash = withinBox ? color?.darker : color?.translucent;
     return InkWell(
       onTap: onTap,
-      borderRadius: _size?.borderRadius,
+      borderRadius: _size?.circularRadius,
       highlightColor: splash?.activated,
       splashColor: splash,
       child: Ink(
         height: _size,
         width: _size,
-        decoration: _size?.circularDecoration(color: color),
+        decoration: _size?.circularBox(color: color),
         child: Container(
           alignment: Alignment.center,
           child: _text(boxed: withinBox) ?? _child(boxed: withinBox),
@@ -508,7 +543,7 @@ class BoxedView extends StatelessWidget {
 
   double? get _size => withinBox ? boxSize : null;
 
-  Widget? _text({bool boxed = false}) => castIf<Text>(child)?.mapTo(
+  Widget? _text({bool boxed = false}) => $cast<Text>(child)?.mapTo(
         (Text it) => Text(
           it.data ?? "",
           textAlign: TextAlign.center,
@@ -765,7 +800,7 @@ class ProgressButton extends StatelessWidget {
 
   final String? text;
   final dynamic error;
-  final WebStatus? status;
+  final GetStatus? status;
   final Function? onPressed;
 
   @override
@@ -773,7 +808,7 @@ class ProgressButton extends StatelessWidget {
     return Container(
       height: 44,
       alignment: Alignment.centerLeft,
-      child: status == WebStatus.busy
+      child: status == GetStatus.busy
           ? Row(children: [
               SizedBox(
                 width: 20,
@@ -797,15 +832,15 @@ class ProgressButton extends StatelessWidget {
                   width: 120,
                   child: GetButton.elevated(
                     child: Text(
-                      (status == WebStatus.failed
+                      (status == GetStatus.failed
                               ? GetText.retry()
-                              : status == WebStatus.succeeded
+                              : status == GetStatus.succeeded
                                   ? GetText.ok()
                                   : text)!
                           .uppercase,
                     ),
                     onPressed: () {
-                      if (status == WebStatus.succeeded)
+                      if (status == GetStatus.succeeded)
                         Get.back(result: true);
                       else
                         onPressed!();
@@ -813,7 +848,7 @@ class ProgressButton extends StatelessWidget {
                   ),
                 ),
               ),
-              if (status == WebStatus.failed)
+              if (status == GetStatus.failed)
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16),
@@ -823,7 +858,7 @@ class ProgressButton extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (status == WebStatus.succeeded)
+              if (status == GetStatus.succeeded)
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16),
@@ -853,7 +888,7 @@ class ProgressSnackBar extends StatelessWidget {
 
   final String? success;
   final String? error;
-  final WebStatus? status;
+  final GetStatus? status;
   final Function? onCancel;
   final Function? onRetry;
   final Function? onDone;
@@ -863,24 +898,24 @@ class ProgressSnackBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SnackBarX(
-      message: status == WebStatus.busy
+      message: status == GetStatus.busy
           ? GetText.busy()
-          : status == WebStatus.failed
+          : status == GetStatus.failed
               ? error ?? GetText.failed()
               : success ?? GetText.succeeded(),
-      action: status == WebStatus.busy
+      action: status == GetStatus.busy
           ? GetText.cancel()
-          : status == WebStatus.failed
+          : status == GetStatus.failed
               ? GetText.retry()
               : GetText.ok(),
-      onAction: status == WebStatus.busy
+      onAction: status == GetStatus.busy
           ? onCancel
-          : status == WebStatus.failed
+          : status == GetStatus.failed
               ? onRetry
               : onDone,
       onDismiss: onCancel,
-      showProgress: status == WebStatus.busy,
-      isDismissible: status == WebStatus.failed,
+      showProgress: status == GetStatus.busy,
+      isDismissible: status == GetStatus.failed,
       withBottomBar: withBottomBar,
       actionColor: actionColor,
     );
