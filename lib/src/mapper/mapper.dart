@@ -27,11 +27,11 @@ class Mapper {
                     : {},
       );
 
-  T? toObject<T>() {
+  T? toObject<T>([Type? type]) {
     _mappingType = MappingType.fromJson;
 
     // Initialize an instance of T
-    final instance = Mappable.getInstance(T);
+    final instance = Mappable.getInstance(type ?? T);
     if (instance == null) return null;
 
     // Call mapping for assigning value
@@ -40,13 +40,13 @@ class Mapper {
     return instance as T;
   }
 
-  T? toMappable<T extends Mappable>({T? as, List<Function>? builders}) {
-    var _builders = as?.builders ?? builders;
+  T? toMappable<T>({T? as, List<Function>? builders}) {
+    var _builders = $cast<Mappable>(as)?.builders ?? builders;
     _builders?.forEach((builder) {
       Mappable.factories.putIfAbsent(builder().runtimeType, () => builder);
     });
     print(Mappable.factories);
-    final object = toObject<T>();
+    final object = toObject<T>(as?.runtimeType);
     print(object);
     _builders?.forEach((builder) {
       Mappable.factories.remove(builder().runtimeType);

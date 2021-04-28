@@ -8,7 +8,10 @@ class HomeModel extends GetController {
   @override
   Future futureToRun() => getAlphabets();
 
-  List<Alphabet> get alphabets => modelData?.data ?? [];
+  List<Alphabet> get alphabets {
+    print("alphabets ${modelData?.toString()}");
+    return modelData?.list ?? [];
+  }
 
   Future getAlphabets() => runBusyFuture(api.getAlphabets());
 }

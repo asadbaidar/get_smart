@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_smart/get_smart.dart';
 
-T? $cast<T>(value) => value is T ? value : null;
+T? $cast<T>(value) => value == null
+    ? null
+    : value is T
+        ? value
+        : null;
 
 Object? $object(value) => value;
 
@@ -66,7 +70,7 @@ extension ObjectX on Object {
 
   String get typeName => $name(runtimeType);
 
-  T? getObject<T extends Mappable>({T? as, List<Function>? builders}) =>
+  T? getObject<T>({T? as, List<Function>? builders}) =>
       Mapper.fromData(this).toMappable<T>(as: as, builders: builders);
 
   /// Return the text from a text map with arguments based on current locale
