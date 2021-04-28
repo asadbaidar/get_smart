@@ -54,7 +54,7 @@ extension ListX<E> on List<E> {
     return null;
   }
 
-  E? get takeFirst {
+  E? get $first {
     Iterator<E> it = iterator;
     if (!it.moveNext()) {
       return null;
@@ -62,7 +62,7 @@ extension ListX<E> on List<E> {
     return it.current;
   }
 
-  E? takeFirstWhere(bool test(E element)) {
+  E? $firstWhere(bool test(E element)) {
     for (E element in this) {
       if (test(element)) return element;
     }

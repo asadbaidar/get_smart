@@ -260,7 +260,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     if (!readOnly &&
         onlyAcceptItem &&
         !filteredItems.map((it) => it.toString()).contains(controller.text)) {
-      var item = filteredItems.takeFirst;
+      var item = filteredItems.$first;
       controller.text = item?.toString() ?? "";
       if (item == null)
         clear();

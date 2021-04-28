@@ -74,7 +74,7 @@ class Mapper {
   ]) {
     final field = fields.firstWhere(
       (it) => json[it] != null,
-      orElse: () => fields.takeFirst ?? "",
+      orElse: () => fields.$first ?? "",
     );
     switch (_mappingType) {
       case MappingType.fromJson:

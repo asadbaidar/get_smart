@@ -27,7 +27,7 @@ class GetResult<T> extends GetObject {
 
   get data => list ?? value;
 
-  T? get firstValue => list?.takeFirst;
+  T? get firstValue => list?.$first;
 
   String? get error => isSucceeded ? null : message;
 
