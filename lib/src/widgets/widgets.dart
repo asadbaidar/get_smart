@@ -303,7 +303,7 @@ class AppTileRow extends StatelessWidget {
     this.maxLines = 2,
     this.expanded = false,
     this.standalone = false,
-    this.isIconBoxed = false,
+    this.isLeadingBoxed = false,
     this.onTapLeading,
     Key? key,
   }) : super(key: key);
@@ -316,7 +316,7 @@ class AppTileRow extends StatelessWidget {
     this.background,
     this.maxLines = 2,
     this.expanded = false,
-    this.isIconBoxed = false,
+    this.isLeadingBoxed = false,
     this.standalone = true,
     this.onTapLeading,
     Key? key,
@@ -330,7 +330,7 @@ class AppTileRow extends StatelessWidget {
   final int maxLines;
   final bool expanded;
   final bool standalone;
-  final bool isIconBoxed;
+  final bool isLeadingBoxed;
   final void Function()? onTapLeading;
 
   @override
@@ -339,7 +339,7 @@ class AppTileRow extends StatelessWidget {
     var tintColor = color ?? context.theme.primaryIconTheme.color;
     return textData == null
         ? Container()
-        : Container(
+        : Ink(
             color: standalone == true
                 ? (background ?? context.theme.backgroundColor)
                 : null,
@@ -354,7 +354,7 @@ class AppTileRow extends StatelessWidget {
                 BoxedView(
                   child: leading!,
                   color: tintColor,
-                  withinBox: isIconBoxed,
+                  withinBox: isLeadingBoxed,
                   small: true,
                   onTap: onTapLeading,
                 ).adjustHorizontally,

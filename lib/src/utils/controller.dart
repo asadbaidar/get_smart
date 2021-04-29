@@ -104,8 +104,8 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Returns data for any object which did not succeed.
   GetResult get anyNotSucceeded =>
-      data(dataMap!.keys.firstWhere((k) => !succeeded(k))) ?? GetResult()
-        ..isSucceeded = true;
+      data(dataMap!.keys.firstWhere((k) => !succeeded(k))) ??
+      GetResult.success();
 
   /// Returns the data ready status of the action if no error occurred
   bool get isActionDataReady => dataReady(actionName);

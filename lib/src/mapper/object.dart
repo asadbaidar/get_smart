@@ -26,13 +26,11 @@ abstract class GetObject extends Mappable {
 
   @override
   void mapping(Mapper map) {
-    map(["CURRENT_TIME"], currentTime, (v) => currentTime = v ?? Date.now,
-        DateTransform());
-    map(idKeys, _id, (v) => _id = v?.toString());
+    map(["CURRENT_TIME"], (v) => currentTime ??= v, DateTransform());
+    map(idKeys, (v) => _id ??= v?.toString());
     map(
       descriptionKeys,
-      _description,
-      (v) => _description =
+      (v) => _description ??=
           v?.toString().applyIf(capitalized, (s) => s.capitalized),
     );
   }
@@ -50,9 +48,17 @@ abstract class GetObject extends Mappable {
   @override
   String toString() => description;
 
+  @override
   String? get equatable => id;
 
+  @override
   String? get containable => id + description;
+
+  Color get color => materialAccent;
+
+  Color get materialAccent => description.materialAccent;
+
+  Color get materialPrimary => description.materialPrimary;
 
   var isExpanded = false;
 
@@ -64,6 +70,4 @@ abstract class GetObject extends Mappable {
   var isChecked = false;
 
   bool toggleChecked() => isChecked = !isChecked;
-
-  Color get color => description.materialAccent;
 }

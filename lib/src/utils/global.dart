@@ -18,8 +18,8 @@ String $name(Type type) => type.toString();
 String $route(Type type) => "/" + $name(type);
 
 Future<T> scheduleTask<T>(FutureOr<T> Function() task) async {
-  return await (SchedulerBinding.instance!
-      .scheduleTask<FutureOr<T>>(task, Priority.animation) as FutureOr<T>);
+  return await SchedulerBinding.instance!
+      .scheduleTask<FutureOr<T>>(task, Priority.animation);
 }
 
 Future<T> profileTask<T>(Future<T> Function() task) async {

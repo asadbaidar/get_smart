@@ -24,17 +24,12 @@ class GetIsolate {
   Map<String, Completer> completer = {};
 
   Future<GetResult<T>> parseJson<T extends Mappable>({String key, T as}) async {
-    final _completer = completer[key] = Completer<GetResult<Mappable>>();
-    sendPort.send(IsolateParcel(key: key, mappable: as));
+    final _completer = completer[key] = Completer<GetResult<T>>();
+    sendPort.send(IsolateParcel<T>(key: key, mappable: as));
     final result = await _completer.future;
     print("parseJson $result");
-    // completer.remove(key);
-    return GetResult<T>()
-      ..tag = result.tag
-      ..isSucceeded = result.isSucceeded
-      ..message = result.message
-      ..value = result.value
-      ..list = result.list as List<T>;
+    completer.remove(key);
+    return result;
   }
 
   Future<void> init() async {
@@ -63,8 +58,9 @@ class GetIsolate {
     receivePort.listen((data) {
       print('[receivePort] $data');
       if (data is IsolateParcel) {
-        final result =
-            parseData(data.mappable /*, data.key == "1" ? data1 : data2*/);
+        final result = parseData(
+            data.result, data.mappable /*, data.key == "1" ? data1 : data2*/);
+
         sendPort.send(data..result = result);
       }
     });
@@ -80,8 +76,8 @@ class IsolateParcel<T> {
   IsolateParcel({this.key, this.mappable});
 
   final String key;
-  final Mappable mappable;
-  GetResult<Mappable> result;
+  final T mappable;
+  GetResult<T> result = GetResult<T>();
 
   @override
   String toString() {
@@ -89,53 +85,66 @@ class IsolateParcel<T> {
   }
 }
 
-GetResult<Mappable> parseData(Mappable as) {
-  return GetResult<Mappable>.success()
-    ..list = data1.map((Object e) => e.getObject<Mappable>(as: as)).toList();
+T parseData<T>(T as, Mappable mappable) {
+  return data1.getObject<T>(as: as, builders: mappable.builders);
 }
 
-const data1 = [
-  {
-    "id": "A",
-    "description": "Apple",
-  },
-  {
-    "id": "B",
-    "description": "Ball",
-  },
-  {
-    "id": "C",
-    "description": "Cat",
-  },
-  {
-    "id": "D",
-    "description": "Doll",
-  },
-  {
-    "id": "E",
-    "description": "Elephant",
-  },
-];
+const data1 = """
+{
+   "tag":"test",
+   "msg":"Success",
+   "status":true,
+   "result":[
+      {
+         "id":"A",
+         "description":"Apple"
+      },
+      {
+         "id":"B",
+         "description":"Ball"
+      },
+      {
+         "id":"C",
+         "description":"Cat"
+      },
+      {
+         "id":"D",
+         "description":"Doll"
+      },
+      {
+         "id":"E",
+         "description":"Elephant"
+      }
+   ]
+}
+""";
 
-const data2 = [
-  {
-    "id": "F",
-    "description": "Frog",
-  },
-  {
-    "id": "G",
-    "description": "Glass",
-  },
-  {
-    "id": "H",
-    "description": "Horse",
-  },
-  {
-    "id": "I",
-    "description": "Ink",
-  },
-  {
-    "id": "J",
-    "description": "Jug",
-  },
-];
+const data2 = """
+{
+   "tag":"test",
+   "msg":"Success",
+   "status":true,
+   "result":[
+      {
+         "id":"F",
+         "description":"Frog"
+      },
+      {
+         "id":"G",
+         "description":"Glass"
+      },
+      {
+         "id":"H",
+         "description":"Horse"
+      },
+      {
+         "id":"I",
+         "description":"Ink"
+      },
+      {
+         "id":"J",
+         "description":"Jug"
+      }
+   ]
+}
+""";

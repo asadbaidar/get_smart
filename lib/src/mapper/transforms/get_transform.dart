@@ -1,13 +1,17 @@
 import 'package:get_smart/get_smart.dart';
 
-class MapperTransform<T extends Mappable>
+class GetTransform<T extends Mappable>
     implements Transformable<T?, Map<String, dynamic>?> {
+  GetTransform(this.mappable);
+
+  final T mappable;
+
   @override
   T? fromJson(value) {
     try {
       if (value == null) return null;
       if (value is Map<String, dynamic>)
-        return Mapper.fromJson(value).toObject<T>();
+        return value.getObject<T>(as: mappable);
       return null;
     } catch (e) {
       return null;

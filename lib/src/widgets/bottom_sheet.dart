@@ -95,7 +95,7 @@ class GetBottomSheet extends StatelessWidget {
 
 extension GetBottomSheetX on GetInterface {
   void modalBottomSheet(
-    Widget sheet, {
+    Widget Function() builder, {
     Color? backgroundColor,
     double? elevation,
     Clip? clipBehavior,
@@ -113,7 +113,7 @@ extension GetBottomSheetX on GetInterface {
   }) async {
     await onShow?.call();
     bottomSheet(
-      sheet,
+      builder(),
       backgroundColor: backgroundColor,
       elevation: elevation,
       clipBehavior: clipBehavior,

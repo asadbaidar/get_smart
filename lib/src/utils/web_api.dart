@@ -7,19 +7,18 @@ import 'package:get_smart/get_smart.dart';
 class GetResult<T> extends GetObject {
   GetResult();
 
+  GetResult.success([String? message])
+      : _message = message,
+        _isSucceeded = true;
+
+  GetResult.error([String? message]) : _message = message;
+
   GetResult.dio([this.dioError]);
 
-  GetResult.error([String? message]) : message = message;
-
-  GetResult.success([String? message])
-      : message = message,
-        isSucceeded = true;
-
   DioErrorType? dioError;
-
-  String tag = "Connection";
-  bool isSucceeded = false;
-  String? message = "Connection failed.";
+  String? _tag;
+  bool? _isSucceeded;
+  String? _message;
   T? value;
   List<T>? list;
 
@@ -28,6 +27,12 @@ class GetResult<T> extends GetObject {
   get data => list ?? value;
 
   T? get firstValue => list?.$first;
+
+  String get tag => _tag ?? typeName;
+
+  bool get isSucceeded => _isSucceeded ?? false;
+
+  String get message => _message ?? "Connection failed.";
 
   String? get error => isSucceeded ? null : message;
 
@@ -50,16 +55,14 @@ class GetResult<T> extends GetObject {
 
   @override
   void mapping(Mapper map) {
-    map(["tag"], tag, (v) => tag = v ?? "Connection");
-    map(["status", "success"], isSucceeded, (v) => isSucceeded = v ?? false);
-    map(["msg", "message"], message,
-        (v) => message = v ?? "Connection failed.");
-    map<T>(["result"], data, (v) {
-      if (v is List) {
+    map(["tag"], (v) => _tag ??= v);
+    map(["status", "success"], (v) => _isSucceeded ??= v);
+    map(["msg", "message"], (v) => _message ??= v);
+    map.$<T>(["result"], data, (v) {
+      if (v is List)
         list = v as List<T>?;
-      } else {
+      else
         value = v;
-      }
     });
   }
 
@@ -79,7 +82,7 @@ enum GetStatus {
 abstract class GetWebAPI {
   Future<GetResult<T>?> get<T>({
     T Function()? builder,
-    List<Object Function()>? builders,
+    List<Function>? builders,
     String? path,
     Map<String, dynamic>? parameters,
   }) {
@@ -94,7 +97,7 @@ abstract class GetWebAPI {
 
   Future<GetResult<T>?> post<T>({
     T Function()? builder,
-    List<Object Function()>? builders,
+    List<Function>? builders,
     bool encrypted = false,
     String? path,
     Map<String, dynamic>? parameters,
@@ -111,7 +114,7 @@ abstract class GetWebAPI {
 
   Future<GetResult<T>?> delete<T>({
     T Function()? builder,
-    List<Object Function()>? builders,
+    List<Function>? builders,
     String? path,
     Map<String, dynamic>? parameters,
   }) {
@@ -146,7 +149,7 @@ abstract class GetWebAPI {
 
   Future<GetResult<T>?> request<T>({
     T Function()? builder,
-    List<Object Function()>? builders,
+    List<Function>? builders,
     bool encrypted = false,
     String? path,
     GetMethod? method,
