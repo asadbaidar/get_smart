@@ -26,7 +26,7 @@ abstract class Mappable with Comparable<Mappable> {
     return json.encode(this.toJson());
   }
 
-  List<Function> get builders => [];
+  List<Function> get builders;
 
   String? get equatable => null;
 

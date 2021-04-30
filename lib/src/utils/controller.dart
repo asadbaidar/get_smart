@@ -6,8 +6,8 @@ import 'package:get_smart/get_smart.dart';
 abstract class GetController extends MultipleFutureGetController {
   final actionName = "action";
 
-  Map<String, dynamic>? get dataMap => _dataMap;
-  Map<String, dynamic>? _dataMap;
+  Map<String, dynamic> get dataMap => _dataMap;
+  Map<String, dynamic> _dataMap = {};
 
   Map<dynamic, Future Function()> get runnerMap => _runnerMap;
   Map<dynamic, Future Function()> _runnerMap = {};
@@ -16,9 +16,6 @@ abstract class GetController extends MultipleFutureGetController {
   int _futuresCompleted = 0;
 
   void _initialiseData() {
-    if (dataMap == null) {
-      _dataMap = {};
-    }
     _futuresCompleted = 0;
   }
 
@@ -100,11 +97,11 @@ abstract class GetController extends MultipleFutureGetController {
   bool get isAnyBusy => anyObjectsBusy;
 
   /// Returns true if all objects have succeeded.
-  bool get isAllSucceeded => dataMap!.keys.every((k) => succeeded(k));
+  bool get isAllSucceeded => dataMap.keys.every((k) => succeeded(k));
 
   /// Returns data for any object which did not succeed.
   GetResult get anyNotSucceeded =>
-      data(dataMap!.keys.firstWhere((k) => !succeeded(k))) ??
+      data(dataMap.keys.firstWhere((k) => !succeeded(k))) ??
       GetResult.success();
 
   /// Returns the data ready status of the action if no error occurred
@@ -255,7 +252,7 @@ abstract class GetController extends MultipleFutureGetController {
   void setErrorFor(key, value) => setErrorForObject(key, value);
 
   /// Sets the data by key
-  void setDataFor(Object key, value) => dataMap![key.hash] = value;
+  void setDataFor(Object key, value) => dataMap[key.hash] = value;
 
   /// Sets the runner by key
   void setRunnerFor(Object key, Future Function() value) =>
@@ -266,7 +263,7 @@ abstract class GetController extends MultipleFutureGetController {
       runnerMap[key.hash] ?? () => Future.value();
 
   /// Returns the data by key
-  GetResult<T>? data<T>(Object key) => dataMap?[key.hash];
+  GetResult<T>? data<T>(Object key) => $cast<GetResult<T>>(dataMap[key.hash]);
 
   /// Returns the success message by key
   dynamic success(Object key) => data(key)?.success;
@@ -312,7 +309,7 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Clears all data and errors
   void clearAllData() {
-    dataMap!.clear();
+    dataMap.clear();
     clearErrors();
     clearBusy();
     update();

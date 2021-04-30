@@ -11,6 +11,9 @@ import 'package:flutter/widgets.dart';
 import 'package:get_smart/get_smart.dart';
 
 class GetTileData extends GetObject {
+  @override
+  List<Function> get builders => [() => GetTileData()];
+
   GetTileData({
     this.icon,
     this.accessory,
