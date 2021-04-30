@@ -5,7 +5,7 @@ import 'package:get_smart/get_smart.dart';
 class LoginPage extends StatelessWidget {
   GlobalKey<FormState> get form => use(GlobalKey<FormState>());
 
-  bool get isValid => true ?? form.state.validate() == true;
+  bool get isValid => true; // ?? form.state?.validate() == true;
 
   @override
   Widget build(BuildContext context) => GetScaffold(

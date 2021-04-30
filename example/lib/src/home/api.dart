@@ -13,14 +13,14 @@ class Api {
 }
 
 class GetIsolate {
-  Isolate _isolate;
-  SendPort sendPort;
-  ReceivePort receivePort;
-  Map<String, Completer> completer = {};
+  late Isolate _isolate;
+  late SendPort _sendPort;
+  late ReceivePort _receivePort;
+  Map<String?, Completer> completer = {};
 
-  Future<GetResult<T>> parseJson<T extends Mappable>({String key, T as}) async {
+  Future<GetResult<T>> parseJson<T>({String? key, T? as}) async {
     final _completer = completer[key] = Completer<GetResult<T>>();
-    sendPort.send(IsolateParcel<T>(key: key, mappable: as));
+    _sendPort.send(IsolateParcel<T>(key: key, mappable: as));
     return _completer.future.then((result) {
       print("parseJson $result");
       completer.remove(key);
@@ -33,21 +33,19 @@ class GetIsolate {
 
   Future<void> init() async {
     Completer _completer = Completer<SendPort>();
-    receivePort = ReceivePort();
-
-    receivePort.listen((data) {
+    _receivePort = ReceivePort();
+    _receivePort.listen((data) {
       if (data is SendPort) {
         print('[init] $data');
         SendPort mainToIsolatePort = data;
         _completer.complete(mainToIsolatePort);
       } else if (data is IsolateParcel) {
         print('[isolateToMainPort] $data');
-        completer[data.key].complete(data.result);
+        completer[data.key]?.complete(data.result);
       }
     });
-
-    _isolate = await Isolate.spawn(isolateEntry, receivePort.sendPort);
-    sendPort = await _completer.future;
+    _isolate = await Isolate.spawn(isolateEntry, _receivePort.sendPort);
+    _sendPort = await _completer.future;
   }
 
   static void isolateEntry(SendPort sendPort) {
@@ -57,34 +55,37 @@ class GetIsolate {
     receivePort.listen((data) {
       print('[receivePort] $data');
       if (data is IsolateParcel) {
-        final result = parseData(
-            data.result, data.mappable /*, data.key == "1" ? data1 : data2*/);
-
-        sendPort.send(data..result = result);
+        final result = parseData(data.result, data.mappable);
+        if (result != null) data.result = result;
+        sendPort.send(data);
       }
     });
   }
 
   void kill() {
-    receivePort?.close();
-    _isolate?.kill();
+    _receivePort.close();
+    _isolate.kill();
   }
 }
 
 class IsolateParcel<T> {
   IsolateParcel({this.key, this.mappable});
 
-  final String key;
-  final T mappable;
+  final String? key;
+  final T? mappable;
   GetResult<T> result = GetResult<T>();
 
   @override
   String toString() {
-    return key + "\n" + mappable.toString() + "\n" + (result?.toString() ?? "");
+    return (key ?? "") +
+        "\n" +
+        (mappable?.toString() ?? "") +
+        "\n" +
+        result.toString();
   }
 }
 
-T parseData<T>(T as, Mappable mappable) {
+T? parseData<T>(T as, Mappable mappable) {
   return data1.getObject<T>(as: as, builders: mappable.builders);
 }
 

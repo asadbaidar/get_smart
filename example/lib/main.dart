@@ -3,7 +3,7 @@ import 'package:example/src/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
-GetIsolate background;
+late GetIsolate background;
 
 Future<void> main() async {
   background = GetIsolate();
@@ -17,7 +17,7 @@ class App extends StatelessWidget {
         title: 'Get Smart Demo',
         builder: (context, child) => Theme(
           data: GetTheme.black(context),
-          child: child,
+          child: child!,
         ),
         localizationsDelegates: [GetLocalizations.delegate],
         supportedLocales: GetLocalizations.supportedLocales,

@@ -200,11 +200,15 @@ abstract class GetController extends MultipleFutureGetController {
   /// Sets the error for the ViewModel
   set modelError(value) => setError(value);
 
-  /// Returns the data of the ViewModel
-  GetResult? get modelData => data(typeName);
-
-  /// Sets the data for the ViewModel
-  set modelData(value) => setData(value);
+  /// Sets or Returns the data of the ViewModel
+  GetResult<T>? modelData<T>([value]) {
+    if (value == null)
+      return data<T>(typeName);
+    else {
+      setData(value);
+      return value;
+    }
+  }
 
   /// Returns the runner of the ViewModel
   Future Function() get modelRunner => runner(typeName);
@@ -262,7 +266,7 @@ abstract class GetController extends MultipleFutureGetController {
       runnerMap[key.hash] ?? () => Future.value();
 
   /// Returns the data by key
-  GetResult? data(Object key) => dataMap?[key.hash];
+  GetResult<T>? data<T>(Object key) => dataMap?[key.hash];
 
   /// Returns the success message by key
   dynamic success(Object key) => data(key)?.success;
