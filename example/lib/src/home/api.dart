@@ -8,12 +8,7 @@ import 'package:get_smart/get_smart.dart';
 class Api {
   Future<GetResult<Alphabet>> getAlphabets() async {
     // return compute(parseData, Alphabet());
-    return background.parseJson(key: "1", as: Alphabet()).then((v) {
-      print("getAlphabets $v");
-      return v;
-    }).catchError((e) {
-      print(e);
-    });
+    return background.parseJson(key: "1", as: Alphabet());
   }
 }
 
@@ -26,10 +21,14 @@ class GetIsolate {
   Future<GetResult<T>> parseJson<T extends Mappable>({String key, T as}) async {
     final _completer = completer[key] = Completer<GetResult<T>>();
     sendPort.send(IsolateParcel<T>(key: key, mappable: as));
-    final result = await _completer.future;
-    print("parseJson $result");
-    completer.remove(key);
-    return result;
+    return _completer.future.then((result) {
+      print("parseJson $result");
+      completer.remove(key);
+      return result;
+    }).catchError((e) {
+      print(e);
+      return GetResult<T>.error(e.toString());
+    });
   }
 
   Future<void> init() async {
