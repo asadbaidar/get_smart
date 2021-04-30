@@ -1,6 +1,5 @@
 import 'package:example/src/home/api.dart';
 import 'package:example/src/login_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
