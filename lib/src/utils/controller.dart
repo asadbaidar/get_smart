@@ -140,11 +140,15 @@ abstract class GetController extends MultipleFutureGetController {
   /// sets the error status of an action
   set actionError(value) => setErrorFor(actionName, value);
 
-  /// Returns the data of the action
-  GetResult? get actionData => data(actionName);
-
-  /// Sets the data of the action
-  set actionData(value) => setDataFor(actionName, value);
+  /// Sets or Returns the data of the action
+  GetResult<T>? actionData<T>([value]) {
+    if (value == null)
+      return data<T>(actionName);
+    else {
+      setDataFor(actionName, value);
+      return value;
+    }
+  }
 
   /// Returns the runner of the action
   Future Function() get actionRunner => runner(actionName);

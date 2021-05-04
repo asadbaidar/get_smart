@@ -11,7 +11,7 @@ class GetTransform<T extends Mappable>
     try {
       if (value == null) return null;
       if (value is Map<String, dynamic>)
-        return value.getObject<T>(as: mappable);
+        return mappable..mapping(Mapper.fromData(value));
       return null;
     } catch (e) {
       return null;

@@ -124,8 +124,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
                   title: data.toString(),
                   onTap: onTap,
                 )),
-        itemSorter:
-            itemSorter ?? (a, b) => a?.compareTo(b?.toString() ?? "") ?? 0,
+        itemSorter: itemSorter ?? (a, b) => a?.compareTo(b) ?? 0,
         itemFilter: disableFiltering == true
             ? (_, __) => true
             : (itemFilter ??

@@ -8,4 +8,5 @@ export 'transforms/bool_transform.dart';
 export 'transforms/date_transform.dart';
 export 'transforms/enum_transform.dart';
 export 'transforms/get_transform.dart';
+export 'transforms/string_transform.dart';
 export 'transforms/transformable.dart';
