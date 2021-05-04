@@ -1,5 +1,6 @@
 //packages
 export "package:auto_size_text/auto_size_text.dart";
+export 'package:collection/collection.dart';
 export "package:dots_indicator/dots_indicator.dart";
 export "package:get/get.dart";
 export "package:google_fonts/google_fonts.dart";

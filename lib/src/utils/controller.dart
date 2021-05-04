@@ -93,15 +93,12 @@ abstract class GetController extends MultipleFutureGetController {
   /// Single future to run at the startup
   Future futureToRun() => Future.value();
 
-  /// Returns true if any objects still have a busy status.
-  bool get isAnyBusy => anyObjectsBusy;
-
   /// Returns true if all objects have succeeded.
   bool get isAllSucceeded => dataMap.keys.every((k) => succeeded(k));
 
   /// Returns data for any object which did not succeed.
   GetResult get anyNotSucceeded =>
-      data(dataMap.keys.firstWhere((k) => !succeeded(k))) ??
+      data(dataMap.keys.firstWhereOrNull((k) => !succeeded(k)) ?? "") ??
       GetResult.success();
 
   /// Returns the data ready status of the action if no error occurred

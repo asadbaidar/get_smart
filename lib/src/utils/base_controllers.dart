@@ -29,18 +29,21 @@ class BaseGetController extends GetxController {
   /// Returns the busy status of the ViewModel
   bool get isBusy => busy(this);
 
+  /// Returns true if any objects still have a busy status that is true.
+  bool get isAnyBusy => _busyStates.values.any((busy) => busy);
+
   /// Returns the error status of the ViewModel
   bool get hasError => error(this) != null;
 
   /// Returns the error status of the ViewModel
   dynamic get modelError => error(this);
 
-  // Returns true if any objects still have a busy status that is true.
-  bool get anyObjectsBusy => _busyStates.values.any((busy) => busy);
+  /// Returns true if any objects still have a error status.
+  bool? get hasAnyError => anyError != null;
 
-  // Returns true if any objects still have a error status.
-  bool? get anyError =>
-      _errorStates.values.firstWhere((error) => error != null);
+  /// Returns error of any object that still have a error status.
+  dynamic get anyError =>
+      _errorStates.values.firstWhereOrNull((error) => error != null);
 
   /// Marks the viewmodel as busy and calls notify listeners
   void setBusy(bool value) {
