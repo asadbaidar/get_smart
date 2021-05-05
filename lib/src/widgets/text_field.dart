@@ -122,7 +122,7 @@ class GetTextField extends StatelessWidget {
   final void Function(String v)? onSubmitted;
   final void Function(String? v)? onSaved;
   final void Function(String v)? onChanged;
-  final String Function(String? v)? validator;
+  final String? Function(String? v)? validator;
   final bool autoControlled;
   final bool? readOnly;
   final bool tapOnly;

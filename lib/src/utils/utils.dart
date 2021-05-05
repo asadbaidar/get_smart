@@ -179,7 +179,7 @@ class GetPlatformChannel {
     dynamic fallback,
   }) async {
     try {
-      return await channel?.invokeMethod(method, arguments);
+      return (await channel?.invokeMethod(method, arguments)) ?? fallback;
     } on Exception {
       return fallback;
     }

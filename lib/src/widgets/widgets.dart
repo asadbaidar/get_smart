@@ -1087,7 +1087,7 @@ extension GlobalKeyX<T extends State<StatefulWidget>> on GlobalKey<T> {
 
   Widget? get widget => currentWidget;
 
-  T? get state => currentState;
+  T? get state => state;
 }
 
 abstract class GetShimmer {

@@ -87,7 +87,7 @@ enum GetStatus {
 }
 
 abstract class GetWebAPI {
-  Future<GetResult<T>?> get<T>({
+  Future<GetResult<T>> get<T>({
     T? as,
     required String path,
     bool encrypted = false,
@@ -103,7 +103,7 @@ abstract class GetWebAPI {
         parameters: parameters,
       );
 
-  Future<GetResult<T>?> post<T>({
+  Future<GetResult<T>> post<T>({
     T? as,
     required String path,
     bool encrypted = false,
@@ -119,7 +119,7 @@ abstract class GetWebAPI {
         parameters: parameters,
       );
 
-  Future<GetResult<T>?> delete<T>({
+  Future<GetResult<T>> delete<T>({
     T? as,
     required String path,
     bool encrypted = false,
@@ -135,7 +135,7 @@ abstract class GetWebAPI {
         parameters: parameters,
       );
 
-  void download<T>({
+  download<T>({
     required String path,
     String? name,
     Map<String, dynamic> parameters = const {},

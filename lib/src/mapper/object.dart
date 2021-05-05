@@ -8,11 +8,11 @@ abstract class GetObject extends Mappable {
 
   String get id => _id ?? idFallback ?? "";
 
-  set id(String id) => _id = id;
+  set id(id) => _id = id;
 
   String get description => _description ?? descriptionFallback ?? "";
 
-  set description(String description) => _description = description;
+  set description(description) => _description = description;
 
   String? get idFallback => null;
 

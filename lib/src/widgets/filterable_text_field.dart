@@ -4,13 +4,13 @@ import 'package:get_smart/get_smart.dart';
 import 'package:get_smart/src/widgets/text_field.dart';
 
 typedef Widget GetFilterItemBuilder<T>(
-    BuildContext context, T? data, void Function()? onTap);
+    BuildContext context, T data, void Function() onTap);
 
-typedef bool Filter<T>(T? data, String query);
+typedef bool Filter<T>(T data, String query);
 
-typedef InputEventCallback<T>(T? data);
+typedef ItemSubmitted<T>(T data);
 
-typedef StringCallback(String? data);
+typedef StringCallback(String data);
 
 /// Build on top of TextFormField, extending its capabilities to get
 /// the list options to select from and filtering based on text entered.
@@ -19,7 +19,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   final Filter<T>? itemFilter;
 
   /// Callback to sort items in the form (a of type <T>, b of type <T>)
-  final Comparator<T?>? itemSorter;
+  final Comparator<T>? itemSorter;
 
   /// Callback on input text changed, this is a string
   final StringCallback? textChanged;
@@ -29,7 +29,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   final ValueSetter<bool>? onFocusChanged;
 
   /// Callback on item selected, this is the item selected of type <T>
-  final InputEventCallback<T> itemSubmitted;
+  final ItemSubmitted<T?> itemSubmitted;
 
   /// Callback to build each item, return a Widget
   final GetFilterItemBuilder<T>? itemBuilder;
@@ -124,7 +124,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
                   title: data.toString(),
                   onTap: onTap,
                 )),
-        itemSorter: itemSorter ?? (a, b) => a?.compareTo(b) ?? 0,
+        itemSorter: itemSorter ?? (a, b) => a.compareTo(b),
         itemFilter: disableFiltering == true
             ? (_, __) => true
             : (itemFilter ??
@@ -135,21 +135,21 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
 class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   final LayerLink _layerLink = LayerLink();
 
-  InputEventCallback<T?>? itemSubmitted;
-  GetFilterItemBuilder<T?>? itemBuilder;
-  Comparator<T?>? itemSorter;
-  Filter<T?>? itemFilter;
+  ItemSubmitted<T?> itemSubmitted;
+  GetFilterItemBuilder<T> itemBuilder;
+  Comparator<T> itemSorter;
+  Filter<T> itemFilter;
 
   GetFilterableTextFieldState({
-    this.itemSubmitted,
-    this.itemBuilder,
-    this.itemSorter,
-    this.itemFilter,
+    required this.itemSubmitted,
+    required this.itemBuilder,
+    required this.itemSorter,
+    required this.itemFilter,
   });
 
   List<T>? _items;
 
-  List<T?> get items => _items ?? widget.items as List<T?>? ?? [];
+  List<T> get items => _items ?? widget.items?.cast() ?? [];
 
   String? _error;
 
@@ -204,7 +204,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   FocusNode? get nextFocusNode => widget.nextFocusNode;
 
   OverlayEntry? itemsOverlayEntry;
-  List<T?> filteredItems = [];
+  List<T> filteredItems = [];
   String currentText = "";
 
   void initState() {
@@ -265,7 +265,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
         clear();
       else
         removeError();
-      itemSubmitted!(item);
+      itemSubmitted(item);
     }
   }
 
@@ -326,17 +326,17 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
                     itemCount: filteredItems.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      final item = filteredItems[index];
+                      final item = filteredItems[index]!;
                       return Row(children: [
                         Expanded(
-                          child: itemBuilder!(
+                          child: itemBuilder(
                             context,
                             item,
                             () => setState(() {
                               if (submitOnItemTap) {
                                 String newText = item.toString();
                                 controller.text = newText;
-                                itemSubmitted!(item);
+                                itemSubmitted(item);
                                 focusNode.unfocus();
                                 clearOverlay();
                                 if (clearOnSubmit) clear();
@@ -364,10 +364,10 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     itemsOverlayEntry!.markNeedsBuild();
   }
 
-  Future<List<T?>> getItems(
-    List<T?> items,
-    Comparator<T?>? sorter,
-    Filter<T?>? filter,
+  Future<List<T>> getItems(
+    List<T> items,
+    Comparator<T> sorter,
+    Filter<T> filter,
     int maxAmount,
     String? query,
   ) =>
@@ -375,7 +375,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
         if (query == null || query.length < minLength) {
           return [];
         }
-        items = items.where((item) => filter!(item, query)).toList();
+        items = items.where((item) => filter(item, query)).toList();
         items.sort(sorter);
         if (items.length > maxAmount) {
           items = items.sublist(0, maxAmount);

@@ -250,9 +250,9 @@ class GetTheme {
   }
 
   /// Resolves which theme to use based on brightness.
-  static Widget defaultBuilder(BuildContext context, Widget child) => Theme(
+  static Widget defaultBuilder(BuildContext context, Widget? child) => Theme(
         data: sky(context),
-        child: child,
+        child: child!,
       );
 
   static setErrorStyle({Color? backgroundColor, ui.TextStyle? textStyle}) {
