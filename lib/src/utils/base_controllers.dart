@@ -24,7 +24,7 @@ class BaseGetController extends GetxController {
   /// Returns false if not present
   bool busy(Object? object) => _busyStates[object.hashCode] ?? false;
 
-  dynamic error(Object object) => _errorStates[object.hashCode];
+  String? error(Object object) => _errorStates[object.hashCode]?.toString();
 
   /// Returns the busy status of the ViewModel
   bool get isBusy => busy(this);
@@ -230,7 +230,7 @@ class _SingleDataSourceGetController<T> extends DynamicSourceGetController {
   dynamic _error;
 
   @override
-  dynamic error([Object? object]) => _error;
+  String? error([Object? object]) => _error?.toString();
 
   bool get dataReady => _data != null && !hasError;
 }

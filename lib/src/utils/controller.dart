@@ -129,10 +129,10 @@ abstract class GetController extends MultipleFutureGetController {
   GetStatus? get actionStatus => status(actionName);
 
   /// Returns the success status of an action
-  dynamic get actionSuccess => success(actionName);
+  String? get actionSuccess => success(actionName);
 
   /// Returns the error status of an action
-  dynamic get actionError => error(actionName);
+  String? get actionError => error(actionName);
 
   /// sets the error status of an action
   set actionError(value) => setErrorFor(actionName, value);
@@ -193,7 +193,7 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Returns the error status of the ViewModel
   @override
-  dynamic get modelError => error(typeName);
+  String? get modelError => error(typeName);
 
   /// Sets the error for the ViewModel
   set modelError(value) => setError(value);
@@ -230,7 +230,7 @@ abstract class GetController extends MultipleFutureGetController {
   GetStatus? get modelStatus => status(typeName);
 
   /// Returns the success message of the ViewModel
-  dynamic get modelSuccess => success(typeName);
+  String? get modelSuccess => success(typeName);
 
   /// Sets the busy status for the ViewModel and calls notify listeners
   @override
@@ -267,7 +267,7 @@ abstract class GetController extends MultipleFutureGetController {
   GetResult<T>? data<T>(Object key) => $cast<GetResult<T>>(dataMap[key.hash]);
 
   /// Returns the success message by key
-  dynamic success(Object key) => data(key)?.success;
+  String? success(Object key) => data(key)?.success;
 
   /// Returns the data ready status by key even if error occurred
   bool ready(key) => data(key) != null;

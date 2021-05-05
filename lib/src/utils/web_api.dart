@@ -204,7 +204,6 @@ abstract class GetWebAPI {
         path: parcel.path,
         method: parcel.method,
         authToken: parcel.authToken,
-        cancelToken: parcel.cancelToken,
         builder: parcel.builder,
         parameters: parcel.parameters,
       );
@@ -219,7 +218,6 @@ abstract class GetWebAPI {
     required String authToken,
     required T result,
     Object? builder,
-    CancelToken? cancelToken,
     Map<String, dynamic> parameters = const {},
   }) async {
     Dio? dio;
@@ -239,7 +237,7 @@ abstract class GetWebAPI {
           "auth": authToken,
         }
         ..validateStatus = (status) => status == 200;
-      cancelToken ??= _cancelTokens[id] = CancelToken();
+      final cancelToken = _cancelTokens[id] = CancelToken();
       print("Request ID $id");
       DIO.Response response = await dio.request(
         path,
@@ -281,7 +279,6 @@ class _RequestParcel<T, R> {
     required this.authToken,
     required this.result,
     this.builder,
-    this.cancelToken,
     this.parameters = const {},
   });
 
@@ -292,7 +289,6 @@ class _RequestParcel<T, R> {
   final String authToken;
   R result;
   final T? builder;
-  final CancelToken? cancelToken;
   final Map<String, dynamic> parameters;
 
   String get key => authToken;
@@ -306,7 +302,6 @@ class _RequestParcel<T, R> {
         "path": path,
         "method": method,
         "authToken": authToken,
-        "cancelToken": cancelToken?.toString(),
         "parameters": parameters,
         "builder": builder?.toString(),
         "result": result.toString(),
@@ -356,15 +351,15 @@ class GetIsolate {
     _receivePort?.listen((data) {
       try {
         if (data is SendPort) {
-          print("[init] $data");
+          print("[MainPort] init: $data");
           SendPort isolatePort = data;
           _completer.complete(isolatePort);
         } else if (data is _RequestParcel) {
-          print("[MainPort] $data");
+          print("[MainPort] request: $data");
           completer[data.key]?.complete(data.result);
         }
       } catch (e) {
-        print(e);
+        print("[MainPort] Error: $e");
       }
     });
     await Isolate.spawn(
@@ -389,13 +384,17 @@ class GetIsolate {
     ReceivePort receivePort = ReceivePort();
     sendPort?.send(receivePort.sendPort);
     receivePort.listen((parcel) async {
-      print('[receivePort] $parcel');
-      if (parcel is _RequestParcel) {
-        sendPort?.send(
-          parcel..result = await GetWebAPI._parcelRequest(parcel),
-        );
-      } else if (parcel is _RequestCancel) {
-        GetWebAPI._cancelTokens.remove(parcel.id)?.cancel();
+      try {
+        print("[IsolatePort] $parcel");
+        if (parcel is _RequestParcel) {
+          sendPort?.send(
+            parcel..result = await GetWebAPI._parcelRequest(parcel),
+          );
+        } else if (parcel is _RequestCancel) {
+          GetWebAPI._cancelTokens.remove(parcel.id)?.cancel();
+        }
+      } catch (e) {
+        print("[IsolatePort] Error: $e");
       }
     });
   }
