@@ -82,9 +82,15 @@ extension Date on DateTime {
 
   String get formatDMMy => GetDateFormat.inDMMy.format(this);
 
+  String get formatYMMd => GetDateFormat.inYMMd.format(this);
+
   String get formatHm => GetDateFormat.inHm.format(this);
 
   String get formatDMMyHm => GetDateFormat.inDMMyHm.format(this);
+
+  String get formatHms => GetDateFormat.inHms.format(this);
+
+  String get formatYMMdHms => GetDateFormat.inYMMdHms.format(this);
 
   int get inMilliseconds => millisecondsSinceEpoch;
 
@@ -133,9 +139,15 @@ extension GetDateFormat on DateFormat {
 
   static DateFormat get inDMMy => DateFormat("dd-MM-yyyy");
 
+  static DateFormat get inYMMd => DateFormat("yyyy-MM-dd");
+
   static DateFormat get inHm => DateFormat.Hm();
 
+  static DateFormat get inHms => DateFormat.Hms();
+
   static DateFormat get inDMMyHm => inDMMy.add_Hm();
+
+  static DateFormat get inYMMdHms => inYMMd.add_Hms();
 
   /// Add [format] to this instance as a pattern.
   ///
