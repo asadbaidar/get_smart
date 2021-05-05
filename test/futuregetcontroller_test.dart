@@ -201,7 +201,7 @@ void main() {
 
       expect(futureGetController.busy(NumberDelayFuture), false,
           reason: 'String future should be done at this point');
-      expect(futureGetController.anyObjectsBusy, true,
+      expect(futureGetController.isAnyBusy, true,
           reason: 'Should be true because second future is still running');
     });
 
