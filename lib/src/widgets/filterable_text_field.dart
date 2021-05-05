@@ -441,3 +441,60 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     );
   }
 }
+
+/*
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: RawAutocomplete<Alphabet>(
+                  optionsBuilder: (TextEditingValue textEditingValue) =>
+                      dataSet.where((option) =>
+                          option.containsIgnoreCase(textEditingValue.text)),
+                  onSelected: (selection) =>
+                      model.autocompleteSelection = selection,
+                  fieldViewBuilder:
+                      (context, controller, focusNode, onFieldSubmitted) {
+                    return TextFormField(
+                      controller: controller,
+                      decoration: const InputDecoration(
+                        hintText: 'This is a RawAutocomplete!',
+                      ),
+                      focusNode: focusNode,
+                      onFieldSubmitted: (String value) {
+                        onFieldSubmitted();
+                      },
+                      validator: (String? value) {
+                        if (dataSet.firstWhereOrNull(
+                                (option) => option.containsIgnoreCase(value)) ==
+                            null) {
+                          return 'Nothing selected.';
+                        }
+                        return null;
+                      },
+                    );
+                  },
+                  optionsViewBuilder: (context, onSelected, options) {
+                    return Container(
+                      margin: EdgeInsets.only(right: 16),
+                      padding: EdgeInsets.only(right: 16),
+                      alignment: Alignment.topLeft,
+                      child: Card(
+                        child: SizedBox(
+                          height: 250.0,
+                          child: ListView.builder(
+                            padding: const EdgeInsets.all(0),
+                            itemCount: options.length,
+                            itemBuilder: (context, int index) {
+                              final option = options.elementAt(index);
+                              return AppTile.simple(
+                                title: option.description,
+                                onTap: () => onSelected(option),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+*/
