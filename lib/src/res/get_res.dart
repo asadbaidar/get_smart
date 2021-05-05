@@ -10,8 +10,8 @@ export "package:sprintf/sprintf.dart";
 export "package:url_launcher/url_launcher.dart";
 
 // res
-export "../res/colors.dart";
-export "../res/get_res.dart";
-export "../res/localizations.dart";
-export "../res/texts.dart";
-export "../res/themes.dart";
+export "colors.dart";
+export "get_res.dart";
+export "localizations.dart";
+export "texts.dart";
+export "themes.dart";
