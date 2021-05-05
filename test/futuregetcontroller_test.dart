@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_smart/get_smart.dart';
 
-const _SingleFutureExceptionFailMessage = 'Future to Run failed';
+const _SingleFutureFailException = HttpException('Future to Run failed');
 
 class TestFutureGetController extends FutureGetController<int> {
   final bool fail;
@@ -13,7 +15,7 @@ class TestFutureGetController extends FutureGetController<int> {
 
   @override
   Future<int> futureToRun() async {
-    if (fail) throw Exception(_SingleFutureExceptionFailMessage);
+    if (fail) throw _SingleFutureFailException;
     await Future.delayed(Duration(milliseconds: 20));
     return numberToReturn;
   }
@@ -26,7 +28,7 @@ class TestFutureGetController extends FutureGetController<int> {
 
 const String NumberDelayFuture = 'delayedNumber';
 const String StringDelayFuture = 'delayedString';
-const String _NumberDelayExceptionMessage = 'getNumberAfterDelay failed';
+const _NumberDelayException = FormatException('getNumberAfterDelay failed');
 
 class TestMultipleFutureGetController extends MultipleFutureGetController {
   final bool failOne;
@@ -48,7 +50,7 @@ class TestMultipleFutureGetController extends MultipleFutureGetController {
 
   Future<int> getNumberAfterDelay() async {
     if (failOne) {
-      throw Exception(_NumberDelayExceptionMessage);
+      throw _NumberDelayException;
     }
     await Future.delayed(Duration(milliseconds: futureOneDuration));
     return numberToReturn;
@@ -94,8 +96,8 @@ void main() {
     test('When a future fails it should set error to exception', () async {
       var futureGetController = TestFutureGetController(fail: true);
       await futureGetController.initialise();
-      expect(futureGetController.modelError.message,
-          _SingleFutureExceptionFailMessage);
+      expect(futureGetController.modelError,
+          _SingleFutureFailException.toString());
     });
 
     test('When a future fails onData should not be called', () async {
@@ -185,8 +187,8 @@ void main() {
       var futureGetController = TestMultipleFutureGetController(failOne: true);
       await futureGetController.initialise();
 
-      expect(futureGetController.error(NumberDelayFuture).message,
-          _NumberDelayExceptionMessage);
+      expect(futureGetController.error(NumberDelayFuture),
+          _NumberDelayException.toString());
 
       expect(futureGetController.error(StringDelayFuture), null);
     });
