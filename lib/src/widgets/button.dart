@@ -865,11 +865,20 @@ abstract class GetButton {
   static Widget back({
     Color? color,
     VoidCallback? onPressed,
-  }) =>
-      icon(
-        icon: const BackButtonIcon(),
-        color: color,
-        tooltip: MaterialLocalizations.of(Get.context!).backButtonTooltip,
-        onPressed: () => Get.canPop ? Get.back() : Get.systemPop(),
-      );
+  }) {
+    var _icon = const BackButtonIcon();
+    var _onPressed = () => Get.canPop ? Get.back() : Get.systemPop();
+    return Get.isIOS
+        ? CupertinoButton(
+            child: _icon,
+            color: color,
+            onPressed: _onPressed,
+          )
+        : icon(
+            icon: _icon,
+            color: color,
+            tooltip: Get.localization.backButtonTooltip,
+            onPressed: _onPressed,
+          );
+  }
 }

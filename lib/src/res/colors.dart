@@ -34,6 +34,8 @@ extension ColorX on Color {
 
   Color get highlighted => withOpacity(0.727);
 
+  Color get actioned => withOpacity(0.9);
+
   Color get normal => withOpacity(1);
 }
 

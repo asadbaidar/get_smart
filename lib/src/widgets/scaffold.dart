@@ -142,8 +142,7 @@ class GetScaffold extends StatelessWidget {
         leading: hideAppBarLeading == true
             ? null
             : appBarLeading ?? GetButton.back(),
-        title:
-            customTitle ?? Column(children: [if (title != null) Text(title!)]),
+        title: customTitle ?? (title != null ? Text(title!) : Container()),
         bottom: PreferredSize(
           child: Column(
             mainAxisSize: MainAxisSize.min,

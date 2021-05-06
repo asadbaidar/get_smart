@@ -700,42 +700,77 @@ class MessageView extends StatelessWidget {
 }
 
 class GetDismissible extends StatefulWidget {
-  GetDismissible({
+  const GetDismissible({
     this.enabled,
-    this.direction,
+    this.timeout = const Duration(seconds: 6),
+    this.autoDismiss = false,
+    this.direction = DismissDirection.down,
     this.onDismissed,
-    this.child,
+    required this.child,
     Key? key,
   }) : super(key: key);
 
   final bool? enabled;
-  final DismissDirection? direction;
+  final Duration timeout;
+  final bool autoDismiss;
+  final DismissDirection direction;
   final void Function(DismissDirection)? onDismissed;
-  final Widget? child;
+  final Widget child;
 
   @override
   _GetDismissibleState createState() => _GetDismissibleState();
 }
 
 class _GetDismissibleState extends State<GetDismissible> {
-  var dismissed = false;
+  var _dismissed = false;
 
   @override
-  Widget build(BuildContext context) => dismissed
-      ? Container(height: 0)
-      : (widget.enabled!
-          ? Dismissible(
-              key: const Key('dismissible'),
-              direction: widget.direction!,
-              onDismissed: (direction) {
-                widget.onDismissed?.call(direction);
-                if (mounted) setState(() => dismissed = true);
-              },
-              background: Container(),
-              secondaryBackground: Container(),
-              child: widget.child!,
-            )
-          : widget.child!);
+  Widget build(BuildContext context) {
+    startTimer();
+    return _dismissed
+        ? Container(height: 0)
+        : widget.enabled == true
+            ? Dismissible(
+                key: const Key('dismissible'),
+                direction: widget.direction,
+                onDismissed: dismiss,
+                background: Container(),
+                secondaryBackground: Container(),
+                child: widget.child,
+              )
+            : widget.child;
+  }
+
+  void dismiss([DismissDirection? direction]) {
+    stopTimer();
+    widget.onDismissed?.call(direction ?? widget.direction);
+    if (mounted) setState(() => _dismissed = true);
+  }
+
+  Timer? _timer;
+  var _time = 6;
+
+  void startTimer() {
+    if (!widget.autoDismiss) return;
+    if (_timer == null && widget.enabled == true && !_dismissed) {
+      print("startTimer");
+      _time = widget.timeout.inSeconds;
+      _timer = Timer.periodic(1.seconds, (_) {
+        print("time $_time");
+        if (_time == 0) {
+          dismiss();
+        } else
+          _time--;
+      });
+    } else if (_timer != null && widget.enabled != true && !_dismissed) {
+      stopTimer();
+    }
+  }
+
+  void stopTimer() {
+    _timer?.cancel();
+    _timer = null;
+  }
 }
 
 class SwipeRefresh extends RefreshIndicator {
@@ -766,7 +801,7 @@ class CrossFade extends AnimatedCrossFade {
           alignment: showFirst ?? firstChild != null
               ? Alignment.topCenter
               : Alignment.bottomCenter,
-          duration: Duration(milliseconds: 200),
+          duration: 200.milliseconds,
           secondCurve: Curves.fastLinearToSlowEaseIn,
           crossFadeState: showFirst ?? firstChild != null
               ? CrossFadeState.showFirst
@@ -870,6 +905,8 @@ class ProgressSnackBar extends StatelessWidget {
     this.onDone,
     this.withBottomBar,
     this.actionColor,
+    this.timeout = const Duration(seconds: 6),
+    this.autoDismiss = true,
     Key? key,
   }) : super(key: key);
 
@@ -881,32 +918,34 @@ class ProgressSnackBar extends StatelessWidget {
   final Function? onDone;
   final bool? withBottomBar;
   final Color? actionColor;
+  final Duration timeout;
+  final bool autoDismiss;
 
   @override
-  Widget build(BuildContext context) {
-    return GetSnackBar(
-      message: status == GetStatus.busy
-          ? GetText.busy()
-          : status == GetStatus.failed
-              ? error ?? GetText.failed()
-              : success ?? GetText.succeeded(),
-      action: status == GetStatus.busy
-          ? GetText.cancel()
-          : status == GetStatus.failed
-              ? GetText.retry()
-              : GetText.ok(),
-      onAction: status == GetStatus.busy
-          ? onCancel
-          : status == GetStatus.failed
-              ? onRetry
-              : onDone,
-      onDismiss: onCancel,
-      showProgress: status == GetStatus.busy,
-      isDismissible: status == GetStatus.failed,
-      withBottomBar: withBottomBar,
-      actionColor: actionColor,
-    );
-  }
+  Widget build(BuildContext context) => GetSnackBar(
+        message: status == GetStatus.busy
+            ? GetText.busy()
+            : status == GetStatus.failed
+                ? error ?? GetText.failed()
+                : success ?? GetText.succeeded(),
+        action: status == GetStatus.busy
+            ? GetText.cancel()
+            : status == GetStatus.failed
+                ? GetText.retry()
+                : GetText.ok(),
+        onAction: status == GetStatus.busy
+            ? onCancel
+            : status == GetStatus.failed
+                ? onRetry
+                : onDone,
+        onDismiss: onCancel,
+        showProgress: status == GetStatus.busy,
+        isDismissible: status == GetStatus.failed,
+        withBottomBar: withBottomBar,
+        actionColor: actionColor,
+        timeout: timeout,
+        autoDismiss: autoDismiss,
+      );
 }
 
 class GetSnackBar extends StatelessWidget {
@@ -919,6 +958,8 @@ class GetSnackBar extends StatelessWidget {
     this.isDismissible = false,
     this.withBottomBar = false,
     this.actionColor,
+    this.timeout = const Duration(seconds: 6),
+    this.autoDismiss = true,
     Key? key,
   }) : super(key: key);
 
@@ -930,6 +971,8 @@ class GetSnackBar extends StatelessWidget {
   final bool isDismissible;
   final bool? withBottomBar;
   final Color? actionColor;
+  final Duration timeout;
+  final bool autoDismiss;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -939,6 +982,8 @@ class GetSnackBar extends StatelessWidget {
             enabled: isDismissible,
             direction: DismissDirection.down,
             onDismissed: (direction) => onDismiss?.call(),
+            timeout: timeout,
+            autoDismiss: autoDismiss,
             child: Container(
               color: Get.theme.bottomAppBarTheme.color,
               child: Column(
@@ -1009,6 +1054,7 @@ class BottomBar extends StatelessWidget {
               child: Container(
                 height: 44,
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  SizedBox(width: 6),
                   ..._leftItems,
                   if (_leftItems.length < _rightItems.length)
                     for (int i = 0;
@@ -1022,6 +1068,7 @@ class BottomBar extends StatelessWidget {
                         i++)
                       GetButton.icon(),
                   ..._rightItems,
+                  SizedBox(width: 6),
                 ]),
               ),
             ),

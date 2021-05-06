@@ -226,6 +226,17 @@ class GetTheme {
         elevation: 1,
         color: _primaryBackground,
         brightness: _primaryBrightness,
+        titleTextStyle: TextStyle(
+          fontSize: 18,
+          color: _primaryBackground.contrast,
+          fontWeight: FontWeight.w500,
+        ),
+        toolbarTextStyle: TextStyle(
+          fontSize: 14,
+          color: _primaryBackground.contrast.actioned,
+        ),
+        foregroundColor: _primaryBackground.contrast,
+        backwardsCompatibility: false,
       ),
       bottomAppBarTheme: BottomAppBarTheme(
         elevation: 4,
