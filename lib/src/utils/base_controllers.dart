@@ -39,7 +39,7 @@ class BaseGetController extends GetxController {
   dynamic get modelError => error(this);
 
   /// Returns true if any objects still have a error status.
-  bool? get hasAnyError => anyError != null;
+  bool get hasAnyError => anyError != null;
 
   /// Returns error of any object that still have a error status.
   dynamic get anyError =>
@@ -83,7 +83,7 @@ class BaseGetController extends GetxController {
   }
 
   /// Function that is called when a future throws an error
-  void onFutureError(dynamic error, Object? key) {}
+  void onError(Object? key, error) {}
 
   /// Sets the ViewModel to busy, runs the future and then sets it to not busy when complete.
   ///
@@ -108,7 +108,7 @@ class BaseGetController extends GetxController {
       return await future;
     } catch (e) {
       _setErrorForModelOrObject(e, key: key);
-      onFutureError(e, key);
+      onError(key, e);
       if (throwException) rethrow;
       return Future.value();
     }
@@ -266,7 +266,7 @@ abstract class FutureGetController<T> extends _SingleDataSourceGetController<T>
       setError(error);
       _error = error;
       setBusy(false);
-      onError(error);
+      onError(null, error);
       update();
     });
 
@@ -276,9 +276,6 @@ abstract class FutureGetController<T> extends _SingleDataSourceGetController<T>
 
     changeSource = false;
   }
-
-  /// Called when an error occurs within the future being run
-  void onError(error) {}
 
   /// Called after the data has been set
   void onData(T? data) {}
@@ -319,7 +316,7 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
       }).catchError((error) {
         setErrorForObject(key, error);
         setBusyForObject(key, false);
-        onError(key: key, error: error);
+        onError(key, error);
         update();
         _incrementAndCheckFuturesCompleted();
       });
@@ -337,8 +334,6 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
       _futuresCompleter.complete();
     }
   }
-
-  void onError({Object? key, error}) {}
 
   void onData(Object key) {}
 
@@ -398,8 +393,8 @@ abstract class MultipleStreamGetController extends _MultiDataSourceGetController
           setErrorForObject(key, error);
           _dataMap![key] = null;
 
-          streamsMap[key]!.onError != null
-              ? streamsMap[key]!.onError!(error)
+          streamsMap[key]?._onError != null
+              ? streamsMap[key]!._onError!(error)
               : onError(key, error);
           update();
         },
@@ -427,8 +422,6 @@ abstract class MultipleStreamGetController extends _MultiDataSourceGetController
   void onData(String key, dynamic data) {}
 
   void onSubscribed(String key) {}
-
-  void onError(String key, error) {}
 
   void onCancel(String key) {}
 
@@ -501,7 +494,7 @@ abstract class StreamGetController<T> extends _SingleDataSourceGetController<T>
         setError(error);
         _error = error;
         _data = null;
-        onError(error);
+        onError(null, error);
         update();
       },
     );
@@ -515,9 +508,6 @@ abstract class StreamGetController<T> extends _SingleDataSourceGetController<T>
 
   /// Called when the stream is listened too
   void onSubscribed() {}
-
-  /// Called when an error is fired in the stream
-  void onError(error) {}
 
   void onCancel() {}
 
@@ -548,7 +538,7 @@ class StreamData<T> extends _SingleDataSourceGetController<T> {
   Function? onSubscribed;
 
   /// Called when an error is placed on the stream
-  Function? onError;
+  Function? _onError;
 
   /// Called when the stream is cancelled
   Function? onCancel;
@@ -563,10 +553,10 @@ class StreamData<T> extends _SingleDataSourceGetController<T> {
     this.stream, {
     this.onData,
     this.onSubscribed,
-    this.onError,
+    Function? onError,
     this.onCancel,
     this.transformData,
-  });
+  }) : _onError = onError;
 
   late StreamSubscription _streamSubscription;
 
@@ -592,7 +582,7 @@ class StreamData<T> extends _SingleDataSourceGetController<T> {
       onError: (error) {
         setError(error);
         _data = null;
-        onError!(error);
+        _onError!(error);
         update();
       },
     );

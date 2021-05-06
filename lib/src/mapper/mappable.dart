@@ -18,13 +18,13 @@ abstract class Mappable with Comparable<Mappable> {
 
   void mapping(Mapper map);
 
-  Map<String, dynamic>? toJson() {
-    return Mapper().toJson(this);
-  }
+  void map() => mapping(Mapper());
 
-  String toJsonString() {
-    return json.encode(this.toJson());
-  }
+  void remap() => mapping(Mapper.fromJson(toJson() ?? {}));
+
+  Map<String, dynamic>? toJson() => Mapper().toJson(this);
+
+  String toJsonString() => json.encode(this.toJson());
 
   List<Function> get builders;
 

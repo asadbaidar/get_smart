@@ -18,10 +18,10 @@ class HomePage extends StatelessWidget {
               onRefresh: model.refreshData,
               child: ListView.separated(
                 itemCount: dataSet.length,
-                separatorBuilder: (_, __) => AppTileSeparator(),
+                separatorBuilder: (_, __) => GetTileSeparator(),
                 itemBuilder: (_, index) {
                   final data = dataSet[index];
-                  return AppTile.simple(
+                  return GetTile.simple(
                     leading: Text(data.id),
                     title: data.description,
                     color: data.color,

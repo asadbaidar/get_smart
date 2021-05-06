@@ -47,11 +47,14 @@ class GetTileData extends GetObject {
   bool get hasSubTiles => subTiles.isNotEmpty == true;
 
   @override
+  String get description => title ?? "";
+
+  @override
   Color get color => _color ?? title?.materialAccent ?? super.color;
 }
 
-class AppTile extends StatelessWidget {
-  const AppTile({
+class GetTile extends StatelessWidget {
+  const GetTile.detailed({
     this.leading,
     this.title,
     this.subtitle,
@@ -79,35 +82,7 @@ class AppTile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  const AppTile.detailed({
-    this.leading,
-    this.title,
-    this.subtitle,
-    this.trailingTop,
-    this.trailingBottom,
-    this.accessory,
-    this.rows,
-    this.color,
-    this.background,
-    this.isLeadingBoxed = true,
-    this.isDetailed = true,
-    this.padAccessory,
-    this.showAccessory,
-    this.tintAccessory,
-    this.tintAble,
-    this.destructive,
-    this.enabled,
-    this.density,
-    this.horizontalPadding,
-    this.verticalPadding,
-    this.topPadding,
-    this.bottomPadding,
-    this.onTap,
-    this.onTapLeading,
-    Key? key,
-  }) : super(key: key);
-
-  const AppTile.simple({
+  const GetTile.simple({
     this.leading,
     this.title,
     this.subtitle,
@@ -135,7 +110,7 @@ class AppTile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  const AppTile.simpleDense({
+  const GetTile.simpleDense({
     this.leading,
     this.title,
     this.subtitle,
@@ -163,7 +138,7 @@ class AppTile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  const AppTile.plain({
+  const GetTile.plain({
     this.leading,
     this.title,
     this.subtitle,
@@ -296,8 +271,8 @@ class AppTile extends StatelessWidget {
   }
 }
 
-class AppTileRow extends StatelessWidget {
-  const AppTileRow({
+class GetTileRow extends StatelessWidget {
+  const GetTileRow({
     this.leading,
     this.text,
     this.hint,
@@ -311,7 +286,7 @@ class AppTileRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  const AppTileRow.standalone({
+  const GetTileRow.standalone({
     this.leading,
     this.text,
     this.hint,
@@ -381,19 +356,19 @@ class AppTileRow extends StatelessWidget {
 
 enum SeparatorStyle { full, padIcon, noIcon }
 
-class AppTileSeparator extends StatelessWidget {
-  const AppTileSeparator({
+class GetTileSeparator extends StatelessWidget {
+  const GetTileSeparator({
     this.margin,
     this.style = SeparatorStyle.padIcon,
     Key? key,
   }) : super(key: key);
 
-  const AppTileSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
+  const GetTileSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
 
-  const AppTileSeparator.noIcon({Key? key})
+  const GetTileSeparator.noIcon({Key? key})
       : this(style: SeparatorStyle.noIcon);
 
-  const AppTileSeparator.padIcon({Key? key})
+  const GetTileSeparator.padIcon({Key? key})
       : this(style: SeparatorStyle.padIcon);
 
   final double? margin;
@@ -403,7 +378,7 @@ class AppTileSeparator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Ink(
       color: Get.theme.backgroundColor,
-      child: AppLineSeparator(
+      child: GetLineSeparator(
         margin: margin,
         style: style,
       ),
@@ -411,19 +386,19 @@ class AppTileSeparator extends StatelessWidget {
   }
 }
 
-class AppLineSeparator extends StatelessWidget {
-  const AppLineSeparator({
+class GetLineSeparator extends StatelessWidget {
+  const GetLineSeparator({
     this.margin,
     this.style = SeparatorStyle.padIcon,
     Key? key,
   }) : super(key: key);
 
-  const AppLineSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
+  const GetLineSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
 
-  const AppLineSeparator.noIcon({Key? key})
+  const GetLineSeparator.noIcon({Key? key})
       : this(style: SeparatorStyle.noIcon);
 
-  const AppLineSeparator.padIcon({Key? key})
+  const GetLineSeparator.padIcon({Key? key})
       : this(style: SeparatorStyle.padIcon);
 
   final double? margin;
@@ -446,8 +421,8 @@ class AppLineSeparator extends StatelessWidget {
   }
 }
 
-class AppTileHeader extends StatelessWidget {
-  const AppTileHeader({
+class GetTileHeader extends StatelessWidget {
+  const GetTileHeader({
     this.text,
     this.topSeparator = true,
     this.bottomSeparator = true,
@@ -456,23 +431,32 @@ class AppTileHeader extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  const AppTileHeader.dense({
+  const GetTileHeader.dense({
     this.text,
     this.topSeparator = true,
     this.bottomSeparator = true,
+    this.padding = 16,
     this.noIcon = true,
     Key? key,
-  })  : padding = 16,
-        super(key: key);
+  }) : super(key: key);
 
-  const AppTileHeader.noTop({
+  const GetTileHeader.noTop({
     this.text,
+    this.topSeparator = false,
+    this.bottomSeparator = true,
+    this.padding,
+    this.noIcon,
+    Key? key,
+  }) : super(key: key);
+
+  const GetTileHeader.noTopIcon({
+    this.text,
+    this.topSeparator = false,
     this.bottomSeparator = true,
     this.padding,
     this.noIcon = true,
     Key? key,
-  })  : topSeparator = false,
-        super(key: key);
+  }) : super(key: key);
 
   final String? text;
   final bool topSeparator;
@@ -485,7 +469,7 @@ class AppTileHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (topSeparator) AppTileSeparator(style: SeparatorStyle.full),
+        if (topSeparator) GetTileSeparator(style: SeparatorStyle.full),
         Container(
           padding: EdgeInsets.only(
             left: noIcon == true ? 16 : 24,
@@ -498,7 +482,7 @@ class AppTileHeader extends StatelessWidget {
             style: Get.textTheme.caption,
           ),
         ),
-        if (bottomSeparator) AppTileSeparator(style: SeparatorStyle.full),
+        if (bottomSeparator) GetTileSeparator(style: SeparatorStyle.full),
       ],
     );
   }
@@ -715,8 +699,8 @@ class MessageView extends StatelessWidget {
   }
 }
 
-class DismissibleX extends StatefulWidget {
-  DismissibleX({
+class GetDismissible extends StatefulWidget {
+  GetDismissible({
     this.enabled,
     this.direction,
     this.onDismissed,
@@ -730,10 +714,10 @@ class DismissibleX extends StatefulWidget {
   final Widget? child;
 
   @override
-  _DismissibleXState createState() => _DismissibleXState();
+  _GetDismissibleState createState() => _GetDismissibleState();
 }
 
-class _DismissibleXState extends State<DismissibleX> {
+class _GetDismissibleState extends State<GetDismissible> {
   var dismissed = false;
 
   @override
@@ -900,7 +884,7 @@ class ProgressSnackBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SnackBarX(
+    return GetSnackBar(
       message: status == GetStatus.busy
           ? GetText.busy()
           : status == GetStatus.failed
@@ -925,8 +909,8 @@ class ProgressSnackBar extends StatelessWidget {
   }
 }
 
-class SnackBarX extends StatelessWidget {
-  const SnackBarX({
+class GetSnackBar extends StatelessWidget {
+  const GetSnackBar({
     this.message,
     this.action,
     this.onAction,
@@ -951,7 +935,7 @@ class SnackBarX extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          DismissibleX(
+          GetDismissible(
             enabled: isDismissible,
             direction: DismissDirection.down,
             onDismissed: (direction) => onDismiss?.call(),
@@ -961,7 +945,7 @@ class SnackBarX extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Stack(children: [
-                    AppLineSeparator(style: SeparatorStyle.full),
+                    GetLineSeparator(style: SeparatorStyle.full),
                     if (showProgress) LinearProgress(),
                   ]),
                   GetBar(
@@ -1012,7 +996,7 @@ class BottomBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         CrossFade(firstChild: topChild),
-        if (topChild == null) AppLineSeparator(style: SeparatorStyle.full),
+        if (topChild == null) GetLineSeparator(style: SeparatorStyle.full),
         if (visible)
           BottomAppBar(
             child: SafeArea(
@@ -1087,7 +1071,7 @@ extension GlobalKeyX<T extends State<StatefulWidget>> on GlobalKey<T> {
 
   Widget? get widget => currentWidget;
 
-  T? get state => state;
+  T? get state => currentState;
 }
 
 abstract class GetShimmer {
@@ -1421,8 +1405,8 @@ extension GetBoxDecoration on BoxDecoration {
 ///
 ///  * [WidgetsBindingObserver], for a mechanism to observe the lifecycle state
 ///    from the widgets layer.
-class AppLifecycle extends StatefulWidget {
-  const AppLifecycle({
+class GetAppLifecycle extends StatefulWidget {
+  const GetAppLifecycle({
     this.onResume,
     this.onPaused,
     this.onInactive,
@@ -1468,10 +1452,10 @@ class AppLifecycle extends StatefulWidget {
   final void Function()? onDetached;
 
   @override
-  _AppLifecycleState createState() => _AppLifecycleState();
+  _GetAppLifecycleState createState() => _GetAppLifecycleState();
 }
 
-class _AppLifecycleState extends State<AppLifecycle>
+class _GetAppLifecycleState extends State<GetAppLifecycle>
     with WidgetsBindingObserver {
   @override
   void initState() {

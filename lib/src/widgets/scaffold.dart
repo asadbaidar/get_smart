@@ -124,7 +124,7 @@ class GetScaffold extends StatelessWidget {
   Widget get _body => Stack(children: [
         sliver ?? (showScrollbar == true ? Scrollbar(child: _child) : _child),
         if (!_isInteractive) Clickable(),
-        AppLifecycle(onDetached: Get.context!.endEditing),
+        GetAppLifecycle(onDetached: Get.context!.endEditing),
         ...childrenAtFront ?? [],
       ]);
 

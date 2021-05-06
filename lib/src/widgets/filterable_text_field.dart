@@ -120,7 +120,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   State<StatefulWidget> createState() => GetFilterableTextFieldState<T>(
         itemSubmitted: itemSubmitted,
         itemBuilder: itemBuilder ??
-            ((_, data, onTap) => AppTile.simpleDense(
+            ((_, data, onTap) => GetTile.simpleDense(
                   title: data.toString(),
                   onTap: onTap,
                 )),

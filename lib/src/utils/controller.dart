@@ -25,31 +25,32 @@ abstract class GetController extends MultipleFutureGetController {
     _initialiseData();
     // We set busy manually as well because when notify listeners is called
     // to clear error messages, ui is rebuilt and busy is not true.
+    clearErrors();
     setBusy(true);
     update();
 
     for (var key in futuresMap.keys) {
-      runBusyFuture(
+      runErrorFuture(
         futuresMap[key]!(),
         key: key,
         throwException: true,
-      ).then((futureData) {
-        setDataFor(key, futureData);
-        setBusyFor(key, false);
+      ).then((result) {
+        setDataFor(key, result);
+        if (key != typeName) setBusyFor(key, false);
+        if (result is GetResult && result.error != null)
+          setErrorFor(typeName, result.error);
         update();
         onData(key);
         _incrementAndCheckFuturesCompleted();
       }).catchError((error) {
         setErrorFor(key, error);
-        setBusyFor(key, false);
-        onError(key: key, error: error);
+        if (key != typeName) setBusyFor(key, false);
+        onError(key, error);
         update();
         _incrementAndCheckFuturesCompleted();
       });
     }
-
     changeSource = false;
-
     return _futuresCompleter.future;
   }
 
@@ -58,6 +59,7 @@ abstract class GetController extends MultipleFutureGetController {
     if (_futuresCompleted == futuresMap.length &&
         !_futuresCompleter.isCompleted) {
       _futuresCompleter.complete();
+      setBusy(false);
       onDataReady();
     }
   }
@@ -377,12 +379,14 @@ abstract class GetController extends MultipleFutureGetController {
     final _key = key ?? typeName;
     try {
       final result = await future;
-      if (result is GetResult && result.error != null)
+      if (result is GetResult && result.error != null) {
         setErrorFor(_key, result.error);
+        onError(_key, result.error);
+      }
       return result;
     } catch (e) {
       setErrorFor(_key, e);
-      onFutureError(e, _key);
+      onError(e, _key);
       if (throwException) rethrow;
       return GetResult();
     }

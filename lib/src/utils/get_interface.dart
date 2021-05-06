@@ -43,9 +43,5 @@ extension GetInterfaceX on GetInterface {
     }
   }
 
-  /// Deprecated method. Please use [$find] instead.
-  @Deprecated("Please use `Get.\$find` instead.")
-  S? find<S>({String? tag}) => null;
-
   MaterialLocalizations get localization => MaterialLocalizations.of(context!);
 }
