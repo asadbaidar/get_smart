@@ -151,6 +151,11 @@ class GetTheme {
         isDark ? primaryBackgroundDark : primaryBackgroundLight;
     final _bottomBackground =
         isDarkBottom ? bottomBackgroundDark : bottomBackgroundLight;
+    var _primaryIconTheme = IconThemeData(
+      color: primaryIconTheme?.color ?? _primaryForeground,
+      opacity: primaryIconTheme?.opacity,
+      size: primaryIconTheme?.size ?? 24.0,
+    );
     return ThemeData(
       brightness: _brightness,
       backgroundColor: isDark ? backgroundDark : backgroundLight,
@@ -160,11 +165,7 @@ class GetTheme {
       accentColor: _accentColor,
       hintColor: theme.hintColor.hinted,
       primaryColorBrightness: _primaryBrightness,
-      primaryIconTheme: IconThemeData(
-        color: primaryIconTheme?.color ?? _primaryForeground,
-        opacity: primaryIconTheme?.opacity,
-        size: primaryIconTheme?.size ?? 24.0,
-      ),
+      primaryIconTheme: _primaryIconTheme,
       iconTheme: IconThemeData(
         color: _accentColor,
         size: 24.0,
@@ -236,6 +237,8 @@ class GetTheme {
           color: _primaryBackground.contrast.actioned,
         ),
         foregroundColor: _primaryBackground.contrast,
+        iconTheme: _primaryIconTheme,
+        actionsIconTheme: _primaryIconTheme,
         backwardsCompatibility: false,
       ),
       bottomAppBarTheme: BottomAppBarTheme(
