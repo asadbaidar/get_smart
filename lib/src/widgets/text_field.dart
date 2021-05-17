@@ -46,7 +46,7 @@ class GetTextField extends StatelessWidget {
     this.obscuringCharacter = "•",
     this.smartDashesType,
     this.smartQuotesType,
-    this.maxLengthEnforcement = true,
+    this.maxLengthEnforcement,
     this.onEditingComplete,
     this.enabled = true,
     this.cursorWidth = 2.0,
@@ -100,122 +100,121 @@ class GetTextField extends StatelessWidget {
     this.border,
     this.semanticCounterText,
     this.alignLabelWithHint,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   /// If provided, it disables any explicit [controller].
-  final String initialText;
+  final String? initialText;
 
   /// Controlled by implicit controller and only effective if [initialText]
   /// and [controller] are not provided.
-  final String controlledText;
+  final String? controlledText;
 
   /// To make it effective, don't provide [initialText].
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
-  final TextInputType keyboardType;
-  final AutovalidateMode autovalidateMode;
-  final List<TextInputFormatter> inputFormatters;
-  final TextInputAction textInputAction;
-  final FocusNode focusNode;
-  final Function onTap;
-  final void Function(String v) onSubmitted;
-  final void Function(String v) onSaved;
-  final void Function(String v) onChanged;
-  final String Function(String v) validator;
+  final TextInputType? keyboardType;
+  final AutovalidateMode? autovalidateMode;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
+  final Function? onTap;
+  final void Function(String v)? onSubmitted;
+  final void Function(String? v)? onSaved;
+  final void Function(String v)? onChanged;
+  final String? Function(String? v)? validator;
   final bool autoControlled;
-  final bool readOnly;
+  final bool? readOnly;
   final bool tapOnly;
-  final bool validateLength;
+  final bool? validateLength;
   final bool validateEmpty;
-  final bool showCounter;
-  final bool isDense;
-  final bool filled;
-  final bool obscureText;
-  final bool enableSuggestions;
-  final int maxLength;
-  final int minLines;
+  final bool? showCounter;
+  final bool? isDense;
+  final bool? filled;
+  final bool? obscureText;
+  final bool? enableSuggestions;
+  final int? maxLength;
+  final int? minLines;
   final int maxLines;
-  final EdgeInsets margin;
-  final EdgeInsets padding;
-  final Color background;
+  final EdgeInsets? margin;
+  final EdgeInsets? padding;
+  final Color? background;
   final TextCapitalization textCapitalization;
-  final TextStyle style;
+  final TextStyle? style;
   final TextAlign textAlign;
-  final TextAlignVertical textAlignVertical;
+  final TextAlignVertical? textAlignVertical;
   final bool autofocus;
   final bool expands;
-  final ToolbarOptions toolbarOptions;
-  final bool showCursor;
+  final ToolbarOptions? toolbarOptions;
+  final bool? showCursor;
   final String obscuringCharacter;
-  final SmartDashesType smartDashesType;
-  final SmartQuotesType smartQuotesType;
-  final bool maxLengthEnforcement;
-  final VoidCallback onEditingComplete;
+  final SmartDashesType? smartDashesType;
+  final SmartQuotesType? smartQuotesType;
+  final MaxLengthEnforcement? maxLengthEnforcement;
+  final VoidCallback? onEditingComplete;
   final bool enabled;
   final double cursorWidth;
-  final double cursorHeight;
-  final Radius cursorRadius;
-  final Color cursorColor;
-  final Brightness keyboardBrightness;
+  final double? cursorHeight;
+  final Radius? cursorRadius;
+  final Color? cursorColor;
+  final Brightness? keyboardBrightness;
   final EdgeInsets scrollPadding;
   final bool enableInteractiveSelection;
-  final TextSelectionControls selectionControls;
-  final InputCounterWidgetBuilder buildCounter;
-  final ScrollPhysics scrollPhysics;
-  final Iterable<String> autofillHints;
-  final String label;
-  final String hint;
-  final String error;
-  final String helper;
-  final Widget hintIcon;
-  final Widget prefix;
-  final Widget suffix;
-  final Widget icon;
-  final TextStyle labelStyle;
-  final TextStyle helperStyle;
-  final int helperMaxLines;
-  final TextStyle hintStyle;
-  final int hintMaxLines;
-  final TextStyle errorStyle;
-  final int errorMaxLines;
+  final TextSelectionControls? selectionControls;
+  final InputCounterWidgetBuilder? buildCounter;
+  final ScrollPhysics? scrollPhysics;
+  final Iterable<String>? autofillHints;
+  final String? label;
+  final String? hint;
+  final String? error;
+  final String? helper;
+  final Widget? hintIcon;
+  final Widget? prefix;
+  final Widget? suffix;
+  final Widget? icon;
+  final TextStyle? labelStyle;
+  final TextStyle? helperStyle;
+  final int? helperMaxLines;
+  final TextStyle? hintStyle;
+  final int? hintMaxLines;
+  final TextStyle? errorStyle;
+  final int? errorMaxLines;
   final FloatingLabelBehavior floatingLabelBehavior;
   final bool isCollapsed;
-  final EdgeInsetsGeometry contentPadding;
-  final Widget prefixIcon;
-  final BoxConstraints prefixIconConstraints;
-  final String prefixText;
-  final TextStyle prefixStyle;
-  final Widget suffixIcon;
-  final String suffixText;
-  final TextStyle suffixStyle;
-  final BoxConstraints suffixIconConstraints;
-  final Widget counter;
-  final String counterText;
-  final TextStyle counterStyle;
-  final Color fillColor;
-  final Color focusColor;
-  final Color hoverColor;
-  final InputBorder errorBorder;
-  final InputBorder focusedBorder;
-  final InputBorder focusedErrorBorder;
-  final InputBorder disabledBorder;
-  final InputBorder enabledBorder;
-  final InputBorder border;
-  final String semanticCounterText;
-  final bool alignLabelWithHint;
+  final EdgeInsetsGeometry? contentPadding;
+  final Widget? prefixIcon;
+  final BoxConstraints? prefixIconConstraints;
+  final String? prefixText;
+  final TextStyle? prefixStyle;
+  final Widget? suffixIcon;
+  final String? suffixText;
+  final TextStyle? suffixStyle;
+  final BoxConstraints? suffixIconConstraints;
+  final Widget? counter;
+  final String? counterText;
+  final TextStyle? counterStyle;
+  final Color? fillColor;
+  final Color? focusColor;
+  final Color? hoverColor;
+  final InputBorder? errorBorder;
+  final InputBorder? focusedBorder;
+  final InputBorder? focusedErrorBorder;
+  final InputBorder? disabledBorder;
+  final InputBorder? enabledBorder;
+  final InputBorder? border;
+  final String? semanticCounterText;
+  final bool? alignLabelWithHint;
 
   String get _hint => hint ?? label?.lowercase ?? GetText.value().lowercase;
 
-  String Function(String v) get _validator =>
-      validator != null ? validator : (v) => null;
+  String? Function(String? v) get _validator =>
+      validator != null ? validator! : (v) => null;
 
-  bool get _readOnly =>
-      readOnly == true || ((tapOnly ?? true) && onTap != null);
+  bool get _readOnly => readOnly == true || (tapOnly && onTap != null);
 
   bool get _obscureText => obscureText == true;
 
-  String _tryValidator(String v) {
+  String? _tryValidator(String? v) {
     try {
       return _validator(v);
     } catch (_) {
@@ -223,11 +222,11 @@ class GetTextField extends StatelessWidget {
     }
   }
 
-  String _validate(String v) =>
+  String? _validate(String? v) =>
       _tryValidator(v) ??
-      (validateEmpty == true && v.isEmpty
+      (validateEmpty == true && v!.isEmpty
           ? GetText.please_enter([_hint])
-          : validateLength == true && v.length != maxLength
+          : validateLength == true && v!.length != maxLength
               ? GetText.invalid([_hint])
               : null);
 
@@ -237,10 +236,10 @@ class GetTextField extends StatelessWidget {
           ? AutovalidateMode.always
           : AutovalidateMode.onUserInteraction);
 
-  TextEditingController get _controller => initialText != null
+  TextEditingController? get _controller => initialText != null
       ? null
       : controller ??
-          (autoControlled ?? true
+          (autoControlled
               ? TextEditingController.fromValue(
                   TextEditingValue(
                     text: controlledText ?? "",
@@ -253,11 +252,11 @@ class GetTextField extends StatelessWidget {
 
   String get _text => initialText ?? _controller?.text ?? "";
 
-  Widget _prefix(BuildContext context) => prefix != null || hintIcon != null
+  Widget? _prefix(BuildContext context) => prefix != null || hintIcon != null
       ? Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (prefix != null) prefix,
+            if (prefix != null) prefix!,
             if (hintIcon != null)
               Padding(
                 padding: const EdgeInsets.only(right: 6),
@@ -266,7 +265,7 @@ class GetTextField extends StatelessWidget {
                     size: 16,
                     color: context.theme.hintColor,
                   ),
-                  child: hintIcon,
+                  child: hintIcon!,
                 ),
               ),
           ],
@@ -295,29 +294,29 @@ class GetTextField extends StatelessWidget {
           maxLines: maxLines,
           onSaved: onSaved,
           validator: _validate,
-          onTap: readOnly == true ? null : onTap,
+          onTap: readOnly == true ? null : onTap as void Function()?,
           onChanged: onChanged,
           onFieldSubmitted: onSubmitted,
-          textCapitalization: textCapitalization ?? TextCapitalization.none,
+          textCapitalization: textCapitalization,
           style: style,
-          textAlign: textAlign ?? TextAlign.start,
-          autofocus: autofocus ?? false,
-          expands: expands ?? false,
+          textAlign: textAlign,
+          autofocus: autofocus,
+          expands: expands,
           toolbarOptions: toolbarOptions,
           showCursor: showCursor,
-          obscuringCharacter: obscuringCharacter ?? "•",
+          obscuringCharacter: obscuringCharacter,
           smartDashesType: smartDashesType,
           smartQuotesType: smartQuotesType,
-          //maxLengthEnforced: maxLengthEnforcement ?? true,
+          maxLengthEnforcement: maxLengthEnforcement,
           onEditingComplete: onEditingComplete,
-          enabled: enabled ?? true,
-          cursorWidth: cursorWidth ?? 2.0,
+          enabled: enabled,
+          cursorWidth: cursorWidth,
           cursorHeight: cursorHeight,
           cursorRadius: cursorRadius,
           cursorColor: cursorColor,
           keyboardAppearance: keyboardBrightness,
-          scrollPadding: scrollPadding ?? const EdgeInsets.all(20.0),
-          enableInteractiveSelection: enableInteractiveSelection ?? true,
+          scrollPadding: scrollPadding,
+          enableInteractiveSelection: enableInteractiveSelection,
           selectionControls: selectionControls,
           buildCounter: buildCounter,
           scrollPhysics: scrollPhysics,
@@ -340,9 +339,8 @@ class GetTextField extends StatelessWidget {
             hintStyle: hintStyle,
             hintMaxLines: hintMaxLines,
             errorStyle: errorStyle,
-            floatingLabelBehavior:
-                floatingLabelBehavior ?? FloatingLabelBehavior.auto,
-            isCollapsed: isCollapsed ?? false,
+            floatingLabelBehavior: floatingLabelBehavior,
+            isCollapsed: isCollapsed,
             contentPadding: contentPadding,
             prefixIcon: prefixIcon,
             prefixIconConstraints: prefixIconConstraints,

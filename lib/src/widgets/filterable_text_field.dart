@@ -4,11 +4,11 @@ import 'package:get_smart/get_smart.dart';
 import 'package:get_smart/src/widgets/text_field.dart';
 
 typedef Widget GetFilterItemBuilder<T>(
-    BuildContext context, T data, Function onTap);
+    BuildContext context, T data, void Function() onTap);
 
 typedef bool Filter<T>(T data, String query);
 
-typedef InputEventCallback<T>(T data);
+typedef ItemSubmitted<T>(T data);
 
 typedef StringCallback(String data);
 
@@ -16,23 +16,23 @@ typedef StringCallback(String data);
 /// the list options to select from and filtering based on text entered.
 class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   /// Callback to filter item: return true or false depending on input text
-  final Filter<T> itemFilter;
+  final Filter<T>? itemFilter;
 
   /// Callback to sort items in the form (a of type <T>, b of type <T>)
-  final Comparator<T> itemSorter;
+  final Comparator<T>? itemSorter;
 
   /// Callback on input text changed, this is a string
-  final StringCallback textChanged;
+  final StringCallback? textChanged;
 
   /// Callback on input text submitted, this is also a string
-  final StringCallback textSubmitted;
-  final ValueSetter<bool> onFocusChanged;
+  final StringCallback? textSubmitted;
+  final ValueSetter<bool>? onFocusChanged;
 
   /// Callback on item selected, this is the item selected of type <T>
-  final InputEventCallback<T> itemSubmitted;
+  final ItemSubmitted<T?> itemSubmitted;
 
   /// Callback to build each item, return a Widget
-  final GetFilterItemBuilder<T> itemBuilder;
+  final GetFilterItemBuilder<T>? itemBuilder;
 
   /// The amount of suggestions to show, larger values will go in ListView
   final int itemCount;
@@ -61,28 +61,28 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   /// Don't accept simple text, only suggestion item
   final bool onlyAcceptItem;
 
-  final List<TextInputFormatter> inputFormatters;
+  final List<TextInputFormatter>? inputFormatters;
   final int minLength;
   final bool readOnly;
   final bool validateEmpty;
 
-  final TextStyle style;
+  final TextStyle? style;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
   final TextCapitalization textCapitalization;
   final TextEditingController controller;
   final FocusNode focusNode;
-  final FocusNode nextFocusNode;
+  final FocusNode? nextFocusNode;
 
   /// Suggestions that will be displayed
-  final List<T> items;
-  final String label;
-  final String helper;
-  final String error;
+  final List<T>? items;
+  final String? label;
+  final String? helper;
+  final String? error;
 
   GetFilterableTextField({
-    @required this.key,
-    @required this.itemSubmitted,
+    required this.key,
+    required this.itemSubmitted,
     this.items,
     this.itemBuilder,
     this.itemSorter,
@@ -109,8 +109,8 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
     this.minLength = 0,
     this.readOnly = false,
     this.validateEmpty = false,
-    TextEditingController controller,
-    FocusNode focusNode,
+    TextEditingController? controller,
+    FocusNode? focusNode,
     this.nextFocusNode,
   })  : this.focusNode = focusNode ?? FocusNode(),
         this.controller = controller ?? TextEditingController(),
@@ -120,10 +120,10 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   State<StatefulWidget> createState() => GetFilterableTextFieldState<T>(
         itemSubmitted: itemSubmitted,
         itemBuilder: itemBuilder ??
-            (_, data, onTap) => AppTile.simpleDense(
+            ((_, data, onTap) => GetTile.simpleDense(
                   title: data.toString(),
                   onTap: onTap,
-                ),
+                )),
         itemSorter: itemSorter ?? (a, b) => a.compareTo(b),
         itemFilter: disableFiltering == true
             ? (_, __) => true
@@ -135,35 +135,35 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
 class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   final LayerLink _layerLink = LayerLink();
 
-  InputEventCallback<T> itemSubmitted;
+  ItemSubmitted<T?> itemSubmitted;
   GetFilterItemBuilder<T> itemBuilder;
   Comparator<T> itemSorter;
   Filter<T> itemFilter;
 
   GetFilterableTextFieldState({
-    this.itemSubmitted,
-    this.itemBuilder,
-    this.itemSorter,
-    this.itemFilter,
+    required this.itemSubmitted,
+    required this.itemBuilder,
+    required this.itemSorter,
+    required this.itemFilter,
   });
 
-  List<T> _items;
+  List<T>? _items;
 
-  List<T> get items => _items ?? widget.items ?? [];
+  List<T> get items => _items ?? widget.items?.cast() ?? [];
 
-  String _error;
+  String? _error;
 
-  String get error => _error ?? widget.error;
+  String? get error => _error ?? widget.error;
 
-  String get helper => widget.helper;
+  String? get helper => widget.helper;
 
-  String get label => widget.label;
+  String? get label => widget.label;
 
-  StringCallback get textChanged => widget.textChanged;
+  StringCallback? get textChanged => widget.textChanged;
 
-  StringCallback get textSubmitted => widget.textSubmitted;
+  StringCallback? get textSubmitted => widget.textSubmitted;
 
-  ValueSetter<bool> get onFocusChanged => widget.onFocusChanged;
+  ValueSetter<bool>? get onFocusChanged => widget.onFocusChanged;
 
   int get itemCount => widget.itemCount;
 
@@ -187,11 +187,11 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   bool get validateEmpty => widget.validateEmpty;
 
-  List<TextInputFormatter> get inputFormatters => widget.inputFormatters;
+  List<TextInputFormatter>? get inputFormatters => widget.inputFormatters;
 
   TextCapitalization get textCapitalization => widget.textCapitalization;
 
-  TextStyle get style => widget.style;
+  TextStyle? get style => widget.style;
 
   TextInputType get keyboardType => widget.keyboardType;
 
@@ -201,23 +201,21 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   FocusNode get focusNode => widget.focusNode;
 
-  FocusNode get nextFocusNode => widget.nextFocusNode;
+  FocusNode? get nextFocusNode => widget.nextFocusNode;
 
-  OverlayEntry itemsOverlayEntry;
+  OverlayEntry? itemsOverlayEntry;
   List<T> filteredItems = [];
   String currentText = "";
 
   void initState() {
     super.initState();
-    if (this.controller != null && this.controller.text != null) {
-      currentText = this.controller.text;
-    }
+    currentText = controller.text;
   }
 
   void focusListener() {
     print("Focus ${focusNode.hasFocus}");
     if (onFocusChanged != null) {
-      onFocusChanged(focusNode.hasFocus);
+      onFocusChanged!(focusNode.hasFocus);
     }
     if (!focusNode.hasFocus) {
       triggerItemSubmitted();
@@ -225,30 +223,27 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
       currentText = "";
       filteredItems = [];
       updateOverlay();
-    } else if (!(currentText == "" || currentText == null)) {
+    } else if (currentText.isNotEmpty) {
       updateOverlay(query: currentText, withoutFilter: showAllOnFocus);
     }
   }
 
-  bool get isTextEmpty {
-    final text = controller?.text?.trim();
-    return text == null || text.isEmpty;
-  }
+  bool get isTextEmpty => controller.text.trim().isEmpty;
 
   void removeError({bool focus: false}) {
     if (error != null) setError(null, focus: focus);
   }
 
-  void setError(String errorText, {bool focus: false}) {
+  void setError(String? errorText, {bool focus: false}) {
     setState(() => _error = errorText);
-    if (focus) focusNode?.requestFocus();
+    if (focus) focusNode.requestFocus();
   }
 
   void triggerSubmitted([submittedText]) {
     if (textSubmitted != null)
       submittedText == null
-          ? textSubmitted(currentText)
-          : textSubmitted(submittedText);
+          ? textSubmitted!(currentText)
+          : textSubmitted!(submittedText);
 
     triggerItemSubmitted();
 
@@ -257,15 +252,15 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     }
 
     if (textInputAction == TextInputAction.next)
-      focusNode?.forward(to: nextFocusNode);
+      focusNode.forward(to: nextFocusNode);
   }
 
   void triggerItemSubmitted() {
     if (!readOnly &&
         onlyAcceptItem &&
         !filteredItems.map((it) => it.toString()).contains(controller.text)) {
-      var item = filteredItems?.takeFirst;
-      controller.text = item?.toString();
+      var item = filteredItems.$first;
+      controller.text = item?.toString() ?? "";
       if (item == null)
         clear();
       else
@@ -299,7 +294,8 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     updateOverlay(query: currentText);
   }
 
-  Future<void> updateOverlay({String query, bool withoutFilter = false}) async {
+  Future<void> updateOverlay(
+      {String? query, bool withoutFilter = false}) async {
     if (!mounted) return;
     print("updateOverlay NoFilter $withoutFilter Focus ${focusNode.hasFocus}");
     filteredItems = withoutFilter == true
@@ -330,7 +326,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
                     itemCount: filteredItems.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      final item = filteredItems[index];
+                      final item = filteredItems[index]!;
                       return Row(children: [
                         Expanded(
                           child: itemBuilder(
@@ -347,7 +343,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
                               } else {
                                 String newText = item.toString();
                                 controller.text = newText;
-                                textChanged(newText);
+                                textChanged!(newText);
                               }
                               removeError();
                             }),
@@ -362,10 +358,10 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
           ),
         );
       });
-      Overlay.of(context).insert(itemsOverlayEntry);
+      Overlay.of(context)!.insert(itemsOverlayEntry!);
     }
 
-    itemsOverlayEntry.markNeedsBuild();
+    itemsOverlayEntry!.markNeedsBuild();
   }
 
   Future<List<T>> getItems(
@@ -373,7 +369,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     Comparator<T> sorter,
     Filter<T> filter,
     int maxAmount,
-    String query,
+    String? query,
   ) =>
       scheduleTask(() {
         if (query == null || query.length < minLength) {
@@ -402,8 +398,8 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   @override
   void dispose() {
     print("$runtimeType dispose");
-    focusNode?.dispose();
-    controller?.dispose();
+    focusNode.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -433,7 +429,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
           currentText = v;
           print("onChanged");
           updateOverlay(query: v);
-          if (textChanged != null) textChanged(v);
+          if (textChanged != null) textChanged!(v);
           removeError();
         },
         onTap: () => updateOverlay(
@@ -445,3 +441,60 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     );
   }
 }
+
+/*
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: RawAutocomplete<Alphabet>(
+                  optionsBuilder: (TextEditingValue textEditingValue) =>
+                      dataSet.where((option) =>
+                          option.containsIgnoreCase(textEditingValue.text)),
+                  onSelected: (selection) =>
+                      model.autocompleteSelection = selection,
+                  fieldViewBuilder:
+                      (context, controller, focusNode, onFieldSubmitted) {
+                    return TextFormField(
+                      controller: controller,
+                      decoration: const InputDecoration(
+                        hintText: 'This is a RawAutocomplete!',
+                      ),
+                      focusNode: focusNode,
+                      onFieldSubmitted: (String value) {
+                        onFieldSubmitted();
+                      },
+                      validator: (String? value) {
+                        if (dataSet.firstWhereOrNull(
+                                (option) => option.containsIgnoreCase(value)) ==
+                            null) {
+                          return 'Nothing selected.';
+                        }
+                        return null;
+                      },
+                    );
+                  },
+                  optionsViewBuilder: (context, onSelected, options) {
+                    return Container(
+                      margin: EdgeInsets.only(right: 16),
+                      padding: EdgeInsets.only(right: 16),
+                      alignment: Alignment.topLeft,
+                      child: Card(
+                        child: SizedBox(
+                          height: 250.0,
+                          child: ListView.builder(
+                            padding: const EdgeInsets.all(0),
+                            itemCount: options.length,
+                            itemBuilder: (context, int index) {
+                              final option = options.elementAt(index);
+                              return AppTile.simple(
+                                title: option.description,
+                                onTap: () => onSelected(option),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+*/

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class Responsive extends StatelessWidget {
   Responsive({
-    @required this.children,
+    required this.children,
     this.runSpacing = 0.0,
     this.alignment = WrapAlignment.start,
     this.runAlignment = WrapAlignment.start,
     this.crossAxisAlignment = WrapCrossAlignment.start,
-  }) : assert(children != null, "children shoud not be Null");
+  });
 
   final List<Widget> children;
 
@@ -86,7 +86,7 @@ class Div extends StatelessWidget {
   /// `12` ~ full width
   ///
   /// `null` / `default` ~ takes [ColS] value
-  final int colM;
+  final int? colM;
 
   /// Large screen `> 990.0`
   ///
@@ -97,7 +97,7 @@ class Div extends StatelessWidget {
   /// `12` ~ full width
   ///
   /// `null` / `default` ~  takes [ColM] value
-  final int colL;
+  final int? colL;
 
   /// input range [0 -12]
   ///
@@ -122,18 +122,17 @@ class Div extends StatelessWidget {
       {this.colS = 12,
       this.colM,
       this.colL,
-      @required this.child,
+      required this.child,
       this.offsetS = 0,
       this.offsetM = 0,
       this.offsetL = 0})
-      : assert(child != null, "child shoud not be Null"),
-        assert(colS == null || (colS >= 0 && colS <= 12)),
+      : assert(colS >= 0 && colS <= 12),
         assert(colM == null || (colM >= 0 && colM <= 12)),
         assert(colL == null || (colL >= 0 && colL <= 12)),
         assert(offsetS >= 0 && offsetS <= 11),
         assert(offsetM >= 0 && offsetM <= 11),
         assert(offsetL >= 0 && offsetL <= 11),
-        assert(colS == null || (colS + offsetS <= 12),
+        assert(colS + offsetS <= 12,
             "sum of the col and the respective offset should be less than or equal to 12"),
         assert(colM == null || (colM + offsetM <= 12),
             "sum of the col and the respective offset should be less than or equal to 12"),

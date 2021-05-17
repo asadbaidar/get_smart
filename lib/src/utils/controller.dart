@@ -7,18 +7,15 @@ abstract class GetController extends MultipleFutureGetController {
   final actionName = "action";
 
   Map<String, dynamic> get dataMap => _dataMap;
-  Map<String, dynamic> _dataMap;
+  Map<String, dynamic> _dataMap = {};
 
   Map<dynamic, Future Function()> get runnerMap => _runnerMap;
   Map<dynamic, Future Function()> _runnerMap = {};
 
-  Completer _futuresCompleter;
-  int _futuresCompleted;
+  late Completer _futuresCompleter;
+  int _futuresCompleted = 0;
 
   void _initialiseData() {
-    if (dataMap == null) {
-      _dataMap = {};
-    }
     _futuresCompleted = 0;
   }
 
@@ -28,31 +25,32 @@ abstract class GetController extends MultipleFutureGetController {
     _initialiseData();
     // We set busy manually as well because when notify listeners is called
     // to clear error messages, ui is rebuilt and busy is not true.
+    clearErrors();
     setBusy(true);
     update();
 
     for (var key in futuresMap.keys) {
-      runBusyFuture(
-        futuresMap[key](),
-        busyObject: key,
+      runErrorFuture(
+        futuresMap[key]!(),
+        key: key,
         throwException: true,
-      ).then((futureData) {
-        setDataFor(key, futureData);
-        setBusyFor(key, false);
+      ).then((result) {
+        setDataFor(key, result);
+        if (key != typeName) setBusyFor(key, false);
+        if (result is GetResult && result.error != null)
+          setErrorFor(typeName, result.error);
         update();
         onData(key);
         _incrementAndCheckFuturesCompleted();
       }).catchError((error) {
         setErrorFor(key, error);
-        setBusyFor(key, false);
-        onError(key: key, error: error);
+        if (key != typeName) setBusyFor(key, false);
+        onError(key, error);
         update();
         _incrementAndCheckFuturesCompleted();
       });
     }
-
     changeSource = false;
-
     return _futuresCompleter.future;
   }
 
@@ -61,6 +59,7 @@ abstract class GetController extends MultipleFutureGetController {
     if (_futuresCompleted == futuresMap.length &&
         !_futuresCompleter.isCompleted) {
       _futuresCompleter.complete();
+      setBusy(false);
       onDataReady();
     }
   }
@@ -82,7 +81,7 @@ abstract class GetController extends MultipleFutureGetController {
 
   @override
   Map<Object, Future Function()> get futuresMap => {
-        nameOf(GetPrefs): GetPrefs.instance.reload,
+        $name(GetPrefs): GetPrefs.instance.reload,
         typeName: futureToRun,
         ...futuresToRun,
       };
@@ -96,16 +95,13 @@ abstract class GetController extends MultipleFutureGetController {
   /// Single future to run at the startup
   Future futureToRun() => Future.value();
 
-  /// Returns true if any objects still have a busy status.
-  bool get isAnyBusy => anyObjectsBusy;
-
   /// Returns true if all objects have succeeded.
   bool get isAllSucceeded => dataMap.keys.every((k) => succeeded(k));
 
   /// Returns data for any object which did not succeed.
-  WebResponse get anyNotSucceeded =>
-      data(dataMap.keys.firstWhere((k) => !succeeded(k))) ?? WebResponse()
-        ..isSucceeded = true;
+  GetResult get anyNotSucceeded =>
+      data(dataMap.keys.firstWhereOrNull((k) => !succeeded(k)) ?? "") ??
+      GetResult.success();
 
   /// Returns the data ready status of the action if no error occurred
   bool get isActionDataReady => dataReady(actionName);
@@ -131,23 +127,27 @@ abstract class GetController extends MultipleFutureGetController {
   /// Returns the error status of action
   bool get hasActionError => hasErrorFor(actionName);
 
-  /// Returns the [WebStatus] of action
-  WebStatus get actionStatus => status(actionName);
+  /// Returns the [GetStatus] of action
+  GetStatus? get actionStatus => status(actionName);
 
   /// Returns the success status of an action
-  dynamic get actionSuccess => success(actionName);
+  String? get actionSuccess => success(actionName);
 
   /// Returns the error status of an action
-  dynamic get actionError => error(actionName);
+  String? get actionError => error(actionName);
 
   /// sets the error status of an action
   set actionError(value) => setErrorFor(actionName, value);
 
-  /// Returns the data of the action
-  WebResponse get actionData => data(actionName);
-
-  /// Sets the data of the action
-  set actionData(value) => setDataFor(actionName, value);
+  /// Sets or Returns the data of the action
+  GetResult<T>? actionData<T>([value]) {
+    if (value == null)
+      return data<T>(actionName);
+    else {
+      setDataFor(actionName, value);
+      return value;
+    }
+  }
 
   /// Returns the runner of the action
   Future Function() get actionRunner => runner(actionName);
@@ -186,7 +186,7 @@ abstract class GetController extends MultipleFutureGetController {
   bool get isBusy => busy(typeName);
 
   /// Returns the error status of the ViewModel and checks if condition valid
-  bool hasErrorOr([bool condition]) =>
+  bool hasErrorOr([bool? condition]) =>
       !isBusy && (hasError || ((condition ?? true) && isReady));
 
   /// Returns the error status of the ViewModel
@@ -195,16 +195,20 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Returns the error status of the ViewModel
   @override
-  dynamic get modelError => error(typeName);
+  String? get modelError => error(typeName);
 
   /// Sets the error for the ViewModel
   set modelError(value) => setError(value);
 
-  /// Returns the data of the ViewModel
-  WebResponse get modelData => data(typeName);
-
-  /// Sets the data for the ViewModel
-  set modelData(value) => setData(value);
+  /// Sets or Returns the data of the ViewModel
+  GetResult<T>? modelData<T>([value]) {
+    if (value == null)
+      return data<T>(typeName);
+    else {
+      setData(value);
+      return value;
+    }
+  }
 
   /// Returns the runner of the ViewModel
   Future Function() get modelRunner => runner(typeName);
@@ -224,11 +228,11 @@ abstract class GetController extends MultipleFutureGetController {
   /// Returns the status of ViewModel if failed or not
   bool get isFailed => failed(typeName);
 
-  /// Returns the [WebStatus] of the ViewModel
-  WebStatus get modelStatus => status(typeName);
+  /// Returns the [GetStatus] of the ViewModel
+  GetStatus? get modelStatus => status(typeName);
 
   /// Returns the success message of the ViewModel
-  dynamic get modelSuccess => success(typeName);
+  String? get modelSuccess => success(typeName);
 
   /// Sets the busy status for the ViewModel and calls notify listeners
   @override
@@ -262,10 +266,10 @@ abstract class GetController extends MultipleFutureGetController {
       runnerMap[key.hash] ?? () => Future.value();
 
   /// Returns the data by key
-  WebResponse data(Object key) => key == null ? null : dataMap[key.hash];
+  GetResult<T>? data<T>(Object key) => $cast<GetResult<T>>(dataMap[key.hash]);
 
   /// Returns the success message by key
-  dynamic success(Object key) => data(key)?.success;
+  String? success(Object key) => data(key)?.success;
 
   /// Returns the data ready status by key even if error occurred
   bool ready(key) => data(key) != null;
@@ -274,20 +278,20 @@ abstract class GetController extends MultipleFutureGetController {
   @override
   bool dataReady(key) => ready(key) && !hasErrorFor(key);
 
-  /// Returns the [WebStatus] by key
-  WebStatus status(key) => busy(key) ? WebStatus.busy : data(key)?.status;
+  /// Returns the [GetStatus] by key
+  GetStatus? status(key) => busy(key) ? GetStatus.busy : data(key)?.status;
 
   /// Returns the status by key if started or not
-  bool started(key) => status(key) != null && status(key) != WebStatus.canceled;
+  bool started(key) => status(key) != null && status(key) != GetStatus.canceled;
 
   /// Returns the status by key if succeeded or not
-  bool succeeded(key) => status(key) == WebStatus.succeeded;
+  bool succeeded(key) => status(key) == GetStatus.succeeded;
 
   /// Returns the status by key if busy/succeeded or not
   bool busyOrSucceeded(key) => busy(key) || succeeded(key);
 
   /// Returns the status by key if failed or not
-  bool failed(key) => status(key) == WebStatus.failed;
+  bool failed(key) => status(key) == GetStatus.failed;
 
   /// Returns the error status by key
   bool hasErrorFor(key) => error(key) != null;
@@ -322,7 +326,7 @@ abstract class GetController extends MultipleFutureGetController {
   /// rethrows [Exception] after setting busy to false by key
   Future runBusyRunner(
     Future Function() busyAction, {
-    Object key,
+    Object? key,
     bool throwException = false,
   }) {
     var _key = key ?? typeName;
@@ -330,7 +334,7 @@ abstract class GetController extends MultipleFutureGetController {
       setDataFor(_key, null);
       return await runBusyFuture(
         busyAction(),
-        busyObject: _key,
+        key: _key,
         throwException: throwException,
       );
     };
@@ -344,16 +348,16 @@ abstract class GetController extends MultipleFutureGetController {
   @override
   Future runBusyFuture(
     Future busyFuture, {
-    Object busyObject,
+    Object? key,
     bool throwException = false,
   }) async {
     clearErrors();
-    final _key = busyObject ?? typeName;
+    final _key = key ?? typeName;
     setBusyFor(_key, true);
     try {
       var value = await runErrorFuture(
         busyFuture,
-        key: busyObject,
+        key: key,
         throwException: throwException,
       );
       setDataFor(_key, value);
@@ -362,27 +366,29 @@ abstract class GetController extends MultipleFutureGetController {
     } catch (e) {
       setBusyFor(_key, false);
       if (throwException) rethrow;
-      return WebResponse();
+      return GetResult();
     }
   }
 
   @override
   Future runErrorFuture(
     Future future, {
-    Object key,
+    Object? key,
     bool throwException = false,
   }) async {
     final _key = key ?? typeName;
     try {
-      final response = await future;
-      if (response is WebResponse && response.error != null)
-        setErrorFor(_key, response.error);
-      return response;
+      final result = await future;
+      if (result is GetResult && result.error != null) {
+        setErrorFor(_key, result.error);
+        onError(_key, result.error);
+      }
+      return result;
     } catch (e) {
       setErrorFor(_key, e);
-      onFutureError(e, _key);
+      onError(e, _key);
       if (throwException) rethrow;
-      return WebResponse();
+      return GetResult();
     }
   }
 }

@@ -10,11 +10,52 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_smart/get_smart.dart';
 
-import '../../get_smart.dart';
+class GetTileData extends GetObject {
+  @override
+  List<Function> get builders => [() => GetTileData()];
 
-class AppTile extends StatelessWidget {
-  const AppTile({
+  GetTileData({
     this.icon,
+    this.accessory,
+    this.header,
+    this.title,
+    this.subtitle,
+    this.trailingTop,
+    this.trailingBottom,
+    this.subTiles = const [],
+    Color? color,
+    this.isDetailed = false,
+    this.isHeader = false,
+    this.padAccessory,
+    this.onTap,
+  }) : _color = color;
+
+  IconData? icon;
+  IconData? accessory;
+  dynamic header;
+  String? title;
+  String? subtitle;
+  String? trailingTop;
+  String? trailingBottom;
+  List<GetTileData> subTiles;
+  Color? _color;
+  bool isDetailed;
+  bool isHeader;
+  bool? padAccessory;
+  Function? onTap;
+
+  bool get hasSubTiles => subTiles.isNotEmpty == true;
+
+  @override
+  String get description => title ?? "";
+
+  @override
+  Color get color => _color ?? title?.materialAccent ?? super.color;
+}
+
+class GetTile extends StatelessWidget {
+  const GetTile.detailed({
+    this.leading,
     this.title,
     this.subtitle,
     this.trailingTop,
@@ -23,7 +64,7 @@ class AppTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
-    this.isIconBoxed = true,
+    this.isLeadingBoxed = true,
     this.isDetailed = true,
     this.padAccessory,
     this.showAccessory,
@@ -37,11 +78,12 @@ class AppTile extends StatelessWidget {
     this.topPadding,
     this.bottomPadding,
     this.onTap,
-    Key key,
+    this.onTapLeading,
+    Key? key,
   }) : super(key: key);
 
-  const AppTile.detailed({
-    this.icon,
+  const GetTile.simple({
+    this.leading,
     this.title,
     this.subtitle,
     this.trailingTop,
@@ -50,34 +92,7 @@ class AppTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
-    this.isIconBoxed = true,
-    this.isDetailed = true,
-    this.padAccessory,
-    this.showAccessory,
-    this.tintAccessory,
-    this.tintAble,
-    this.destructive,
-    this.enabled,
-    this.density,
-    this.horizontalPadding,
-    this.verticalPadding,
-    this.topPadding,
-    this.bottomPadding,
-    this.onTap,
-    Key key,
-  }) : super(key: key);
-
-  const AppTile.simple({
-    this.icon,
-    this.title,
-    this.subtitle,
-    this.trailingTop,
-    this.trailingBottom,
-    this.accessory,
-    this.rows,
-    this.color,
-    this.background,
-    this.isIconBoxed = true,
+    this.isLeadingBoxed = true,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -91,11 +106,12 @@ class AppTile extends StatelessWidget {
     this.topPadding,
     this.bottomPadding,
     this.onTap,
-    Key key,
+    this.onTapLeading,
+    Key? key,
   }) : super(key: key);
 
-  const AppTile.simpleDense({
-    this.icon,
+  const GetTile.simpleDense({
+    this.leading,
     this.title,
     this.subtitle,
     this.trailingTop,
@@ -104,7 +120,7 @@ class AppTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
-    this.isIconBoxed = true,
+    this.isLeadingBoxed = true,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -118,11 +134,12 @@ class AppTile extends StatelessWidget {
     this.topPadding,
     this.bottomPadding,
     this.onTap,
-    Key key,
+    this.onTapLeading,
+    Key? key,
   }) : super(key: key);
 
-  const AppTile.plain({
-    this.icon,
+  const GetTile.plain({
+    this.leading,
     this.title,
     this.subtitle,
     this.trailingTop,
@@ -131,7 +148,7 @@ class AppTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background = Colors.transparent,
-    this.isIconBoxed = false,
+    this.isLeadingBoxed = false,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -145,32 +162,34 @@ class AppTile extends StatelessWidget {
     this.topPadding,
     this.bottomPadding,
     this.onTap,
-    Key key,
+    this.onTapLeading,
+    Key? key,
   }) : super(key: key);
 
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final String trailingTop;
-  final String trailingBottom;
-  final Widget accessory;
-  final List<Widget> rows;
-  final Color color;
-  final Color background;
-  final bool isIconBoxed;
+  final Widget? leading;
+  final String? title;
+  final String? subtitle;
+  final String? trailingTop;
+  final String? trailingBottom;
+  final Widget? accessory;
+  final List<Widget>? rows;
+  final Color? color;
+  final Color? background;
+  final bool isLeadingBoxed;
   final bool isDetailed;
-  final bool padAccessory;
-  final bool showAccessory;
-  final bool tintAccessory;
-  final bool tintAble;
-  final bool destructive;
-  final bool enabled;
-  final double horizontalPadding;
-  final double verticalPadding;
-  final double topPadding;
-  final double bottomPadding;
-  final VisualDensity density;
-  final void Function() onTap;
+  final bool? padAccessory;
+  final bool? showAccessory;
+  final bool? tintAccessory;
+  final bool? tintAble;
+  final bool? destructive;
+  final bool? enabled;
+  final double? horizontalPadding;
+  final double? verticalPadding;
+  final double? topPadding;
+  final double? bottomPadding;
+  final VisualDensity? density;
+  final void Function()? onTap;
+  final void Function()? onTapLeading;
 
   @override
   Widget build(BuildContext context) {
@@ -183,8 +202,8 @@ class AppTile extends StatelessWidget {
         (isDetailed == true ? const Icon(Icons.chevron_right) : null);
     final showAccessory = accessory != null && (this.showAccessory ?? true);
     return InkWell(
-      highlightColor: tintColor?.activated,
-      splashColor: tintColor?.translucent,
+      highlightColor: tintColor.activated,
+      splashColor: tintColor.translucent,
       onTap: (enabled ?? true) ? onTap : null,
       child: Ink(
         color: background ?? context.theme.backgroundColor,
@@ -198,20 +217,21 @@ class AppTile extends StatelessWidget {
                 top: verticalPadding ?? topPadding ?? 0,
                 bottom: verticalPadding ?? bottomPadding ?? 0,
               ),
-              leading: icon == null
+              leading: leading == null
                   ? null
-                  : IconBox(
-                      icon: icon,
+                  : BoxedView(
+                      child: leading!,
                       color: tintColor,
-                      withinBox: isIconBoxed,
+                      withinBox: isLeadingBoxed,
+                      onTap: onTapLeading,
                     ).adjustHorizontally,
-              title: title?.notEmpty?.let((it) => Text(
+              title: title?.notEmpty?.mapIt((it) => Text(
                     it,
                     style: TextStyle(
                       color: _tintAble ? tintColor : null,
                     ),
                   )),
-              subtitle: subtitle?.notEmpty?.let((it) => Text(it)),
+              subtitle: subtitle?.notEmpty?.mapIt((it) => Text(it)),
               trailing: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
@@ -222,11 +242,11 @@ class AppTile extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (isTrailingTop)
-                          Text(trailingTop, style: Get.textTheme.caption),
+                          Text(trailingTop!, style: Get.textTheme.caption),
                         if (isTrailingTop && isTrailingBottom)
                           SizedBox(height: 4),
                         if (isTrailingBottom)
-                          Text(trailingBottom, style: Get.textTheme.caption),
+                          Text(trailingBottom!, style: Get.textTheme.caption),
                       ],
                     ),
                   if (showAccessory)
@@ -236,7 +256,7 @@ class AppTile extends StatelessWidget {
                             ? tintColor
                             : context.theme.hintColor,
                       ),
-                      child: accessory,
+                      child: accessory!,
                     ),
                   if (!showAccessory && padAccessory != true)
                     SizedBox(width: 14)
@@ -251,9 +271,9 @@ class AppTile extends StatelessWidget {
   }
 }
 
-class AppTileRow extends StatelessWidget {
-  const AppTileRow({
-    this.icon,
+class GetTileRow extends StatelessWidget {
+  const GetTileRow({
+    this.leading,
     this.text,
     this.hint,
     this.color,
@@ -261,32 +281,35 @@ class AppTileRow extends StatelessWidget {
     this.maxLines = 2,
     this.expanded = false,
     this.standalone = false,
-    this.isIconBoxed = false,
-    Key key,
+    this.isLeadingBoxed = false,
+    this.onTapLeading,
+    Key? key,
   }) : super(key: key);
 
-  const AppTileRow.standalone({
-    this.icon,
+  const GetTileRow.standalone({
+    this.leading,
     this.text,
     this.hint,
     this.color,
     this.background,
     this.maxLines = 2,
     this.expanded = false,
-    this.isIconBoxed = false,
+    this.isLeadingBoxed = false,
     this.standalone = true,
-    Key key,
+    this.onTapLeading,
+    Key? key,
   }) : super(key: key);
 
-  final IconData icon;
-  final String text;
-  final String hint;
-  final Color color;
-  final Color background;
+  final Widget? leading;
+  final String? text;
+  final String? hint;
+  final Color? color;
+  final Color? background;
   final int maxLines;
   final bool expanded;
   final bool standalone;
-  final bool isIconBoxed;
+  final bool isLeadingBoxed;
+  final void Function()? onTapLeading;
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +317,7 @@ class AppTileRow extends StatelessWidget {
     var tintColor = color ?? context.theme.primaryIconTheme.color;
     return textData == null
         ? Container()
-        : Container(
+        : Ink(
             color: standalone == true
                 ? (background ?? context.theme.backgroundColor)
                 : null,
@@ -305,19 +328,20 @@ class AppTileRow extends StatelessWidget {
               bottom: 16,
             ),
             child: Row(children: [
-              if (icon != null)
-                IconBox(
-                  icon: icon,
+              if (leading != null)
+                BoxedView(
+                  child: leading!,
                   color: tintColor,
-                  withinBox: isIconBoxed,
+                  withinBox: isLeadingBoxed,
                   small: true,
+                  onTap: onTapLeading,
                 ).adjustHorizontally,
-              if (icon != null) SizedBox(width: 16),
+              if (leading != null) SizedBox(width: 16),
               Flexible(
                 child: CrossFade(
                   firstChild: Text(
                     textData,
-                    style: context.textTheme.caption.apply(
+                    style: context.textTheme.caption!.apply(
                       color: text == null ? context.theme.hintColor : null,
                     ),
                     maxLines: expanded == true ? null : maxLines,
@@ -332,28 +356,29 @@ class AppTileRow extends StatelessWidget {
 
 enum SeparatorStyle { full, padIcon, noIcon }
 
-class AppTileSeparator extends StatelessWidget {
-  const AppTileSeparator({
+class GetTileSeparator extends StatelessWidget {
+  const GetTileSeparator({
     this.margin,
     this.style = SeparatorStyle.padIcon,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  const AppTileSeparator.full({Key key}) : this(style: SeparatorStyle.full);
+  const GetTileSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
 
-  const AppTileSeparator.noIcon({Key key}) : this(style: SeparatorStyle.noIcon);
+  const GetTileSeparator.noIcon({Key? key})
+      : this(style: SeparatorStyle.noIcon);
 
-  const AppTileSeparator.padIcon({Key key})
+  const GetTileSeparator.padIcon({Key? key})
       : this(style: SeparatorStyle.padIcon);
 
-  final double margin;
+  final double? margin;
   final SeparatorStyle style;
 
   @override
   Widget build(BuildContext context) {
     return Ink(
       color: Get.theme.backgroundColor,
-      child: AppLineSeparator(
+      child: GetLineSeparator(
         margin: margin,
         style: style,
       ),
@@ -361,78 +386,90 @@ class AppTileSeparator extends StatelessWidget {
   }
 }
 
-class AppLineSeparator extends StatelessWidget {
-  const AppLineSeparator({
+class GetLineSeparator extends StatelessWidget {
+  const GetLineSeparator({
     this.margin,
     this.style = SeparatorStyle.padIcon,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  const AppLineSeparator.full({Key key}) : this(style: SeparatorStyle.full);
+  const GetLineSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
 
-  const AppLineSeparator.noIcon({Key key}) : this(style: SeparatorStyle.noIcon);
+  const GetLineSeparator.noIcon({Key? key})
+      : this(style: SeparatorStyle.noIcon);
 
-  const AppLineSeparator.padIcon({Key key})
+  const GetLineSeparator.padIcon({Key? key})
       : this(style: SeparatorStyle.padIcon);
 
-  final double margin;
+  final double? margin;
   final SeparatorStyle style;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
-          left: margin ?? style == SeparatorStyle.full
-              ? 0
-              : style == SeparatorStyle.noIcon
-                  ? 18
-                  : 72),
+        left: margin ??
+            (style == SeparatorStyle.full
+                ? 0
+                : style == SeparatorStyle.noIcon
+                    ? 18
+                    : 72),
+      ),
       color: Get.theme.hintColor.translucent,
       height: 0.5,
     );
   }
 }
 
-class AppTileHeader extends StatelessWidget {
-  const AppTileHeader({
+class GetTileHeader extends StatelessWidget {
+  const GetTileHeader({
     this.text,
     this.topSeparator = true,
     this.bottomSeparator = true,
     this.padding,
     this.noIcon,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  const AppTileHeader.dense({
+  const GetTileHeader.dense({
     this.text,
     this.topSeparator = true,
     this.bottomSeparator = true,
+    this.padding = 16,
     this.noIcon = true,
-    Key key,
-  })  : padding = 16,
-        super(key: key);
+    Key? key,
+  }) : super(key: key);
 
-  const AppTileHeader.noTop({
+  const GetTileHeader.noTop({
     this.text,
+    this.topSeparator = false,
+    this.bottomSeparator = true,
+    this.padding,
+    this.noIcon,
+    Key? key,
+  }) : super(key: key);
+
+  const GetTileHeader.noTopIcon({
+    this.text,
+    this.topSeparator = false,
     this.bottomSeparator = true,
     this.padding,
     this.noIcon = true,
-    Key key,
-  })  : topSeparator = false,
-        super(key: key);
+    Key? key,
+  }) : super(key: key);
 
-  final String text;
+  final String? text;
   final bool topSeparator;
   final bool bottomSeparator;
-  final bool noIcon;
-  final double padding;
+  final bool? noIcon;
+  final double? padding;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (topSeparator) AppTileSeparator(style: SeparatorStyle.full),
+        if (topSeparator) GetTileSeparator(style: SeparatorStyle.full),
         Container(
           padding: EdgeInsets.only(
             left: noIcon == true ? 16 : 24,
@@ -445,52 +482,81 @@ class AppTileHeader extends StatelessWidget {
             style: Get.textTheme.caption,
           ),
         ),
-        if (bottomSeparator) AppTileSeparator(style: SeparatorStyle.full),
+        if (bottomSeparator) GetTileSeparator(style: SeparatorStyle.full),
       ],
     );
   }
 }
 
-class IconBox extends StatelessWidget {
+class BoxedView extends StatelessWidget {
   static const double boxHeight = 40;
   static const double boxWidth = 40;
   static const double boxSize = 30;
-  static const double iconSmall = 24;
-  static const double iconNormal = 30;
-  static const double iconBoxed = 18;
 
-  const IconBox({
+  const BoxedView({
+    required this.child,
     this.color,
-    this.icon,
     this.withinBox = true,
     this.small,
-    Key key,
+    this.onTap,
+    Key? key,
   }) : super(key: key);
 
-  final Color color;
-  final IconData icon;
+  final Widget child;
+  final Color? color;
   final bool withinBox;
-  final bool small;
+  final bool? small;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return withinBox == true
-        ? Container(
-            height: boxSize,
-            width: boxSize,
-            decoration: boxSize.circularDecoration(color: color),
-            child: Icon(
-              icon,
-              size: iconBoxed,
-              color: color.contrast,
-            ),
-          )
-        : Icon(
-            icon,
-            size: small == true ? iconSmall : iconNormal,
-            color: color,
-          );
+    final splash = withinBox ? color?.darker : color?.translucent;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: _size?.circularRadius,
+      highlightColor: splash?.activated,
+      splashColor: splash,
+      child: Ink(
+        height: _size,
+        width: _size,
+        decoration: _size?.circularBox(color: color),
+        child: Container(
+          alignment: Alignment.center,
+          child: _text(boxed: withinBox) ?? _child(boxed: withinBox),
+        ),
+      ),
+    );
   }
+
+  double? get _size => withinBox ? boxSize : null;
+
+  Widget? _text({bool boxed = false}) => $cast<Text>(child)?.mapTo(
+        (Text it) => Text(
+          it.data ?? "",
+          textAlign: TextAlign.center,
+          style: GoogleFonts.voltaire(
+            fontSize: boxed
+                ? 17
+                : small == true
+                    ? 18
+                    : 24,
+            color: boxed ? color?.contrast : color,
+            // fontWeight: FontWeight.w100,
+          ),
+        ),
+      );
+
+  Widget _child({bool boxed = false}) => IconTheme(
+        child: child,
+        data: IconThemeData(
+          size: boxed
+              ? 18
+              : small == true
+                  ? 24
+                  : 30,
+          color: boxed ? color?.contrast : color,
+        ),
+      );
 
   Widget get adjustForTile => Container(
         alignment: Alignment.center,
@@ -510,21 +576,10 @@ class CircularProgress extends StatelessWidget {
   const CircularProgress({
     this.size = 14,
     this.margin = 0,
-    this.strokeWidth = 1.4,
-    this.color,
-  });
-
-  const CircularProgress.small({
-    this.size = 10,
-    this.margin = 0,
-    this.strokeWidth = 1,
-    this.color,
   });
 
   final double size;
   final double margin;
-  final double strokeWidth;
-  final Color color;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -533,11 +588,8 @@ class CircularProgress extends StatelessWidget {
           Container(
             height: size,
             width: size,
-            margin: EdgeInsets.all(margin ?? 0),
-            child: CircularProgressIndicator(
-              strokeWidth: strokeWidth,
-              color: color,
-            ),
+            margin: EdgeInsets.all(margin),
+            child: CircularProgressIndicator(strokeWidth: 1.4),
           ),
         ],
       );
@@ -559,19 +611,19 @@ class LinearProgress extends StatelessWidget {
   });
 
   final bool visible;
-  final Color color;
+  final Color? color;
   final double height;
-  final double value;
+  final double? value;
 
   @override
-  Widget build(BuildContext context) => visible ?? true
+  Widget build(BuildContext context) => visible
       ? LinearProgressIndicator(
-          minHeight: height ?? 1,
+          minHeight: height,
           backgroundColor: Colors.transparent,
-          valueColor: color?.let((it) => AlwaysStoppedAnimation<Color>(it)),
+          valueColor: color?.mapIt((it) => AlwaysStoppedAnimation<Color>(it)),
           value: value,
         )
-      : Container(height: height ?? 1);
+      : Container(height: height);
 }
 
 class MessageView extends StatelessWidget {
@@ -585,12 +637,12 @@ class MessageView extends StatelessWidget {
     this.error,
   });
 
-  final Widget icon;
-  final Widget errorIcon;
-  final String action;
-  final void Function() onAction;
-  final String message;
-  final String emptyTitle;
+  final Widget? icon;
+  final Widget? errorIcon;
+  final String? action;
+  final void Function()? onAction;
+  final String? message;
+  final String? emptyTitle;
   final error;
 
   @override
@@ -632,7 +684,7 @@ class MessageView extends StatelessWidget {
               child: Text(
                 message.toString().trim(),
                 textAlign: TextAlign.center,
-                style: Get.textTheme.subtitle1.apply(fontSizeDelta: 1),
+                style: Get.textTheme.subtitle1!.apply(fontSizeDelta: 1),
               ),
             ),
           SizedBox(height: 16),
@@ -647,50 +699,85 @@ class MessageView extends StatelessWidget {
   }
 }
 
-class DismissibleX extends StatefulWidget {
-  DismissibleX({
+class GetDismissible extends StatefulWidget {
+  const GetDismissible({
     this.enabled,
-    this.direction,
+    this.timeout = const Duration(seconds: 6),
+    this.autoDismiss = false,
+    this.direction = DismissDirection.down,
     this.onDismissed,
-    this.child,
-    Key key,
+    required this.child,
+    Key? key,
   }) : super(key: key);
 
-  final bool enabled;
+  final bool? enabled;
+  final Duration timeout;
+  final bool autoDismiss;
   final DismissDirection direction;
-  final void Function(DismissDirection) onDismissed;
+  final void Function(DismissDirection)? onDismissed;
   final Widget child;
 
   @override
-  _DismissibleXState createState() => _DismissibleXState();
+  _GetDismissibleState createState() => _GetDismissibleState();
 }
 
-class _DismissibleXState extends State<DismissibleX> {
-  var dismissed = false;
+class _GetDismissibleState extends State<GetDismissible> {
+  var _dismissed = false;
 
   @override
-  Widget build(BuildContext context) => dismissed
-      ? Container(height: 0)
-      : (widget.enabled
-          ? Dismissible(
-              key: const Key('dismissible'),
-              direction: widget.direction,
-              onDismissed: (direction) {
-                widget.onDismissed?.call(direction);
-                if (mounted) setState(() => dismissed = true);
-              },
-              background: Container(),
-              secondaryBackground: Container(),
-              child: widget.child,
-            )
-          : widget.child);
+  Widget build(BuildContext context) {
+    startTimer();
+    return _dismissed
+        ? Container(height: 0)
+        : widget.enabled == true
+            ? Dismissible(
+                key: const Key('dismissible'),
+                direction: widget.direction,
+                onDismissed: dismiss,
+                background: Container(),
+                secondaryBackground: Container(),
+                child: widget.child,
+              )
+            : widget.child;
+  }
+
+  void dismiss([DismissDirection? direction]) {
+    stopTimer();
+    widget.onDismissed?.call(direction ?? widget.direction);
+    if (mounted) setState(() => _dismissed = true);
+  }
+
+  Timer? _timer;
+  var _time = 6;
+
+  void startTimer() {
+    if (!widget.autoDismiss) return;
+    if (_timer == null && widget.enabled == true && !_dismissed) {
+      print("startTimer");
+      _time = widget.timeout.inSeconds;
+      _timer = Timer.periodic(1.seconds, (_) {
+        print("time $_time");
+        if (_time == 0) {
+          dismiss();
+        } else
+          _time--;
+      });
+    } else if (_timer != null && widget.enabled != true && !_dismissed) {
+      stopTimer();
+    }
+  }
+
+  void stopTimer() {
+    _timer?.cancel();
+    _timer = null;
+  }
 }
 
 class SwipeRefresh extends RefreshIndicator {
   SwipeRefresh({
-    Widget child,
-    Future<void> Function() onRefresh,
-    Key key,
+    required Widget child,
+    required Future<void> Function() onRefresh,
+    Key? key,
   }) : super(
           key: key,
           child: child,
@@ -705,16 +792,16 @@ class SwipeRefresh extends RefreshIndicator {
 
 class CrossFade extends AnimatedCrossFade {
   CrossFade({
-    bool showFirst,
-    Widget firstChild,
-    Widget secondChild,
-    Key key,
+    bool? showFirst,
+    Widget? firstChild,
+    Widget? secondChild,
+    Key? key,
   }) : super(
           key: key,
           alignment: showFirst ?? firstChild != null
               ? Alignment.topCenter
               : Alignment.bottomCenter,
-          duration: Duration(milliseconds: 200),
+          duration: 200.milliseconds,
           secondCurve: Curves.fastLinearToSlowEaseIn,
           crossFadeState: showFirst ?? firstChild != null
               ? CrossFadeState.showFirst
@@ -730,20 +817,20 @@ class ProgressButton extends StatelessWidget {
     this.error,
     this.status,
     this.onPressed,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  final String text;
+  final String? text;
   final dynamic error;
-  final WebStatus status;
-  final Function onPressed;
+  final GetStatus? status;
+  final Function? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 44,
       alignment: Alignment.centerLeft,
-      child: status == WebStatus.busy
+      child: status == GetStatus.busy
           ? Row(children: [
               SizedBox(
                 width: 20,
@@ -767,23 +854,23 @@ class ProgressButton extends StatelessWidget {
                   width: 120,
                   child: GetButton.elevated(
                     child: Text(
-                      (status == WebStatus.failed
+                      (status == GetStatus.failed
                               ? GetText.retry()
-                              : status == WebStatus.succeeded
+                              : status == GetStatus.succeeded
                                   ? GetText.ok()
-                                  : text)
+                                  : text)!
                           .uppercase,
                     ),
                     onPressed: () {
-                      if (status == WebStatus.succeeded)
+                      if (status == GetStatus.succeeded)
                         Get.back(result: true);
                       else
-                        onPressed();
+                        onPressed!();
                     },
                   ),
                 ),
               ),
-              if (status == WebStatus.failed)
+              if (status == GetStatus.failed)
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16),
@@ -793,7 +880,7 @@ class ProgressButton extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (status == WebStatus.succeeded)
+              if (status == GetStatus.succeeded)
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16),
@@ -818,47 +905,51 @@ class ProgressSnackBar extends StatelessWidget {
     this.onDone,
     this.withBottomBar,
     this.actionColor,
-    Key key,
+    this.timeout = const Duration(seconds: 6),
+    this.autoDismiss = true,
+    Key? key,
   }) : super(key: key);
 
-  final String success;
-  final String error;
-  final WebStatus status;
-  final Function onCancel;
-  final Function onRetry;
-  final Function onDone;
-  final bool withBottomBar;
-  final Color actionColor;
+  final String? success;
+  final String? error;
+  final GetStatus? status;
+  final Function? onCancel;
+  final Function? onRetry;
+  final Function? onDone;
+  final bool? withBottomBar;
+  final Color? actionColor;
+  final Duration timeout;
+  final bool autoDismiss;
 
   @override
-  Widget build(BuildContext context) {
-    return SnackBarX(
-      message: status == WebStatus.busy
-          ? GetText.busy()
-          : status == WebStatus.failed
-              ? error ?? GetText.failed()
-              : success ?? GetText.succeeded(),
-      action: status == WebStatus.busy
-          ? GetText.cancel()
-          : status == WebStatus.failed
-              ? GetText.retry()
-              : GetText.ok(),
-      onAction: status == WebStatus.busy
-          ? onCancel
-          : status == WebStatus.failed
-              ? onRetry
-              : onDone,
-      onDismiss: onCancel,
-      showProgress: status == WebStatus.busy,
-      isDismissible: status == WebStatus.failed,
-      withBottomBar: withBottomBar,
-      actionColor: actionColor,
-    );
-  }
+  Widget build(BuildContext context) => GetSnackBar(
+        message: status == GetStatus.busy
+            ? GetText.busy()
+            : status == GetStatus.failed
+                ? error ?? GetText.failed()
+                : success ?? GetText.succeeded(),
+        action: status == GetStatus.busy
+            ? GetText.cancel()
+            : status == GetStatus.failed
+                ? GetText.retry()
+                : GetText.ok(),
+        onAction: status == GetStatus.busy
+            ? onCancel
+            : status == GetStatus.failed
+                ? onRetry
+                : onDone,
+        onDismiss: onCancel,
+        showProgress: status == GetStatus.busy,
+        isDismissible: status == GetStatus.failed,
+        withBottomBar: withBottomBar,
+        actionColor: actionColor,
+        timeout: timeout,
+        autoDismiss: autoDismiss,
+      );
 }
 
-class SnackBarX extends StatelessWidget {
-  const SnackBarX({
+class GetSnackBar extends StatelessWidget {
+  const GetSnackBar({
     this.message,
     this.action,
     this.onAction,
@@ -867,33 +958,39 @@ class SnackBarX extends StatelessWidget {
     this.isDismissible = false,
     this.withBottomBar = false,
     this.actionColor,
-    Key key,
+    this.timeout = const Duration(seconds: 6),
+    this.autoDismiss = true,
+    Key? key,
   }) : super(key: key);
 
-  final String message;
-  final String action;
-  final Function onAction;
-  final Function onDismiss;
+  final String? message;
+  final String? action;
+  final Function? onAction;
+  final Function? onDismiss;
   final bool showProgress;
   final bool isDismissible;
-  final bool withBottomBar;
-  final Color actionColor;
+  final bool? withBottomBar;
+  final Color? actionColor;
+  final Duration timeout;
+  final bool autoDismiss;
 
   @override
   Widget build(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          DismissibleX(
+          GetDismissible(
             enabled: isDismissible,
             direction: DismissDirection.down,
             onDismissed: (direction) => onDismiss?.call(),
+            timeout: timeout,
+            autoDismiss: autoDismiss,
             child: Container(
               color: Get.theme.bottomAppBarTheme.color,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Stack(children: [
-                    AppLineSeparator(style: SeparatorStyle.full),
+                    GetLineSeparator(style: SeparatorStyle.full),
                     if (showProgress) LinearProgress(),
                   ]),
                   GetBar(
@@ -901,14 +998,14 @@ class SnackBarX extends StatelessWidget {
                         ? SnackPosition.TOP
                         : SnackPosition.BOTTOM,
                     animationDuration: Duration(milliseconds: 200),
-                    messageText: message == null ? null : Text(message),
-                    backgroundColor: Get.theme.bottomAppBarTheme.color,
+                    messageText: message == null ? null : Text(message!),
+                    backgroundColor: Get.theme.bottomAppBarTheme.color!,
                     mainButton: action == null
                         ? null
                         : GetButton.text(
-                            child: Text(action.uppercase),
+                            child: Text(action!.uppercase),
                             primary: actionColor,
-                            onPressed: onAction,
+                            onPressed: onAction as void Function()?,
                           ),
                   ),
                 ],
@@ -926,13 +1023,13 @@ class BottomBar extends StatelessWidget {
     this.centerItems,
     this.topChild,
     this.visible = true,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  final List<Widget> leftItems;
-  final List<Widget> rightItems;
-  final List<Widget> centerItems;
-  final Widget topChild;
+  final List<Widget>? leftItems;
+  final List<Widget>? rightItems;
+  final List<Widget>? centerItems;
+  final Widget? topChild;
   final bool visible;
 
   @override
@@ -944,8 +1041,8 @@ class BottomBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         CrossFade(firstChild: topChild),
-        if (topChild == null) AppLineSeparator(style: SeparatorStyle.full),
-        if (visible ?? true)
+        if (topChild == null) GetLineSeparator(style: SeparatorStyle.full),
+        if (visible)
           BottomAppBar(
             child: SafeArea(
               minimum:
@@ -957,6 +1054,7 @@ class BottomBar extends StatelessWidget {
               child: Container(
                 height: 44,
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  SizedBox(width: 6),
                   ..._leftItems,
                   if (_leftItems.length < _rightItems.length)
                     for (int i = 0;
@@ -970,6 +1068,7 @@ class BottomBar extends StatelessWidget {
                         i++)
                       GetButton.icon(),
                   ..._rightItems,
+                  SizedBox(width: 6),
                 ]),
               ),
             ),
@@ -982,8 +1081,8 @@ class BottomBar extends StatelessWidget {
 class Clickable extends MouseRegion {
   Clickable({
     bool enable = true,
-    Function() onTap,
-    Widget child,
+    Function()? onTap,
+    Widget? child,
   }) : super(
           cursor: enable == true && onTap != null
               ? MaterialStateMouseCursor.clickable
@@ -996,7 +1095,7 @@ class Clickable extends MouseRegion {
 }
 
 extension FocusNodeX on FocusNode {
-  void forward({FocusNode to}) {
+  void forward({FocusNode? to}) {
     unfocus();
     to?.requestFocus();
   }
@@ -1008,18 +1107,18 @@ extension WidgetX on Widget {
 
 extension GetDiagnosticable on Diagnosticable {
   S use<S>(S dependency,
-          {String tag,
+          {String? tag,
           bool permanent = false,
-          InstanceBuilderCallback<S> builder}) =>
+          InstanceBuilderCallback<S>? builder}) =>
       Get.put<S>(dependency, tag: typeName + (tag ?? ""), permanent: permanent);
 }
 
 extension GlobalKeyX<T extends State<StatefulWidget>> on GlobalKey<T> {
-  BuildContext get context => currentContext;
+  BuildContext? get context => currentContext;
 
-  Widget get widget => currentWidget;
+  Widget? get widget => currentWidget;
 
-  T get state => currentState;
+  T? get state => currentState;
 }
 
 abstract class GetShimmer {
@@ -1134,7 +1233,7 @@ class DottedPageView extends StatefulWidget {
     this.scrollDirection = Axis.horizontal,
     this.autoPlay = true,
     this.reverse = false,
-    PageController controller,
+    PageController? controller,
     this.physics,
     this.pageSnapping = true,
     this.onPageChanged,
@@ -1144,7 +1243,7 @@ class DottedPageView extends StatefulWidget {
     this.allowImplicitScrolling = false,
     this.restorationId,
     this.clipBehavior = Clip.hardEdge,
-    Key key,
+    Key? key,
   })  : _key = key,
         this.controller = controller ?? PageController();
 
@@ -1154,16 +1253,16 @@ class DottedPageView extends StatefulWidget {
   final bool autoPlay;
   final bool reverse;
   final PageController controller;
-  final ScrollPhysics physics;
+  final ScrollPhysics? physics;
   final bool pageSnapping;
-  final void Function(int) onPageChanged;
-  final IndexedWidgetBuilder itemBuilder;
-  final int itemCount;
+  final void Function(int)? onPageChanged;
+  final IndexedWidgetBuilder? itemBuilder;
+  final int? itemCount;
   final DragStartBehavior dragStartBehavior;
   final bool allowImplicitScrolling;
-  final String restorationId;
+  final String? restorationId;
   final Clip clipBehavior;
-  final Key _key;
+  final Key? _key;
 
   @override
   _DottedPageViewState createState() => _DottedPageViewState();
@@ -1173,7 +1272,7 @@ class _DottedPageViewState extends State<DottedPageView>
     with SingleTickerProviderStateMixin {
   static const double duration = 10;
   final _index = 0.obs;
-  Ticker _ticker;
+  Ticker? _ticker;
   int _elapsed = 0;
 
   @override
@@ -1200,10 +1299,10 @@ class _DottedPageViewState extends State<DottedPageView>
   }
 
   void updatePage() {
-    if (widget.controller?.hasClients == true)
-      widget.controller?.animateToPage(
-        _index.value == widget.itemCount - 1 ? 0 : _index.value + 1,
-        duration: Duration(milliseconds: 1500),
+    if (widget.controller.hasClients)
+      widget.controller.animateToPage(
+        _index.value == widget.itemCount! - 1 ? 0 : _index.value + 1,
+        duration: 1500.milliseconds,
         curve: Curves.easeOut,
       );
   }
@@ -1224,7 +1323,7 @@ class _DottedPageViewState extends State<DottedPageView>
             this._index.value = index;
             widget.onPageChanged?.call(index);
           },
-          itemBuilder: widget.itemBuilder,
+          itemBuilder: widget.itemBuilder!,
           itemCount: widget.itemCount,
           dragStartBehavior: widget.dragStartBehavior,
           allowImplicitScrolling: widget.allowImplicitScrolling,
@@ -1242,7 +1341,7 @@ class _DottedPageViewState extends State<DottedPageView>
             ),
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
-            dotsCount: widget.itemCount,
+            dotsCount: widget.itemCount!,
             position: _index.toDouble(),
           ),
         ),
@@ -1253,13 +1352,13 @@ class _DottedPageViewState extends State<DottedPageView>
 
 extension GetBoxDecoration on BoxDecoration {
   static BoxDecoration only({
-    double top,
-    double bottom,
-    double left,
-    double right,
-    Color color,
-    Color borderColor,
-    double borderRadius,
+    double? top,
+    double? bottom,
+    double? left,
+    double? right,
+    Color? color,
+    Color? borderColor,
+    double? borderRadius,
   }) {
     var _borderColor = borderColor ?? Get.theme.hintColor.dimmed;
     return BoxDecoration(
@@ -1284,12 +1383,12 @@ extension GetBoxDecoration on BoxDecoration {
   }
 
   static BoxDecoration symmetric({
-    double vertical,
-    double horizontal,
-    Color color,
-    Color borderColor,
-    double borderWidth,
-    double borderRadius,
+    double? vertical,
+    double? horizontal,
+    Color? color,
+    Color? borderColor,
+    double? borderWidth,
+    double? borderRadius,
   }) {
     return only(
       top: vertical,
@@ -1304,10 +1403,10 @@ extension GetBoxDecoration on BoxDecoration {
 
   static BoxDecoration all(
     double all, {
-    Color color,
-    Color borderColor,
-    double borderWidth,
-    double borderRadius,
+    Color? color,
+    Color? borderColor,
+    double? borderWidth,
+    double? borderRadius,
   }) {
     return symmetric(
       vertical: all,
@@ -1353,17 +1452,17 @@ extension GetBoxDecoration on BoxDecoration {
 ///
 ///  * [WidgetsBindingObserver], for a mechanism to observe the lifecycle state
 ///    from the widgets layer.
-class AppLifecycle extends StatefulWidget {
-  const AppLifecycle({
+class GetAppLifecycle extends StatefulWidget {
+  const GetAppLifecycle({
     this.onResume,
     this.onPaused,
     this.onInactive,
     this.onDetached,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   /// The application is visible and responding to user input.
-  final void Function() onResume;
+  final void Function()? onResume;
 
   /// The application is in an inactive state and is not receiving user input.
   ///
@@ -1380,7 +1479,7 @@ class AppLifecycle extends StatefulWidget {
   ///
   /// Apps in this state should assume that they may be
   /// [AppLifecycleState.paused] at any time.
-  final void Function() onInactive;
+  final void Function()? onInactive;
 
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
@@ -1388,7 +1487,7 @@ class AppLifecycle extends StatefulWidget {
   /// When the application is in this state, the engine will not call the
   /// [PlatformDispatcher.onBeginFrame] and [PlatformDispatcher.onDrawFrame]
   /// callbacks.
-  final void Function() onPaused;
+  final void Function()? onPaused;
 
   /// The application is still hosted on a flutter engine but is detached from
   /// any host views.
@@ -1397,23 +1496,23 @@ class AppLifecycle extends StatefulWidget {
   /// a view. It can either be in the progress of attaching a view when engine
   /// was first initializes, or after the view being destroyed due to a Navigator
   /// pop.
-  final void Function() onDetached;
+  final void Function()? onDetached;
 
   @override
-  _AppLifecycleState createState() => _AppLifecycleState();
+  _GetAppLifecycleState createState() => _GetAppLifecycleState();
 }
 
-class _AppLifecycleState extends State<AppLifecycle>
+class _GetAppLifecycleState extends State<GetAppLifecycle>
     with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
@@ -1458,7 +1557,7 @@ abstract class Density {
 
 class GetSearchDelegate extends SearchDelegate {
   GetSearchDelegate({
-    String hint,
+    String? hint,
   }) : super(searchFieldLabel: hint);
 
   @override
