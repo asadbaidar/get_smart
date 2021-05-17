@@ -2,7 +2,7 @@ name: get_smart
 description: A package of widgets and utils to make flutter easy and smart.
 homepage: https://github.com/asadbaidar/get_smart
 
-version: 0.1.0
+version: 0.1.0-nullsafety.1
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -22,6 +22,7 @@ dependencies:
   shimmer: ^2.0.0
   dots_indicator: ^2.0.0
   google_fonts: ^2.0.0
+  collection: ^1.15.0
   #provider: ^4.3.2+3
   #firebase_core: ^0.5.0
   #firebase_crashlytics: ^0.2.1
