@@ -54,6 +54,7 @@ class GetTileData extends GetObject {
 }
 
 class GetTile extends StatelessWidget {
+  /// Tile with detailed accessory
   const GetTile.detailed({
     this.leading,
     this.title,
@@ -82,6 +83,7 @@ class GetTile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Tile with no accessory
   const GetTile.simple({
     this.leading,
     this.title,
@@ -110,6 +112,7 @@ class GetTile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Tile with no accessory and dense view
   const GetTile.simpleDense({
     this.leading,
     this.title,
@@ -138,6 +141,7 @@ class GetTile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Tile with no accessory, no background and no boxed leading
   const GetTile.plain({
     this.leading,
     this.title,
@@ -363,11 +367,14 @@ class GetTileSeparator extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Tile separator with full edge to edge length
   const GetTileSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
 
+  /// Tile separator with `18` padding at start
   const GetTileSeparator.noIcon({Key? key})
       : this(style: SeparatorStyle.noIcon);
 
+  /// Tile separator with `72` padding at start
   const GetTileSeparator.padIcon({Key? key})
       : this(style: SeparatorStyle.padIcon);
 
@@ -393,11 +400,14 @@ class GetLineSeparator extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Tile separator with full edge to edge length
   const GetLineSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
 
+  /// Tile separator with `18` padding at start
   const GetLineSeparator.noIcon({Key? key})
       : this(style: SeparatorStyle.noIcon);
 
+  /// Tile separator with `72` padding at start
   const GetLineSeparator.padIcon({Key? key})
       : this(style: SeparatorStyle.padIcon);
 
@@ -422,6 +432,7 @@ class GetLineSeparator extends StatelessWidget {
 }
 
 class GetTileHeader extends StatelessWidget {
+  /// Tile header for icon with normal padding including top/bottom separators
   const GetTileHeader({
     this.text,
     this.topSeparator = true,
@@ -431,6 +442,7 @@ class GetTileHeader extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Tile header for no icon with dense padding including top/bottom separators
   const GetTileHeader.dense({
     this.text,
     this.topSeparator = true,
@@ -440,6 +452,7 @@ class GetTileHeader extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Tile header for icon with normal padding including bottom separators
   const GetTileHeader.noTop({
     this.text,
     this.topSeparator = false,
@@ -449,6 +462,7 @@ class GetTileHeader extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Tile header for no icon with normal padding including bottom separators
   const GetTileHeader.noTopIcon({
     this.text,
     this.topSeparator = false,
