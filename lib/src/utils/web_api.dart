@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:isolate';
 
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as DIO;
@@ -178,7 +177,7 @@ abstract class GetWebAPI {
               (dynamic key) async =>
                   parameters[key] = await parameters[key]?.toString().encrypted,
             );
-          var parcel = _RequestParcel<T, GetResult<T>>(
+          var parcel = GetRequestParcel<T, GetResult<T>>(
             id: id,
             address: await address,
             path: path.pre(this.path?.post("/")) ?? "",
@@ -196,7 +195,7 @@ abstract class GetWebAPI {
         }
       });
 
-  static Future<R> _parcelRequest<T, R>(_RequestParcel<T, R> parcel) =>
+  static Future<R> _parcelRequest<T, R>(GetRequestParcel<T, R> parcel) =>
       _httpRequest<R>(
         result: parcel.result,
         id: parcel.id,
@@ -261,8 +260,8 @@ abstract class GetWebAPI {
   }
 }
 
-class _RequestCancel {
-  _RequestCancel(this.id);
+class GetRequestCancel {
+  GetRequestCancel(this.id);
 
   final String id;
 
@@ -270,8 +269,17 @@ class _RequestCancel {
   String toString() => "$typeName: " + {"id": id}.toString();
 }
 
-class _RequestParcel<T, R> {
-  _RequestParcel({
+class GetIsolateEntry {
+  GetIsolateEntry(this.sendPort);
+
+  final sendPort;
+
+  @override
+  String toString() => "$typeName: " + {"sendPort": sendPort}.toString();
+}
+
+class GetRequestParcel<T, R> {
+  GetRequestParcel({
     required this.id,
     required this.address,
     required this.path,
@@ -311,27 +319,25 @@ class _RequestParcel<T, R> {
 GetIsolate? get isolate => GetIsolate.instance;
 
 class GetIsolate {
-  GetIsolate._();
-
   static GetIsolate? instance;
 
-  static Future<void> spawn() async {
-    instance = GetIsolate._();
+  static Future<void> spawn(GetIsolate isolate) async {
+    instance = isolate;
     await instance?.init();
-    if (instance?._isolate == null) {
+    if (instance?.mIsolate == null) {
       instance?.dispose();
       instance = null;
     }
   }
 
-  Isolate? _isolate;
-  SendPort? _sendPort;
-  ReceivePort? _receivePort;
+  var mIsolate;
+  var sendPort;
+  var receivePort;
   Map<String?, Completer> completer = {};
 
-  Future<R> httpRequest<T, R>(_RequestParcel<T, R> parcel) async {
+  Future<R> httpRequest<T, R>(GetRequestParcel<T, R> parcel) async {
     final _completer = completer[parcel.key] = Completer<R>();
-    _sendPort?.send(parcel);
+    sendPort?.send(parcel);
     return _completer.future.then((result) {
       print("RequestParcel $result");
       completer.remove(parcel.key);
@@ -343,67 +349,45 @@ class GetIsolate {
     });
   }
 
-  void cancelRequest(String id) => _sendPort?.send(_RequestCancel(id));
+  void cancelRequest(String id) => sendPort?.send(GetRequestCancel(id));
 
-  Future<void> init() async {
-    Completer _completer = Completer<SendPort>();
-    _receivePort = ReceivePort();
-    _receivePort?.listen((data) {
-      try {
-        if (data is SendPort) {
-          print("[MainPort] init: $data");
-          SendPort isolatePort = data;
-          _completer.complete(isolatePort);
-        } else if (data is _RequestParcel) {
-          print("[MainPort] request: $data");
-          completer[data.key]?.complete(data.result);
-        }
-      } catch (e) {
-        print("[MainPort] Error: $e");
+  void onMain(data, Completer _completer) {
+    try {
+      if (data is GetIsolateEntry) {
+        print("[MainPort] init: $data");
+        final isolatePort = data.sendPort;
+        _completer.complete(isolatePort);
+      } else if (data is GetRequestParcel) {
+        print("[MainPort] request: $data");
+        completer[data.key]?.complete(data.result);
       }
-    });
-    await Isolate.spawn(
-      _isolateEntry,
-      _receivePort?.sendPort,
-      errorsAreFatal: false,
-    ).then((value) {
-      _isolate = value;
-      return value;
-    }).catchError((e) {
-      print(e);
-    });
-    await _completer.future.then((value) {
-      _sendPort = value;
-      return value;
-    }).catchError((e) {
-      print(e);
-    });
+    } catch (e) {
+      print("[MainPort] Error: $e");
+    }
   }
 
-  static void _isolateEntry(SendPort? sendPort) {
-    ReceivePort receivePort = ReceivePort();
-    sendPort?.send(receivePort.sendPort);
-    receivePort.listen((parcel) async {
-      try {
-        print("[IsolatePort] $parcel");
-        if (parcel is _RequestParcel) {
-          sendPort?.send(
-            parcel..result = await GetWebAPI._parcelRequest(parcel),
-          );
-        } else if (parcel is _RequestCancel) {
-          GetWebAPI._cancelTokens.remove(parcel.id)?.cancel();
-        }
-      } catch (e) {
-        print("[IsolatePort] Error: $e");
+  Future<void> init() async {}
+
+  static Future<void> onIsolate(data, sendPort) async {
+    try {
+      print("[IsolatePort] $data");
+      if (data is GetRequestParcel) {
+        sendPort?.send(
+          data..result = await GetWebAPI._parcelRequest(data),
+        );
+      } else if (data is GetRequestCancel) {
+        GetWebAPI._cancelTokens.remove(data.id)?.cancel();
       }
-    });
+    } catch (e) {
+      print("[IsolatePort] Error: $e");
+    }
   }
 
   void dispose() {
-    _receivePort?.close();
-    _isolate?.kill();
-    _isolate = null;
-    _sendPort = null;
-    _receivePort = null;
+    receivePort?.close();
+    mIsolate?.kill();
+    mIsolate = null;
+    sendPort = null;
+    receivePort = null;
   }
 }

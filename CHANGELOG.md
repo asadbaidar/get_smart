@@ -1,3 +1,7 @@
+## [0.1.0-nullsafety.2]
+
+* Null-safety
+
 ## [0.1.0-nullsafety.1]
 
 * Null-safety
