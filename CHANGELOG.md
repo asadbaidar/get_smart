@@ -1,3 +1,7 @@
+## [0.1.0]
+
+* Null-safety
+
 ## [0.0.6]
 
 * Updated dependencies
