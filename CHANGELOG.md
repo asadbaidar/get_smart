@@ -1,3 +1,7 @@
+## [0.1.0-nullsafety.3]
+
+* Dependencies upgraded
+
 ## [0.1.0-nullsafety.2]
 
 * Null-safety
