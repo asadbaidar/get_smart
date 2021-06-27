@@ -590,10 +590,21 @@ class CircularProgress extends StatelessWidget {
   const CircularProgress({
     this.size = 14,
     this.margin = 0,
+    this.strokeWidth = 1.4,
+    this.color,
+  });
+
+  const CircularProgress.small({
+    this.size = 10,
+    this.margin = 0,
+    this.strokeWidth = 1,
+    this.color,
   });
 
   final double size;
   final double margin;
+  final double strokeWidth;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -603,7 +614,10 @@ class CircularProgress extends StatelessWidget {
             height: size,
             width: size,
             margin: EdgeInsets.all(margin),
-            child: CircularProgressIndicator(strokeWidth: 1.4),
+            child: CircularProgressIndicator(
+              strokeWidth: strokeWidth,
+              color: color,
+            ),
           ),
         ],
       );

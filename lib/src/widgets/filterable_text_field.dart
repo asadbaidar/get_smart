@@ -485,7 +485,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
                             itemCount: options.length,
                             itemBuilder: (context, int index) {
                               final option = options.elementAt(index);
-                              return AppTile.simple(
+                              return GetTile.simple(
                                 title: option.description,
                                 onTap: () => onSelected(option),
                               );
