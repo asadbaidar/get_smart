@@ -866,17 +866,15 @@ abstract class GetButton {
     Color? color,
     VoidCallback? onPressed,
   }) {
-    var _icon = const BackButtonIcon();
     var _onPressed = () => Get.canPop ? Get.back() : Get.systemPop();
     return Get.isIOS
-        ? CupertinoButton(
-            child: _icon,
-            color: color,
+        ? CupertinoNavigationBarBackButton(
+            color: color ?? Get.theme.primaryIconTheme.color,
             onPressed: _onPressed,
           )
         : icon(
-            icon: _icon,
-            color: color,
+            icon: const BackButtonIcon(),
+            color: color ?? Get.theme.primaryIconTheme.color,
             tooltip: Get.localization.backButtonTooltip,
             onPressed: _onPressed,
           );

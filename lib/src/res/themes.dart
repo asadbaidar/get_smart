@@ -231,10 +231,12 @@ class GetTheme {
           fontSize: 18,
           color: _primaryBackground.contrast,
           fontWeight: FontWeight.w500,
+          fontFamily: fontFamily,
         ),
         toolbarTextStyle: TextStyle(
           fontSize: 14,
           color: _primaryBackground.contrast.actioned,
+          fontFamily: fontFamily,
         ),
         foregroundColor: _primaryBackground.contrast,
         iconTheme: _primaryIconTheme,
@@ -248,8 +250,14 @@ class GetTheme {
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         elevation: 4,
-        selectedLabelStyle: TextStyle(fontSize: 10),
-        unselectedLabelStyle: TextStyle(fontSize: 9.8),
+        selectedLabelStyle: TextStyle(
+          fontSize: 10,
+          fontFamily: fontFamily,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontSize: 9.8,
+          fontFamily: fontFamily,
+        ),
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: true,
         showUnselectedLabels: true,
