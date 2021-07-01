@@ -1,3 +1,7 @@
+## [0.1.0-nullsafety.4]
+
+* Bug fixes
+
 ## [0.1.0-nullsafety.3]
 
 * Dependencies updated
