@@ -242,6 +242,14 @@ class GetTheme {
         iconTheme: _primaryIconTheme,
         actionsIconTheme: _primaryIconTheme,
         backwardsCompatibility: false,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          // systemNavigationBarDividerColor: _bottomBackground,
+          // systemNavigationBarIconBrightness: _bottomBrightness.inverse,
+          // systemNavigationBarColor: _bottomBackground,
+          statusBarBrightness: _primaryBrightness,
+          statusBarIconBrightness: _primaryBrightness.inverse,
+          statusBarColor: Colors.transparent,
+        ),
       ),
       bottomAppBarTheme: BottomAppBarTheme(
         elevation: 4,
@@ -282,16 +290,29 @@ class GetTheme {
     RenderErrorBox.textStyle = textStyle ?? kErrorTextStyle;
   }
 
-  static resetSystemChrome(BuildContext context) {
-    setErrorStyle(backgroundColor: context.theme.backgroundColor);
-    var brightness = GetTheme.brightnessInverse(context);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      // systemNavigationBarIconBrightness: brightness,
-      statusBarBrightness: brightness,
-      statusBarIconBrightness: brightness,
-      // systemNavigationBarColor: Get.theme.bottomAppBarTheme.color,
-      statusBarColor: Colors.transparent,
-    ));
+  static resetSystemChrome(BuildContext? context) {
+    setErrorStyle(backgroundColor: context?.theme.backgroundColor);
+    // var brightness = GetTheme.brightnessInverse(context);
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   // systemNavigationBarIconBrightness: brightness,
+    //   statusBarBrightness: brightness,
+    //   statusBarIconBrightness: brightness,
+    //   // systemNavigationBarColor: Get.theme.bottomAppBarTheme.color,
+    //   statusBarColor: Colors.transparent,
+    // ));
+    var _systemOverlayStyle = context?.theme.appBarTheme.systemOverlayStyle;
+    var _primaryBrightness = context?.theme.appBarTheme.brightness;
+    // var _bottomBackground = context?.theme.bottomAppBarTheme.color;
+    // var _bottomBrightness = _bottomBackground?.brightness;
+    SystemChrome.setSystemUIOverlayStyle(_systemOverlayStyle ??
+        SystemUiOverlayStyle(
+          // systemNavigationBarDividerColor: _bottomBackground,
+          // systemNavigationBarIconBrightness: _bottomBrightness?.inverse,
+          // systemNavigationBarColor: _bottomBackground,
+          statusBarBrightness: _primaryBrightness,
+          statusBarIconBrightness: _primaryBrightness?.inverse,
+          statusBarColor: Colors.transparent,
+        ));
   }
 }
 
@@ -390,4 +411,9 @@ class GetFont {
           fontFamily: fontFamily,
         ),
       );
+}
+
+extension BrightnessX on Brightness {
+  Brightness get inverse =>
+      this == Brightness.dark ? Brightness.light : Brightness.dark;
 }

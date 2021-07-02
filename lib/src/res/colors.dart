@@ -8,6 +8,8 @@ extension ColorX on Color {
 
   Color get contrast => isDark ? Colors.white : Colors.black;
 
+  Brightness get brightness => isDark ? Brightness.light : Brightness.dark;
+
   Color get darker => withBlue(max(blue - 50, 0))
       .withGreen(max(green - 50, 0))
       .withRed(max(red - 50, 0));

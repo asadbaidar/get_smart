@@ -35,7 +35,7 @@ abstract class GetButton {
 
   static MaterialStateProperty<BorderSide> defaultSide(Color color) =>
       MaterialStateProperty.resolveWith(
-        (states) => BorderSide(color: resolveColor(color, states)),
+        (states) => BorderSide(color: resolveColor(color.subbed, states)),
       );
 
   static Color resolveColor(Color color, Set<MaterialState> states) {
@@ -43,7 +43,7 @@ abstract class GetButton {
     if (states.contains(MaterialState.hovered)) return color.highlighted;
     if (states.contains(MaterialState.focused)) return color.highlighted;
     if (states.contains(MaterialState.pressed)) return color.hinted;
-    return color.subbed;
+    return color;
   }
 
   /// Create an elevated button.
