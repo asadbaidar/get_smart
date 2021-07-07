@@ -60,6 +60,7 @@ abstract class GetController extends MultipleFutureGetController {
         !_futuresCompleter.isCompleted) {
       _futuresCompleter.complete();
       setBusy(false);
+      setData(modelData() ?? GetResult.success());
       onDataReady();
     }
   }
