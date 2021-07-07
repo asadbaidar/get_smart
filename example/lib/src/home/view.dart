@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage();
+
   @override
   Widget build(BuildContext context) => GetBuilder<HomeModel>(
         init: HomeModel(),

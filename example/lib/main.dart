@@ -29,7 +29,7 @@ class AppRoute {
   static List<GetPage> get pages => [
         GetPage(
           name: login,
-          page: () => LoginPage(),
+          page: () => const LoginPage(),
           transition: Transition.noTransition,
         ),
       ];

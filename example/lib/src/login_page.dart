@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 class LoginPage extends StatelessWidget {
+  const LoginPage();
+
   GlobalKey<FormState> get form => use(GlobalKey<FormState>());
 
   bool get isValid => true; // ?? form.state?.validate() == true;
@@ -37,7 +39,7 @@ class LoginPage extends StatelessWidget {
                   verticalPadding: 14,
                   child: Text("Log In"),
                   onPressed: () {
-                    if (isValid) Get.to(() => HomePage());
+                    if (isValid) Get.to(() => const HomePage());
                   },
                 ),
               ]),
