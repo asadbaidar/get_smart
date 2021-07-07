@@ -14,9 +14,11 @@ abstract class GetController extends MultipleFutureGetController {
 
   late Completer _futuresCompleter;
   int _futuresCompleted = 0;
+  bool _isModelReady = false;
 
   void _initialiseData() {
     _futuresCompleted = 0;
+    _isModelReady = false;
   }
 
   @override
@@ -60,7 +62,7 @@ abstract class GetController extends MultipleFutureGetController {
         !_futuresCompleter.isCompleted) {
       _futuresCompleter.complete();
       setBusy(false);
-      setData(modelData() ?? GetResult.success());
+      _isModelReady = true;
       onDataReady();
     }
   }
@@ -179,6 +181,9 @@ abstract class GetController extends MultipleFutureGetController {
   /// Returns the data ready status of the ViewModel if no error occurred
   bool get isDataReady => dataReady(typeName);
 
+  /// Returns the ready status of the ViewModel when all futures are completed
+  bool get isModelReady => _isModelReady;
+
   /// Returns the data ready status of the ViewModel even if error occurred
   bool get isReady => ready(typeName);
 
@@ -188,7 +193,8 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Returns the error status of the ViewModel and checks if condition valid
   bool hasErrorOr([bool? condition]) =>
-      !isBusy && (hasError || ((condition ?? true) && isReady));
+      !isBusy &&
+      (hasError || ((condition ?? true) && (isReady || isModelReady)));
 
   /// Returns the error status of the ViewModel
   @override
