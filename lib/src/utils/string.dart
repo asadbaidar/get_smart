@@ -49,7 +49,7 @@ extension StringX on String {
 
   bool get isNotBlank => !isBlank!;
 
-  String get fileType => takeLastWhile((s) => s != ".");
+  String get fileType => takeLastWhile((s) => s != ".").lowercase;
 
   bool equalsIgnoreCase(String? s) => lowercase == s?.lowercase;
 

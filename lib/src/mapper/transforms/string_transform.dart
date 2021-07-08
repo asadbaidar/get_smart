@@ -1,30 +1,43 @@
 import 'package:get_smart/get_smart.dart';
 
 class StringTransform implements Transformable<String, String> {
-  StringTransform({this.fallback = ""});
+  StringTransform({
+    this.capitalize = false,
+    this.fallback = "",
+  });
 
+  final bool capitalize;
   final String fallback;
 
   @override
-  String fromJson(value) => _stringFromJson(value, fallback);
+  String fromJson(value) => _stringFromJson(value, capitalize, fallback);
 
   @override
   String toJson(String? value) => _stringToJson(value, fallback);
 }
 
 class RxStringTransform implements Transformable<RxString, String?> {
-  RxStringTransform({this.fallback = ""});
+  RxStringTransform({
+    this.capitalize = false,
+    this.fallback = "",
+  });
 
+  final bool capitalize;
   final String fallback;
 
   @override
-  RxString fromJson(value) => _stringFromJson(value, fallback).obs;
+  RxString fromJson(value) => _stringFromJson(value, capitalize, fallback).obs;
 
   @override
   String toJson(RxString? value) => _stringToJson(value?.value, fallback);
 }
 
-String _stringFromJson(value, fallback) {
+String _stringFromJson(value, bool capitalize, fallback) {
+  final string = _$stringFromJson(value, fallback);
+  return capitalize ? string.capitalized : string;
+}
+
+String _$stringFromJson(value, fallback) {
   try {
     if (value == null) return fallback;
     if (value is String) return value;
