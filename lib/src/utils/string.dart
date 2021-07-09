@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime_type/mime_type.dart';
 
 extension StringX on String {
   String? pre(String? pre, {int doFor = 1, bool doIf = true}) {
@@ -50,6 +52,10 @@ extension StringX on String {
   bool get isNotBlank => !isBlank!;
 
   String get fileType => takeLastWhile((s) => s != ".").lowercase;
+
+  String? get mimeType => mime(this);
+
+  MediaType? get mediaType => mimeType?.mapIt((it) => MediaType.parse(it));
 
   bool equalsIgnoreCase(String? s) => lowercase == s?.lowercase;
 

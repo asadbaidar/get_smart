@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -44,6 +45,10 @@ extension TextStyleX on TextStyle {
   TextStyle get italic => apply(fontStyle: FontStyle.italic);
 
   TextStyle get bold => apply(fontWeightDelta: 1);
+}
+
+extension MapX<K, V> on Map<K, V> {
+  String get jsonString => jsonEncode(this);
 }
 
 extension ListX<E> on List<E> {

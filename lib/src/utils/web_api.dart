@@ -3,6 +3,11 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as DIO;
 import 'package:get_smart/get_smart.dart';
+import 'package:http_parser/http_parser.dart';
+
+typedef GetFormData = DIO.FormData;
+typedef GetResponse<T> = DIO.Response<T>;
+typedef GetMultipartFile = DIO.MultipartFile;
 
 class GetResult<T> extends GetObject {
   GetResult();
@@ -76,7 +81,11 @@ class GetResult<T> extends GetObject {
   String toString() => toJsonString();
 }
 
-enum GetMethod { get, post, delete }
+enum GetMethod {
+  get,
+  post,
+  delete,
+}
 
 enum GetStatus {
   busy,
@@ -107,6 +116,7 @@ abstract class GetWebAPI {
     required String path,
     bool encrypted = false,
     bool inIsolate = true,
+    List<GetFile>? files,
     Map<String, dynamic> parameters = const {},
   }) =>
       request<T>(
@@ -115,6 +125,7 @@ abstract class GetWebAPI {
         method: GetMethod.post,
         encrypted: encrypted,
         inIsolate: inIsolate,
+        files: files,
         parameters: parameters,
       );
 
@@ -167,6 +178,7 @@ abstract class GetWebAPI {
     required GetMethod method,
     bool encrypted = false,
     bool inIsolate = true,
+    List<GetFile>? files,
     Map<String, dynamic> parameters = const {},
   }) async =>
       scheduleTask(() async {
@@ -185,6 +197,7 @@ abstract class GetWebAPI {
             result: GetResult<T>(),
             builder: as,
             authToken: await authToken,
+            files: files,
             parameters: parameters,
           );
           return inIsolate && isolate != null
@@ -204,6 +217,7 @@ abstract class GetWebAPI {
         method: parcel.method,
         authToken: parcel.authToken,
         builder: parcel.builder,
+        files: parcel.files,
         parameters: parcel.parameters,
       );
 
@@ -217,6 +231,7 @@ abstract class GetWebAPI {
     required String authToken,
     required T result,
     Object? builder,
+    List<GetFile>? files,
     Map<String, dynamic> parameters = const {},
   }) async {
     Dio? dio;
@@ -227,21 +242,31 @@ abstract class GetWebAPI {
         requestBody: true,
         responseBody: true,
       ));
+      final isMultipart = files != null;
       dio.options
         ..baseUrl = address
         ..connectTimeout = 30000
         ..receiveTimeout = 60000
-        ..method = method.keyNAME
-        ..headers = {
-          "auth": authToken,
-        }
         ..validateStatus = (status) => status == 200;
       final cancelToken = _cancelTokens[id] = CancelToken();
       print("Request ID $id");
-      DIO.Response response = await dio.request(
+      GetResponse response = await dio.request(
         path,
-        queryParameters: method == GetMethod.post ? null : parameters,
-        data: method == GetMethod.get ? null : parameters,
+        queryParameters:
+            method == GetMethod.post || isMultipart ? null : parameters,
+        data: method == GetMethod.get
+            ? null
+            : isMultipart
+                ? GetFormData.fromMap({
+                    "data": parameters.jsonString,
+                    "files": await GetFile.toMultipart(files!),
+                  })
+                : parameters,
+        options: Options(
+          method: method.keyNAME,
+          contentType: isMultipart ? "multipart/form-data" : null,
+          headers: {"auth": authToken},
+        ),
         cancelToken: cancelToken,
       );
       return $object(response.data)?.getObject<T>(
@@ -260,6 +285,41 @@ abstract class GetWebAPI {
   }
 }
 
+class GetFile {
+  GetFile({
+    required this.path,
+    required this.name,
+  });
+
+  final String path;
+  final String name;
+
+  MediaType? get mediaType => path.mediaType;
+
+  Future<GetMultipartFile> get multipart => GetMultipartFile.fromFile(
+        path,
+        filename: name,
+        contentType: mediaType,
+      );
+
+  static Future<List<GetMultipartFile>> toMultipart(List<GetFile> files) async {
+    List<GetMultipartFile> multipartFiles = [];
+    await Future.forEach(
+      files,
+      (GetFile file) async => multipartFiles.add(await file.multipart),
+    );
+    return multipartFiles;
+  }
+
+  @override
+  String toString() =>
+      "$typeName: " +
+      {
+        "path": path,
+        "name": name,
+      }.toString();
+}
+
 class GetRequestCancel {
   GetRequestCancel(this.id);
 
@@ -267,15 +327,6 @@ class GetRequestCancel {
 
   @override
   String toString() => "$typeName: " + {"id": id}.toString();
-}
-
-class GetIsolateEntry {
-  GetIsolateEntry(this.sendPort);
-
-  final sendPort;
-
-  @override
-  String toString() => "$typeName: " + {"sendPort": sendPort}.toString();
 }
 
 class GetRequestParcel<T, R> {
@@ -287,6 +338,7 @@ class GetRequestParcel<T, R> {
     required this.authToken,
     required this.result,
     this.builder,
+    this.files,
     this.parameters = const {},
   });
 
@@ -297,6 +349,7 @@ class GetRequestParcel<T, R> {
   final String authToken;
   R result;
   final T? builder;
+  final List<GetFile>? files;
   final Map<String, dynamic> parameters;
 
   String get key => authToken;
@@ -310,10 +363,20 @@ class GetRequestParcel<T, R> {
         "path": path,
         "method": method,
         "authToken": authToken,
+        "files": files,
         "parameters": parameters,
         "builder": builder?.toString(),
         "result": result.toString(),
       }.toString();
+}
+
+class GetIsolateEntry {
+  GetIsolateEntry(this.sendPort);
+
+  final sendPort;
+
+  @override
+  String toString() => "$typeName: " + {"sendPort": sendPort}.toString();
 }
 
 GetIsolate? get isolate => GetIsolate.instance;

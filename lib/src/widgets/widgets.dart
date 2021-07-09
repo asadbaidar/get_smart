@@ -746,10 +746,10 @@ class GetDismissible extends StatefulWidget {
   final Widget child;
 
   @override
-  _GetDismissibleState createState() => _GetDismissibleState();
+  GetDismissibleState createState() => GetDismissibleState();
 }
 
-class _GetDismissibleState extends State<GetDismissible> {
+class GetDismissibleState extends State<GetDismissible> {
   var _dismissed = false;
 
   @override
@@ -934,6 +934,8 @@ class ProgressSnackBar extends StatelessWidget {
     this.withBottomBar,
     this.actionColor,
     this.timeout = const Duration(seconds: 6),
+    this.isDismissible,
+    this.progress,
     this.autoDismiss = true,
     Key? key,
   }) : super(key: key);
@@ -941,12 +943,14 @@ class ProgressSnackBar extends StatelessWidget {
   final String? success;
   final String? error;
   final GetStatus? status;
-  final Function? onCancel;
-  final Function? onRetry;
-  final Function? onDone;
+  final VoidCallback? onCancel;
+  final VoidCallback? onRetry;
+  final VoidCallback? onDone;
   final bool? withBottomBar;
   final Color? actionColor;
   final Duration timeout;
+  final bool? isDismissible;
+  final double? progress;
   final bool autoDismiss;
 
   @override
@@ -968,10 +972,11 @@ class ProgressSnackBar extends StatelessWidget {
                 : onDone,
         onDismiss: onCancel,
         showProgress: status == GetStatus.busy,
-        isDismissible: status == GetStatus.failed,
+        isDismissible: isDismissible ?? status == GetStatus.failed,
         withBottomBar: withBottomBar,
         actionColor: actionColor,
         timeout: timeout,
+        progress: progress,
         autoDismiss: autoDismiss,
       );
 }
@@ -987,26 +992,32 @@ class GetSnackBar extends StatelessWidget {
     this.withBottomBar = false,
     this.actionColor,
     this.timeout = const Duration(seconds: 6),
+    this.progress,
     this.autoDismiss = true,
     Key? key,
   }) : super(key: key);
 
   final String? message;
   final String? action;
-  final Function? onAction;
-  final Function? onDismiss;
+  final VoidCallback? onAction;
+  final VoidCallback? onDismiss;
   final bool showProgress;
   final bool isDismissible;
   final bool? withBottomBar;
   final Color? actionColor;
   final Duration timeout;
+  final double? progress;
   final bool autoDismiss;
+
+  GlobalKey<GetDismissibleState> get _dismissible =>
+      use(GlobalKey<GetDismissibleState>());
 
   @override
   Widget build(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           GetDismissible(
+            key: _dismissible,
             enabled: isDismissible,
             direction: DismissDirection.down,
             onDismissed: (direction) => onDismiss?.call(),
@@ -1019,7 +1030,7 @@ class GetSnackBar extends StatelessWidget {
                 children: [
                   Stack(children: [
                     GetLineSeparator(style: SeparatorStyle.full),
-                    if (showProgress) LinearProgress(),
+                    if (showProgress) LinearProgress(value: progress),
                   ]),
                   GetBar(
                     snackPosition: withBottomBar == true
@@ -1033,7 +1044,8 @@ class GetSnackBar extends StatelessWidget {
                         : GetButton.text(
                             child: Text(action!.uppercase),
                             primary: actionColor,
-                            onPressed: onAction as void Function()?,
+                            onPressed:
+                                onAction ?? () => _dismissible.state?.dismiss(),
                           ),
                   ),
                 ],
