@@ -1,3 +1,7 @@
+## [0.1.0-nullsafety.7]
+
+* Bug fixes
+
 ## [0.1.0-nullsafety.6]
 
 * Bug fixes
