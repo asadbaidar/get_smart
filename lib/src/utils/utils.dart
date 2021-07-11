@@ -164,6 +164,24 @@ extension ContextX on BuildContext {
     FocusScope.of(this).unfocus();
     SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
+
+  NavigatorState get navigator => Navigator.of(this);
+
+  RelativeRect position({Offset offset = Offset.zero}) {
+    final RenderBox widget = findRenderObject() as RenderBox;
+    final RenderBox overlay =
+        navigator.overlay!.context.findRenderObject() as RenderBox;
+    return RelativeRect.fromRect(
+      Rect.fromPoints(
+        widget.localToGlobal(offset, ancestor: overlay),
+        widget.localToGlobal(
+          widget.size.bottomRight(Offset.zero) + offset,
+          ancestor: overlay,
+        ),
+      ),
+      Offset.zero & overlay.size,
+    );
+  }
 }
 
 class GetPlatformChannel {

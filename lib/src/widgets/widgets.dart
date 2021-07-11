@@ -267,7 +267,7 @@ class GetTile extends StatelessWidget {
                 ],
               ),
             ),
-            ...rows ?? []
+            ...rows ?? [],
           ],
         ),
       ),
