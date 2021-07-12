@@ -294,6 +294,10 @@ class GetFile {
   final String path;
   final String name;
 
+  bool get isImage => name.isImageFileName;
+
+  bool get isVideo => name.isVideoFileName;
+
   MediaType? get mediaType => path.mediaType;
 
   Future<GetMultipartFile> get multipart => GetMultipartFile.fromFile(

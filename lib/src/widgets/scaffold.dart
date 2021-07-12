@@ -33,7 +33,7 @@ class GetScaffold extends StatelessWidget {
     this.bottomBarCenterItems,
     this.appBarRightItems,
     this.floatingActionButton,
-    this.floatingActionButtonLocation = FloatingActionButtonLocation.endDocked,
+    this.floatingActionButtonLocation,
     Key? key,
   }) : _key = key as GlobalKey<ScaffoldState>?;
 
@@ -65,7 +65,7 @@ class GetScaffold extends StatelessWidget {
   final List<Widget>? bottomBarCenterItems;
   final List<Widget>? appBarRightItems;
   final FloatingActionButton? floatingActionButton;
-  final FloatingActionButtonLocation floatingActionButtonLocation;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
   final GlobalKey<ScaffoldState>? _key;
 
   bool get _isInteractive => isInteractive == true;
@@ -91,7 +91,7 @@ class GetScaffold extends StatelessWidget {
                   toolbarHeight: Get.mediaQuery.viewInsets.top.abs(),
                   elevation: hideToolbars ? Get.theme.appBarTheme.elevation : 0,
                 )
-              : _appBar as PreferredSizeWidget?,
+              : _appBar,
       bottomNavigationBar: withBottomBar != null
           ? _bottomAppBar
           : CrossFade(
@@ -107,9 +107,10 @@ class GetScaffold extends StatelessWidget {
             )
           : _body,
       floatingActionButton: _isInteractive ? floatingActionButton : null,
-      floatingActionButtonLocation: subtitle?.isBlank ?? true
-          ? FloatingActionButtonLocation.endFloat
-          : floatingActionButtonLocation,
+      floatingActionButtonLocation: floatingActionButtonLocation ??
+          (subtitle?.isBlank ?? true
+              ? FloatingActionButtonLocation.endFloat
+              : FloatingActionButtonLocation.endDocked),
       bottomSheet: bottomSheet,
     );
   }
@@ -139,7 +140,7 @@ class GetScaffold extends StatelessWidget {
         ),
       );
 
-  Widget get _appBar => AppBar(
+  AppBar get _appBar => AppBar(
         centerTitle: _centerTitle,
         automaticallyImplyLeading: false,
         leading: hideAppBarLeading == true
