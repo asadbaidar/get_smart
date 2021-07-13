@@ -927,6 +927,7 @@ class ProgressSnackBar extends StatelessWidget {
   const ProgressSnackBar({
     this.success,
     this.error,
+    this.action,
     this.status,
     this.onCancel,
     this.onRetry,
@@ -942,6 +943,7 @@ class ProgressSnackBar extends StatelessWidget {
 
   final String? success;
   final String? error;
+  final String? action;
   final GetStatus? status;
   final VoidCallback? onCancel;
   final VoidCallback? onRetry;
@@ -960,11 +962,12 @@ class ProgressSnackBar extends StatelessWidget {
             : status == GetStatus.failed
                 ? error ?? GetText.failed()
                 : success ?? GetText.succeeded(),
-        action: status == GetStatus.busy
-            ? GetText.cancel()
-            : status == GetStatus.failed
-                ? GetText.retry()
-                : GetText.ok(),
+        action: action ??
+            (status == GetStatus.busy
+                ? GetText.cancel()
+                : status == GetStatus.failed
+                    ? GetText.retry()
+                    : GetText.ok()),
         onAction: status == GetStatus.busy
             ? onCancel
             : status == GetStatus.failed
