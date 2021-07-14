@@ -1461,27 +1461,69 @@ extension GetBoxDecoration on BoxDecoration {
   }
 }
 
-/* TODO:
-         Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.all(50),
-                  padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1.5),
-                  child: Text(
-                    "34Y",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Get.theme.accentColor, fontSize: 9),
-                  ),
-                  decoration: GetBoxDecoration.all(
-                    1,
-                    color: Colors.transparent, //Get.theme.accentColor,
-                    borderColor: Get.theme.accentColor,
-                    borderRadius: 5,
-                  ),
+class TextBadge extends StatelessWidget {
+  const TextBadge({
+    this.text,
+    this.size = 9,
+    this.textColor,
+    this.backgroundColor,
+    this.borderColor,
+    this.borderWidth,
+    this.borderRadius = 5,
+    this.inverted = false,
+    this.padding = 3,
+    this.margin = const EdgeInsets.symmetric(horizontal: 2),
+    Key? key,
+  }) : super(key: key);
+
+  final String? text;
+  final double size;
+  final Color? textColor;
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final double? borderWidth;
+  final double? borderRadius;
+  final bool inverted;
+  final EdgeInsetsGeometry? margin;
+  final double padding;
+
+  Color get _textColor => textColor ?? Get.theme.accentColor;
+
+  Color get _backgroundColor => backgroundColor ?? Colors.transparent;
+
+  Color get _borderColor => borderColor ?? Get.theme.accentColor;
+
+  @override
+  Widget build(BuildContext context) => text == null
+      ? Container()
+      : Row(
+          children: [
+            Container(
+              margin: margin,
+              padding: EdgeInsets.symmetric(
+                horizontal: padding,
+                vertical: padding.half,
+              ),
+              child: Text(
+                text!,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: _textColor.applyIf(inverted, (it) => it.contrast),
+                  fontSize: size,
                 ),
-              ],
-            )
-*/
+              ),
+              decoration: GetBoxDecoration.all(
+                1,
+                color: inverted ? _textColor : _backgroundColor,
+                borderColor:
+                    inverted ? borderColor ?? _textColor : _borderColor,
+                borderWidth: borderWidth,
+                borderRadius: borderRadius,
+              ),
+            ),
+          ],
+        );
+}
 
 /// States that an application can be in.
 ///
