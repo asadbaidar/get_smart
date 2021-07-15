@@ -28,11 +28,8 @@ abstract class GetObject extends Mappable {
   void mapping(Mapper map) {
     map(["CURRENT_TIME"], (v) => currentTime ??= v, DateTransform());
     map(idKeys, (v) => _id ??= v?.toString());
-    map(
-      descriptionKeys,
-      (v) => _description ??=
-          v?.toString().applyIf(capitalized, (s) => s.capitalized),
-    );
+    map(descriptionKeys, (v) => _description ??= v,
+        StringTransform(capitalize: capitalized));
   }
 
   Future get decrypted async {

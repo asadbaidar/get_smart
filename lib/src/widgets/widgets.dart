@@ -16,33 +16,61 @@ class GetTileData extends GetObject {
 
   GetTileData({
     this.icon,
-    this.accessory,
-    this.header,
     this.title,
     this.subtitle,
     this.trailingTop,
     this.trailingBottom,
+    this.accessory,
     this.subTiles = const [],
     Color? color,
-    this.isDetailed = false,
+    this.background,
+    this.header,
     this.isHeader = false,
+    this.isLeadingBoxed,
+    this.isDetailed = false,
     this.padAccessory,
+    this.showAccessory,
+    this.tintAccessory,
+    this.tintAble,
+    this.destructive,
+    this.enabled,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
+    this.height,
+    this.density,
     this.onTap,
+    this.onTapLeading,
   }) : _color = color;
 
   IconData? icon;
-  IconData? accessory;
-  dynamic header;
   String? title;
   String? subtitle;
   String? trailingTop;
   String? trailingBottom;
+  IconData? accessory;
   List<GetTileData> subTiles;
   Color? _color;
-  bool isDetailed;
+  Color? background;
+  dynamic header;
   bool isHeader;
+  bool? isLeadingBoxed;
+  bool isDetailed;
   bool? padAccessory;
-  Function? onTap;
+  bool? showAccessory;
+  bool? tintAccessory;
+  bool? tintAble;
+  bool? destructive;
+  bool? enabled;
+  double? horizontalPadding;
+  double? verticalPadding;
+  double? topPadding;
+  double? bottomPadding;
+  double? height;
+  VisualDensity? density;
+  VoidCallback? onTap;
+  VoidCallback? onTapLeading;
 
   bool get hasSubTiles => subTiles.isNotEmpty == true;
 
@@ -162,6 +190,36 @@ class GetTile extends StatelessWidget {
     this.enabled,
     this.density,
     this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
+    this.onTap,
+    this.onTapLeading,
+    Key? key,
+  }) : super(key: key);
+
+  /// Tile with no accessory, no background and no boxed leading and
+  /// have tinted accessory, minimum density and horizontal padding of 4dp.
+  const GetTile.item({
+    this.leading,
+    this.title,
+    this.subtitle,
+    this.trailingTop,
+    this.trailingBottom,
+    this.accessory,
+    this.rows,
+    this.color,
+    this.background = Colors.transparent,
+    this.isLeadingBoxed = false,
+    this.isDetailed = false,
+    this.padAccessory,
+    this.showAccessory,
+    this.tintAccessory = true,
+    this.tintAble,
+    this.destructive,
+    this.enabled,
+    this.density = Density.min,
+    this.horizontalPadding = 4,
     this.verticalPadding,
     this.topPadding,
     this.bottomPadding,
@@ -727,80 +785,6 @@ class MessageView extends StatelessWidget {
   }
 }
 
-class GetDismissible extends StatefulWidget {
-  const GetDismissible({
-    this.enabled,
-    this.timeout = const Duration(seconds: 6),
-    this.autoDismiss = false,
-    this.direction = DismissDirection.down,
-    this.onDismissed,
-    required this.child,
-    Key? key,
-  }) : super(key: key);
-
-  final bool? enabled;
-  final Duration timeout;
-  final bool autoDismiss;
-  final DismissDirection direction;
-  final void Function(DismissDirection)? onDismissed;
-  final Widget child;
-
-  @override
-  GetDismissibleState createState() => GetDismissibleState();
-}
-
-class GetDismissibleState extends State<GetDismissible> {
-  var _dismissed = false;
-
-  @override
-  Widget build(BuildContext context) {
-    startTimer();
-    return _dismissed
-        ? Container(height: 0)
-        : widget.enabled == true
-            ? Dismissible(
-                key: const Key('dismissible'),
-                direction: widget.direction,
-                onDismissed: dismiss,
-                background: Container(),
-                secondaryBackground: Container(),
-                child: widget.child,
-              )
-            : widget.child;
-  }
-
-  void dismiss([DismissDirection? direction]) {
-    stopTimer();
-    widget.onDismissed?.call(direction ?? widget.direction);
-    if (mounted) setState(() => _dismissed = true);
-  }
-
-  Timer? _timer;
-  var _time = 6;
-
-  void startTimer() {
-    if (!widget.autoDismiss) return;
-    if (_timer == null && widget.enabled == true && !_dismissed) {
-      print("startTimer");
-      _time = widget.timeout.inSeconds;
-      _timer = Timer.periodic(1.seconds, (_) {
-        print("time $_time");
-        if (_time == 0) {
-          dismiss();
-        } else
-          _time--;
-      });
-    } else if (_timer != null && widget.enabled != true && !_dismissed) {
-      stopTimer();
-    }
-  }
-
-  void stopTimer() {
-    _timer?.cancel();
-    _timer = null;
-  }
-}
-
 class SwipeRefresh extends RefreshIndicator {
   SwipeRefresh({
     required Widget child,
@@ -935,9 +919,10 @@ class ProgressSnackBar extends StatelessWidget {
     this.withBottomBar,
     this.actionColor,
     this.timeout = const Duration(seconds: 6),
-    this.isDismissible,
     this.progress,
-    this.autoDismiss = true,
+    this.isDismissible,
+    this.autoDismissible = true,
+    this.autoDismissIfNotBusy,
     Key? key,
   }) : super(key: key);
 
@@ -951,9 +936,10 @@ class ProgressSnackBar extends StatelessWidget {
   final bool? withBottomBar;
   final Color? actionColor;
   final Duration timeout;
-  final bool? isDismissible;
   final double? progress;
-  final bool autoDismiss;
+  final bool? isDismissible;
+  final bool autoDismissible;
+  final bool? autoDismissIfNotBusy;
 
   @override
   Widget build(BuildContext context) => GetSnackBar(
@@ -975,12 +961,18 @@ class ProgressSnackBar extends StatelessWidget {
                 : onDone,
         onDismiss: onCancel,
         showProgress: status == GetStatus.busy,
-        isDismissible: isDismissible ?? status == GetStatus.failed,
+        isDismissible: status != GetStatus.busy &&
+            (isDismissible ??
+                autoDismissIfNotBusy ??
+                status == GetStatus.failed),
+        autoDismiss: autoDismissIfNotBusy == true
+            ? status != GetStatus.busy
+            : status == GetStatus.failed,
+        autoDismissible: autoDismissible,
         withBottomBar: withBottomBar,
         actionColor: actionColor,
         timeout: timeout,
         progress: progress,
-        autoDismiss: autoDismiss,
       );
 }
 
@@ -990,13 +982,14 @@ class GetSnackBar extends StatelessWidget {
     this.action,
     this.onAction,
     this.onDismiss,
-    this.showProgress = true,
-    this.isDismissible = false,
-    this.withBottomBar = false,
     this.actionColor,
     this.timeout = const Duration(seconds: 6),
     this.progress,
-    this.autoDismiss = true,
+    this.showProgress = true,
+    this.withBottomBar = false,
+    this.isDismissible = false,
+    this.autoDismissible = true,
+    this.autoDismiss = false,
     Key? key,
   }) : super(key: key);
 
@@ -1004,12 +997,13 @@ class GetSnackBar extends StatelessWidget {
   final String? action;
   final VoidCallback? onAction;
   final VoidCallback? onDismiss;
-  final bool showProgress;
-  final bool isDismissible;
-  final bool? withBottomBar;
   final Color? actionColor;
   final Duration timeout;
   final double? progress;
+  final bool showProgress;
+  final bool? withBottomBar;
+  final bool isDismissible;
+  final bool autoDismissible;
   final bool autoDismiss;
 
   GlobalKey<GetDismissibleState> get _dismissible =>
@@ -1022,10 +1016,11 @@ class GetSnackBar extends StatelessWidget {
           GetDismissible(
             key: _dismissible,
             enabled: isDismissible,
+            autoDismissible: autoDismissible,
+            autoDismiss: autoDismiss,
             direction: DismissDirection.down,
             onDismissed: (direction) => onDismiss?.call(),
             timeout: timeout,
-            autoDismiss: autoDismiss,
             child: Container(
               color: Get.theme.bottomAppBarTheme.color,
               child: Column(
@@ -1057,6 +1052,82 @@ class GetSnackBar extends StatelessWidget {
           ),
         ],
       );
+}
+
+class GetDismissible extends StatefulWidget {
+  const GetDismissible({
+    this.enabled,
+    this.autoDismissible = false,
+    this.autoDismiss = false,
+    this.timeout = const Duration(seconds: 6),
+    this.direction = DismissDirection.down,
+    this.onDismissed,
+    required this.child,
+    Key? key,
+  }) : super(key: key);
+
+  final bool? enabled;
+  final Duration timeout;
+  final bool autoDismissible;
+  final bool autoDismiss;
+  final DismissDirection direction;
+  final void Function(DismissDirection)? onDismissed;
+  final Widget child;
+
+  @override
+  GetDismissibleState createState() => GetDismissibleState();
+}
+
+class GetDismissibleState extends State<GetDismissible> {
+  var _dismissed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    startTimer();
+    return _dismissed
+        ? Container(height: 0)
+        : widget.enabled == true
+            ? Dismissible(
+                key: const Key('dismissible'),
+                direction: widget.direction,
+                onDismissed: dismiss,
+                background: Container(),
+                secondaryBackground: Container(),
+                child: widget.child,
+              )
+            : widget.child;
+  }
+
+  void dismiss([DismissDirection? direction]) {
+    stopTimer();
+    widget.onDismissed?.call(direction ?? widget.direction);
+    if (mounted) setState(() => _dismissed = true);
+  }
+
+  Timer? _timer;
+  var _time = 6;
+
+  void startTimer() {
+    if (!(widget.autoDismissible && widget.autoDismiss)) return;
+    if (_timer == null && widget.enabled == true && !_dismissed) {
+      print("startTimer");
+      _time = widget.timeout.inSeconds;
+      _timer = Timer.periodic(1.seconds, (_) {
+        print("time $_time");
+        if (_time == 0) {
+          dismiss();
+        } else
+          _time--;
+      });
+    } else if (_timer != null && widget.enabled != true && !_dismissed) {
+      stopTimer();
+    }
+  }
+
+  void stopTimer() {
+    _timer?.cancel();
+    _timer = null;
+  }
 }
 
 class BottomBar extends StatelessWidget {
@@ -1681,4 +1752,151 @@ class GetSearchDelegate extends SearchDelegate {
   void clear() => query = "";
 
   Widget getResults(BuildContext context) => Container();
+}
+
+typedef PopupMenuItemSelected<T> = void Function(int value, T data);
+typedef PopupMenuChildBuilder = Widget Function(VoidCallback? onPressed);
+typedef PopupMenuItemBuilder<T> = PopupMenuEntry<int> Function(
+  int value,
+  T data,
+);
+typedef PopupMenuSeparatorBuilder<T> = PopupMenuEntry<int> Function(
+  int value,
+  T data,
+);
+
+class PopupMenu<T extends Object> extends StatelessWidget {
+  const PopupMenu({
+    this.childBuilder,
+    this.itemBuilder,
+    this.separatorBuilder,
+    this.onSelected,
+    this.onCanceled,
+    required this.items,
+    this.initialSelected,
+    this.elevation = 12,
+    this.cornerRadius = 16,
+    this.color,
+    this.offset,
+    this.enabled = true,
+    this.separator = true,
+    this.useRootNavigator = false,
+    this.semanticLabel,
+  });
+
+  final PopupMenuChildBuilder? childBuilder;
+  final PopupMenuItemBuilder<T>? itemBuilder;
+  final PopupMenuSeparatorBuilder<T>? separatorBuilder;
+  final PopupMenuItemSelected<T>? onSelected;
+  final VoidCallback? onCanceled;
+  final List<T> items;
+  final int? initialSelected;
+  final double elevation;
+  final double cornerRadius;
+  final Color? color;
+  final Offset? offset;
+  final bool enabled;
+  final bool separator;
+  final bool useRootNavigator;
+  final String? semanticLabel;
+
+  PopupMenuChildBuilder get _childBuilder =>
+      childBuilder ??
+      (onPressed) => GetButton.primaryIcon(
+            icon: Icon(Icons.more_vert),
+            onPressed: onPressed,
+          );
+
+  PopupMenuSeparatorBuilder<T> get _separatorBuilder =>
+      separatorBuilder ?? (value, data) => const PopupMenuDivider(height: 1.5);
+
+  PopupMenuItemBuilder<T> get _itemBuilder =>
+      itemBuilder ??
+      (value, data) =>
+          $cast<GetTileData>(data)?.mapTo((GetTileData data) => GetTile.item(
+                leading: data.icon?.mapIt((it) => Icon(it)),
+                title: data.title,
+                subtitle: data.subtitle,
+                trailingTop: data.trailingTop,
+                trailingBottom: data.trailingBottom,
+                accessory: data.accessory?.mapIt((it) => Icon(it)),
+                color: data._color,
+                background: data.background ?? Colors.transparent,
+                isLeadingBoxed: data.isLeadingBoxed ?? false,
+                isDetailed: data.isDetailed,
+                padAccessory: data.padAccessory,
+                showAccessory: data.showAccessory,
+                tintAccessory: data.tintAccessory ?? true,
+                tintAble: data.tintAble,
+                destructive: data.destructive,
+                enabled: data.enabled,
+                density: data.density ?? Density.min,
+                horizontalPadding: data.horizontalPadding ?? 4,
+                verticalPadding: data.verticalPadding,
+                topPadding: data.topPadding,
+                bottomPadding: data.bottomPadding,
+                onTapLeading: data.onTapLeading,
+              ).popupMenuItem(
+                enabled: data.enabled ?? true,
+                height: data.height ?? 36,
+                value: value,
+              )) ??
+          Container().popupMenuItem(value: value);
+
+  List<PopupMenuEntry<int>> get _items =>
+      $cast<List<GetTileData>>(items)?.mapTo((List<T> items) => separator
+          ? (items
+              .expandIndexed((v, d) => [
+                    _itemBuilder(v, d),
+                    _separatorBuilder(v, d),
+                  ])
+              .toList()
+                ..removeLast())
+          : items.mapIndexed(_itemBuilder).toList()) ??
+      [];
+
+  _onSelected(value) {
+    final data = items.get(value);
+    if (value != null && data != null) {
+      onSelected?.call(value, data);
+      $cast<GetTileData>(data)?.mapTo((GetTileData data) => data.onTap?.call());
+    } else
+      onCanceled?.call();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      _childBuilder(/*onPressed:*/ () => showMenu(
+            context: context,
+            items: _items,
+            position: context.position(offset: offset),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(cornerRadius),
+            ),
+            color: color,
+            initialValue: initialSelected,
+            elevation: elevation,
+            useRootNavigator: useRootNavigator,
+            semanticLabel: semanticLabel,
+          ).then(_onSelected));
+}
+
+extension PopupMenuWidget on Widget {
+  PopupMenuItem<T> popupMenuItem<T>({
+    T? value,
+    bool enabled = true,
+    double height = 36,
+    EdgeInsets? padding,
+    TextStyle? textStyle,
+    MouseCursor? mouseCursor,
+  }) =>
+      PopupMenuItem<T>(
+        value: value,
+        enabled: enabled,
+        height: height,
+        padding: padding,
+        textStyle: textStyle,
+        mouseCursor: mouseCursor,
+        child: this,
+      );
 }

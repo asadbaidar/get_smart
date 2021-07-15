@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
+import 'package:path/path.dart' as PATH;
 
 extension StringX on String {
   String? pre(String? pre, {int doFor = 1, bool doIf = true}) {
@@ -51,6 +52,10 @@ extension StringX on String {
 
   bool get isNotBlank => !isBlank!;
 
+  String get fileName => PATH.basename(this);
+
+  String get fileNameWithoutType => PATH.basenameWithoutExtension(this);
+
   String get fileType => takeLastWhile((s) => s != ".").lowercase;
 
   String? get mimeType => mime(this);
@@ -95,23 +100,19 @@ extension StringX on String {
 
   /// Capitalize each word inside string
   /// Example: your name => Your Name
-  String get capitalized {
-    return isBlank!
-        ? ""
-        : length == 1
-            ? uppercase
-            : split(' ').map((s) => s.capitalizedFirst).join(' ');
-  }
+  String get capitalized => this.isBlank == true
+      ? ""
+      : length == 1
+          ? uppercase
+          : split(" ").map((s) => s.capitalizedFirst).join(" ");
 
   /// Uppercase first letter inside string and let the others lowercase
   /// Example: your name => Your name
-  String get capitalizedFirst {
-    return isBlank!
-        ? ""
-        : length == 1
-            ? uppercase
-            : this[0].uppercase + substring(1).lowercase;
-  }
+  String get capitalizedFirst => this.isBlank == true
+      ? ""
+      : length == 1
+          ? uppercase
+          : this[0].uppercase + substring(1).lowercase;
 
   bool get boolYN => trim().equalsIgnoreCase("Y");
 

@@ -52,8 +52,8 @@ extension MapX<K, V> on Map<K, V> {
 }
 
 extension ListX<E> on List<E> {
-  E? get(int index) {
-    if (index < length) {
+  E? get(int? index) {
+    if (index != null && index < length) {
       return this[index];
     }
     return null;
@@ -167,21 +167,28 @@ extension ContextX on BuildContext {
 
   NavigatorState get navigator => Navigator.of(this);
 
-  RelativeRect position({Offset offset = Offset.zero}) {
+  RelativeRect position({Offset? offset}) {
+    final _offset = offset ?? Offset.zero;
     final RenderBox widget = findRenderObject() as RenderBox;
     final RenderBox overlay =
         navigator.overlay!.context.findRenderObject() as RenderBox;
     return RelativeRect.fromRect(
       Rect.fromPoints(
-        widget.localToGlobal(offset, ancestor: overlay),
+        widget.localToGlobal(_offset, ancestor: overlay),
         widget.localToGlobal(
-          widget.size.bottomRight(Offset.zero) + offset,
+          widget.size.bottomRight(Offset.zero) + _offset,
           ancestor: overlay,
         ),
       ),
       Offset.zero & overlay.size,
     );
   }
+}
+
+extension GetOffset on Offset {
+  static Offset only({double? dx, double? dy}) => Offset(dx ?? 0, dy ?? 0);
+
+  static Offset all(double d) => Offset(d, d);
 }
 
 class GetPlatformChannel {
