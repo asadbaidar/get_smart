@@ -146,7 +146,8 @@ class GetScaffold extends StatelessWidget {
         leading: hideAppBarLeading == true
             ? null
             : appBarLeading ?? GetButton.back(),
-        title: customTitle ?? (title != null ? Text(title!) : Container()),
+        title: customTitle ??
+            (title != null ? Text(title!) : Container(height: 0)),
         bottom: PreferredSize(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -225,7 +226,7 @@ class GetScaffold extends StatelessWidget {
       },
       body: PageView.builder(
         itemCount: pages.length,
-        itemBuilder: (context, index) => Container(),
+        itemBuilder: (context, index) => Container(height: 0),
       ),
     );
 

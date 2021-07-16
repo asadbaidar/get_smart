@@ -13,6 +13,8 @@ import 'package:get_smart/get_smart.dart';
 ///  * [OutlinedButton], similar to [TextButton], but with an outline.
 ///  * [IconButton], A material design icon button.
 abstract class GetButton {
+  const GetButton._();
+
   static MaterialStateProperty<double> defaultElevation([
     double elevation = 2,
   ]) =>

@@ -417,3 +417,11 @@ extension BrightnessX on Brightness {
   Brightness get inverse =>
       this == Brightness.dark ? Brightness.light : Brightness.dark;
 }
+
+extension TextStyleX on TextStyle {
+  TextStyle get underlined => apply(decoration: TextDecoration.underline);
+
+  TextStyle get italic => apply(fontStyle: FontStyle.italic);
+
+  TextStyle get bold => apply(fontWeightDelta: 1);
+}

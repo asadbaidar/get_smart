@@ -11,7 +11,6 @@ export "package:url_launcher/url_launcher.dart";
 
 // res
 export "colors.dart";
-export "get_res.dart";
 export "localizations.dart";
 export "texts.dart";
 export "themes.dart";
