@@ -78,6 +78,7 @@ class ProgressSnackBar extends StatelessWidget {
     this.actionColor,
     this.timeout = const Duration(seconds: 6),
     this.progress,
+    this.enabled,
     this.isDismissible,
     this.autoDismissible = true,
     this.autoDismissIfNotBusy,
@@ -95,6 +96,7 @@ class ProgressSnackBar extends StatelessWidget {
   final Color? actionColor;
   final Duration timeout;
   final double? progress;
+  final bool? enabled;
   final bool? isDismissible;
   final bool autoDismissible;
   final bool? autoDismissIfNotBusy;
@@ -106,12 +108,14 @@ class ProgressSnackBar extends StatelessWidget {
             : status == GetStatus.failed
                 ? error ?? GetText.failed()
                 : success ?? GetText.succeeded(),
-        action: action ??
-            (status == GetStatus.busy
-                ? GetText.cancel()
-                : status == GetStatus.failed
-                    ? GetText.retry()
-                    : GetText.ok()),
+        action: enabled ?? true
+            ? action ??
+                (status == GetStatus.busy
+                    ? GetText.cancel()
+                    : status == GetStatus.failed
+                        ? GetText.retry()
+                        : GetText.ok())
+            : null,
         onAction: status == GetStatus.busy
             ? onCancel
             : status == GetStatus.failed

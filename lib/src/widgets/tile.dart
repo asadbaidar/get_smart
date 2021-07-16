@@ -15,6 +15,7 @@ class GetTileData extends GetObject {
     this.subTiles = const [],
     Color? color,
     this.background,
+    this.value,
     this.header,
     this.isHeader = false,
     this.isLeadingBoxed,
@@ -47,6 +48,7 @@ class GetTileData extends GetObject {
   List<GetTileData> subTiles;
   Color? tintColor;
   Color? background;
+  dynamic value;
   dynamic header;
   bool isHeader;
   bool? isLeadingBoxed;
