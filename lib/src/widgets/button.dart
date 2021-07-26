@@ -707,7 +707,7 @@ abstract class GetButton {
               ? EdgeInsets.symmetric(vertical: mini ? 4 : 8)
               : const EdgeInsets.all(8)),
       alignment: alignment ?? Alignment.center,
-      splashRadius: splashRadius ?? (labeled ? 24 : 20),
+      splashRadius: splashRadius ?? (labeled ? 24 : 18),
       icon: labeled
           ? Column(
               children: [
@@ -880,5 +880,40 @@ abstract class GetButton {
             tooltip: Get.localization.backButtonTooltip,
             onPressed: _onPressed,
           );
+  }
+
+  static Widget sticker({
+    Color? color,
+    VoidCallback? onPressed,
+    String? tooltip,
+    String? text,
+    IconData? icon,
+  }) {
+    var _color = color ?? Get.iconColor ?? Get.theme.accentColor;
+    return Container(
+      width: 20,
+      height: 20,
+      margin: const EdgeInsets.only(bottom: 6, right: 8, top: 6, left: 6),
+      padding: EdgeInsets.only(top: icon != null ? 2.2 : 3),
+      alignment: Alignment.topCenter,
+      decoration: BoxDecoration(
+        border: Border.all(color: _color),
+        borderRadius: BorderRadius.only(
+          topRight: 6.radius,
+          topLeft: 6.radius,
+          bottomLeft: 6.radius,
+          bottomRight: 12.radius,
+        ),
+      ),
+      child: icon != null
+          ? Icon(icon, color: _color, size: 13)
+          : Text(
+              text?.take(3).uppercase ?? "",
+              style: GoogleFonts.ubuntuCondensed(
+                fontSize: 8,
+                color: _color,
+              ),
+            ),
+    ).clickable(onTap: onPressed).tooltip(tooltip);
   }
 }

@@ -33,13 +33,13 @@ class BoxedView extends StatelessWidget {
     final splash = withinBox ? color?.darker : color?.translucent;
     return InkWell(
       onTap: onTap,
-      borderRadius: _size?.circularRadius,
+      borderRadius: _size?.roundRadius,
       highlightColor: splash?.activated,
       splashColor: splash,
       child: Ink(
         height: _size,
         width: _size,
-        decoration: _size?.circularBox(color: color),
+        decoration: _size?.roundBox(color: color),
         child: Container(
           alignment: Alignment.center,
           child: _text(boxed: withinBox) ?? _child(boxed: withinBox),
@@ -274,7 +274,7 @@ class CrossFade extends AnimatedCrossFade {
 class Clickable extends MouseRegion {
   Clickable({
     bool enable = true,
-    Function()? onTap,
+    VoidCallback? onTap,
     Widget? child,
   }) : super(
           cursor: enable == true && onTap != null
@@ -285,6 +285,18 @@ class Clickable extends MouseRegion {
             child: child ?? Container(height: 0),
           ),
         );
+}
+
+extension ClickableX on Widget {
+  Widget clickable({
+    bool enable = true,
+    VoidCallback? onTap,
+  }) =>
+      Clickable(
+        enable: enable,
+        onTap: onTap,
+        child: this,
+      );
 }
 
 class TextBadge extends StatelessWidget {

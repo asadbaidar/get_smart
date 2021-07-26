@@ -94,6 +94,16 @@ enum GetStatus {
   canceled,
 }
 
+extension GetStatusX on GetStatus {
+  bool get isBusy => this == GetStatus.busy;
+
+  bool get isSucceeded => this == GetStatus.succeeded;
+
+  bool get isFailed => this == GetStatus.failed;
+
+  bool get isCanceled => this == GetStatus.canceled;
+}
+
 abstract class GetWebAPI {
   Future<GetResult<T>> get<T>({
     T? as,
@@ -288,15 +298,24 @@ abstract class GetWebAPI {
 class GetFile {
   GetFile({
     required this.path,
-    required this.name,
-  });
+    String? name,
+    int? size,
+  })  : _name = name,
+        _size = size;
 
   final String path;
-  final String name;
+  final String? _name;
+  final int? _size;
+
+  String get name => _name ?? path.fileName;
+
+  int get size => _size ?? 0;
 
   bool get isImage => name.isImageFileName;
 
   bool get isVideo => name.isVideoFileName;
+
+  String get type => name.fileType;
 
   MediaType? get mediaType => path.mediaType;
 

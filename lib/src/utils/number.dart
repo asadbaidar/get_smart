@@ -8,12 +8,14 @@ extension Num on num {
 
   double get twice => this * 2;
 
-  double get radius => this * 0.2237;
+  double get roundCorner => this * 0.2237;
 
-  BorderRadius get circularRadius => BorderRadius.circular(radius);
+  Radius get radius => Radius.circular(toDouble());
 
-  BoxDecoration circularBox({Color? color}) => BoxDecoration(
-        borderRadius: circularRadius,
+  BorderRadius get roundRadius => BorderRadius.circular(roundCorner);
+
+  BoxDecoration roundBox({Color? color}) => BoxDecoration(
+        borderRadius: roundRadius,
         color: color,
       );
 

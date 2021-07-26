@@ -175,6 +175,9 @@ class GetScaffold extends StatelessWidget {
         ? Container(height: 0)
         : BottomBar(
             visible: !hideToolbars,
+            crossAxisAlignment: subtitle?.isBlank ?? true
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.center,
             topChild: withBottomBar,
             leftItems: _bottomBarLeftItems,
             rightItems: _bottomBarRightItems,

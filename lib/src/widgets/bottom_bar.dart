@@ -9,6 +9,7 @@ class BottomBar extends StatelessWidget {
     this.rightItems,
     this.centerItems,
     this.topChild,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
     this.visible = true,
     Key? key,
   }) : super(key: key);
@@ -17,6 +18,7 @@ class BottomBar extends StatelessWidget {
   final List<Widget>? rightItems;
   final List<Widget>? centerItems;
   final Widget? topChild;
+  final CrossAxisAlignment crossAxisAlignment;
   final bool visible;
 
   @override
@@ -39,24 +41,29 @@ class BottomBar extends StatelessWidget {
               top: false,
               bottom: true,
               child: Container(
-                height: 44,
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  SizedBox(width: 6),
-                  ..._leftItems,
-                  if (_leftItems.length < _rightItems.length)
-                    for (int i = 0;
-                        i < _rightItems.length - _leftItems.length;
-                        i++)
-                      GetButton.icon(),
-                  ...(_centerItems.isEmpty ? [Spacer()] : _centerItems),
-                  if (_rightItems.length < _leftItems.length)
-                    for (int i = 0;
-                        i < _leftItems.length - _rightItems.length;
-                        i++)
-                      GetButton.icon(),
-                  ..._rightItems,
-                  SizedBox(width: 6),
-                ]),
+                constraints: BoxConstraints(minHeight: 44),
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: crossAxisAlignment,
+                  children: [
+                    SizedBox(width: 2),
+                    ..._leftItems,
+                    if (_leftItems.length < _rightItems.length)
+                      for (int i = 0;
+                          i < _rightItems.length - _leftItems.length;
+                          i++)
+                        GetButton.icon(),
+                    ...(_centerItems.isEmpty ? [Spacer()] : _centerItems),
+                    if (_rightItems.length < _leftItems.length)
+                      for (int i = 0;
+                          i < _leftItems.length - _rightItems.length;
+                          i++)
+                        GetButton.icon(),
+                    ..._rightItems,
+                    SizedBox(width: 2),
+                  ],
+                ),
               ),
             ),
           ),
@@ -76,6 +83,7 @@ class ProgressSnackBar extends StatelessWidget {
     this.onDone,
     this.withBottomBar,
     this.actionColor,
+    this.errorColor = Colors.red,
     this.timeout = const Duration(seconds: 6),
     this.progress,
     this.enabled,
@@ -94,6 +102,7 @@ class ProgressSnackBar extends StatelessWidget {
   final VoidCallback? onDone;
   final bool? withBottomBar;
   final Color? actionColor;
+  final Color? errorColor;
   final Duration timeout;
   final double? progress;
   final bool? enabled;
@@ -101,38 +110,35 @@ class ProgressSnackBar extends StatelessWidget {
   final bool autoDismissible;
   final bool? autoDismissIfNotBusy;
 
+  GetStatus get _status => status ?? GetStatus.canceled;
+
   @override
   Widget build(BuildContext context) => GetSnackBar(
-        message: status == GetStatus.busy
+        message: _status.isBusy
             ? GetText.busy()
-            : status == GetStatus.failed
+            : _status.isFailed
                 ? error ?? GetText.failed()
                 : success ?? GetText.succeeded(),
         action: enabled ?? true
-            ? action ??
-                (status == GetStatus.busy
-                    ? GetText.cancel()
-                    : status == GetStatus.failed
-                        ? GetText.retry()
-                        : GetText.ok())
+            ? (_status.isBusy
+                ? (action == null ? GetText.cancel() : null)
+                : action ?? (_status.isFailed ? GetText.retry() : GetText.ok()))
             : null,
-        onAction: status == GetStatus.busy
+        onAction: _status.isBusy
             ? onCancel
-            : status == GetStatus.failed
+            : _status.isFailed
                 ? onRetry
                 : onDone,
         onDismiss: onCancel,
-        showProgress: status == GetStatus.busy,
-        isDismissible: status != GetStatus.busy &&
-            (isDismissible ??
-                autoDismissIfNotBusy ??
-                status == GetStatus.failed),
-        autoDismiss: autoDismissIfNotBusy == true
-            ? status != GetStatus.busy
-            : status == GetStatus.failed,
+        showProgress: _status.isBusy,
+        isDismissible: !_status.isBusy &&
+            (isDismissible ?? autoDismissIfNotBusy ?? _status.isFailed),
+        autoDismiss:
+            autoDismissIfNotBusy == true ? !_status.isBusy : _status.isFailed,
         autoDismissible: autoDismissible,
         withBottomBar: withBottomBar,
         actionColor: actionColor,
+        messageColor: _status.isFailed ? errorColor : null,
         timeout: timeout,
         progress: progress,
       );
@@ -145,6 +151,7 @@ class GetSnackBar extends StatelessWidget {
     this.onAction,
     this.onDismiss,
     this.actionColor,
+    this.messageColor,
     this.timeout = const Duration(seconds: 6),
     this.progress,
     this.showProgress = true,
@@ -160,6 +167,7 @@ class GetSnackBar extends StatelessWidget {
   final VoidCallback? onAction;
   final VoidCallback? onDismiss;
   final Color? actionColor;
+  final Color? messageColor;
   final Duration timeout;
   final double? progress;
   final bool showProgress;
@@ -197,7 +205,12 @@ class GetSnackBar extends StatelessWidget {
                         ? SnackPosition.TOP
                         : SnackPosition.BOTTOM,
                     animationDuration: Duration(milliseconds: 200),
-                    messageText: message == null ? null : Text(message!),
+                    messageText: message == null
+                        ? null
+                        : Text(
+                            message!,
+                            style: TextStyle(color: messageColor),
+                          ),
                     backgroundColor: Get.theme.bottomAppBarTheme.color!,
                     mainButton: action == null
                         ? null

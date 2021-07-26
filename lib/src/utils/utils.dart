@@ -44,3 +44,11 @@ extension RandomX on Random {
         .join();
   }
 }
+
+class GetException implements Exception {
+  final dynamic message;
+
+  GetException([this.message]);
+
+  String toString() => message == null ? GetText.failed() : message;
+}
