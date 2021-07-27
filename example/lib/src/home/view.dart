@@ -34,6 +34,8 @@ class HomePage extends StatelessWidget {
                     accessory: data.attachment?.mapIt(
                       (icon) => PopupMenu<GetFile>(
                         cornerRadius: 0,
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
                         items: [data.file!],
                         childBuilder: (onPopup) => GetButton.icon(
                           icon: Icon(icon),
