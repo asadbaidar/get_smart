@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -22,6 +23,53 @@ String $name(Type type) => type.toString();
 ///
 /// i.e. "/typeName"
 String $route(Type type) => "/" + $name(type);
+
+void $debugLog([
+  dynamic value,
+  dynamic tag,
+  String name = "",
+]) {
+  final _tag = tag == null ? "" : "$tag: ";
+  developer.log(
+    "$_tag${value ?? ""}".trim(),
+    time: Date.now,
+    name: name,
+  );
+}
+
+void $log([
+  dynamic value,
+  dynamic tag,
+  String? name,
+]) {
+  final _name = name == null ? "" : "[$name] ";
+  final _tag = tag == null ? "" : "$tag: ";
+  print("$_name$_tag${value ?? ""}".trim());
+}
+
+extension GetDebugUtils<T> on T {
+  void $debugPrint([
+    dynamic value,
+    dynamic tag,
+  ]) {
+    $print(value, tag);
+    $debugLog(
+      value ?? this,
+      tag,
+      $name(runtimeType),
+    );
+  }
+
+  void $print([
+    dynamic value,
+    dynamic tag,
+  ]) =>
+      $log(
+        value ?? this,
+        tag,
+        $name(runtimeType),
+      );
+}
 
 /// Schedules the given `task` with the [Priority.animation] and returns a
 /// [Future] that completes to the `task`'s eventual return value.
