@@ -153,6 +153,25 @@ extension GetBoxDecoration on BoxDecoration {
 }
 
 extension GetShimmer on Shimmer {
+  static Widget plain() => Column(children: [
+        Expanded(
+          child: Container(
+            color: Get.theme.canvasColor,
+            child: Shimmer.fromColors(
+              period: 900.milliseconds,
+              baseColor: Get.theme.canvasColor,
+              highlightColor: Get.theme.backgroundColor,
+              child: Column(children: [
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(color: Colors.grey),
+                ),
+              ]),
+            ),
+          ),
+        ),
+      ]);
+
   static Widget article() => Column(children: [
         Expanded(
           child: Container(

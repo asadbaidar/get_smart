@@ -30,7 +30,7 @@ class TestGetController extends BaseGetController {
   }
 
   @override
-  void onFutureError(error, key) {
+  void onError(error, key) {
     onErrorCalled = true;
   }
 }
