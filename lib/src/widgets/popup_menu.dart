@@ -64,7 +64,7 @@ class PopupMenu<T extends Object> extends StatelessWidget {
   PopupMenuChildBuilder get _childBuilder =>
       childBuilder ??
       (onPressed) => GetButton.primaryIcon(
-            icon: Icon(Icons.more_vert),
+            child: Icon(Icons.more_vert),
             onPressed: onPressed,
           );
 
@@ -85,7 +85,7 @@ class PopupMenu<T extends Object> extends StatelessWidget {
                     ? data.materialPrimary
                     : (data.tintColor ?? tintColor),
                 background: data.background ?? Colors.transparent,
-                isLeadingBoxed: data.isLeadingBoxed ?? false,
+                isLeadingFilled: data.isLeadingBoxed ?? false,
                 isDetailed: data.isDetailed,
                 padAccessory: data.padAccessory ?? true,
                 showAccessory: data.showAccessory,

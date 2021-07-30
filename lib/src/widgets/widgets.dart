@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -9,86 +10,113 @@ import 'package:flutter/widgets.dart';
 import 'package:get_smart/get_smart.dart';
 
 class BoxedView extends StatelessWidget {
-  static const double boxHeight = 40;
-  static const double boxWidth = 40;
-  static const double boxSize = 30;
+  static const double kBoxSize = 30;
 
   const BoxedView({
     required this.child,
     this.color,
-    this.withinBox = true,
+    this.filled = true,
+    this.circular = false,
     this.small,
+    this.boxSize = kBoxSize,
+    this.fontSize,
+    this.margin = const EdgeInsets.symmetric(horizontal: 5),
+    this.onTap,
+    Key? key,
+  }) : super(key: key);
+
+  const BoxedView.zero({
+    required this.child,
+    this.color,
+    this.filled = true,
+    this.circular = false,
+    this.small,
+    this.boxSize = kBoxSize,
+    this.fontSize,
+    this.margin = EdgeInsets.zero,
+    this.onTap,
+    Key? key,
+  }) : super(key: key);
+
+  const BoxedView.circular({
+    required this.child,
+    this.color,
+    this.filled = true,
+    this.circular = true,
+    this.small,
+    this.boxSize = 26,
+    this.fontSize,
+    this.margin = EdgeInsets.zero,
     this.onTap,
     Key? key,
   }) : super(key: key);
 
   final Widget child;
   final Color? color;
-  final bool withinBox;
+  final bool filled;
+  final bool circular;
   final bool? small;
+  final double boxSize;
+  final double? fontSize;
+  final EdgeInsetsGeometry margin;
   final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final splash = withinBox ? color?.darker : color?.translucent;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: _size?.roundRadius,
-      highlightColor: splash?.activated,
-      splashColor: splash,
-      child: Ink(
-        height: _size,
-        width: _size,
-        decoration: _size?.roundBox(color: color),
-        child: Container(
-          alignment: Alignment.center,
-          child: _text(boxed: withinBox) ?? _child(boxed: withinBox),
+    final splash = filled ? color?.darker : color?.translucent;
+    return Container(
+      margin: margin,
+      width: boxSize,
+      alignment: Alignment.center,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: circular ? _size?.circularRadius : _size?.roundRadius,
+        highlightColor: splash?.activated,
+        splashColor: splash,
+        child: Ink(
+          height: _size,
+          width: _size,
+          decoration: circular
+              ? _size?.circularBox(color: color)
+              : _size?.roundBox(color: color),
+          child: Container(
+            alignment: Alignment.center,
+            child: _text() ?? _child(),
+          ),
         ),
       ),
     );
   }
 
-  double? get _size => withinBox ? boxSize : null;
+  double? get _size => filled ? boxSize : null;
 
-  Widget? _text({bool boxed = false}) => $cast<Text>(child)?.mapTo(
+  Widget? _text() => $cast<Text>(child)?.mapTo(
         (Text it) => Text(
-          it.data ?? "",
+          it.data?.take(boxSize > kBoxSize ? 3 : 2).uppercase ?? "",
           textAlign: TextAlign.center,
           style: GoogleFonts.voltaire(
-            fontSize: boxed
-                ? 17
-                : small == true
-                    ? 18
-                    : 24,
-            color: boxed ? color?.contrast : color,
+            fontSize: fontSize ??
+                (filled
+                    ? (17 - max(0, (kBoxSize - boxSize).half))
+                    : small == true
+                        ? 18
+                        : 24),
+            color: filled ? color?.contrast : color,
             // fontWeight: FontWeight.w100,
           ),
         ),
       );
 
-  Widget _child({bool boxed = false}) => IconTheme(
+  Widget _child() => IconTheme(
         child: child,
         data: IconThemeData(
-          size: boxed
+          size: filled
               ? 18
               : small == true
                   ? 24
                   : 30,
-          color: boxed ? color?.contrast : color,
+          color: filled ? color?.contrast : color,
         ),
-      );
-
-  Widget get adjustForTile => Container(
-        alignment: Alignment.center,
-        height: boxHeight,
-        width: boxWidth,
-        child: this,
-      );
-
-  Widget get adjustHorizontally => Container(
-        alignment: Alignment.center,
-        width: boxWidth,
-        child: this,
       );
 }
 
@@ -125,7 +153,7 @@ class CircularProgress extends StatelessWidget {
             margin: EdgeInsets.all(margin),
             child: CircularProgressIndicator(
               strokeWidth: strokeWidth,
-              // backgroundColor: Colors.transparent,
+              backgroundColor: Colors.transparent,
               color: color,
               value: value,
             ),
@@ -307,7 +335,7 @@ extension ClickableX on Widget {
 class TextBadge extends StatelessWidget {
   const TextBadge({
     this.text,
-    this.size = 9,
+    this.fontSize = 9,
     this.textColor,
     this.backgroundColor,
     this.borderColor,
@@ -319,8 +347,22 @@ class TextBadge extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  const TextBadge.round({
+    this.text,
+    this.fontSize = 9,
+    this.textColor,
+    this.backgroundColor,
+    this.borderColor,
+    this.borderWidth,
+    this.borderRadius = 20,
+    this.inverted = false,
+    this.padding = 5,
+    this.margin = const EdgeInsets.symmetric(horizontal: 2),
+    Key? key,
+  }) : super(key: key);
+
   final String? text;
-  final double size;
+  final double fontSize;
   final Color? textColor;
   final Color? backgroundColor;
   final Color? borderColor;
@@ -340,9 +382,11 @@ class TextBadge extends StatelessWidget {
   Widget build(BuildContext context) => text == null
       ? Container(height: 0)
       : Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               margin: margin,
+              alignment: Alignment.center,
               padding: EdgeInsets.symmetric(
                 horizontal: padding,
                 vertical: padding.half,
@@ -352,7 +396,7 @@ class TextBadge extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: _textColor.applyIf(inverted, (it) => it.contrast),
-                  fontSize: size,
+                  fontSize: fontSize,
                 ),
               ),
               decoration: GetBoxDecoration.all(
@@ -395,7 +439,7 @@ class GetSearchDelegate extends SearchDelegate {
   List<Widget> buildActions(BuildContext context) => [
         if (query.trim().isNotEmpty)
           GetButton.icon(
-            icon: Icon(CupertinoIcons.clear_circled_solid),
+            child: Icon(CupertinoIcons.clear_circled_solid),
             onPressed: clear,
           )
       ];

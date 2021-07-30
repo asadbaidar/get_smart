@@ -666,7 +666,7 @@ abstract class GetButton {
     EdgeInsetsGeometry? padding,
     AlignmentGeometry? alignment,
     double? splashRadius,
-    Widget? icon,
+    Widget? child,
     Color? color,
     Color? focusColor,
     Color? hoverColor,
@@ -716,7 +716,7 @@ abstract class GetButton {
                       ? (mini ? 2 : 4)
                       : ((mini ? 22 : 24) - iconSize).abs(),
                 ),
-                icon!,
+                child!,
                 SizedBox(height: mini ? 2 : 2.5),
                 Expanded(
                   child: Text(
@@ -732,7 +732,7 @@ abstract class GetButton {
                 ),
               ],
             )
-          : (icon ?? const SizedBox()),
+          : (child ?? const SizedBox()),
       color: color,
       focusColor: focusColor,
       hoverColor: hoverColor,
@@ -758,7 +758,7 @@ abstract class GetButton {
     EdgeInsetsGeometry? padding,
     AlignmentGeometry? alignment,
     double? splashRadius,
-    Widget? icon,
+    Widget? child,
     Color? color,
     Color? focusColor,
     Color? hoverColor,
@@ -785,7 +785,7 @@ abstract class GetButton {
         padding: padding,
         alignment: alignment,
         splashRadius: splashRadius,
-        icon: icon,
+        child: child,
         color: color,
         focusColor: focusColor,
         hoverColor: hoverColor,
@@ -815,7 +815,7 @@ abstract class GetButton {
     EdgeInsetsGeometry? padding,
     AlignmentGeometry? alignment,
     double? splashRadius,
-    Widget? icon,
+    Widget? child,
     Color? color,
     Color? focusColor,
     Color? hoverColor,
@@ -842,7 +842,7 @@ abstract class GetButton {
         padding: padding,
         alignment: alignment,
         splashRadius: splashRadius,
-        icon: icon,
+        child: child,
         color: color,
         focusColor: focusColor,
         hoverColor: hoverColor,
@@ -875,7 +875,7 @@ abstract class GetButton {
             onPressed: _onPressed,
           )
         : icon(
-            icon: const BackButtonIcon(),
+            child: const BackButtonIcon(),
             color: color ?? Get.theme.primaryIconTheme.color,
             tooltip: Get.localization.backButtonTooltip,
             onPressed: _onPressed,
@@ -888,12 +888,18 @@ abstract class GetButton {
     String? tooltip,
     String? text,
     IconData? icon,
+    EdgeInsets margin = const EdgeInsets.only(
+      bottom: 6,
+      right: 8,
+      top: 6,
+      left: 6,
+    ),
   }) {
     var _color = color ?? Get.iconColor ?? Get.theme.accentColor;
     return Container(
       width: 20,
       height: 20,
-      margin: const EdgeInsets.only(bottom: 6, right: 8, top: 6, left: 6),
+      margin: margin,
       padding: EdgeInsets.only(top: icon != null ? 2.2 : 3),
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(

@@ -38,7 +38,7 @@ class HomePage extends StatelessWidget {
                         backgroundColor: Colors.transparent,
                         items: [data.file!],
                         childBuilder: (onPopup) => GetButton.icon(
-                          icon: Icon(icon),
+                          child: Icon(icon),
                           onPressed:
                               data.file?.isVideo == true ? () => null : onPopup,
                         ),

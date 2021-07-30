@@ -12,6 +12,7 @@ class GetInteractiveViewer extends StatefulWidget {
     this.maxScale = 2.5,
     this.barrierColor = Colors.black,
     this.backgroundColor,
+    this.enabled = true,
     Key? key,
   }) : super(key: key);
 
@@ -20,6 +21,7 @@ class GetInteractiveViewer extends StatefulWidget {
   final double maxScale;
   final Color barrierColor;
   final Color? backgroundColor;
+  final bool enabled;
 
   @override
   _GetInteractiveViewerState createState() => _GetInteractiveViewerState();
@@ -65,7 +67,8 @@ class _GetInteractiveViewerState extends State<GetInteractiveViewer>
       child: widget.child,
       onInteractionUpdate: (details) => scaleDetails.value = details,
       onInteractionStart: (details) {
-        if (placeholder != null || details.pointerCount <= 1) return;
+        if (!widget.enabled || placeholder != null || details.pointerCount <= 1)
+          return;
 
         setState(() {
           final renderViewer =

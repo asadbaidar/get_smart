@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -92,7 +93,7 @@ class GetTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
-    this.isLeadingBoxed = true,
+    this.isLeadingFilled = true,
     this.isDetailed = true,
     this.padAccessory,
     this.showAccessory,
@@ -124,7 +125,7 @@ class GetTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
-    this.isLeadingBoxed = true,
+    this.isLeadingFilled = true,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -156,7 +157,7 @@ class GetTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
-    this.isLeadingBoxed = true,
+    this.isLeadingFilled = true,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -188,7 +189,7 @@ class GetTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background = Colors.transparent,
-    this.isLeadingBoxed = false,
+    this.isLeadingFilled = false,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -221,7 +222,7 @@ class GetTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background = Colors.transparent,
-    this.isLeadingBoxed = false,
+    this.isLeadingFilled = false,
     this.isDetailed = false,
     this.padAccessory = true,
     this.showAccessory,
@@ -251,7 +252,7 @@ class GetTile extends StatelessWidget {
   final List<Widget>? rows;
   final Color? color;
   final Color? background;
-  final bool isLeadingBoxed;
+  final bool isLeadingFilled;
   final bool isDetailed;
   final bool? padAccessory;
   final bool? showAccessory;
@@ -267,8 +268,8 @@ class GetTile extends StatelessWidget {
   final double? titleSize;
   final double? accessorySize;
   final VisualDensity? density;
-  final void Function()? onTap;
-  final void Function()? onTapLeading;
+  final VoidCallback? onTap;
+  final VoidCallback? onTapLeading;
 
   @override
   Widget build(BuildContext context) {
@@ -301,9 +302,9 @@ class GetTile extends StatelessWidget {
                   : BoxedView(
                       child: leading!,
                       color: tintColor,
-                      withinBox: isLeadingBoxed,
+                      filled: isLeadingFilled,
                       onTap: onTapLeading,
-                    ).adjustHorizontally,
+                    ),
               title: title?.notEmpty?.mapIt((it) => Text(
                     it,
                     style: TextStyle(
@@ -354,84 +355,150 @@ class GetTile extends StatelessWidget {
 }
 
 class GetTileRow extends StatelessWidget {
+  static const kLeadingPadding = const EdgeInsets.only(left: 5, right: 21);
+  static const kChildrenPadding = const EdgeInsets.all(1);
+  static const kTrailingSize = 20.0;
+  static const kMaxLines = 2;
+
   const GetTileRow({
     this.leading,
+    this.trailing,
+    this.children,
     this.text,
     this.hint,
     this.color,
     this.background,
-    this.maxLines = 2,
+    this.maxLines = kMaxLines,
+    this.trailingSize = kTrailingSize,
     this.expanded = false,
+    this.isLeadingFilled = false,
     this.standalone = false,
-    this.isLeadingBoxed = false,
+    this.enabled = true,
+    this.padding,
+    this.leadingPadding = kLeadingPadding,
+    this.childrenPadding = kChildrenPadding,
+    this.onTap,
     this.onTapLeading,
     Key? key,
   }) : super(key: key);
 
   const GetTileRow.standalone({
     this.leading,
+    this.trailing,
+    this.children,
     this.text,
     this.hint,
     this.color,
     this.background,
-    this.maxLines = 2,
+    this.maxLines = kMaxLines,
+    this.trailingSize = kTrailingSize,
     this.expanded = false,
-    this.isLeadingBoxed = false,
+    this.isLeadingFilled = false,
     this.standalone = true,
+    this.enabled = true,
+    this.padding,
+    this.leadingPadding = kLeadingPadding,
+    this.childrenPadding = kChildrenPadding,
+    this.onTap,
     this.onTapLeading,
     Key? key,
   }) : super(key: key);
 
   final Widget? leading;
+  final Widget? trailing;
+  final List<Widget>? children;
   final String? text;
   final String? hint;
   final Color? color;
   final Color? background;
   final int maxLines;
+  final double trailingSize;
   final bool expanded;
+  final bool isLeadingFilled;
   final bool standalone;
-  final bool isLeadingBoxed;
-  final void Function()? onTapLeading;
+  final bool enabled;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry leadingPadding;
+  final EdgeInsetsGeometry childrenPadding;
+  final VoidCallback? onTap;
+  final VoidCallback? onTapLeading;
 
   @override
   Widget build(BuildContext context) {
-    var textData = text ?? hint;
-    var tintColor = color ?? context.theme.primaryIconTheme.color;
-    return textData == null
+    final _text = text ?? hint;
+    final tintColor = color ??
+        context.theme.primaryIconTheme.color ??
+        context.theme.accentColor;
+    return _text == null && children?.isNotEmpty != true
         ? Container(height: 0)
-        : Ink(
-            color: standalone == true
-                ? (background ?? context.theme.backgroundColor)
-                : null,
-            padding: EdgeInsets.only(
-              top: standalone == true ? 16 : 0,
-              left: 16,
-              right: 16,
-              bottom: 16,
-            ),
-            child: Row(children: [
-              if (leading != null)
-                BoxedView(
-                  child: leading!,
-                  color: tintColor,
-                  withinBox: isLeadingBoxed,
-                  small: true,
-                  onTap: onTapLeading,
-                ).adjustHorizontally,
-              if (leading != null) SizedBox(width: 16),
-              Flexible(
-                child: CrossFade(
-                  firstChild: Text(
-                    textData,
-                    style: context.textTheme.caption!.apply(
-                      color: text == null ? context.theme.hintColor : null,
+        : InkWell(
+            highlightColor: tintColor.activated,
+            splashColor: tintColor.translucent,
+            onTap: enabled ? onTap : null,
+            child: Ink(
+              color: background ??
+                  (standalone == true ? context.theme.backgroundColor : null),
+              padding: padding ??
+                  EdgeInsets.only(
+                    top: background != null || standalone == true ? 16 : 0,
+                    left: 16,
+                    right: 16,
+                    bottom: 16,
+                  ),
+              child: Row(children: [
+                if (leading != null)
+                  leading is BoxedView
+                      ? leading!
+                      : BoxedView(
+                          child: leading!,
+                          color: tintColor,
+                          filled: isLeadingFilled,
+                          margin: leadingPadding,
+                          small: true,
+                          onTap: onTapLeading,
+                        ),
+                Expanded(
+                  child: CrossFade(
+                    firstChild: RichText(
+                      text: TextSpan(
+                        text: _text,
+                        style: context.textTheme.caption!.copyWith(
+                          color: text == null ? context.theme.hintColor : null,
+                        ),
+                        children: children
+                            ?.map((w) =>
+                                $cast<Text>(w)?.mapTo((Text w) => TextSpan(
+                                      text: w.data,
+                                      style:
+                                          w.style ?? context.textTheme.caption,
+                                    )) ??
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: Padding(
+                                    padding: childrenPadding,
+                                    child: w,
+                                  ),
+                                ))
+                            .toList(),
+                      ),
+                      maxLines: expanded == true ? null : maxLines,
+                      overflow: expanded == true
+                          ? TextOverflow.visible
+                          : TextOverflow.ellipsis,
                     ),
-                    maxLines: expanded == true ? null : maxLines,
-                    overflow: expanded == true ? null : TextOverflow.ellipsis,
                   ),
                 ),
-              ),
-            ]),
+                if (trailing != null) SizedBox(width: 6),
+                if (trailing != null)
+                  IconTheme(
+                    data: IconThemeData(
+                      color: tintColor,
+                      size: trailingSize,
+                    ),
+                    child: trailing!,
+                  ),
+              ]),
+            ),
           );
   }
 }

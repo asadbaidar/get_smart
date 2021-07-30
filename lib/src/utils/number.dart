@@ -10,12 +10,19 @@ extension Num on num {
 
   double get roundCorner => this * 0.2237;
 
-  Radius get radius => Radius.circular(toDouble());
-
   BorderRadius get roundRadius => BorderRadius.circular(roundCorner);
 
   BoxDecoration roundBox({Color? color}) => BoxDecoration(
         borderRadius: roundRadius,
+        color: color,
+      );
+
+  Radius get radius => Radius.circular(toDouble());
+
+  BorderRadius get circularRadius => BorderRadius.circular(toDouble());
+
+  BoxDecoration circularBox({Color? color}) => BoxDecoration(
+        borderRadius: circularRadius,
         color: color,
       );
 

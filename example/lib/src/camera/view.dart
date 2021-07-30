@@ -25,13 +25,13 @@ class CameraPage extends StatelessWidget {
           appBarRightItems: [
             if (model.file == null)
               GetButton.primaryIcon(
-                icon: Icon(model.flashIcon),
+                child: Icon(model.flashIcon),
                 label: model.flashLabel,
                 onPressed: model.switchFlash,
               ),
             if (model.file == null && !model.isRecordingVideo)
               GetButton.primaryIcon(
-                icon: Icon(model.modeIcon),
+                child: Icon(model.modeIcon),
                 label: model.modeLabel,
                 onPressed: model.switchMode,
               ),
@@ -90,7 +90,7 @@ class CameraPage extends StatelessWidget {
                     text: model.duration,
                     textColor: Colors.red,
                     inverted: true,
-                    size: 16,
+                    fontSize: 16,
                     padding: 4,
                     margin: EdgeInsets.all(16),
                   );
