@@ -259,7 +259,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     if (!readOnly &&
         onlyAcceptItem &&
         !filteredItems.map((it) => it.toString()).contains(controller.text)) {
-      var item = filteredItems.$first;
+      var item = filteredItems.firstOrNull;
       controller.text = item?.toString() ?? "";
       if (item == null)
         clear();
@@ -463,7 +463,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
                         onFieldSubmitted();
                       },
                       validator: (String? value) {
-                        if (dataSet.firstWhereOrNull(
+                        if (dataSet.$firstWhere(
                                 (option) => option.containsIgnoreCase(value)) ==
                             null) {
                           return 'Nothing selected.';

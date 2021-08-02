@@ -315,7 +315,7 @@ class Clickable extends MouseRegion {
               : SystemMouseCursors.basic,
           child: GestureDetector(
             onTap: enable == true ? onTap : null,
-            child: child ?? Container(height: 0),
+            child: child ?? Container(),
           ),
         );
 }

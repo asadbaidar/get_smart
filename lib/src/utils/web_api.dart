@@ -34,7 +34,7 @@ class GetResult<T> extends GetObject {
 
   get data => list ?? value;
 
-  T? get firstValue => list?.$first;
+  T? get firstValue => list?.firstOrNull;
 
   String get tag => _tag ?? typeName;
 

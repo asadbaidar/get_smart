@@ -40,19 +40,4 @@ extension ListX<E> on List<E> {
     }
     return null;
   }
-
-  E? get $first {
-    Iterator<E> it = iterator;
-    if (!it.moveNext()) {
-      return null;
-    }
-    return it.current;
-  }
-
-  E? $firstWhere(bool test(E element)) {
-    for (E element in this) {
-      if (test(element)) return element;
-    }
-    return null;
-  }
 }
