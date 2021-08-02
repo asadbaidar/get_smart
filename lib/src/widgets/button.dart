@@ -13,6 +13,8 @@ import 'package:get_smart/get_smart.dart';
 ///  * [OutlinedButton], similar to [TextButton], but with an outline.
 ///  * [IconButton], A material design icon button.
 abstract class GetButton {
+  const GetButton._();
+
   static MaterialStateProperty<double> defaultElevation([
     double elevation = 2,
   ]) =>
@@ -35,7 +37,7 @@ abstract class GetButton {
 
   static MaterialStateProperty<BorderSide> defaultSide(Color color) =>
       MaterialStateProperty.resolveWith(
-        (states) => BorderSide(color: resolveColor(color, states)),
+        (states) => BorderSide(color: resolveColor(color.subbed, states)),
       );
 
   static Color resolveColor(Color color, Set<MaterialState> states) {
@@ -43,34 +45,34 @@ abstract class GetButton {
     if (states.contains(MaterialState.hovered)) return color.highlighted;
     if (states.contains(MaterialState.focused)) return color.highlighted;
     if (states.contains(MaterialState.pressed)) return color.hinted;
-    return color.subbed;
+    return color;
   }
 
   /// Create an elevated button.
   static Widget elevated({
-    Key key,
-    VoidCallback onPressed,
-    VoidCallback onLongPress,
-    Size minimumSize,
-    EdgeInsetsGeometry padding,
-    double horizontalPadding = 24,
-    double verticalPadding,
-    EdgeInsetsGeometry margin,
-    double horizontalMargin,
-    double verticalMargin,
-    OutlinedBorder shape,
-    BorderSide side,
-    Color primary,
-    Color onPrimary,
-    Color onSurface,
-    double elevation,
-    TextStyle textStyle,
-    FocusNode focusNode,
-    bool autofocus = false,
+    Key? key,
+    VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    Size? minimumSize,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding = 24,
+    double? verticalPadding,
+    EdgeInsetsGeometry? margin,
+    double? horizontalMargin,
+    double? verticalMargin,
+    OutlinedBorder? shape,
+    BorderSide? side,
+    Color? primary,
+    Color? onPrimary,
+    Color? onSurface,
+    double? elevation,
+    TextStyle? textStyle,
+    FocusNode? focusNode,
+    bool? autofocus = false,
     bool round = false,
     bool enabled = true,
-    Clip clipBehavior = Clip.none,
-    Widget child,
+    Clip? clipBehavior = Clip.none,
+    Widget? child,
   }) =>
       Container(
         margin: margin ??
@@ -93,11 +95,12 @@ abstract class GetButton {
                         vertical: verticalPadding ?? 0,
                       )
                     : null),
-            shape: shape ?? round == true
-                ? RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  )
-                : null,
+            shape: shape ??
+                (round == true
+                    ? RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      )
+                    : null),
             side: side,
             primary: primary,
             onPrimary: onPrimary,
@@ -114,30 +117,30 @@ abstract class GetButton {
 
   /// Create an elevated button with icon.
   static Widget elevatedIcon({
-    Key key,
-    VoidCallback onPressed,
-    VoidCallback onLongPress,
-    Size minimumSize,
-    EdgeInsetsGeometry padding,
-    double horizontalPadding = 24,
-    double verticalPadding,
-    EdgeInsetsGeometry margin,
-    double horizontalMargin,
-    double verticalMargin,
-    OutlinedBorder shape,
-    BorderSide side,
-    Color primary,
-    Color onPrimary,
-    Color onSurface,
-    double elevation,
-    TextStyle textStyle,
-    FocusNode focusNode,
-    bool autofocus = false,
+    Key? key,
+    VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    Size? minimumSize,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding = 24,
+    double? verticalPadding,
+    EdgeInsetsGeometry? margin,
+    double? horizontalMargin,
+    double? verticalMargin,
+    OutlinedBorder? shape,
+    BorderSide? side,
+    Color? primary,
+    Color? onPrimary,
+    Color? onSurface,
+    double? elevation,
+    TextStyle? textStyle,
+    FocusNode? focusNode,
+    bool? autofocus = false,
     bool round = false,
     bool enabled = true,
-    Clip clipBehavior = Clip.none,
-    Widget icon,
-    Widget label,
+    Clip? clipBehavior = Clip.none,
+    required Widget icon,
+    required Widget label,
   }) =>
       Container(
         margin: margin ??
@@ -160,11 +163,12 @@ abstract class GetButton {
                         vertical: verticalPadding ?? 0,
                       )
                     : null),
-            shape: shape ?? round == true
-                ? RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  )
-                : null,
+            shape: shape ??
+                (round == true
+                    ? RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      )
+                    : null),
             side: side,
             primary: primary,
             onPrimary: onPrimary,
@@ -182,27 +186,27 @@ abstract class GetButton {
 
   /// Create an elevated button with fully round corner.
   static Widget roundElevated({
-    Key key,
-    VoidCallback onPressed,
-    VoidCallback onLongPress,
-    Size minimumSize,
-    EdgeInsetsGeometry padding,
-    double horizontalPadding,
-    double verticalPadding,
-    EdgeInsetsGeometry margin,
-    double horizontalMargin,
-    double verticalMargin,
-    BorderSide side,
-    Color primary,
-    Color onPrimary,
-    Color onSurface,
-    double elevation,
-    TextStyle textStyle,
-    FocusNode focusNode,
+    Key? key,
+    VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    Size? minimumSize,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    EdgeInsetsGeometry? margin,
+    double? horizontalMargin,
+    double? verticalMargin,
+    BorderSide? side,
+    Color? primary,
+    Color? onPrimary,
+    Color? onSurface,
+    double? elevation,
+    TextStyle? textStyle,
+    FocusNode? focusNode,
     bool autofocus = false,
     bool enabled = true,
     Clip clipBehavior = Clip.none,
-    Widget child,
+    Widget? child,
   }) =>
       elevated(
         key: key,
@@ -231,28 +235,28 @@ abstract class GetButton {
 
   /// Create an outlined button.
   static Widget outlined({
-    Key key,
-    VoidCallback onPressed,
-    VoidCallback onLongPress,
-    Size minimumSize,
-    EdgeInsetsGeometry padding,
-    double horizontalPadding = 24,
-    double verticalPadding,
-    EdgeInsetsGeometry margin,
-    double horizontalMargin,
-    double verticalMargin,
-    OutlinedBorder shape,
-    BorderSide side,
-    Color primary,
-    Color backgroundColor,
-    Color onSurface,
-    double elevation,
-    TextStyle textStyle,
-    FocusNode focusNode,
-    bool autofocus = false,
+    Key? key,
+    VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    Size? minimumSize,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding = 24,
+    double? verticalPadding,
+    EdgeInsetsGeometry? margin,
+    double? horizontalMargin,
+    double? verticalMargin,
+    OutlinedBorder? shape,
+    BorderSide? side,
+    Color? primary,
+    Color? backgroundColor,
+    Color? onSurface,
+    double? elevation,
+    TextStyle? textStyle,
+    FocusNode? focusNode,
+    bool? autofocus = false,
     bool round = false,
-    Clip clipBehavior = Clip.none,
-    Widget child,
+    Clip? clipBehavior = Clip.none,
+    required Widget child,
   }) =>
       Container(
         margin: margin ??
@@ -275,11 +279,12 @@ abstract class GetButton {
                         vertical: verticalPadding ?? 0,
                       )
                     : null),
-            shape: shape ?? round == true
-                ? RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  )
-                : null,
+            shape: shape ??
+                (round == true
+                    ? RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      )
+                    : null),
             side: side,
             primary: primary,
             backgroundColor: backgroundColor,
@@ -296,26 +301,26 @@ abstract class GetButton {
 
   /// Create an outlined button with fully round corner.
   static Widget roundOutlined({
-    Key key,
-    VoidCallback onPressed,
-    VoidCallback onLongPress,
-    Size minimumSize,
-    EdgeInsetsGeometry padding,
-    double horizontalPadding = 24,
-    double verticalPadding = 11,
-    EdgeInsetsGeometry margin,
-    double horizontalMargin,
-    double verticalMargin,
-    BorderSide side,
-    Color primary,
-    Color backgroundColor,
-    Color onSurface,
-    double elevation,
-    TextStyle textStyle,
-    FocusNode focusNode,
+    Key? key,
+    VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    Size? minimumSize,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding = 24,
+    double? verticalPadding = 11,
+    EdgeInsetsGeometry? margin,
+    double? horizontalMargin,
+    double? verticalMargin,
+    BorderSide? side,
+    Color? primary,
+    Color? backgroundColor,
+    Color? onSurface,
+    double? elevation,
+    TextStyle? textStyle,
+    FocusNode? focusNode,
     bool autofocus = false,
     Clip clipBehavior = Clip.none,
-    Widget child,
+    required Widget child,
   }) =>
       outlined(
         key: key,
@@ -343,28 +348,28 @@ abstract class GetButton {
 
   /// Create a text button.
   static Widget text({
-    Key key,
-    VoidCallback onPressed,
-    VoidCallback onLongPress,
-    Size minimumSize,
-    EdgeInsetsGeometry padding,
-    double horizontalPadding = 24,
-    double verticalPadding,
-    EdgeInsetsGeometry margin,
-    double horizontalMargin,
-    double verticalMargin,
-    OutlinedBorder shape,
-    BorderSide side,
-    Color primary,
-    Color backgroundColor,
-    Color onSurface,
-    double elevation,
-    TextStyle textStyle,
-    FocusNode focusNode,
+    Key? key,
+    VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    Size? minimumSize,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding = 24,
+    double? verticalPadding,
+    EdgeInsetsGeometry? margin,
+    double? horizontalMargin,
+    double? verticalMargin,
+    OutlinedBorder? shape,
+    BorderSide? side,
+    Color? primary,
+    Color? backgroundColor,
+    Color? onSurface,
+    double? elevation,
+    TextStyle? textStyle,
+    FocusNode? focusNode,
     bool autofocus = false,
     bool round = false,
     Clip clipBehavior = Clip.none,
-    Widget child,
+    required Widget child,
   }) =>
       Container(
         margin: margin ??
@@ -387,11 +392,12 @@ abstract class GetButton {
                         vertical: verticalPadding ?? 0,
                       )
                     : null),
-            shape: shape ?? round == true
-                ? RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  )
-                : null,
+            shape: shape ??
+                (round == true
+                    ? RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      )
+                    : null),
             side: side,
             primary: primary,
             backgroundColor: backgroundColor,
@@ -408,26 +414,26 @@ abstract class GetButton {
 
   /// Create a text button with fully round corner.
   static Widget roundText({
-    Key key,
-    VoidCallback onPressed,
-    VoidCallback onLongPress,
-    Size minimumSize,
-    EdgeInsetsGeometry padding,
-    double horizontalPadding = 24,
-    double verticalPadding,
-    EdgeInsetsGeometry margin,
-    double horizontalMargin,
-    double verticalMargin,
-    BorderSide side,
-    Color primary,
-    Color backgroundColor,
-    Color onSurface,
-    double elevation,
-    TextStyle textStyle,
-    FocusNode focusNode,
+    Key? key,
+    VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    Size? minimumSize,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding = 24,
+    double? verticalPadding,
+    EdgeInsetsGeometry? margin,
+    double? horizontalMargin,
+    double? verticalMargin,
+    BorderSide? side,
+    Color? primary,
+    Color? backgroundColor,
+    Color? onSurface,
+    double? elevation,
+    TextStyle? textStyle,
+    FocusNode? focusNode,
     bool autofocus = false,
     Clip clipBehavior = Clip.none,
-    Widget child,
+    required Widget child,
   }) =>
       text(
         key: key,
@@ -455,27 +461,27 @@ abstract class GetButton {
 
   /// Create a dialog text button.
   static Widget dialogText({
-    Key key,
-    VoidCallback onPressed,
-    VoidCallback onLongPress,
-    Size minimumSize,
-    EdgeInsetsGeometry padding,
-    double horizontalPadding,
-    double verticalPadding,
-    EdgeInsetsGeometry margin,
-    double horizontalMargin,
-    double verticalMargin,
-    BorderSide side,
-    Color primary,
-    Color backgroundColor,
-    Color onSurface,
-    double elevation,
-    TextStyle textStyle,
-    FocusNode focusNode,
+    Key? key,
+    VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    Size? minimumSize,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    EdgeInsetsGeometry? margin,
+    double? horizontalMargin,
+    double? verticalMargin,
+    BorderSide? side,
+    Color? primary,
+    Color? backgroundColor,
+    Color? onSurface,
+    double? elevation,
+    TextStyle? textStyle,
+    FocusNode? focusNode,
     bool autofocus = false,
     bool enabled = true,
     Clip clipBehavior = Clip.none,
-    Widget child,
+    required Widget child,
   }) =>
       text(
         key: key,
@@ -507,24 +513,24 @@ abstract class GetButton {
 
   /// Create a dialog text negative button.
   static Widget dialogNegative({
-    Key key,
-    String label,
-    VoidCallback onPressed,
-    VoidCallback onLongPress,
-    Size minimumSize,
-    EdgeInsetsGeometry padding,
-    double horizontalPadding,
-    double verticalPadding,
-    EdgeInsetsGeometry margin,
-    double horizontalMargin,
-    double verticalMargin,
-    BorderSide side,
-    Color primary,
-    Color backgroundColor,
-    Color onSurface,
-    double elevation,
-    TextStyle textStyle,
-    FocusNode focusNode,
+    Key? key,
+    String? label,
+    VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    Size? minimumSize,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    EdgeInsetsGeometry? margin,
+    double? horizontalMargin,
+    double? verticalMargin,
+    BorderSide? side,
+    Color? primary,
+    Color? backgroundColor,
+    Color? onSurface,
+    double? elevation,
+    TextStyle? textStyle,
+    FocusNode? focusNode,
     bool autofocus = false,
     bool enabled = true,
     Clip clipBehavior = Clip.none,
@@ -555,27 +561,27 @@ abstract class GetButton {
 
   /// Create a dialog elevated button.
   static Widget dialogElevated({
-    Key key,
-    VoidCallback onPressed,
-    VoidCallback onLongPress,
-    Size minimumSize,
-    EdgeInsetsGeometry padding,
-    double horizontalPadding,
-    double verticalPadding,
-    EdgeInsetsGeometry margin = const EdgeInsets.only(right: 7),
-    double horizontalMargin,
-    double verticalMargin,
-    BorderSide side,
-    Color primary,
-    Color onPrimary,
-    Color onSurface,
-    double elevation,
-    TextStyle textStyle,
-    FocusNode focusNode,
+    Key? key,
+    VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    Size? minimumSize,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    EdgeInsetsGeometry? margin = const EdgeInsets.only(right: 7),
+    double? horizontalMargin,
+    double? verticalMargin,
+    BorderSide? side,
+    Color? primary,
+    Color? onPrimary,
+    Color? onSurface,
+    double? elevation,
+    TextStyle? textStyle,
+    FocusNode? focusNode,
     bool autofocus = false,
     bool enabled = true,
     Clip clipBehavior = Clip.none,
-    Widget child,
+    Widget? child,
   }) =>
       elevated(
         onPressed: enabled != true
@@ -606,24 +612,24 @@ abstract class GetButton {
 
   /// Create a dialog elevated positive button.
   static Widget dialogPositive({
-    Key key,
-    String label,
-    VoidCallback onPressed,
-    VoidCallback onLongPress,
-    Size minimumSize,
-    EdgeInsetsGeometry padding,
-    double horizontalPadding,
-    double verticalPadding,
-    EdgeInsetsGeometry margin = const EdgeInsets.only(right: 7),
-    double horizontalMargin,
-    double verticalMargin,
-    BorderSide side,
-    Color primary,
-    Color onPrimary,
-    Color onSurface,
-    double elevation,
-    TextStyle textStyle,
-    FocusNode focusNode,
+    Key? key,
+    String? label,
+    VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    Size? minimumSize,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    EdgeInsetsGeometry? margin = const EdgeInsets.only(right: 7),
+    double? horizontalMargin,
+    double? verticalMargin,
+    BorderSide? side,
+    Color? primary,
+    Color? onPrimary,
+    Color? onSurface,
+    double? elevation,
+    TextStyle? textStyle,
+    FocusNode? focusNode,
     bool autofocus = false,
     bool enabled = true,
     Clip clipBehavior = Clip.none,
@@ -654,32 +660,32 @@ abstract class GetButton {
 
   /// Create an icon button.
   static Widget icon({
-    Key key,
-    double iconSize,
-    VisualDensity visualDensity,
-    EdgeInsetsGeometry padding,
-    AlignmentGeometry alignment,
-    double splashRadius,
-    Widget icon,
-    Color color,
-    Color focusColor,
-    Color hoverColor,
-    Color highlightColor,
-    Color splashColor,
-    Color disabledColor,
-    void Function() onPressed,
-    MouseCursor mouseCursor,
-    FocusNode focusNode,
-    bool autofocus = false,
+    Key? key,
+    double? iconSize,
+    VisualDensity? visualDensity,
+    EdgeInsetsGeometry? padding,
+    AlignmentGeometry? alignment,
+    double? splashRadius,
+    Widget? child,
+    Color? color,
+    Color? focusColor,
+    Color? hoverColor,
+    Color? highlightColor,
+    Color? splashColor,
+    Color? disabledColor,
+    void Function()? onPressed,
+    MouseCursor? mouseCursor,
+    FocusNode? focusNode,
+    bool? autofocus = false,
     bool primary = false,
-    bool enabled = true,
+    bool? enabled = true,
     bool mini = false,
     bool tintLabel = true,
-    String tooltip,
-    String label,
-    TextStyle labelStyle,
-    bool enableFeedback = true,
-    BoxConstraints constraints,
+    String? tooltip,
+    String? label,
+    TextStyle? labelStyle,
+    bool? enableFeedback = true,
+    BoxConstraints? constraints,
   }) {
     var labeled = label != null;
     var labeledOrMini = labeled || mini == true;
@@ -701,7 +707,7 @@ abstract class GetButton {
               ? EdgeInsets.symmetric(vertical: mini ? 4 : 8)
               : const EdgeInsets.all(8)),
       alignment: alignment ?? Alignment.center,
-      splashRadius: splashRadius ?? (labeled ? 24 : 20),
+      splashRadius: splashRadius ?? (labeled ? 24 : 18),
       icon: labeled
           ? Column(
               children: [
@@ -710,11 +716,11 @@ abstract class GetButton {
                       ? (mini ? 2 : 4)
                       : ((mini ? 22 : 24) - iconSize).abs(),
                 ),
-                icon,
+                child!,
                 SizedBox(height: mini ? 2 : 2.5),
                 Expanded(
                   child: Text(
-                    label,
+                    label!,
                     style: labelStyle ??
                         TextStyle(
                           fontSize: 9,
@@ -726,7 +732,7 @@ abstract class GetButton {
                 ),
               ],
             )
-          : (icon ?? const SizedBox()),
+          : (child ?? const SizedBox()),
       color: color,
       focusColor: focusColor,
       hoverColor: hoverColor,
@@ -746,31 +752,31 @@ abstract class GetButton {
 
   /// Create a primary icon button.
   static Widget primaryIcon({
-    Key key,
-    double iconSize,
-    VisualDensity visualDensity,
-    EdgeInsetsGeometry padding,
-    AlignmentGeometry alignment,
-    double splashRadius,
-    Widget icon,
-    Color color,
-    Color focusColor,
-    Color hoverColor,
-    Color highlightColor,
-    Color splashColor,
-    Color disabledColor,
-    void Function() onPressed,
-    MouseCursor mouseCursor,
-    FocusNode focusNode,
+    Key? key,
+    double? iconSize,
+    VisualDensity? visualDensity,
+    EdgeInsetsGeometry? padding,
+    AlignmentGeometry? alignment,
+    double? splashRadius,
+    Widget? child,
+    Color? color,
+    Color? focusColor,
+    Color? hoverColor,
+    Color? highlightColor,
+    Color? splashColor,
+    Color? disabledColor,
+    void Function()? onPressed,
+    MouseCursor? mouseCursor,
+    FocusNode? focusNode,
     bool autofocus = false,
     bool enabled = true,
     bool mini = false,
     bool tintLabel = true,
-    String tooltip,
-    String label,
-    TextStyle labelStyle,
+    String? tooltip,
+    String? label,
+    TextStyle? labelStyle,
     bool enableFeedback = true,
-    BoxConstraints constraints,
+    BoxConstraints? constraints,
   }) =>
       GetButton.icon(
         key: key,
@@ -779,7 +785,7 @@ abstract class GetButton {
         padding: padding,
         alignment: alignment,
         splashRadius: splashRadius,
-        icon: icon,
+        child: child,
         color: color,
         focusColor: focusColor,
         hoverColor: hoverColor,
@@ -803,31 +809,31 @@ abstract class GetButton {
 
   /// Create a mini icon button.
   static Widget miniIcon({
-    Key key,
-    double iconSize,
-    VisualDensity visualDensity,
-    EdgeInsetsGeometry padding,
-    AlignmentGeometry alignment,
-    double splashRadius,
-    Widget icon,
-    Color color,
-    Color focusColor,
-    Color hoverColor,
-    Color highlightColor,
-    Color splashColor,
-    Color disabledColor,
-    void Function() onPressed,
-    MouseCursor mouseCursor,
-    FocusNode focusNode,
+    Key? key,
+    double? iconSize,
+    VisualDensity? visualDensity,
+    EdgeInsetsGeometry? padding,
+    AlignmentGeometry? alignment,
+    double? splashRadius,
+    Widget? child,
+    Color? color,
+    Color? focusColor,
+    Color? hoverColor,
+    Color? highlightColor,
+    Color? splashColor,
+    Color? disabledColor,
+    void Function()? onPressed,
+    MouseCursor? mouseCursor,
+    FocusNode? focusNode,
     bool autofocus = false,
     bool primary = false,
     bool enabled = true,
     bool tintLabel = true,
-    String tooltip,
-    String label,
-    TextStyle labelStyle,
+    String? tooltip,
+    String? label,
+    TextStyle? labelStyle,
     bool enableFeedback = true,
-    BoxConstraints constraints,
+    BoxConstraints? constraints,
   }) =>
       GetButton.icon(
         key: key,
@@ -836,7 +842,7 @@ abstract class GetButton {
         padding: padding,
         alignment: alignment,
         splashRadius: splashRadius,
-        icon: icon,
+        child: child,
         color: color,
         focusColor: focusColor,
         hoverColor: hoverColor,
@@ -859,13 +865,61 @@ abstract class GetButton {
       );
 
   static Widget back({
-    Color color,
-    VoidCallback onPressed,
-  }) =>
-      icon(
-        icon: const BackButtonIcon(),
-        color: color,
-        tooltip: MaterialLocalizations.of(Get.context).backButtonTooltip,
-        onPressed: () => Get.canPop ? Get.back() : Get.popSystem(),
-      );
+    Color? color,
+    VoidCallback? onPressed,
+  }) {
+    var _onPressed = () => Get.canPop ? Get.back() : Get.systemPop();
+    return Get.isIOS
+        ? CupertinoNavigationBarBackButton(
+            color: color ?? Get.theme.primaryIconTheme.color,
+            onPressed: _onPressed,
+          )
+        : icon(
+            child: const BackButtonIcon(),
+            color: color ?? Get.theme.primaryIconTheme.color,
+            tooltip: Get.localization.backButtonTooltip,
+            onPressed: _onPressed,
+          );
+  }
+
+  static Widget sticker({
+    Color? color,
+    VoidCallback? onPressed,
+    String? tooltip,
+    String? text,
+    IconData? icon,
+    EdgeInsets margin = const EdgeInsets.only(
+      bottom: 6,
+      right: 8,
+      top: 6,
+      left: 6,
+    ),
+  }) {
+    var _color = color ?? Get.iconColor ?? Get.theme.accentColor;
+    return Container(
+      width: 20,
+      height: 20,
+      margin: margin,
+      padding: EdgeInsets.only(top: icon != null ? 2.2 : 3),
+      alignment: Alignment.topCenter,
+      decoration: BoxDecoration(
+        border: Border.all(color: _color),
+        borderRadius: BorderRadius.only(
+          topRight: 6.radius,
+          topLeft: 6.radius,
+          bottomLeft: 6.radius,
+          bottomRight: 12.radius,
+        ),
+      ),
+      child: icon != null
+          ? Icon(icon, color: _color, size: 13)
+          : Text(
+              text?.take(3).uppercase ?? "",
+              style: GoogleFonts.ubuntuCondensed(
+                fontSize: 8,
+                color: _color,
+              ),
+            ),
+    ).clickable(onTap: onPressed).tooltip(tooltip);
+  }
 }

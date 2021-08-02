@@ -23,9 +23,9 @@ class GetTheme {
     fontWeight: FontWeight.bold,
   );
 
-  static bool isDark(BuildContext context) =>
+  static bool isDark(BuildContext? context) =>
       ThemeMode.system == ThemeMode.dark ||
-      MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+      MediaQuery.platformBrightnessOf(context!) == Brightness.dark;
 
   static bool get isDarkMode => isDark(Get.context);
 
@@ -47,13 +47,13 @@ class GetTheme {
 
   static ThemeData black(
     BuildContext context, {
-    Brightness brightness,
-    String fontFamily,
-    TextTheme textTheme,
-    IconThemeData primaryIconTheme,
-    ButtonStyle elevatedButtonStyle,
-    ButtonStyle outlinedButtonStyle,
-    ButtonStyle textButtonStyle,
+    Brightness? brightness,
+    String? fontFamily,
+    TextTheme? textTheme,
+    IconThemeData? primaryIconTheme,
+    ButtonStyle? elevatedButtonStyle,
+    ButtonStyle? outlinedButtonStyle,
+    ButtonStyle? textButtonStyle,
     Brightness primaryBrightness = Brightness.dark,
     Color primaryBackgroundLight = Colors.black,
     Color bottomBackgroundLight = Colors.white,
@@ -90,12 +90,12 @@ class GetTheme {
 
   static ThemeData sky(
     BuildContext context, {
-    Brightness brightness,
-    String fontFamily,
-    TextTheme textTheme,
-    ButtonStyle elevatedButtonStyle,
-    ButtonStyle outlinedButtonStyle,
-    ButtonStyle textButtonStyle,
+    Brightness? brightness,
+    String? fontFamily,
+    TextTheme? textTheme,
+    ButtonStyle? elevatedButtonStyle,
+    ButtonStyle? outlinedButtonStyle,
+    ButtonStyle? textButtonStyle,
   }) =>
       builder(
         context,
@@ -109,15 +109,15 @@ class GetTheme {
 
   static ThemeData builder(
     BuildContext context, {
-    Brightness brightness,
-    Brightness primaryBrightness,
-    Brightness bottomBrightness,
-    String fontFamily,
-    TextTheme textTheme,
-    IconThemeData primaryIconTheme,
-    ButtonStyle elevatedButtonStyle,
-    ButtonStyle outlinedButtonStyle,
-    ButtonStyle textButtonStyle,
+    Brightness? brightness,
+    Brightness? primaryBrightness,
+    Brightness? bottomBrightness,
+    String? fontFamily,
+    TextTheme? textTheme,
+    IconThemeData? primaryIconTheme,
+    ButtonStyle? elevatedButtonStyle,
+    ButtonStyle? outlinedButtonStyle,
+    ButtonStyle? textButtonStyle,
     Color accentColorLight = kAccentColor,
     Color primarySwatchLight = kPrimarySwatch,
     Color backgroundLight = kBackgroundLight,
@@ -151,20 +151,21 @@ class GetTheme {
         isDark ? primaryBackgroundDark : primaryBackgroundLight;
     final _bottomBackground =
         isDarkBottom ? bottomBackgroundDark : bottomBackgroundLight;
+    var _primaryIconTheme = IconThemeData(
+      color: primaryIconTheme?.color ?? _primaryForeground,
+      opacity: primaryIconTheme?.opacity,
+      size: primaryIconTheme?.size ?? 24.0,
+    );
     return ThemeData(
       brightness: _brightness,
       backgroundColor: isDark ? backgroundDark : backgroundLight,
       canvasColor: isDark ? canvasColorDark : canvasColorLight,
       scaffoldBackgroundColor: isDark ? canvasColorDark : canvasColorLight,
-      primarySwatch: _primarySwatch,
+      primarySwatch: $cast(_primarySwatch),
       accentColor: _accentColor,
       hintColor: theme.hintColor.hinted,
       primaryColorBrightness: _primaryBrightness,
-      primaryIconTheme: IconThemeData(
-        color: primaryIconTheme?.color ?? _primaryForeground,
-        opacity: primaryIconTheme?.opacity,
-        size: primaryIconTheme?.size ?? 24.0,
-      ),
+      primaryIconTheme: _primaryIconTheme,
       iconTheme: IconThemeData(
         color: _accentColor,
         size: 24.0,
@@ -226,6 +227,29 @@ class GetTheme {
         elevation: 1,
         color: _primaryBackground,
         brightness: _primaryBrightness,
+        titleTextStyle: TextStyle(
+          fontSize: 18,
+          color: _primaryBackground.contrast,
+          fontWeight: FontWeight.w500,
+          fontFamily: fontFamily,
+        ),
+        toolbarTextStyle: TextStyle(
+          fontSize: 14,
+          color: _primaryBackground.contrast.actioned,
+          fontFamily: fontFamily,
+        ),
+        foregroundColor: _primaryBackground.contrast,
+        iconTheme: _primaryIconTheme,
+        actionsIconTheme: _primaryIconTheme,
+        backwardsCompatibility: false,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          // systemNavigationBarDividerColor: _bottomBackground,
+          // systemNavigationBarIconBrightness: _bottomBrightness.inverse,
+          // systemNavigationBarColor: _bottomBackground,
+          statusBarBrightness: _primaryBrightness,
+          statusBarIconBrightness: _primaryBrightness.inverse,
+          statusBarColor: Colors.transparent,
+        ),
       ),
       bottomAppBarTheme: BottomAppBarTheme(
         elevation: 4,
@@ -234,8 +258,14 @@ class GetTheme {
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         elevation: 4,
-        selectedLabelStyle: TextStyle(fontSize: 10),
-        unselectedLabelStyle: TextStyle(fontSize: 9.8),
+        selectedLabelStyle: TextStyle(
+          fontSize: 10,
+          fontFamily: fontFamily,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontSize: 9.8,
+          fontFamily: fontFamily,
+        ),
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: true,
         showUnselectedLabels: true,
@@ -250,26 +280,39 @@ class GetTheme {
   }
 
   /// Resolves which theme to use based on brightness.
-  static Widget defaultBuilder(BuildContext context, Widget child) => Theme(
+  static Widget defaultBuilder(BuildContext context, Widget? child) => Theme(
         data: sky(context),
-        child: child,
+        child: child!,
       );
 
-  static setErrorStyle({Color backgroundColor, ui.TextStyle textStyle}) {
+  static setErrorStyle({Color? backgroundColor, ui.TextStyle? textStyle}) {
     RenderErrorBox.backgroundColor = backgroundColor ?? kBackgroundLight;
     RenderErrorBox.textStyle = textStyle ?? kErrorTextStyle;
   }
 
-  static resetSystemChrome(BuildContext context) {
-    setErrorStyle(backgroundColor: context.theme.backgroundColor);
-    var brightness = GetTheme.brightnessInverse(context);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      // systemNavigationBarIconBrightness: brightness,
-      statusBarBrightness: brightness,
-      statusBarIconBrightness: brightness,
-      // systemNavigationBarColor: Get.theme.bottomAppBarTheme.color,
-      statusBarColor: Colors.transparent,
-    ));
+  static resetSystemChrome(BuildContext? context) {
+    setErrorStyle(backgroundColor: context?.theme.backgroundColor);
+    // var brightness = GetTheme.brightnessInverse(context);
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   // systemNavigationBarIconBrightness: brightness,
+    //   statusBarBrightness: brightness,
+    //   statusBarIconBrightness: brightness,
+    //   // systemNavigationBarColor: Get.theme.bottomAppBarTheme.color,
+    //   statusBarColor: Colors.transparent,
+    // ));
+    var _systemOverlayStyle = context?.theme.appBarTheme.systemOverlayStyle;
+    var _primaryBrightness = context?.theme.appBarTheme.brightness;
+    // var _bottomBackground = context?.theme.bottomAppBarTheme.color;
+    // var _bottomBrightness = _bottomBackground?.brightness;
+    SystemChrome.setSystemUIOverlayStyle(_systemOverlayStyle ??
+        SystemUiOverlayStyle(
+          // systemNavigationBarDividerColor: _bottomBackground,
+          // systemNavigationBarIconBrightness: _bottomBrightness?.inverse,
+          // systemNavigationBarColor: _bottomBackground,
+          statusBarBrightness: _primaryBrightness,
+          statusBarIconBrightness: _primaryBrightness?.inverse,
+          statusBarColor: Colors.transparent,
+        ));
   }
 }
 
@@ -308,7 +351,7 @@ class GetFont {
   static final dietDidotTextTheme = textTheme(fontFamily: dietDidot);
   static final stoneSerifTextTheme = textTheme(fontFamily: stoneSerif);
 
-  static TextTheme textTheme({String fontFamily}) => TextTheme(
+  static TextTheme textTheme({String? fontFamily}) => TextTheme(
         headline1: TextStyle(
           fontSize: 80,
           fontWeight: FontWeight.w600,
@@ -368,4 +411,17 @@ class GetFont {
           fontFamily: fontFamily,
         ),
       );
+}
+
+extension BrightnessX on Brightness {
+  Brightness get inverse =>
+      this == Brightness.dark ? Brightness.light : Brightness.dark;
+}
+
+extension TextStyleX on TextStyle {
+  TextStyle get underlined => apply(decoration: TextDecoration.underline);
+
+  TextStyle get italic => apply(fontStyle: FontStyle.italic);
+
+  TextStyle get bold => apply(fontWeightDelta: 1);
 }

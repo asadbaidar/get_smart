@@ -1,3 +1,36 @@
+## [0.1.0-nullsafety.8]
+
+* Bug fixes
+* Added New Widgets
+
+## [0.1.0-nullsafety.7]
+
+* Bug fixes
+
+## [0.1.0-nullsafety.6]
+
+* Bug fixes
+
+## [0.1.0-nullsafety.5]
+
+* Bug fixes
+
+## [0.1.0-nullsafety.4]
+
+* Bug fixes
+
+## [0.1.0-nullsafety.3]
+
+* Dependencies updated
+
+## [0.1.0-nullsafety.2]
+
+* Null-safety
+
+## [0.1.0-nullsafety.1]
+
+* Null-safety
+
 ## [0.0.6]
 
 * Updated dependencies

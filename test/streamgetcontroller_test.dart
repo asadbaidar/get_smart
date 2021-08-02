@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_smart/get_smart.dart';
 
-Stream<int> numberStream(int dataBack, {bool fail, int delay}) async* {
+Stream<int> numberStream(int dataBack, {required bool fail, int? delay}) async* {
   if (fail) throw Exception('numberStream failed');
   if (delay != null) await Future.delayed(Duration(milliseconds: delay));
   yield dataBack;
 }
 
-Stream<String> textStream(String dataBack, {bool fail, int delay}) async* {
+Stream<String> textStream(String dataBack, {required bool fail, int? delay}) async* {
   if (fail) throw Exception('textStream failed');
   if (delay != null) await Future.delayed(Duration(milliseconds: delay));
   yield dataBack;
@@ -19,13 +19,13 @@ class TestStreamGetController extends StreamGetController<int> {
 
   TestStreamGetController({this.fail = false, this.delay = 0});
 
-  int loadedData;
+  int? loadedData;
 
   @override
   get stream => numberStream(1, fail: fail, delay: delay);
 
   @override
-  void onData(int data) {
+  void onData(int? data) {
     loadedData = data;
   }
 }
@@ -39,7 +39,7 @@ class TestMultipleStreamGetController extends MultipleStreamGetController {
 
   TestMultipleStreamGetController({this.failOne = false, this.delay = 0});
 
-  int loadedData;
+  int? loadedData;
   int cancelledCalls = 0;
 
   @override
@@ -66,7 +66,7 @@ class TestMultipleStreamGetControllerWithOverrides
     extends MultipleStreamGetController {
   TestMultipleStreamGetControllerWithOverrides();
 
-  int loadedData;
+  int? loadedData;
 
   @override
   Map<String, StreamData> get streamsMap => {
@@ -171,8 +171,8 @@ void main() async {
       var streamGetController = TestMultipleStreamGetController();
       streamGetController.initialise();
       await Future.delayed(Duration(milliseconds: 4));
-      expect(streamGetController.dataMap[_NumberStream], 5);
-      expect(streamGetController.dataMap[_StringStream], 'five');
+      expect(streamGetController.dataMap![_NumberStream], 5);
+      expect(streamGetController.dataMap![_StringStream], 'five');
     });
 
     test(
@@ -243,7 +243,7 @@ void main() async {
       streamGetController.initialise();
       streamGetController.notifySourceChanged();
 
-      expect(streamGetController.streamsSubscriptions.length, 0);
+      expect(streamGetController.streamsSubscriptions!.length, 0);
     });
 
     test(
@@ -255,7 +255,7 @@ void main() async {
       await Future.delayed(const Duration(milliseconds: 20));
       streamGetController.notifySourceChanged();
 
-      expect(streamGetController.dataMap[_NumberStream], 5);
+      expect(streamGetController.dataMap![_NumberStream], 5);
     });
 
     test(
@@ -267,7 +267,7 @@ void main() async {
       await Future.delayed(const Duration(milliseconds: 20));
       streamGetController.notifySourceChanged(clearOldData: true);
 
-      expect(streamGetController.dataMap[_NumberStream], null);
+      expect(streamGetController.dataMap![_NumberStream], null);
     });
   });
 }

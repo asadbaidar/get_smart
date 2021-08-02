@@ -33,17 +33,17 @@ class GetScaffold extends StatelessWidget {
     this.bottomBarCenterItems,
     this.appBarRightItems,
     this.floatingActionButton,
-    this.floatingActionButtonLocation = FloatingActionButtonLocation.endDocked,
-    Key key,
-  }) : _key = key;
+    this.floatingActionButtonLocation,
+    Key? key,
+  }) : _key = key as GlobalKey<ScaffoldState>?;
 
-  final Widget child;
-  final List<Widget> children;
-  final String title;
-  final String subtitle;
-  final Widget customTitle;
-  final Color backgroundColor;
-  final bool centerTitle;
+  final Widget? child;
+  final List<Widget>? children;
+  final String? title;
+  final String? subtitle;
+  final Widget? customTitle;
+  final Color? backgroundColor;
+  final bool? centerTitle;
   final bool extendBody;
   final bool showProgress;
   final bool showScrollbar;
@@ -51,22 +51,22 @@ class GetScaffold extends StatelessWidget {
   final bool hideAbleAppBar;
   final bool isInteractive;
   final bool hideAppBarLeading;
-  final LinearProgress progressBar;
-  final Widget appBarLeading;
-  final Widget appBarExtension;
-  final double appBarExtensionSize;
-  final Widget withBottomBar;
-  final Widget bottomBar;
-  final Widget bottomSheet;
-  final Widget sliver;
-  final List<Widget> childrenAtFront;
-  final List<Widget> bottomBarLeftItems;
-  final List<Widget> bottomBarRightItems;
-  final List<Widget> bottomBarCenterItems;
-  final List<Widget> appBarRightItems;
-  final FloatingActionButton floatingActionButton;
-  final FloatingActionButtonLocation floatingActionButtonLocation;
-  final GlobalKey<ScaffoldState> _key;
+  final LinearProgress? progressBar;
+  final Widget? appBarLeading;
+  final Widget? appBarExtension;
+  final double? appBarExtensionSize;
+  final Widget? withBottomBar;
+  final Widget? bottomBar;
+  final Widget? bottomSheet;
+  final Widget? sliver;
+  final List<Widget>? childrenAtFront;
+  final List<Widget>? bottomBarLeftItems;
+  final List<Widget>? bottomBarRightItems;
+  final List<Widget>? bottomBarCenterItems;
+  final List<Widget>? appBarRightItems;
+  final FloatingActionButton? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final GlobalKey<ScaffoldState>? _key;
 
   bool get _isInteractive => isInteractive == true;
 
@@ -79,7 +79,7 @@ class GetScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GetTheme.resetSystemChrome(context);
-    if (!_isInteractive) context?.endEditing();
+    if (!_isInteractive) context.endEditing();
     return Scaffold(
       key: _key,
       extendBody: extendBody,
@@ -107,9 +107,10 @@ class GetScaffold extends StatelessWidget {
             )
           : _body,
       floatingActionButton: _isInteractive ? floatingActionButton : null,
-      floatingActionButtonLocation: subtitle?.isBlank ?? true
-          ? FloatingActionButtonLocation.endFloat
-          : floatingActionButtonLocation,
+      floatingActionButtonLocation: floatingActionButtonLocation ??
+          (subtitle?.isBlank ?? true
+              ? FloatingActionButtonLocation.endFloat
+              : FloatingActionButtonLocation.endDocked),
       bottomSheet: bottomSheet,
     );
   }
@@ -124,7 +125,10 @@ class GetScaffold extends StatelessWidget {
   Widget get _body => Stack(children: [
         sliver ?? (showScrollbar == true ? Scrollbar(child: _child) : _child),
         if (!_isInteractive) Clickable(),
-        AppLifecycle(onDetached: Get.context.endEditing),
+        GetAppLifecycle(
+          onDetached: Get.context!.endEditing,
+          onResume: () => GetTheme.resetSystemChrome(Get.context),
+        ),
         ...childrenAtFront ?? [],
       ]);
 
@@ -132,23 +136,23 @@ class GetScaffold extends StatelessWidget {
         showFirst: hideToolbars,
         secondChild: SizedBox(
           height: kToolbarHeight + _appBarExtensionSize,
-          child: _appBar ?? Container(height: 0),
+          child: _appBar,
         ),
       );
 
-  Widget get _appBar => AppBar(
+  AppBar get _appBar => AppBar(
         centerTitle: _centerTitle,
         automaticallyImplyLeading: false,
         leading: hideAppBarLeading == true
             ? null
             : appBarLeading ?? GetButton.back(),
-        title:
-            customTitle ?? Column(children: [if (title != null) Text(title)]),
+        title: customTitle ??
+            (title != null ? Text(title!) : Container(height: 0)),
         bottom: PreferredSize(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (appBarExtension != null) appBarExtension,
+              if (appBarExtension != null) appBarExtension!,
               progressBar ?? LinearProgress(visible: showProgress),
             ],
           ),
@@ -165,12 +169,15 @@ class GetScaffold extends StatelessWidget {
     List<Widget> _bottomBarCenterItems =
         _isInteractive ? bottomBarCenterItems ?? [] : [];
     return (subtitle?.isBlank ?? true) &&
-            (_bottomBarLeftItems.isBlank) &&
-            (_bottomBarRightItems.isBlank) &&
-            (_bottomBarCenterItems.isBlank)
+            _bottomBarLeftItems.isBlank! &&
+            _bottomBarRightItems.isBlank! &&
+            _bottomBarCenterItems.isBlank!
         ? Container(height: 0)
         : BottomBar(
             visible: !hideToolbars,
+            crossAxisAlignment: subtitle?.isBlank ?? true
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.center,
             topChild: withBottomBar,
             leftItems: _bottomBarLeftItems,
             rightItems: _bottomBarRightItems,
@@ -181,7 +188,7 @@ class GetScaffold extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8),
                         child: AutoSizeText(
-                          subtitle,
+                          subtitle!,
                           maxLines: 2,
                           textAlign: TextAlign.center,
                         ),
@@ -191,16 +198,15 @@ class GetScaffold extends StatelessWidget {
           );
   }
 
-  bool get _centerTitle {
+  bool? get _centerTitle {
     if (centerTitle != null) return centerTitle;
     if (customTitle != null) return true;
     if (Get.theme.appBarTheme.centerTitle != null)
       return Get.theme.appBarTheme.centerTitle;
-    assert(Get.platform != null);
     switch (Get.platform) {
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        return appBarRightItems == null || appBarRightItems.length < 2;
+        return appBarRightItems == null || appBarRightItems!.length < 2;
       default:
         return false;
     }
@@ -223,7 +229,7 @@ class GetScaffold extends StatelessWidget {
       },
       body: PageView.builder(
         itemCount: pages.length,
-        itemBuilder: (context, index) => Container(),
+        itemBuilder: (context, index) => Container(height: 0),
       ),
     );
 

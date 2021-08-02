@@ -1,14 +1,10 @@
-import 'package:flutter/widgets.dart';
 import 'package:get_smart/get_smart.dart';
-
-import '../enumerable.dart';
-import '../transformable.dart';
 
 class DateUnit extends Enumerable<int> {
   static const seconds = const DateUnit(rawValue: 1000);
   static const milliseconds = const DateUnit(rawValue: 1);
 
-  const DateUnit({@required this.rawValue});
+  const DateUnit({required this.rawValue});
 
   final int rawValue;
 
@@ -21,17 +17,17 @@ class DateUnit extends Enumerable<int> {
   }
 }
 
-class DateTransform implements Transformable<DateTime, double> {
+class DateTransform implements Transformable<DateTime?, double?> {
   DateTransform({
     this.unit = DateUnit.seconds,
     this.format,
   });
 
   final DateUnit unit;
-  final DateFormat format;
+  final DateFormat? format;
 
   @override
-  DateTime fromJson(value) {
+  DateTime? fromJson(value) {
     try {
       if (value == null) return null;
       if (value is String) return format?.parse(value) ?? DateTime.parse(value);
@@ -45,7 +41,7 @@ class DateTransform implements Transformable<DateTime, double> {
   }
 
   @override
-  double toJson(DateTime value) {
+  double? toJson(DateTime? value) {
     if (value == null) return null;
 
     return unit.removeScale(value.millisecondsSinceEpoch.toDouble());
