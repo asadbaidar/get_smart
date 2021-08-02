@@ -161,7 +161,7 @@ class GetTheme {
       backgroundColor: isDark ? backgroundDark : backgroundLight,
       canvasColor: isDark ? canvasColorDark : canvasColorLight,
       scaffoldBackgroundColor: isDark ? canvasColorDark : canvasColorLight,
-      primarySwatch: _primarySwatch as MaterialColor?,
+      primarySwatch: $cast(_primarySwatch),
       accentColor: _accentColor,
       hintColor: theme.hintColor.hinted,
       primaryColorBrightness: _primaryBrightness,

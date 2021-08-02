@@ -43,5 +43,13 @@ extension GetInterfaceX on GetInterface {
     }
   }
 
+  /// Clears all registered instances (and/or tags).
+  /// Even the persistent ones.
+  /// This should be used at the end or tearDown of unit tests.
+  ///
+  /// [clearRouteBindings] clears Instances associated with routes.
+  bool resetInstance({bool clearRouteBindings = true}) =>
+      GetInstance().resetInstance(clearRouteBindings: clearRouteBindings);
+
   MaterialLocalizations get localization => MaterialLocalizations.of(context!);
 }

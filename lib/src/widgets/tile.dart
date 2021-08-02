@@ -19,7 +19,7 @@ class GetTileData extends GetObject {
     this.value,
     this.header,
     this.isHeader = false,
-    this.isLeadingBoxed,
+    this.isLeadingFilled,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -52,7 +52,7 @@ class GetTileData extends GetObject {
   dynamic value;
   dynamic header;
   bool isHeader;
-  bool? isLeadingBoxed;
+  bool? isLeadingFilled;
   bool isDetailed;
   bool? padAccessory;
   bool? showAccessory;
@@ -100,7 +100,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.destructive,
-    this.enabled,
+    this.enabled = true,
+    this.expanded = false,
     this.density,
     this.horizontalPadding,
     this.verticalPadding,
@@ -132,7 +133,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.destructive,
-    this.enabled,
+    this.enabled = true,
+    this.expanded = false,
     this.density,
     this.horizontalPadding,
     this.verticalPadding,
@@ -164,7 +166,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.destructive,
-    this.enabled,
+    this.enabled = true,
+    this.expanded = false,
     this.density = GetDensity.min,
     this.horizontalPadding,
     this.verticalPadding,
@@ -196,7 +199,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.destructive,
-    this.enabled,
+    this.enabled = true,
+    this.expanded = false,
     this.density,
     this.horizontalPadding,
     this.verticalPadding,
@@ -229,7 +233,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory = true,
     this.tintAble,
     this.destructive,
-    this.enabled,
+    this.enabled = true,
+    this.expanded = false,
     this.density = GetDensity.min,
     this.horizontalPadding = 4,
     this.verticalPadding,
@@ -237,7 +242,7 @@ class GetTile extends StatelessWidget {
     this.bottomPadding,
     this.titleEndPadding,
     this.titleSize = 14,
-    this.accessorySize = 20,
+    this.accessorySize = GetTileRow.kTrailingSize,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -259,7 +264,8 @@ class GetTile extends StatelessWidget {
   final bool? tintAccessory;
   final bool? tintAble;
   final bool? destructive;
-  final bool? enabled;
+  final bool enabled;
+  final bool expanded;
   final double? horizontalPadding;
   final double? verticalPadding;
   final double? topPadding;
@@ -284,11 +290,49 @@ class GetTile extends StatelessWidget {
     return InkWell(
       highlightColor: tintColor.activated,
       splashColor: tintColor.translucent,
-      onTap: (enabled ?? true) ? onTap : null,
+      onTap: enabled ? onTap : null,
       child: Ink(
         color: background ?? context.theme.backgroundColor,
         child: Column(
           children: [
+            // GetTileRow(
+            //   child: Column(children: [
+            //     GetTileRow(
+            //       leading: leading,
+            //       trailing: accessory,
+            //       children: [],
+            //       text: text,
+            //       textStyle: textStyle,
+            //       hint: hint,
+            //       color: color,
+            //       background: background,
+            //       maxLines: maxLines,
+            //       trailingSize: trailingSize,
+            //       expanded: expanded,
+            //       isLeadingFilled: isLeadingFilled,
+            //       enabled: enabled,
+            //       padding: padding,
+            //       leadingPadding: leadingPadding,
+            //       childrenPadding: childrenPadding,
+            //       onTap: onTap,
+            //       onTapLeading: onTapLeading,
+            //     )
+            //   ]),
+            //   leading: leading,
+            //   trailing: accessory,
+            //   trailingSize: accessorySize,
+            //   color: color,
+            //   background: background,
+            //   maxLines: maxLines,
+            //   expanded: expanded,
+            //   isLeadingFilled: isLeadingFilled,
+            //   enabled: enabled,
+            //   padding: padding,
+            //   // leadingPadding: leadingPadding,
+            //   // childrenPadding: childrenPadding,
+            //   onTap: onTap,
+            //   onTapLeading: onTapLeading,
+            // ),
             ListTile(
               visualDensity: density,
               contentPadding: EdgeInsets.only(
@@ -364,7 +408,9 @@ class GetTileRow extends StatelessWidget {
     this.leading,
     this.trailing,
     this.children,
+    this.child,
     this.text,
+    this.textStyle,
     this.hint,
     this.color,
     this.background,
@@ -386,7 +432,9 @@ class GetTileRow extends StatelessWidget {
     this.leading,
     this.trailing,
     this.children,
+    this.child,
     this.text,
+    this.textStyle,
     this.hint,
     this.color,
     this.background,
@@ -407,12 +455,14 @@ class GetTileRow extends StatelessWidget {
   final Widget? leading;
   final Widget? trailing;
   final List<Widget>? children;
+  final Widget? child;
   final String? text;
+  final TextStyle? textStyle;
   final String? hint;
   final Color? color;
   final Color? background;
   final int maxLines;
-  final double trailingSize;
+  final double? trailingSize;
   final bool expanded;
   final bool isLeadingFilled;
   final bool standalone;
@@ -459,33 +509,36 @@ class GetTileRow extends StatelessWidget {
                         ),
                 Expanded(
                   child: CrossFade(
-                    firstChild: RichText(
-                      text: TextSpan(
-                        text: _text,
-                        style: context.textTheme.caption!.copyWith(
-                          color: text == null ? context.theme.hintColor : null,
+                    firstChild: child ??
+                        RichText(
+                          text: TextSpan(
+                            text: _text,
+                            style: (textStyle ?? context.textTheme.caption)!
+                                .copyWith(
+                              color:
+                                  text == null ? context.theme.hintColor : null,
+                            ),
+                            children: children
+                                ?.map((w) =>
+                                    $cast<Text>(w)?.mapTo((Text w) => TextSpan(
+                                          text: w.data,
+                                          style: w.style ??
+                                              context.textTheme.caption,
+                                        )) ??
+                                    WidgetSpan(
+                                      alignment: PlaceholderAlignment.middle,
+                                      child: Padding(
+                                        padding: childrenPadding,
+                                        child: w,
+                                      ),
+                                    ))
+                                .toList(),
+                          ),
+                          maxLines: expanded == true ? null : maxLines,
+                          overflow: expanded == true
+                              ? TextOverflow.visible
+                              : TextOverflow.ellipsis,
                         ),
-                        children: children
-                            ?.map((w) =>
-                                $cast<Text>(w)?.mapTo((Text w) => TextSpan(
-                                      text: w.data,
-                                      style:
-                                          w.style ?? context.textTheme.caption,
-                                    )) ??
-                                WidgetSpan(
-                                  alignment: PlaceholderAlignment.middle,
-                                  child: Padding(
-                                    padding: childrenPadding,
-                                    child: w,
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                      maxLines: expanded == true ? null : maxLines,
-                      overflow: expanded == true
-                          ? TextOverflow.visible
-                          : TextOverflow.ellipsis,
-                    ),
                   ),
                 ),
                 if (trailing != null) SizedBox(width: 6),
