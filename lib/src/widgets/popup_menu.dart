@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
+/// Signature for the callback invoked when a menu item is selected. The
+/// argument is the index of the selected item and value of [T] that caused its
+/// menu to be dismissed.
 typedef PopupMenuItemSelected<T> = void Function(int value, T data);
+
+/// Signature used by [PopupMenu] to lazily construct the child widget that can
+/// show the menu if onPopup method is called from the argument.
 typedef PopupMenuChildBuilder = Widget Function(VoidCallback? onPopup);
+
+/// Signature used by [PopupMenu] to lazily construct the items shown when
+/// the button is pressed.
 typedef PopupMenuItemBuilder<T> = PopupMenuEntry<int> Function(
   int value,
   T data,
@@ -12,7 +21,13 @@ typedef PopupMenuSeparatorBuilder<T> = PopupMenuEntry<int> Function(
   T data,
 );
 
+/// Displays a menu when pressed and calls [onSelected] when the menu is dismissed
+/// because an item was selected. The value passed to [onSelected] is the value of
+/// the selected menu item.
 class PopupMenu<T extends Object> extends StatelessWidget {
+  /// Creates a widget that shows a popup menu.
+  ///
+  /// The [items] argument must not be null.
   const PopupMenu({
     this.childBuilder,
     this.itemBuilder,
@@ -38,13 +53,32 @@ class PopupMenu<T extends Object> extends StatelessWidget {
     this.semanticLabel,
   });
 
+  /// If provided, [childBuilder] is the widget used for this button
   final PopupMenuChildBuilder? childBuilder;
+
+  /// Called when the button is pressed to create the items to show in the menu.
   final PopupMenuItemBuilder<T>? itemBuilder;
   final PopupMenuSeparatorBuilder<T>? separatorBuilder;
+
+  /// Called when the user selects a value from the popup menu.
+  ///
+  /// If the popup menu is dismissed without selecting a value, [onCanceled] is
+  /// called instead.
   final PopupMenuItemSelected<T>? onSelected;
+
+  /// Called when the user dismisses the popup menu without selecting an item.
+  ///
+  /// If the user selects a value, [onSelected] is called instead.
   final VoidCallback? onCanceled;
   final List<T> items;
+
+  /// The value of the menu item, if any, that should be highlighted when the menu opens.
   final int? initialSelected;
+
+  /// The z-coordinate at which to place the menu when open. This controls the
+  /// size of the shadow below the menu.
+  ///
+  /// Defaults to 12, the appropriate elevation for popup menus.
   final double elevation;
   final double cornerRadius;
   final double? itemHeight;
@@ -52,9 +86,22 @@ class PopupMenu<T extends Object> extends StatelessWidget {
   final double? titleSize;
   final double? accessorySize;
   final Color? tintColor;
+
+  /// If provided, the background color used for the menu.
+  ///
+  /// If this property is null, then [PopupMenuThemeData.color] is used.
+  /// If [PopupMenuThemeData.color] is also null, then
+  /// Theme.of(context).cardColor is used.
   final Color? backgroundColor;
   final EdgeInsets padding;
+
+  /// The offset applied to the Popup Menu Button.
+  ///
+  /// When not set, the Popup Menu Button will be positioned directly next to
+  /// the button that was used to create it.
   final Offset? offset;
+
+  /// Whether this popup menu button is interactive.
   final bool enabled;
   final bool autoTint;
   final bool separator;
