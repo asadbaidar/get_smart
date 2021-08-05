@@ -557,7 +557,6 @@ class GetTile extends StatelessWidget {
               isDetailed: isDetailed,
               constraints: constraints,
               color: color,
-              background: background,
               alignment: alignment,
               enabled: enabled,
               padding: padding ??
