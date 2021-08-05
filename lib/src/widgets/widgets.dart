@@ -18,8 +18,10 @@ class BoxedView extends StatelessWidget {
     this.filled = true,
     this.circular = false,
     this.small,
+    this.wrap = false,
     this.boxSize = kBoxSize,
     this.fontSize,
+    this.iconSize,
     this.margin = const EdgeInsets.symmetric(horizontal: 5),
     this.onTap,
     Key? key,
@@ -31,9 +33,26 @@ class BoxedView extends StatelessWidget {
     this.filled = true,
     this.circular = false,
     this.small,
+    this.wrap = false,
     this.boxSize = kBoxSize,
     this.fontSize,
-    this.margin = EdgeInsets.zero,
+    this.iconSize,
+    this.margin,
+    this.onTap,
+    Key? key,
+  }) : super(key: key);
+
+  const BoxedView.wrap({
+    required this.child,
+    this.color,
+    this.filled = false,
+    this.circular = false,
+    this.small = true,
+    this.wrap = true,
+    this.boxSize = kBoxSize,
+    this.fontSize,
+    this.iconSize,
+    this.margin,
     this.onTap,
     Key? key,
   }) : super(key: key);
@@ -44,9 +63,11 @@ class BoxedView extends StatelessWidget {
     this.filled = true,
     this.circular = true,
     this.small,
-    this.boxSize = 26,
+    this.wrap = false,
+    this.boxSize = kBoxSize,
     this.fontSize,
-    this.margin = EdgeInsets.zero,
+    this.iconSize,
+    this.margin,
     this.onTap,
     Key? key,
   }) : super(key: key);
@@ -56,9 +77,11 @@ class BoxedView extends StatelessWidget {
   final bool filled;
   final bool circular;
   final bool? small;
+  final bool wrap;
   final double boxSize;
   final double? fontSize;
-  final EdgeInsetsGeometry margin;
+  final double? iconSize;
+  final EdgeInsetsGeometry? margin;
   final void Function()? onTap;
 
   @override
@@ -66,7 +89,7 @@ class BoxedView extends StatelessWidget {
     final splash = filled ? color?.darker : color?.translucent;
     return Container(
       margin: margin,
-      width: boxSize,
+      width: _boxSize,
       alignment: Alignment.center,
       child: InkWell(
         onTap: onTap,
@@ -74,8 +97,8 @@ class BoxedView extends StatelessWidget {
         highlightColor: splash?.activated,
         splashColor: splash,
         child: Ink(
-          height: _size,
-          width: _size,
+          height: _wrapSize,
+          width: _wrapSize,
           decoration: circular
               ? _size?.circularBox(color: color)
               : _size?.roundBox(color: color),
@@ -88,6 +111,8 @@ class BoxedView extends StatelessWidget {
     );
   }
 
+  double? get _boxSize => wrap ? null : boxSize;
+  double? get _wrapSize => filled ? _boxSize : null;
   double? get _size => filled ? boxSize : null;
 
   Widget? _text() => $cast<Text>(child)?.mapTo(
@@ -97,7 +122,7 @@ class BoxedView extends StatelessWidget {
           style: GoogleFonts.voltaire(
             fontSize: fontSize ??
                 (filled
-                    ? (17 - max(0, (kBoxSize - boxSize).half))
+                    ? ((circular ? 15 : 17) - max(0, (kBoxSize - boxSize).half))
                     : small == true
                         ? 18
                         : 24),
@@ -110,11 +135,12 @@ class BoxedView extends StatelessWidget {
   Widget _child() => IconTheme(
         child: child,
         data: IconThemeData(
-          size: filled
-              ? 18
-              : small == true
-                  ? 24
-                  : 30,
+          size: iconSize ??
+              (filled
+                  ? 18
+                  : small == true
+                      ? 24
+                      : 30),
           color: filled ? color?.contrast : color,
         ),
       );
@@ -391,12 +417,15 @@ class TextBadge extends StatelessWidget {
                 horizontal: padding,
                 vertical: padding.half,
               ),
-              child: Text(
-                text!,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: _textColor.applyIf(inverted, (it) => it.contrast),
-                  fontSize: fontSize,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 0.5),
+                child: Text(
+                  text!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: _textColor.applyIf(inverted, (it) => it.contrast),
+                    fontSize: fontSize,
+                  ),
                 ),
               ),
               decoration: GetBoxDecoration.all(

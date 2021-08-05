@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,68 @@ extension GetWidgetX on Widget {
   Widget tooltip([String? message]) => message?.notEmpty != null
       ? Tooltip(message: message!, child: this)
       : this;
+
+  Widget flex({
+    Key? key,
+    int flex = 1,
+    bool expanded = false,
+  }) =>
+      Flexible(
+        key: key,
+        flex: flex,
+        fit: expanded ? FlexFit.tight : FlexFit.loose,
+        child: this,
+      );
+
+  Widget textButton({
+    Key? key,
+    bool enabled = true,
+    EdgeInsetsGeometry? padding = EdgeInsets.zero,
+    Color? color,
+    Color disabledColor = CupertinoColors.quaternarySystemFill,
+    double? minSize = kMinInteractiveDimensionCupertino,
+    double? pressedOpacity = 0.4,
+    BorderRadius? borderRadius = const BorderRadius.all(Radius.circular(8.0)),
+    AlignmentGeometry alignment = Alignment.center,
+    VoidCallback? onPressed,
+  }) =>
+      CupertinoButton(
+        key: key,
+        padding: padding,
+        color: color,
+        disabledColor: disabledColor,
+        minSize: minSize,
+        pressedOpacity: pressedOpacity,
+        borderRadius: borderRadius,
+        alignment: alignment,
+        onPressed: enabled ? onPressed : null,
+        child: this,
+      );
+
+  Widget textButtonZero({
+    Key? key,
+    bool enabled = true,
+    EdgeInsetsGeometry? padding = EdgeInsets.zero,
+    Color? color,
+    Color disabledColor = CupertinoColors.quaternarySystemFill,
+    double? minSize = 0,
+    double? pressedOpacity = 0.4,
+    BorderRadius? borderRadius = const BorderRadius.all(Radius.circular(8.0)),
+    AlignmentGeometry alignment = Alignment.center,
+    VoidCallback? onPressed,
+  }) =>
+      CupertinoButton(
+        key: key,
+        padding: padding,
+        color: color,
+        disabledColor: disabledColor,
+        minSize: minSize,
+        pressedOpacity: pressedOpacity,
+        borderRadius: borderRadius,
+        alignment: alignment,
+        onPressed: enabled ? onPressed : null,
+        child: this,
+      );
 }
 
 extension GetDiagnosticable on Diagnosticable {

@@ -32,7 +32,7 @@ extension ColorX on Color {
 
   Color get hinted => withOpacity(0.34);
 
-  Color get subbed => withOpacity(0.6);
+  Color get subbed => withOpacity(0.5);
 
   Color get highlighted => withOpacity(0.727);
 

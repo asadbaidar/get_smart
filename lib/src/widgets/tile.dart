@@ -31,11 +31,10 @@ class GetTileData extends GetObject {
     this.verticalPadding,
     this.topPadding,
     this.bottomPadding,
-    this.titleEndPadding,
+    this.trailingPadding,
     this.titleSize,
     this.accessorySize,
     this.height,
-    this.density,
     this.onTap,
     this.onTapLeading,
   }) : tintColor = color;
@@ -64,11 +63,10 @@ class GetTileData extends GetObject {
   double? verticalPadding;
   double? topPadding;
   double? bottomPadding;
-  double? titleEndPadding;
+  double? trailingPadding;
   double? titleSize;
   double? accessorySize;
   double? height;
-  VisualDensity? density;
   VoidCallback? onTap;
   VoidCallback? onTapLeading;
 
@@ -82,34 +80,66 @@ class GetTileData extends GetObject {
 }
 
 class GetTile extends StatelessWidget {
+  static const kConstraints = const BoxConstraints(minHeight: 31);
+  static const kTitleSize = 14.0;
+
   /// Tile with detailed accessory
   const GetTile.detailed({
     this.leading,
     this.title,
     this.subtitle,
+    this.titleChild,
+    this.subtitleChild,
+    this.titleChildren,
+    this.subtitleChildren,
+    this.titleHint,
+    this.subtitleHint,
     this.trailingTop,
+    this.trailingTopChild,
     this.trailingBottom,
+    this.trailingBottomChild,
+    this.trailingTitle,
+    this.trailingTitleChild,
+    this.trailingSubtitle,
+    this.trailingSubtitleChild,
+    this.titleStyle,
+    this.subtitleStyle,
+    this.trailingStyle,
     this.accessory,
     this.rows,
     this.color,
     this.background,
+    this.trailingColor,
     this.isLeadingFilled = true,
     this.isDetailed = true,
     this.padAccessory,
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
+    this.isTitleBold = true,
     this.destructive,
     this.enabled = true,
-    this.expanded = false,
-    this.density,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
     this.bottomPadding,
-    this.titleEndPadding,
-    this.titleSize,
+    this.leftPadding,
+    this.rightPadding,
+    this.trailingPadding,
+    this.titleSize = kTitleSize,
+    this.leadingSize,
     this.accessorySize,
+    this.trailingSize = GetTileRow.kTrailingSize,
+    this.titleMaxLines,
+    this.subtitleMaxLines,
+    this.padding,
+    this.leadingPadding = GetTileRow.kLeadingPadding,
+    this.titleChildrenPadding = GetTileRow.kChildrenPadding,
+    this.subtitleChildrenPadding = GetTileRow.kChildrenPadding,
+    this.constraints = kConstraints,
+    this.alignment = CrossAxisAlignment.start,
+    this.onTapTitle,
+    this.onTapSubtitle,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -120,29 +150,58 @@ class GetTile extends StatelessWidget {
     this.leading,
     this.title,
     this.subtitle,
+    this.titleChild,
+    this.subtitleChild,
+    this.titleChildren,
+    this.subtitleChildren,
+    this.titleHint,
+    this.subtitleHint,
     this.trailingTop,
+    this.trailingTopChild,
     this.trailingBottom,
+    this.trailingBottomChild,
+    this.trailingTitle,
+    this.trailingTitleChild,
+    this.trailingSubtitle,
+    this.trailingSubtitleChild,
+    this.titleStyle,
+    this.subtitleStyle,
+    this.trailingStyle,
     this.accessory,
     this.rows,
     this.color,
     this.background,
+    this.trailingColor,
     this.isLeadingFilled = true,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
+    this.isTitleBold = true,
     this.destructive,
     this.enabled = true,
-    this.expanded = false,
-    this.density,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
     this.bottomPadding,
-    this.titleEndPadding,
-    this.titleSize,
+    this.leftPadding,
+    this.rightPadding,
+    this.trailingPadding,
+    this.titleSize = kTitleSize,
+    this.leadingSize,
     this.accessorySize,
+    this.trailingSize = GetTileRow.kTrailingSize,
+    this.titleMaxLines,
+    this.subtitleMaxLines,
+    this.padding,
+    this.leadingPadding = GetTileRow.kLeadingPadding,
+    this.titleChildrenPadding = GetTileRow.kChildrenPadding,
+    this.subtitleChildrenPadding = GetTileRow.kChildrenPadding,
+    this.constraints = kConstraints,
+    this.alignment = CrossAxisAlignment.start,
+    this.onTapTitle,
+    this.onTapSubtitle,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -153,29 +212,58 @@ class GetTile extends StatelessWidget {
     this.leading,
     this.title,
     this.subtitle,
+    this.titleChild,
+    this.subtitleChild,
+    this.titleChildren,
+    this.subtitleChildren,
+    this.titleHint,
+    this.subtitleHint,
     this.trailingTop,
+    this.trailingTopChild,
     this.trailingBottom,
+    this.trailingBottomChild,
+    this.trailingTitle,
+    this.trailingTitleChild,
+    this.trailingSubtitle,
+    this.trailingSubtitleChild,
+    this.titleStyle,
+    this.subtitleStyle,
+    this.trailingStyle,
     this.accessory,
     this.rows,
     this.color,
     this.background,
+    this.trailingColor,
     this.isLeadingFilled = true,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
+    this.isTitleBold = true,
     this.destructive,
     this.enabled = true,
-    this.expanded = false,
-    this.density = GetDensity.min,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
     this.bottomPadding,
-    this.titleEndPadding,
-    this.titleSize,
+    this.leftPadding,
+    this.rightPadding,
+    this.trailingPadding,
+    this.titleSize = kTitleSize,
+    this.leadingSize,
     this.accessorySize,
+    this.trailingSize = GetTileRow.kTrailingSize,
+    this.titleMaxLines,
+    this.subtitleMaxLines,
+    this.padding,
+    this.leadingPadding = GetTileRow.kLeadingPadding,
+    this.titleChildrenPadding = GetTileRow.kChildrenPadding,
+    this.subtitleChildrenPadding = GetTileRow.kChildrenPadding,
+    this.constraints = kConstraints,
+    this.alignment = CrossAxisAlignment.center,
+    this.onTapTitle,
+    this.onTapSubtitle,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -186,29 +274,58 @@ class GetTile extends StatelessWidget {
     this.leading,
     this.title,
     this.subtitle,
+    this.titleChild,
+    this.subtitleChild,
+    this.titleChildren,
+    this.subtitleChildren,
+    this.titleHint,
+    this.subtitleHint,
     this.trailingTop,
+    this.trailingTopChild,
     this.trailingBottom,
+    this.trailingBottomChild,
+    this.trailingTitle,
+    this.trailingTitleChild,
+    this.trailingSubtitle,
+    this.trailingSubtitleChild,
+    this.titleStyle,
+    this.subtitleStyle,
+    this.trailingStyle,
     this.accessory,
     this.rows,
     this.color,
     this.background = Colors.transparent,
+    this.trailingColor,
     this.isLeadingFilled = false,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
+    this.isTitleBold = true,
     this.destructive,
     this.enabled = true,
-    this.expanded = false,
-    this.density,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
     this.bottomPadding,
-    this.titleEndPadding,
-    this.titleSize,
+    this.leftPadding,
+    this.rightPadding,
+    this.trailingPadding,
+    this.titleSize = kTitleSize,
+    this.leadingSize,
     this.accessorySize,
+    this.trailingSize = GetTileRow.kTrailingSize,
+    this.titleMaxLines,
+    this.subtitleMaxLines,
+    this.padding,
+    this.leadingPadding = GetTileRow.kLeadingPadding,
+    this.titleChildrenPadding = GetTileRow.kChildrenPadding,
+    this.subtitleChildrenPadding = GetTileRow.kChildrenPadding,
+    this.constraints = kConstraints,
+    this.alignment = CrossAxisAlignment.center,
+    this.onTapTitle,
+    this.onTapSubtitle,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -220,29 +337,58 @@ class GetTile extends StatelessWidget {
     this.leading,
     this.title,
     this.subtitle,
+    this.titleChild,
+    this.subtitleChild,
+    this.titleChildren,
+    this.subtitleChildren,
+    this.titleHint,
+    this.subtitleHint,
     this.trailingTop,
+    this.trailingTopChild,
     this.trailingBottom,
+    this.trailingBottomChild,
+    this.trailingTitle,
+    this.trailingTitleChild,
+    this.trailingSubtitle,
+    this.trailingSubtitleChild,
+    this.titleStyle,
+    this.subtitleStyle,
+    this.trailingStyle,
     this.accessory,
     this.rows,
     this.color,
     this.background = Colors.transparent,
+    this.trailingColor,
     this.isLeadingFilled = false,
     this.isDetailed = false,
     this.padAccessory = true,
     this.showAccessory,
     this.tintAccessory = true,
     this.tintAble,
+    this.isTitleBold = true,
     this.destructive,
     this.enabled = true,
-    this.expanded = false,
-    this.density = GetDensity.min,
     this.horizontalPadding = 4,
     this.verticalPadding,
     this.topPadding,
     this.bottomPadding,
-    this.titleEndPadding,
-    this.titleSize = 14,
+    this.leftPadding,
+    this.rightPadding,
+    this.trailingPadding,
+    this.titleSize = kTitleSize,
+    this.leadingSize,
     this.accessorySize = GetTileRow.kTrailingSize,
+    this.trailingSize = GetTileRow.kTrailingSize,
+    this.titleMaxLines,
+    this.subtitleMaxLines,
+    this.padding,
+    this.leadingPadding = GetTileRow.kLeadingPadding,
+    this.titleChildrenPadding = GetTileRow.kChildrenPadding,
+    this.subtitleChildrenPadding = GetTileRow.kChildrenPadding,
+    this.constraints = kConstraints,
+    this.alignment = CrossAxisAlignment.center,
+    this.onTapTitle,
+    this.onTapSubtitle,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -251,29 +397,58 @@ class GetTile extends StatelessWidget {
   final Widget? leading;
   final String? title;
   final String? subtitle;
+  final Widget? titleChild;
+  final Widget? subtitleChild;
+  final List<Widget>? titleChildren;
+  final List<Widget>? subtitleChildren;
+  final String? titleHint;
+  final String? subtitleHint;
   final String? trailingTop;
+  final Widget? trailingTopChild;
   final String? trailingBottom;
+  final Widget? trailingBottomChild;
+  final String? trailingTitle;
+  final Widget? trailingTitleChild;
+  final String? trailingSubtitle;
+  final Widget? trailingSubtitleChild;
+  final TextStyle? titleStyle;
+  final TextStyle? subtitleStyle;
+  final TextStyle? trailingStyle;
   final Widget? accessory;
   final List<Widget>? rows;
   final Color? color;
   final Color? background;
+  final Color? trailingColor;
   final bool isLeadingFilled;
   final bool isDetailed;
   final bool? padAccessory;
   final bool? showAccessory;
   final bool? tintAccessory;
   final bool? tintAble;
+  final bool isTitleBold;
   final bool? destructive;
   final bool enabled;
-  final bool expanded;
   final double? horizontalPadding;
   final double? verticalPadding;
   final double? topPadding;
   final double? bottomPadding;
-  final double? titleEndPadding;
+  final double? leftPadding;
+  final double? rightPadding;
+  final double? trailingPadding;
   final double? titleSize;
+  final double? leadingSize;
   final double? accessorySize;
-  final VisualDensity? density;
+  final double? trailingSize;
+  final int? titleMaxLines;
+  final int? subtitleMaxLines;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry leadingPadding;
+  final EdgeInsetsGeometry titleChildrenPadding;
+  final EdgeInsetsGeometry subtitleChildrenPadding;
+  final BoxConstraints constraints;
+  final CrossAxisAlignment alignment;
+  final VoidCallback? onTapTitle;
+  final VoidCallback? onTapSubtitle;
   final VoidCallback? onTap;
   final VoidCallback? onTapLeading;
 
@@ -282,11 +457,36 @@ class GetTile extends StatelessWidget {
     final _tintAble = destructive == true ? true : (tintAble ?? false);
     final tintColor =
         destructive == true ? Colors.red : color ?? context.theme.accentColor;
-    final isTrailingTop = trailingTop?.notEmpty != null;
-    final isTrailingBottom = trailingBottom?.notEmpty != null;
-    final accessory = this.accessory ??
-        (isDetailed == true ? const Icon(Icons.chevron_right) : null);
-    final showAccessory = accessory != null && (this.showAccessory ?? true);
+    final _trailingColor = _tintAble
+        ? tintColor
+        : trailingColor ??
+            context.theme.iconTheme.color ??
+            context.theme.accentColor;
+    final isTrailingTop =
+        trailingTop?.notEmpty != null || trailingTopChild != null;
+    final isTrailingBottom =
+        trailingBottom?.notEmpty != null || trailingBottomChild != null;
+    final _accessory = accessory ??
+        (isDetailed == true
+            ? const Icon(
+                CupertinoIcons.chevron_right,
+                size: 14,
+              )
+            : null);
+    final _showAccessory = _accessory != null && (showAccessory ?? true);
+    final _trailingPadding =
+        trailingPadding?.mapIt((it) => EdgeInsets.only(left: it)) ??
+            GetTileRow.kTrailingPadding;
+    final _titleStyle = titleStyle ??
+        (isTitleBold
+            ? context.textTheme.bodyText1
+            : context.textTheme.bodyText2);
+    final _titleColor = _tintAble ? tintColor : null;
+    final _subtitleStyle = subtitleStyle ?? context.textTheme.bodyText2;
+    final _subtitleColor = _tintAble ? tintColor : _subtitleStyle?.color;
+    final _padding = leading != null ? 8.0 : 12.0;
+    final _leftPadding = horizontalPadding ?? leftPadding ?? _padding;
+    final _rightPadding = horizontalPadding ?? rightPadding ?? _padding;
     return InkWell(
       highlightColor: tintColor.activated,
       splashColor: tintColor.translucent,
@@ -294,100 +494,149 @@ class GetTile extends StatelessWidget {
       child: Ink(
         color: background ?? context.theme.backgroundColor,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // GetTileRow(
-            //   child: Column(children: [
-            //     GetTileRow(
-            //       leading: leading,
-            //       trailing: accessory,
-            //       children: [],
-            //       text: text,
-            //       textStyle: textStyle,
-            //       hint: hint,
-            //       color: color,
-            //       background: background,
-            //       maxLines: maxLines,
-            //       trailingSize: trailingSize,
-            //       expanded: expanded,
-            //       isLeadingFilled: isLeadingFilled,
-            //       enabled: enabled,
-            //       padding: padding,
-            //       leadingPadding: leadingPadding,
-            //       childrenPadding: childrenPadding,
-            //       onTap: onTap,
-            //       onTapLeading: onTapLeading,
-            //     )
-            //   ]),
-            //   leading: leading,
-            //   trailing: accessory,
-            //   trailingSize: accessorySize,
-            //   color: color,
-            //   background: background,
-            //   maxLines: maxLines,
-            //   expanded: expanded,
-            //   isLeadingFilled: isLeadingFilled,
-            //   enabled: enabled,
-            //   padding: padding,
-            //   // leadingPadding: leadingPadding,
-            //   // childrenPadding: childrenPadding,
-            //   onTap: onTap,
-            //   onTapLeading: onTapLeading,
-            // ),
-            ListTile(
-              visualDensity: density,
-              contentPadding: EdgeInsets.only(
-                left: horizontalPadding ?? 16,
-                right: padAccessory == true ? (horizontalPadding ?? 16) : 2,
-                top: verticalPadding ?? topPadding ?? 0,
-                bottom: verticalPadding ?? bottomPadding ?? 0,
-              ),
-              leading: leading == null
-                  ? null
-                  : BoxedView(
-                      child: leading!,
-                      color: tintColor,
-                      filled: isLeadingFilled,
-                      onTap: onTapLeading,
-                    ),
-              title: title?.notEmpty?.mapIt((it) => Text(
-                    it,
-                    style: TextStyle(
-                      color: _tintAble ? tintColor : null,
-                      fontSize: titleSize,
-                    ),
-                  )),
-              subtitle: subtitle?.notEmpty?.mapIt((it) => Text(it)),
+            GetTileRow(
+              child: Column(children: [
+                GetTileRow(
+                  child: titleChild,
+                  children: titleChildren,
+                  childrenPadding: titleChildrenPadding,
+                  text: title?.notEmpty,
+                  textStyle: _titleStyle?.copyWith(
+                    color: _titleColor,
+                  ),
+                  fontSize: titleSize,
+                  hint: titleHint,
+                  trailingText: trailingTitle,
+                  trailingStyle: trailingStyle,
+                  trailing: trailingTitleChild,
+                  trailingPadding: _trailingPadding,
+                  trailingColor: trailingColor,
+                  trailingSize: trailingSize,
+                  color: tintColor,
+                  maxLines: titleMaxLines,
+                  alignment: alignment == CrossAxisAlignment.center
+                      ? alignment
+                      : CrossAxisAlignment.baseline,
+                  enabled: enabled,
+                  padding: EdgeInsets.zero,
+                  onTap: onTapTitle,
+                ),
+                GetTileRow(
+                  child: subtitleChild,
+                  children: subtitleChildren,
+                  childrenPadding: subtitleChildrenPadding,
+                  text: subtitle?.notEmpty,
+                  textStyle: _subtitleStyle?.copyWith(
+                    color: _subtitleColor?.subbed,
+                  ),
+                  fontSize: titleSize,
+                  hint: subtitleHint,
+                  trailingText: trailingSubtitle,
+                  trailingStyle: trailingStyle,
+                  trailing: trailingSubtitleChild,
+                  trailingPadding: _trailingPadding,
+                  trailingColor: trailingColor,
+                  trailingSize: trailingSize,
+                  color: tintColor,
+                  maxLines: subtitleMaxLines,
+                  alignment: alignment == CrossAxisAlignment.center
+                      ? alignment
+                      : CrossAxisAlignment.baseline,
+                  enabled: enabled,
+                  padding: EdgeInsets.zero,
+                  onTap: onTapSubtitle,
+                )
+              ]),
+              leading: leading,
+              leadingSize: leadingSize,
+              isLeadingSmall: false,
+              isLeadingFilled: isLeadingFilled,
+              leadingPadding: leadingPadding,
+              isDetailed: isDetailed,
+              constraints: constraints,
+              color: color,
+              background: background,
+              alignment: alignment,
+              enabled: enabled,
+              padding: padding ??
+                  EdgeInsets.only(
+                    left: _leftPadding,
+                    right: padAccessory == true ? _rightPadding : 6,
+                    top: verticalPadding ?? topPadding ?? 11,
+                    bottom: verticalPadding ?? bottomPadding ?? 11,
+                  ),
+              onTap: onTap,
+              onTapLeading: onTapLeading,
+              trailingSize: accessorySize,
+              trailingColor:
+                  tintAccessory == true ? tintColor : context.theme.hintColor,
+              trailingStyle: trailingStyle,
+              trailingPadding: _trailingPadding,
               trailing: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (titleEndPadding != null) SizedBox(width: titleEndPadding),
+                  if (trailingPadding != null) SizedBox(width: trailingPadding),
                   if (isTrailingTop || isTrailingBottom)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        if (isTrailingTop || isTrailingBottom)
+                          SizedBox(height: 1),
                         if (isTrailingTop)
-                          Text(trailingTop!, style: Get.textTheme.caption),
+                          trailingTopChild?.mapIt((it) => IconTheme(
+                                    data: IconThemeData(
+                                      color: _trailingColor,
+                                      size: trailingSize,
+                                    ),
+                                    child: it!,
+                                  )) ??
+                              Text(
+                                trailingTop!,
+                                style: trailingStyle ?? Get.textTheme.caption,
+                              ),
                         if (isTrailingTop && isTrailingBottom)
-                          SizedBox(height: 4),
+                          SizedBox(height: 1.5),
                         if (isTrailingBottom)
-                          Text(trailingBottom!, style: Get.textTheme.caption),
+                          trailingBottomChild?.mapIt((it) => IconTheme(
+                                    data: IconThemeData(
+                                      color: _trailingColor,
+                                      size: trailingSize,
+                                    ),
+                                    child: it!,
+                                  )) ??
+                              Text(
+                                trailingBottom!,
+                                style: trailingStyle ?? Get.textTheme.caption,
+                              ),
                       ],
                     ),
-                  if (showAccessory)
-                    IconTheme(
-                      data: IconThemeData(
-                        color: tintAccessory == true
-                            ? tintColor
-                            : context.theme.hintColor,
-                        size: accessorySize,
+                  if (_showAccessory)
+                    Padding(
+                      padding: isTrailingTop || isTrailingBottom
+                          ? (isDetailed
+                              ? const EdgeInsets.only(left: 2)
+                              : _trailingPadding)
+                          : EdgeInsets.zero,
+                      child: IconTheme(
+                        data: IconThemeData(
+                          color: tintAccessory == true
+                              ? tintColor
+                              : context.theme.hintColor,
+                          size: accessorySize,
+                        ),
+                        child: _accessory!,
                       ),
-                      child: accessory!,
                     ),
-                  if (!showAccessory && padAccessory != true)
-                    SizedBox(width: 14)
+                  if (!_showAccessory && padAccessory != true)
+                    SizedBox(width: _rightPadding)
                 ],
+              ).applyIf(
+                _showAccessory || isTrailingTop || isTrailingBottom,
+                (it) => it.paddingOnly(top: 1),
               ),
             ),
             ...rows ?? [],
@@ -399,14 +648,19 @@ class GetTile extends StatelessWidget {
 }
 
 class GetTileRow extends StatelessWidget {
-  static const kLeadingPadding = const EdgeInsets.only(left: 5, right: 21);
+  static const kLeadingPadding = const EdgeInsets.only(right: 8);
+  static const kTrailingPadding = const EdgeInsets.only(left: 6);
   static const kChildrenPadding = const EdgeInsets.all(1);
+  static const kConstraints = const BoxConstraints(minHeight: 26.5);
   static const kTrailingSize = 20.0;
+  static const kLeadingSize = 20.0;
   static const kMaxLines = 2;
 
   const GetTileRow({
     this.leading,
     this.trailing,
+    this.trailingText,
+    this.trailingStyle,
     this.children,
     this.child,
     this.text,
@@ -414,23 +668,42 @@ class GetTileRow extends StatelessWidget {
     this.hint,
     this.color,
     this.background,
+    this.trailingColor,
     this.maxLines = kMaxLines,
+    this.fontSize,
+    this.leadingSize,
     this.trailingSize = kTrailingSize,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
+    this.leftPadding,
+    this.rightPadding,
     this.expanded = false,
     this.isLeadingFilled = false,
-    this.standalone = false,
+    this.isLeadingSmall = true,
+    this.themed = false,
+    this.wrap = false,
     this.enabled = true,
+    this.tintAble = false,
+    this.destructive,
+    this.isDetailed = false,
     this.padding,
     this.leadingPadding = kLeadingPadding,
+    this.trailingPadding = kTrailingPadding,
     this.childrenPadding = kChildrenPadding,
+    this.constraints = kConstraints,
+    this.alignment: CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
   }) : super(key: key);
 
-  const GetTileRow.standalone({
+  const GetTileRow.wrap({
     this.leading,
     this.trailing,
+    this.trailingText,
+    this.trailingStyle,
     this.children,
     this.child,
     this.text,
@@ -438,15 +711,75 @@ class GetTileRow extends StatelessWidget {
     this.hint,
     this.color,
     this.background,
+    this.trailingColor,
     this.maxLines = kMaxLines,
+    this.fontSize = 12,
+    this.leadingSize = kLeadingSize,
     this.trailingSize = kTrailingSize,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
+    this.leftPadding,
+    this.rightPadding,
     this.expanded = false,
     this.isLeadingFilled = false,
-    this.standalone = true,
+    this.isLeadingSmall = true,
+    this.themed = false,
+    this.wrap = true,
     this.enabled = true,
+    this.tintAble = false,
+    this.destructive,
+    this.isDetailed = false,
+    this.padding = const EdgeInsets.symmetric(horizontal: 7),
+    this.leadingPadding = const EdgeInsets.only(right: 3),
+    this.trailingPadding = kTrailingPadding,
+    this.childrenPadding = kChildrenPadding,
+    this.constraints,
+    this.alignment: CrossAxisAlignment.center,
+    this.onTap,
+    this.onTapLeading,
+    Key? key,
+  }) : super(key: key);
+
+  const GetTileRow.item({
+    this.leading,
+    this.trailing,
+    this.trailingText,
+    this.trailingStyle,
+    this.children,
+    this.child,
+    this.text,
+    this.textStyle,
+    this.hint,
+    this.color,
+    this.background,
+    this.trailingColor,
+    this.maxLines = kMaxLines,
+    this.fontSize,
+    this.leadingSize,
+    this.trailingSize = kTrailingSize,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
+    this.leftPadding,
+    this.rightPadding,
+    this.expanded = false,
+    this.isLeadingFilled = false,
+    this.isLeadingSmall = true,
+    this.themed = true,
+    this.wrap = false,
+    this.enabled = true,
+    this.tintAble = false,
+    this.destructive,
+    this.isDetailed = false,
     this.padding,
     this.leadingPadding = kLeadingPadding,
+    this.trailingPadding = kTrailingPadding,
     this.childrenPadding = kChildrenPadding,
+    this.constraints = GetTile.kConstraints,
+    this.alignment: CrossAxisAlignment.start,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -454,6 +787,8 @@ class GetTileRow extends StatelessWidget {
 
   final Widget? leading;
   final Widget? trailing;
+  final String? trailingText;
+  final TextStyle? trailingStyle;
   final List<Widget>? children;
   final Widget? child;
   final String? text;
@@ -461,96 +796,165 @@ class GetTileRow extends StatelessWidget {
   final String? hint;
   final Color? color;
   final Color? background;
-  final int maxLines;
+  final Color? trailingColor;
+  final int? maxLines;
+  final double? fontSize;
+  final double? leadingSize;
   final double? trailingSize;
+  final double? horizontalPadding;
+  final double? verticalPadding;
+  final double? topPadding;
+  final double? bottomPadding;
+  final double? leftPadding;
+  final double? rightPadding;
   final bool expanded;
   final bool isLeadingFilled;
-  final bool standalone;
+  final bool isLeadingSmall;
+  final bool themed;
+  final bool wrap;
   final bool enabled;
+  final bool tintAble;
+  final bool? destructive;
+  final bool isDetailed;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry leadingPadding;
+  final EdgeInsetsGeometry trailingPadding;
   final EdgeInsetsGeometry childrenPadding;
+  final BoxConstraints? constraints;
+  final CrossAxisAlignment alignment;
   final VoidCallback? onTap;
   final VoidCallback? onTapLeading;
 
   @override
   Widget build(BuildContext context) {
     final _text = text ?? hint;
-    final tintColor = color ??
-        context.theme.primaryIconTheme.color ??
-        context.theme.accentColor;
-    return _text == null && children?.isNotEmpty != true
+    final _color =
+        context.theme.primaryIconTheme.color ?? context.theme.accentColor;
+    final _tintColor = destructive == true ? Colors.red : color ?? _color;
+    final _tintAble = destructive == true || tintAble;
+    final _trailingColor = trailingColor ?? (_tintAble ? _tintColor : _color);
+    final _textStyle = textStyle ?? context.textTheme.caption;
+    final _constrained = alignment == CrossAxisAlignment.start ||
+        alignment == CrossAxisAlignment.end;
+    final _trailing = trailing ??
+        (isDetailed
+            ? const Icon(
+                CupertinoIcons.chevron_right,
+                size: 14,
+              )
+            : null);
+    final _boxedView = $cast<BoxedView>(leading);
+    final _horizontalPadding = leading != null ? 8.0 : 12.0;
+    return _text == null && child == null && children?.isNotEmpty != true
         ? Container(height: 0)
         : InkWell(
-            highlightColor: tintColor.activated,
-            splashColor: tintColor.translucent,
+            highlightColor: _tintColor.activated,
+            splashColor: _tintColor.translucent,
             onTap: enabled ? onTap : null,
             child: Ink(
               color: background ??
-                  (standalone == true ? context.theme.backgroundColor : null),
+                  (themed == true ? context.theme.backgroundColor : null),
               padding: padding ??
                   EdgeInsets.only(
-                    top: background != null || standalone == true ? 16 : 0,
-                    left: 16,
-                    right: 16,
-                    bottom: 16,
+                    left:
+                        horizontalPadding ?? leftPadding ?? _horizontalPadding,
+                    right:
+                        horizontalPadding ?? rightPadding ?? _horizontalPadding,
+                    top: verticalPadding ?? topPadding ?? 8,
+                    bottom: verticalPadding ?? bottomPadding ?? 8,
                   ),
-              child: Row(children: [
-                if (leading != null)
-                  leading is BoxedView
-                      ? leading!
-                      : BoxedView(
-                          child: leading!,
-                          color: tintColor,
-                          filled: isLeadingFilled,
-                          margin: leadingPadding,
-                          small: true,
-                          onTap: onTapLeading,
-                        ),
-                Expanded(
-                  child: CrossFade(
-                    firstChild: child ??
-                        RichText(
-                          text: TextSpan(
-                            text: _text,
-                            style: (textStyle ?? context.textTheme.caption)!
-                                .copyWith(
-                              color:
-                                  text == null ? context.theme.hintColor : null,
-                            ),
-                            children: children
-                                ?.map((w) =>
-                                    $cast<Text>(w)?.mapTo((Text w) => TextSpan(
-                                          text: w.data,
-                                          style: w.style ??
-                                              context.textTheme.caption,
-                                        )) ??
-                                    WidgetSpan(
-                                      alignment: PlaceholderAlignment.middle,
-                                      child: Padding(
-                                        padding: childrenPadding,
-                                        child: w,
-                                      ),
-                                    ))
-                                .toList(),
-                          ),
-                          maxLines: expanded == true ? null : maxLines,
-                          overflow: expanded == true
-                              ? TextOverflow.visible
-                              : TextOverflow.ellipsis,
-                        ),
-                  ),
-                ),
-                if (trailing != null) SizedBox(width: 6),
-                if (trailing != null)
-                  IconTheme(
-                    data: IconThemeData(
-                      color: tintColor,
-                      size: trailingSize,
+              child: Row(
+                mainAxisSize: wrap ? MainAxisSize.min : MainAxisSize.max,
+                crossAxisAlignment: alignment,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  if (leading != null)
+                    Container(
+                      constraints: _constrained ? constraints : null,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: BoxedView(
+                        child: _boxedView?.child ?? leading!,
+                        color: _boxedView?.color ?? _tintColor,
+                        filled: _boxedView?.filled ?? isLeadingFilled,
+                        margin: _boxedView?.margin ?? leadingPadding,
+                        small: _boxedView?.small ?? isLeadingSmall,
+                        wrap: _boxedView?.wrap ?? wrap,
+                        boxSize: _boxedView?.boxSize ?? BoxedView.kBoxSize,
+                        fontSize: _boxedView?.fontSize,
+                        iconSize: _boxedView?.iconSize ?? leadingSize,
+                        circular: _boxedView?.circular ?? false,
+                        onTap: _boxedView?.onTap ?? onTapLeading,
+                      ),
                     ),
-                    child: trailing!,
-                  ),
-              ]),
+                  CrossFade(
+                    firstChild: Container(
+                      constraints: _constrained ? constraints : null,
+                      alignment: Alignment.centerLeft,
+                      child: child ??
+                          RichText(
+                            text: TextSpan(
+                              text: _text,
+                              style: _textStyle?.copyWith(
+                                color: text == null
+                                    ? context.theme.hintColor
+                                    : null,
+                                fontSize: fontSize,
+                              ),
+                              children: children
+                                  ?.map((w) =>
+                                      $cast<Text>(w)?.mapTo(
+                                        (Text w) => TextSpan(
+                                          text: w.data,
+                                          style:
+                                              (w.style ?? _textStyle)?.copyWith(
+                                            fontSize: fontSize,
+                                          ),
+                                        ),
+                                      ) ??
+                                      WidgetSpan(
+                                        alignment: PlaceholderAlignment.middle,
+                                        child: Padding(
+                                          padding: childrenPadding,
+                                          child: w,
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
+                            maxLines: expanded == true ? null : maxLines,
+                            overflow: expanded == true
+                                ? TextOverflow.visible
+                                : TextOverflow.ellipsis,
+                          ),
+                    ),
+                  ).flex(expanded: !wrap),
+                  if (_trailing != null)
+                    Container(
+                      constraints: _constrained ? constraints : null,
+                      alignment: Alignment.center,
+                      padding: isDetailed
+                          ? const EdgeInsets.only(left: 2)
+                          : trailingPadding,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: _trailing is Icon ? 1 : 0,
+                        ),
+                        child: IconTheme(
+                          data: IconThemeData(
+                            color: _trailingColor,
+                            size: trailingSize,
+                          ),
+                          child: trailingText?.notEmpty?.mapIt((t) => Text(
+                                    t,
+                                    style: trailingStyle ??
+                                        context.textTheme.caption,
+                                  )) ??
+                              _trailing,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
           );
   }
@@ -568,11 +972,11 @@ class GetTileSeparator extends StatelessWidget {
   /// Tile separator with full edge to edge length
   const GetTileSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
 
-  /// Tile separator with `18` padding at start
+  /// Tile separator with `12` padding at start
   const GetTileSeparator.noIcon({Key? key})
       : this(style: SeparatorStyle.noIcon);
 
-  /// Tile separator with `72` padding at start
+  /// Tile separator with `56` padding at start
   const GetTileSeparator.padIcon({Key? key})
       : this(style: SeparatorStyle.padIcon);
 
@@ -601,11 +1005,11 @@ class GetLineSeparator extends StatelessWidget {
   /// Tile separator with full edge to edge length
   const GetLineSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
 
-  /// Tile separator with `18` padding at start
+  /// Tile separator with `12` padding at start
   const GetLineSeparator.noIcon({Key? key})
       : this(style: SeparatorStyle.noIcon);
 
-  /// Tile separator with `72` padding at start
+  /// Tile separator with `56` padding at start
   const GetLineSeparator.padIcon({Key? key})
       : this(style: SeparatorStyle.padIcon);
 
@@ -613,20 +1017,18 @@ class GetLineSeparator extends StatelessWidget {
   final SeparatorStyle style;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        left: margin ??
-            (style == SeparatorStyle.full
-                ? 0
-                : style == SeparatorStyle.noIcon
-                    ? 18
-                    : 72),
-      ),
-      color: Get.theme.hintColor.translucent,
-      height: 0.5,
-    );
-  }
+  Widget build(BuildContext context) => Container(
+        margin: EdgeInsets.only(
+          left: margin ??
+              (style == SeparatorStyle.full
+                  ? 0
+                  : style == SeparatorStyle.noIcon
+                      ? 12
+                      : 56),
+        ),
+        color: Get.theme.hintColor.translucent,
+        height: 0.5,
+      );
 }
 
 class GetTileHeader extends StatelessWidget {
@@ -677,25 +1079,23 @@ class GetTileHeader extends StatelessWidget {
   final double? padding;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (topSeparator) GetTileSeparator(style: SeparatorStyle.full),
-        Container(
-          padding: EdgeInsets.only(
-            left: noIcon == true ? 16 : 24,
-            right: 16,
-            top: padding ?? 28,
-            bottom: 8,
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (topSeparator) GetTileSeparator(style: SeparatorStyle.full),
+          Container(
+            padding: EdgeInsets.only(
+              left: noIcon == true ? 12 : 16,
+              right: 12,
+              top: padding ?? 28,
+              bottom: 8,
+            ),
+            child: Text(
+              text?.uppercase ?? "",
+              style: Get.textTheme.caption,
+            ),
           ),
-          child: Text(
-            text?.uppercase ?? "",
-            style: Get.textTheme.caption,
-          ),
-        ),
-        if (bottomSeparator) GetTileSeparator(style: SeparatorStyle.full),
-      ],
-    );
-  }
+          if (bottomSeparator) GetTileSeparator(style: SeparatorStyle.full),
+        ],
+      );
 }
