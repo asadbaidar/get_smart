@@ -109,6 +109,7 @@ class GetTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
+    this.headColor,
     this.trailingColor,
     this.isLeadingFilled = true,
     this.isDetailed = true,
@@ -171,6 +172,7 @@ class GetTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
+    this.headColor,
     this.trailingColor,
     this.isLeadingFilled = true,
     this.isDetailed = false,
@@ -233,6 +235,7 @@ class GetTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background,
+    this.headColor,
     this.trailingColor,
     this.isLeadingFilled = true,
     this.isDetailed = false,
@@ -295,6 +298,7 @@ class GetTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background = Colors.transparent,
+    this.headColor,
     this.trailingColor,
     this.isLeadingFilled = false,
     this.isDetailed = false,
@@ -358,6 +362,7 @@ class GetTile extends StatelessWidget {
     this.rows,
     this.color,
     this.background = Colors.transparent,
+    this.headColor,
     this.trailingColor,
     this.isLeadingFilled = false,
     this.isDetailed = false,
@@ -418,6 +423,7 @@ class GetTile extends StatelessWidget {
   final List<Widget>? rows;
   final Color? color;
   final Color? background;
+  final Color? headColor;
   final Color? trailingColor;
   final bool isLeadingFilled;
   final bool isDetailed;
@@ -557,6 +563,7 @@ class GetTile extends StatelessWidget {
               isDetailed: isDetailed,
               constraints: constraints,
               color: color,
+              background: headColor,
               alignment: alignment,
               enabled: enabled,
               padding: padding ??
