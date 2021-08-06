@@ -33,17 +33,42 @@ extension GetWidgetX on Widget {
             )
           : this;
 
+  Widget row({
+    Key? key,
+    bool enabled = false,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    MainAxisSize mainAxisSize = MainAxisSize.max,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
+    VerticalDirection verticalDirection = VerticalDirection.down,
+    TextBaseline? textBaseline,
+    List<Widget> children = const [],
+  }) =>
+      enabled
+          ? Row(
+              key: key,
+              mainAxisAlignment: mainAxisAlignment,
+              mainAxisSize: mainAxisSize,
+              crossAxisAlignment: crossAxisAlignment,
+              verticalDirection: verticalDirection,
+              textBaseline: textBaseline,
+              children: [this, ...children],
+            )
+          : this;
+
   Widget flex({
     Key? key,
     int flex = 1,
+    bool enabled = true,
     bool expanded = false,
   }) =>
-      Flexible(
-        key: key,
-        flex: flex,
-        fit: expanded ? FlexFit.tight : FlexFit.loose,
-        child: this,
-      );
+      enabled
+          ? Flexible(
+              key: key,
+              flex: flex,
+              fit: expanded ? FlexFit.tight : FlexFit.loose,
+              child: this,
+            )
+          : this;
 
   Widget textButton({
     Key? key,

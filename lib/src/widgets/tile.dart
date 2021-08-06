@@ -851,6 +851,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kMaxLines,
     this.fontSize,
     this.leadingSize,
+    this.leadingBoxSize = BoxedView.kBoxSize,
     this.trailingSize = kTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
@@ -896,6 +897,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kMaxLines,
     this.fontSize,
     this.leadingSize,
+    this.leadingBoxSize = BoxedView.kBoxSize,
     this.trailingSize = kTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
@@ -941,6 +943,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kMaxLines,
     this.fontSize = 12,
     this.leadingSize = kLeadingSize,
+    this.leadingBoxSize = BoxedView.kBoxSize,
     this.trailingSize = kTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
@@ -970,6 +973,52 @@ class GetTileRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  const GetTileRow.rich({
+    this.leading,
+    this.trailing,
+    this.trailingText,
+    this.trailingStyle,
+    this.children,
+    this.child,
+    this.text,
+    this.textStyle,
+    this.hint,
+    this.color,
+    this.background,
+    this.trailingColor,
+    this.maxLines = kMaxLines,
+    this.fontSize = 12,
+    this.leadingSize = kLeadingSize,
+    this.leadingBoxSize = BoxedView.kBoxSize,
+    this.trailingSize = kTrailingSize,
+    this.horizontalPadding,
+    this.verticalPadding = 0,
+    this.topPadding,
+    this.bottomPadding,
+    this.leftPadding,
+    this.rightPadding,
+    this.expanded = false,
+    this.isLeadingFilled = true,
+    this.isLeadingSmall = true,
+    this.isLeadingOval = true,
+    this.themed = false,
+    this.wrap = false,
+    this.enabled = true,
+    this.tintAble = false,
+    this.destructive,
+    this.isDetailed = false,
+    this.padding,
+    this.leadingMargin = kLeadingMargin,
+    this.leadingPadding = kLeadingPadding,
+    this.trailingPadding = kTrailingPadding,
+    this.childrenPadding = kChildrenPadding,
+    this.constraints,
+    this.alignment: CrossAxisAlignment.center,
+    this.onTap,
+    this.onTapLeading,
+    Key? key,
+  }) : super(key: key);
+
   const GetTileRow.item({
     this.leading,
     this.trailing,
@@ -986,6 +1035,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kMaxLines,
     this.fontSize,
     this.leadingSize,
+    this.leadingBoxSize = BoxedView.kBoxSize,
     this.trailingSize = kTrailingSize,
     this.horizontalPadding,
     this.verticalPadding = kStandardPaddingY,
@@ -1030,6 +1080,7 @@ class GetTileRow extends StatelessWidget {
   final int? maxLines;
   final double? fontSize;
   final double? leadingSize;
+  final double? leadingBoxSize;
   final double? trailingSize;
   final double? horizontalPadding;
   final double? verticalPadding;
@@ -1078,7 +1129,7 @@ class GetTileRow extends StatelessWidget {
     final _boxedView = $cast<BoxedView>(leading);
     final _horizontalPadding = leading != null ? 8.0 : kStandardPaddingX;
     return _text == null && child == null && children?.isNotEmpty != true
-        ? Container(height: 0)
+        ? Container(height: 0, width: 0)
         : InkWell(
             highlightColor: _tintColor.activated,
             splashColor: _tintColor.translucent,
@@ -1164,7 +1215,7 @@ class GetTileRow extends StatelessWidget {
                                 : TextOverflow.ellipsis,
                           ),
                     ),
-                  ).flex(expanded: !wrap),
+                  ).flex(enabled: !wrap, expanded: true),
                   if (_trailing != null)
                     Container(
                       constraints: _constrained ? constraints : null,
