@@ -16,7 +16,7 @@ class BoxedView extends StatelessWidget {
     required this.child,
     this.color,
     this.filled = true,
-    this.circular = false,
+    this.oval = false,
     this.small,
     this.wrap = false,
     this.boxSize = kBoxSize,
@@ -31,7 +31,7 @@ class BoxedView extends StatelessWidget {
     required this.child,
     this.color,
     this.filled = true,
-    this.circular = false,
+    this.oval = false,
     this.small,
     this.wrap = false,
     this.boxSize = kBoxSize,
@@ -46,7 +46,7 @@ class BoxedView extends StatelessWidget {
     required this.child,
     this.color,
     this.filled = false,
-    this.circular = false,
+    this.oval = false,
     this.small = true,
     this.wrap = true,
     this.boxSize = kBoxSize,
@@ -57,11 +57,11 @@ class BoxedView extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  const BoxedView.circular({
+  const BoxedView.oval({
     required this.child,
     this.color,
     this.filled = true,
-    this.circular = true,
+    this.oval = true,
     this.small,
     this.wrap = false,
     this.boxSize = kBoxSize,
@@ -75,7 +75,7 @@ class BoxedView extends StatelessWidget {
   final Widget child;
   final Color? color;
   final bool filled;
-  final bool circular;
+  final bool oval;
   final bool? small;
   final bool wrap;
   final double boxSize;
@@ -93,18 +93,18 @@ class BoxedView extends StatelessWidget {
       alignment: Alignment.center,
       child: InkWell(
         onTap: onTap,
-        borderRadius: circular ? _size?.circularRadius : _size?.roundRadius,
+        borderRadius: oval ? _size?.circularRadius : _size?.roundRadius,
         highlightColor: splash?.activated,
         splashColor: splash,
         child: Ink(
           height: _wrapSize,
           width: _wrapSize,
-          decoration: circular
+          decoration: oval
               ? _size?.circularBox(color: color)
               : _size?.roundBox(color: color),
           child: Container(
             alignment: Alignment.center,
-            child: _text() ?? _child(),
+            child: _text() ?? _child() ?? child.clipOval(clip: oval),
           ),
         ),
       ),
@@ -112,7 +112,9 @@ class BoxedView extends StatelessWidget {
   }
 
   double? get _boxSize => wrap ? null : boxSize;
+
   double? get _wrapSize => filled ? _boxSize : null;
+
   double? get _size => filled ? boxSize : null;
 
   Widget? _text() => $cast<Text>(child)?.mapTo(
@@ -122,7 +124,7 @@ class BoxedView extends StatelessWidget {
           style: GoogleFonts.voltaire(
             fontSize: fontSize ??
                 (filled
-                    ? ((circular ? 15 : 17) - max(0, (kBoxSize - boxSize).half))
+                    ? ((oval ? 15 : 17) - max(0, (kBoxSize - boxSize).half))
                     : small == true
                         ? 18
                         : 24),
@@ -132,16 +134,19 @@ class BoxedView extends StatelessWidget {
         ),
       );
 
-  Widget _child() => IconTheme(
-        child: child,
-        data: IconThemeData(
-          size: iconSize ??
-              (filled
-                  ? 18
-                  : small == true
-                      ? 24
-                      : 30),
-          color: filled ? color?.contrast : color,
+  Widget? _child() => $cast<Icon>(child)?.mapTo(
+        (Icon it) => IconTheme(
+          child: it,
+          data: IconThemeData(
+            size: it.size ??
+                iconSize ??
+                (filled
+                    ? 18
+                    : small == true
+                        ? 24
+                        : 30),
+            color: it.color ?? (filled ? color?.contrast : color),
+          ),
         ),
       );
 }
@@ -325,8 +330,8 @@ class CrossFade extends AnimatedCrossFade {
           crossFadeState: showFirst ?? firstChild != null
               ? CrossFadeState.showFirst
               : CrossFadeState.showSecond,
-          firstChild: firstChild ?? Container(height: 0),
-          secondChild: secondChild ?? Container(height: 0),
+          firstChild: firstChild ?? Container(height: 0, width: 0),
+          secondChild: secondChild ?? Container(height: 0, width: 0),
         );
 }
 

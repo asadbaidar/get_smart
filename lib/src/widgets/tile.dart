@@ -2,6 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
+const kStandardPadding = 12.0;
+const kStandardPaddingX = 12.0;
+const kStandardPaddingY = 11.0;
+const kStandardPaddingAll = const EdgeInsets.all(kStandardPadding);
+const kStandardPaddingH = const EdgeInsets.symmetric(
+  horizontal: kStandardPaddingX,
+);
+const kStandardPaddingV = const EdgeInsets.symmetric(
+  vertical: kStandardPaddingY,
+);
+const kStandardPaddingForm = const EdgeInsets.symmetric(
+  horizontal: 16,
+  vertical: 4,
+);
+
 class GetTileData extends GetObject {
   @override
   List<Function> get builders => [() => GetTileData()];
@@ -112,6 +127,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.isLeadingFilled = true,
+    this.isLeadingOval = false,
     this.isDetailed = true,
     this.padAccessory,
     this.showAccessory,
@@ -134,6 +150,7 @@ class GetTile extends StatelessWidget {
     this.titleMaxLines,
     this.subtitleMaxLines,
     this.padding,
+    this.leadingMargin = GetTileRow.kLeadingMargin,
     this.leadingPadding = GetTileRow.kLeadingPadding,
     this.titleChildrenPadding = GetTileRow.kChildrenPadding,
     this.subtitleChildrenPadding = GetTileRow.kChildrenPadding,
@@ -142,6 +159,7 @@ class GetTile extends StatelessWidget {
     this.onTapTitle,
     this.onTapSubtitle,
     this.onTap,
+    this.onTapHead,
     this.onTapLeading,
     Key? key,
   }) : super(key: key);
@@ -175,6 +193,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.isLeadingFilled = true,
+    this.isLeadingOval = false,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -197,6 +216,7 @@ class GetTile extends StatelessWidget {
     this.titleMaxLines,
     this.subtitleMaxLines,
     this.padding,
+    this.leadingMargin = GetTileRow.kLeadingMargin,
     this.leadingPadding = GetTileRow.kLeadingPadding,
     this.titleChildrenPadding = GetTileRow.kChildrenPadding,
     this.subtitleChildrenPadding = GetTileRow.kChildrenPadding,
@@ -205,6 +225,7 @@ class GetTile extends StatelessWidget {
     this.onTapTitle,
     this.onTapSubtitle,
     this.onTap,
+    this.onTapHead,
     this.onTapLeading,
     Key? key,
   }) : super(key: key);
@@ -238,6 +259,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.isLeadingFilled = true,
+    this.isLeadingOval = false,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -260,6 +282,7 @@ class GetTile extends StatelessWidget {
     this.titleMaxLines,
     this.subtitleMaxLines,
     this.padding,
+    this.leadingMargin = GetTileRow.kLeadingMargin,
     this.leadingPadding = GetTileRow.kLeadingPadding,
     this.titleChildrenPadding = GetTileRow.kChildrenPadding,
     this.subtitleChildrenPadding = GetTileRow.kChildrenPadding,
@@ -268,6 +291,7 @@ class GetTile extends StatelessWidget {
     this.onTapTitle,
     this.onTapSubtitle,
     this.onTap,
+    this.onTapHead,
     this.onTapLeading,
     Key? key,
   }) : super(key: key);
@@ -301,6 +325,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.isLeadingFilled = false,
+    this.isLeadingOval = true,
     this.isDetailed = false,
     this.padAccessory,
     this.showAccessory,
@@ -309,10 +334,10 @@ class GetTile extends StatelessWidget {
     this.isTitleBold = true,
     this.destructive,
     this.enabled = true,
-    this.horizontalPadding,
-    this.verticalPadding,
-    this.topPadding,
-    this.bottomPadding,
+    this.horizontalPadding/*= 0*/,
+    this.verticalPadding/*= 0*/,
+    this.topPadding = 0,
+    this.bottomPadding = 10,
     this.leftPadding,
     this.rightPadding,
     this.trailingPadding,
@@ -323,6 +348,7 @@ class GetTile extends StatelessWidget {
     this.titleMaxLines,
     this.subtitleMaxLines,
     this.padding,
+    this.leadingMargin = GetTileRow.kLeadingMargin /*EdgeInsets.zero*/,
     this.leadingPadding = GetTileRow.kLeadingPadding,
     this.titleChildrenPadding = GetTileRow.kChildrenPadding,
     this.subtitleChildrenPadding = GetTileRow.kChildrenPadding,
@@ -331,6 +357,7 @@ class GetTile extends StatelessWidget {
     this.onTapTitle,
     this.onTapSubtitle,
     this.onTap,
+    this.onTapHead,
     this.onTapLeading,
     Key? key,
   }) : super(key: key);
@@ -365,6 +392,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.isLeadingFilled = false,
+    this.isLeadingOval = false,
     this.isDetailed = false,
     this.padAccessory = true,
     this.showAccessory,
@@ -387,6 +415,7 @@ class GetTile extends StatelessWidget {
     this.titleMaxLines,
     this.subtitleMaxLines,
     this.padding,
+    this.leadingMargin = GetTileRow.kLeadingMargin,
     this.leadingPadding = GetTileRow.kLeadingPadding,
     this.titleChildrenPadding = GetTileRow.kChildrenPadding,
     this.subtitleChildrenPadding = GetTileRow.kChildrenPadding,
@@ -395,6 +424,7 @@ class GetTile extends StatelessWidget {
     this.onTapTitle,
     this.onTapSubtitle,
     this.onTap,
+    this.onTapHead,
     this.onTapLeading,
     Key? key,
   }) : super(key: key);
@@ -426,6 +456,7 @@ class GetTile extends StatelessWidget {
   final Color? headColor;
   final Color? trailingColor;
   final bool isLeadingFilled;
+  final bool isLeadingOval;
   final bool isDetailed;
   final bool? padAccessory;
   final bool? showAccessory;
@@ -448,14 +479,16 @@ class GetTile extends StatelessWidget {
   final int? titleMaxLines;
   final int? subtitleMaxLines;
   final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry leadingMargin;
   final EdgeInsetsGeometry leadingPadding;
   final EdgeInsetsGeometry titleChildrenPadding;
   final EdgeInsetsGeometry subtitleChildrenPadding;
-  final BoxConstraints constraints;
+  final BoxConstraints? constraints;
   final CrossAxisAlignment alignment;
   final VoidCallback? onTapTitle;
   final VoidCallback? onTapSubtitle;
   final VoidCallback? onTap;
+  final VoidCallback? onTapHead;
   final VoidCallback? onTapLeading;
 
   @override
@@ -490,7 +523,7 @@ class GetTile extends StatelessWidget {
     final _titleColor = _tintAble ? tintColor : null;
     final _subtitleStyle = subtitleStyle ?? context.textTheme.bodyText2;
     final _subtitleColor = _tintAble ? tintColor : _subtitleStyle?.color;
-    final _padding = leading != null ? 8.0 : 12.0;
+    final _padding = leading != null ? 8.0 : kStandardPaddingX;
     final _leftPadding = horizontalPadding ?? leftPadding ?? _padding;
     final _rightPadding = horizontalPadding ?? rightPadding ?? _padding;
     return InkWell(
@@ -559,6 +592,8 @@ class GetTile extends StatelessWidget {
               leadingSize: leadingSize,
               isLeadingSmall: false,
               isLeadingFilled: isLeadingFilled,
+              isLeadingOval: isLeadingOval,
+              leadingMargin: leadingMargin,
               leadingPadding: leadingPadding,
               isDetailed: isDetailed,
               constraints: constraints,
@@ -569,11 +604,16 @@ class GetTile extends StatelessWidget {
               padding: padding ??
                   EdgeInsets.only(
                     left: _leftPadding,
-                    right: padAccessory == true ? _rightPadding : 6,
-                    top: verticalPadding ?? topPadding ?? 11,
-                    bottom: verticalPadding ?? bottomPadding ?? 11,
+                    right: padAccessory == true
+                        ? _rightPadding
+                        : _showAccessory
+                            ? 6
+                            : 0,
+                    top: verticalPadding ?? topPadding ?? kStandardPaddingY,
+                    bottom:
+                        verticalPadding ?? bottomPadding ?? kStandardPaddingY,
                   ),
-              onTap: onTap,
+              onTap: onTapHead,
               onTapLeading: onTapLeading,
               trailingSize: accessorySize,
               trailingColor:
@@ -654,6 +694,7 @@ class GetTile extends StatelessWidget {
 }
 
 class GetTileRow extends StatelessWidget {
+  static const kLeadingMargin = const EdgeInsets.symmetric(horizontal: 5);
   static const kLeadingPadding = const EdgeInsets.only(right: 8);
   static const kTrailingPadding = const EdgeInsets.only(left: 6);
   static const kChildrenPadding = const EdgeInsets.all(1);
@@ -688,6 +729,7 @@ class GetTileRow extends StatelessWidget {
     this.expanded = false,
     this.isLeadingFilled = false,
     this.isLeadingSmall = true,
+    this.isLeadingOval = false,
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
@@ -695,11 +737,57 @@ class GetTileRow extends StatelessWidget {
     this.destructive,
     this.isDetailed = false,
     this.padding,
+    this.leadingMargin = kLeadingMargin,
     this.leadingPadding = kLeadingPadding,
     this.trailingPadding = kTrailingPadding,
     this.childrenPadding = kChildrenPadding,
     this.constraints = kConstraints,
     this.alignment: CrossAxisAlignment.center,
+    this.onTap,
+    this.onTapLeading,
+    Key? key,
+  }) : super(key: key);
+
+  const GetTileRow.expanded({
+    this.leading,
+    this.trailing,
+    this.trailingText,
+    this.trailingStyle,
+    this.children,
+    this.child,
+    this.text,
+    this.textStyle,
+    this.hint,
+    this.color,
+    this.background,
+    this.trailingColor,
+    this.maxLines = kMaxLines,
+    this.fontSize,
+    this.leadingSize,
+    this.trailingSize = kTrailingSize,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
+    this.leftPadding,
+    this.rightPadding,
+    this.expanded = true,
+    this.isLeadingFilled = false,
+    this.isLeadingSmall = true,
+    this.isLeadingOval = false,
+    this.themed = false,
+    this.wrap = false,
+    this.enabled = true,
+    this.tintAble = false,
+    this.destructive,
+    this.isDetailed = false,
+    this.padding,
+    this.leadingMargin = kLeadingMargin,
+    this.leadingPadding = kLeadingPadding,
+    this.trailingPadding = kTrailingPadding,
+    this.childrenPadding = kChildrenPadding,
+    this.constraints = kConstraints,
+    this.alignment: CrossAxisAlignment.start,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -731,6 +819,7 @@ class GetTileRow extends StatelessWidget {
     this.expanded = false,
     this.isLeadingFilled = false,
     this.isLeadingSmall = true,
+    this.isLeadingOval = false,
     this.themed = false,
     this.wrap = true,
     this.enabled = true,
@@ -738,6 +827,7 @@ class GetTileRow extends StatelessWidget {
     this.destructive,
     this.isDetailed = false,
     this.padding = const EdgeInsets.symmetric(horizontal: 7),
+    this.leadingMargin = EdgeInsets.zero,
     this.leadingPadding = const EdgeInsets.only(right: 3),
     this.trailingPadding = kTrailingPadding,
     this.childrenPadding = kChildrenPadding,
@@ -766,14 +856,15 @@ class GetTileRow extends StatelessWidget {
     this.leadingSize,
     this.trailingSize = kTrailingSize,
     this.horizontalPadding,
-    this.verticalPadding,
+    this.verticalPadding = kStandardPaddingY,
     this.topPadding,
     this.bottomPadding,
     this.leftPadding,
     this.rightPadding,
-    this.expanded = false,
-    this.isLeadingFilled = false,
+    this.expanded = true,
+    this.isLeadingFilled = true,
     this.isLeadingSmall = true,
+    this.isLeadingOval = false,
     this.themed = true,
     this.wrap = false,
     this.enabled = true,
@@ -781,6 +872,7 @@ class GetTileRow extends StatelessWidget {
     this.destructive,
     this.isDetailed = false,
     this.padding,
+    this.leadingMargin = kLeadingMargin,
     this.leadingPadding = kLeadingPadding,
     this.trailingPadding = kTrailingPadding,
     this.childrenPadding = kChildrenPadding,
@@ -816,6 +908,7 @@ class GetTileRow extends StatelessWidget {
   final bool expanded;
   final bool isLeadingFilled;
   final bool isLeadingSmall;
+  final bool isLeadingOval;
   final bool themed;
   final bool wrap;
   final bool enabled;
@@ -823,6 +916,7 @@ class GetTileRow extends StatelessWidget {
   final bool? destructive;
   final bool isDetailed;
   final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry leadingMargin;
   final EdgeInsetsGeometry leadingPadding;
   final EdgeInsetsGeometry trailingPadding;
   final EdgeInsetsGeometry childrenPadding;
@@ -850,7 +944,7 @@ class GetTileRow extends StatelessWidget {
               )
             : null);
     final _boxedView = $cast<BoxedView>(leading);
-    final _horizontalPadding = leading != null ? 8.0 : 12.0;
+    final _horizontalPadding = leading != null ? 8.0 : kStandardPaddingX;
     return _text == null && child == null && children?.isNotEmpty != true
         ? Container(height: 0)
         : InkWell(
@@ -874,25 +968,30 @@ class GetTileRow extends StatelessWidget {
                 crossAxisAlignment: alignment,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  if (leading != null)
-                    Container(
-                      constraints: _constrained ? constraints : null,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: BoxedView(
-                        child: _boxedView?.child ?? leading!,
-                        color: _boxedView?.color ?? _tintColor,
-                        filled: _boxedView?.filled ?? isLeadingFilled,
-                        margin: _boxedView?.margin ?? leadingPadding,
-                        small: _boxedView?.small ?? isLeadingSmall,
-                        wrap: _boxedView?.wrap ?? wrap,
-                        boxSize: _boxedView?.boxSize ?? BoxedView.kBoxSize,
-                        fontSize: _boxedView?.fontSize,
-                        iconSize: _boxedView?.iconSize ?? leadingSize,
-                        circular: _boxedView?.circular ?? false,
-                        onTap: _boxedView?.onTap ?? onTapLeading,
-                      ),
-                    ),
+                  CrossFade(
+                    showFirst: leading != null,
+                    firstChild: leading != null
+                        ? Container(
+                            constraints: _constrained ? constraints : null,
+                            alignment: Alignment.center,
+                            padding: leadingMargin,
+                            child: BoxedView(
+                              child: _boxedView?.child ?? leading!,
+                              color: _boxedView?.color ?? _tintColor,
+                              filled: _boxedView?.filled ?? isLeadingFilled,
+                              margin: _boxedView?.margin ?? leadingPadding,
+                              small: _boxedView?.small ?? isLeadingSmall,
+                              wrap: _boxedView?.wrap ?? false,
+                              boxSize:
+                                  _boxedView?.boxSize ?? BoxedView.kBoxSize,
+                              fontSize: _boxedView?.fontSize,
+                              iconSize: _boxedView?.iconSize ?? leadingSize,
+                              oval: _boxedView?.oval ?? isLeadingOval,
+                              onTap: _boxedView?.onTap ?? onTapLeading,
+                            ),
+                          )
+                        : null,
+                  ),
                   CrossFade(
                     firstChild: Container(
                       constraints: _constrained ? constraints : null,
@@ -927,8 +1026,8 @@ class GetTileRow extends StatelessWidget {
                                       ))
                                   .toList(),
                             ),
-                            maxLines: expanded == true ? null : maxLines,
-                            overflow: expanded == true
+                            maxLines: expanded ? null : maxLines,
+                            overflow: expanded || maxLines == null
                                 ? TextOverflow.visible
                                 : TextOverflow.ellipsis,
                           ),
@@ -1029,7 +1128,7 @@ class GetLineSeparator extends StatelessWidget {
               (style == SeparatorStyle.full
                   ? 0
                   : style == SeparatorStyle.noIcon
-                      ? 12
+                      ? kStandardPaddingX
                       : 56),
         ),
         color: Get.theme.hintColor.translucent,
@@ -1043,7 +1142,7 @@ class GetTileHeader extends StatelessWidget {
     this.text,
     this.topSeparator = true,
     this.bottomSeparator = true,
-    this.padding,
+    this.top,
     this.noIcon,
     Key? key,
   }) : super(key: key);
@@ -1053,7 +1152,7 @@ class GetTileHeader extends StatelessWidget {
     this.text,
     this.topSeparator = true,
     this.bottomSeparator = true,
-    this.padding = 16,
+    this.top = 16,
     this.noIcon = true,
     Key? key,
   }) : super(key: key);
@@ -1063,7 +1162,7 @@ class GetTileHeader extends StatelessWidget {
     this.text,
     this.topSeparator = false,
     this.bottomSeparator = true,
-    this.padding,
+    this.top,
     this.noIcon,
     Key? key,
   }) : super(key: key);
@@ -1073,7 +1172,7 @@ class GetTileHeader extends StatelessWidget {
     this.text,
     this.topSeparator = false,
     this.bottomSeparator = true,
-    this.padding,
+    this.top,
     this.noIcon = true,
     Key? key,
   }) : super(key: key);
@@ -1082,7 +1181,7 @@ class GetTileHeader extends StatelessWidget {
   final bool topSeparator;
   final bool bottomSeparator;
   final bool? noIcon;
-  final double? padding;
+  final double? top;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -1091,9 +1190,9 @@ class GetTileHeader extends StatelessWidget {
           if (topSeparator) GetTileSeparator(style: SeparatorStyle.full),
           Container(
             padding: EdgeInsets.only(
-              left: noIcon == true ? 12 : 16,
-              right: 12,
-              top: padding ?? 28,
+              left: noIcon == true ? kStandardPaddingX : 16,
+              right: kStandardPaddingX,
+              top: top ?? 28,
               bottom: 8,
             ),
             child: Text(

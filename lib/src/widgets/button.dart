@@ -867,20 +867,12 @@ abstract class GetButton {
   static Widget back({
     Color? color,
     VoidCallback? onPressed,
-  }) {
-    var _onPressed = () => Get.canPop ? Get.back() : Get.systemPop();
-    return Get.isIOS
-        ? CupertinoNavigationBarBackButton(
-            color: color ?? Get.theme.primaryIconTheme.color,
-            onPressed: _onPressed,
-          )
-        : icon(
-            child: const BackButtonIcon(),
-            color: color ?? Get.theme.primaryIconTheme.color,
-            tooltip: Get.localization.backButtonTooltip,
-            onPressed: _onPressed,
-          );
-  }
+  }) =>
+      CupertinoButton(
+        child: Icon(Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
+        padding: EdgeInsets.all(Get.isIOS ? 15 : 11),
+        onPressed: () => Get.canPop ? Get.back() : Get.systemPop(),
+      ).tooltip(Get.localization.backButtonTooltip);
 
   static Widget sticker({
     Color? color,

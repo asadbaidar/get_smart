@@ -73,7 +73,7 @@ class GetScaffold extends StatelessWidget {
   double get _progressBarHeight => progressBar?.height ?? 1;
 
   double get _appBarExtensionSize => (appBarExtension != null
-      ? kToolbarHeight + _progressBarHeight + (appBarExtensionSize ?? 0)
+      ? 48 + _progressBarHeight + (appBarExtensionSize ?? 0)
       : _progressBarHeight);
 
   @override
@@ -146,6 +146,7 @@ class GetScaffold extends StatelessWidget {
         leading: hideAppBarLeading == true
             ? null
             : appBarLeading ?? GetButton.back(),
+        leadingWidth: 40,
         title: customTitle ??
             (title != null ? Text(title!) : Container(height: 0)),
         bottom: PreferredSize(
@@ -200,7 +201,6 @@ class GetScaffold extends StatelessWidget {
 
   bool? get _centerTitle {
     if (centerTitle != null) return centerTitle;
-    if (customTitle != null) return true;
     if (Get.theme.appBarTheme.centerTitle != null)
       return Get.theme.appBarTheme.centerTitle;
     switch (Get.platform) {

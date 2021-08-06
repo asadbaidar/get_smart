@@ -18,6 +18,21 @@ extension GetWidgetX on Widget {
       ? Tooltip(message: message!, child: this)
       : this;
 
+  Widget clipOval({
+    Key? key,
+    bool clip = true,
+    CustomClipper<Rect>? clipper,
+    Clip clipBehavior = Clip.antiAlias,
+  }) =>
+      clip
+          ? ClipOval(
+              key: key,
+              clipper: clipper,
+              clipBehavior: clipBehavior,
+              child: this,
+            )
+          : this;
+
   Widget flex({
     Key? key,
     int flex = 1,
