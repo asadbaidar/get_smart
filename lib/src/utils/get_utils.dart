@@ -3,6 +3,7 @@ export "base_controllers.dart";
 export "collections.dart";
 export "controller.dart";
 export "date_time.dart";
+export "file.dart";
 export "get_interface.dart";
 export "global.dart";
 export "number.dart";

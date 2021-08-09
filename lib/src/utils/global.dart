@@ -119,7 +119,7 @@ extension ObjectX on Object {
   FutureOr<T> future<T>() => Future.value(this as T);
 
   /// Returns [hashCode] as [String]
-  String get hash => hashCode.toString();
+  String get $hash => hashCode.toString();
 
   /// Returns random integer seeded with [hashCode] and less than [max]
   int random(int max) => Random(hashCode).nextInt(max);

@@ -262,18 +262,18 @@ abstract class GetController extends MultipleFutureGetController {
   void setErrorFor(key, value) => setErrorForObject(key, value);
 
   /// Sets the data by key
-  void setDataFor(Object key, value) => dataMap[key.hash] = value;
+  void setDataFor(Object key, value) => dataMap[key.$hash] = value;
 
   /// Sets the runner by key
   void setRunnerFor(Object key, Future Function() value) =>
-      runnerMap[key.hash] = value;
+      runnerMap[key.$hash] = value;
 
   /// Returns the runner by key
   Future Function() runner(Object key) =>
-      runnerMap[key.hash] ?? () => Future.value();
+      runnerMap[key.$hash] ?? () => Future.value();
 
   /// Returns the data by key
-  GetResult<T>? data<T>(Object key) => $cast<GetResult<T>>(dataMap[key.hash]);
+  GetResult<T>? data<T>(Object key) => $cast<GetResult<T>>(dataMap[key.$hash]);
 
   /// Returns the success message by key
   String? success(Object key) => data(key)?.success;

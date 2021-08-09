@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -62,7 +63,7 @@ abstract class GetObject extends Mappable {
   bool toggleExpand() => isExpanded = !isExpanded;
 
   IconData get expandedIcon =>
-      isExpanded ? Icons.expand_less : Icons.expand_more;
+      isExpanded ? CupertinoIcons.chevron_up : CupertinoIcons.chevron_down;
 
   var isChecked = false;
 

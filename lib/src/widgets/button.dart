@@ -705,7 +705,7 @@ abstract class GetButton {
       padding: padding ??
           (labeled
               ? EdgeInsets.symmetric(vertical: mini ? 4 : 8)
-              : const EdgeInsets.all(8)),
+              : const EdgeInsets.symmetric(horizontal: 8)),
       alignment: alignment ?? Alignment.center,
       splashRadius: splashRadius ?? (labeled ? 24 : 18),
       icon: labeled
@@ -864,13 +864,71 @@ abstract class GetButton {
         constraints: constraints,
       );
 
+  /// Create an anchored icon button.
+  static Widget anchoredIcon({
+    Key? key,
+    double? iconSize,
+    VisualDensity? visualDensity,
+    EdgeInsetsGeometry? padding,
+    AlignmentGeometry? alignment,
+    double? splashRadius,
+    Widget? child,
+    Color? color,
+    Color? focusColor,
+    Color? hoverColor,
+    Color? highlightColor,
+    Color? splashColor,
+    Color? disabledColor,
+    void Function()? onPressed,
+    MouseCursor? mouseCursor,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool primary = false,
+    bool enabled = true,
+    bool mini = false,
+    bool tintLabel = true,
+    String? tooltip,
+    String? label,
+    TextStyle? labelStyle,
+    bool enableFeedback = true,
+    BoxConstraints? constraints,
+  }) =>
+      GetButton.icon(
+        key: key,
+        iconSize: iconSize,
+        visualDensity: visualDensity,
+        padding: padding ?? const EdgeInsets.all(8),
+        alignment: alignment,
+        splashRadius: splashRadius,
+        child: child,
+        color: color,
+        focusColor: focusColor,
+        hoverColor: hoverColor,
+        highlightColor: highlightColor,
+        splashColor: splashColor,
+        disabledColor: disabledColor,
+        onPressed: onPressed,
+        mouseCursor: mouseCursor,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        primary: primary,
+        enabled: enabled,
+        mini: mini,
+        tintLabel: tintLabel,
+        tooltip: tooltip,
+        label: label,
+        labelStyle: labelStyle,
+        enableFeedback: enableFeedback,
+        constraints: constraints,
+      );
+
   static Widget back({
     Color? color,
     VoidCallback? onPressed,
   }) =>
       CupertinoButton(
         child: Icon(Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
-        padding: EdgeInsets.all(Get.isIOS ? 15 : 11),
+        padding: EdgeInsets.only(left: Get.isIOS ? 15 : 8),
         onPressed: () => Get.canPop ? Get.back() : Get.systemPop(),
       ).tooltip(Get.localization.backButtonTooltip);
 

@@ -276,6 +276,10 @@ class GetTheme {
       snackBarTheme: SnackBarThemeData(
         backgroundColor: _bottomBackground,
       ),
+      switchTheme: SwitchThemeData(
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        splashRadius: 16,
+      ),
     );
   }
 

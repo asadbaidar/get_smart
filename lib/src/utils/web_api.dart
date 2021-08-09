@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as DIO;
 import 'package:get_smart/get_smart.dart';
-import 'package:http_parser/http_parser.dart';
 
 typedef GetFormData = DIO.FormData;
 typedef GetResponse<T> = DIO.Response<T>;
@@ -293,54 +292,6 @@ abstract class GetWebAPI {
       _cancelTokens.remove(id);
     }
   }
-}
-
-class GetFile {
-  GetFile({
-    required this.path,
-    String? name,
-    int? size,
-  })  : _name = name,
-        _size = size;
-
-  final String path;
-  final String? _name;
-  final int? _size;
-
-  String get name => _name ?? path.fileName;
-
-  int get size => _size ?? 0;
-
-  bool get isImage => name.isImageFileName;
-
-  bool get isVideo => name.isVideoFileName;
-
-  String get type => name.fileType;
-
-  MediaType? get mediaType => path.mediaType;
-
-  Future<GetMultipartFile> get multipart => GetMultipartFile.fromFile(
-        path,
-        filename: name,
-        contentType: mediaType,
-      );
-
-  static Future<List<GetMultipartFile>> toMultipart(List<GetFile> files) async {
-    List<GetMultipartFile> multipartFiles = [];
-    await Future.forEach(
-      files,
-      (GetFile file) async => multipartFiles.add(await file.multipart),
-    );
-    return multipartFiles;
-  }
-
-  @override
-  String toString() =>
-      "$typeName: " +
-      {
-        "path": path,
-        "name": name,
-      }.toString();
 }
 
 class GetRequestCancel {

@@ -1,0 +1,143 @@
+import 'package:get_smart/get_smart.dart';
+import 'package:get_smart/src/utils/get_utils.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime_type/mime_type.dart';
+import 'package:path/path.dart' as PATH;
+
+class GetFile {
+  GetFile({
+    required this.path,
+    String? name,
+    int? size,
+  })  : _name = name,
+        _size = size;
+
+  final String path;
+  final String? _name;
+  final int? _size;
+
+  String get name => _name ?? path.fileName;
+
+  int get size => _size ?? 0;
+
+  String get type => name.fileType;
+
+  MediaType? get mediaType => path.mediaType;
+
+  Future<GetMultipartFile> get multipart => GetMultipartFile.fromFile(
+        path,
+        filename: name,
+        contentType: mediaType,
+      );
+
+  bool get isImage => name.isImage;
+
+  bool get isVideo => name.isVideo;
+
+  bool get isAudio => name.isAudio;
+
+  bool get isDocument => name.isDocument;
+
+  bool get isMediaOrDocs => name.isMediaOrDocs;
+
+  @override
+  String toString() =>
+      "$typeName: " +
+      {
+        "path": path,
+        "name": name,
+        "size": size,
+      }.toString();
+
+  static Future<List<GetMultipartFile>> toMultipart(List<GetFile> files) async {
+    List<GetMultipartFile> multipartFiles = [];
+    await Future.forEach(
+      files,
+      (GetFile file) async => multipartFiles.add(await file.multipart),
+    );
+    return multipartFiles;
+  }
+
+  static const List<String> videoTypes = const [
+    "mp4",
+    "wmv",
+    "mov",
+    "mpg",
+    "mpeg",
+  ];
+
+  static const List<String> imageTypes = const [
+    "jpg",
+    "jpeg",
+    "png",
+    "gif",
+    "bmp",
+  ];
+
+  static const List<String> audioTypes = const [
+    "mp3",
+    "wav",
+    "wma",
+    "m4a",
+  ];
+
+  static const List<String> docTypes = const [
+    "pdf",
+    "doc",
+    "docx",
+  ];
+
+  static const List<String> mediaAndDocTypes = const [
+    ...videoTypes,
+    ...imageTypes,
+    ...audioTypes,
+    ...docTypes,
+  ];
+}
+
+extension GetFileX on String {
+  /// return the file name of file path.
+  String get fileName => PATH.basename(this);
+
+  /// return the file name without type.
+  String get fileNameWithoutType => PATH.basenameWithoutExtension(this);
+
+  /// return the file type without dot i.e. pdf.
+  String get fileType => takeLastWhile((s) => s != ".").lowercase;
+
+  /// Parses a string to mime type.
+  String? get mimeType => mime(this);
+
+  /// Parses a string to media type.
+  MediaType? get mediaType => mimeType?.mapIt((it) => MediaType.parse(it));
+
+  /// Checks if string is a video file.
+  bool get isVideo {
+    final file = lowercase;
+    return GetFile.videoTypes.any(file.endsWith);
+  }
+
+  /// Checks if string is an image file.
+  bool get isImage {
+    final file = lowercase;
+    return GetFile.imageTypes.any(file.endsWith);
+  }
+
+  /// Checks if string is an audio file.
+  bool get isAudio {
+    final file = lowercase;
+    return GetFile.audioTypes.any(file.endsWith);
+  }
+
+  /// Checks if string is a document file.
+  bool get isDocument {
+    final file = lowercase;
+    return GetFile.docTypes.any(file.endsWith);
+  }
+
+  /// Checks if string is an image, video, audio or document file.
+  bool get isMediaOrDocs {
+    final file = lowercase;
+    return GetFile.mediaAndDocTypes.any(file.endsWith);
+  }
+}
