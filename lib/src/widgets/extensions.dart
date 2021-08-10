@@ -161,6 +161,14 @@ extension GetContext on BuildContext {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 
+  void endIfEditing() {
+    final focus = FocusScope.of(this);
+    if (focus.hasFocus == true) {
+      FocusScope.of(this).unfocus();
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
+  }
+
   NavigatorState get navigator => Navigator.of(this);
 
   RelativeRect position({Offset? offset}) {
