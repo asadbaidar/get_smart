@@ -72,7 +72,7 @@ class BoxedView extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final Widget child;
+  final dynamic child;
   final Color? color;
   final bool filled;
   final bool oval;
@@ -104,7 +104,9 @@ class BoxedView extends StatelessWidget {
               : _size?.roundBox(color: color),
           child: Container(
             alignment: Alignment.center,
-            child: _text() ?? _child() ?? child.clipOval(clip: oval),
+            child: _text() ??
+                _icon() ??
+                (_image() ?? _child())?.clipOval(clip: oval),
           ),
         ),
       ),
@@ -134,7 +136,7 @@ class BoxedView extends StatelessWidget {
         ),
       );
 
-  Widget? _child() => $cast<Icon>(child)?.mapTo(
+  Widget? _icon() => $cast<Icon>(child)?.mapTo(
         (Icon it) => IconTheme(
           child: it,
           data: IconThemeData(
@@ -149,6 +151,17 @@ class BoxedView extends StatelessWidget {
           ),
         ),
       );
+
+  Widget? _image() => $cast<ImageProvider>(child)?.mapTo(
+        (ImageProvider it) => Image(
+          image: it,
+          height: boxSize,
+          width: boxSize,
+          fit: BoxFit.cover,
+        ),
+      );
+
+  Widget? _child() => $cast<Widget>(child);
 }
 
 class CircularProgress extends StatelessWidget {

@@ -94,9 +94,10 @@ class Mapper {
     bool withGetter, [
     Transformable? transform,
   ]) {
-    final field =
-        fields.firstWhereOrNull((f) => json[f]?.toString().notEmpty != null) ??
-            "";
+    final field = fields.firstWhere(
+      (f) => json[f]?.toString().notEmpty != null,
+      orElse: () => fields.firstOrNull ?? "",
+    );
     switch (_mappingType) {
       case MapperType.fromJson:
         _fromJson<T>(field, setter, transform);

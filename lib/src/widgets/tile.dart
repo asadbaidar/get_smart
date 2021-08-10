@@ -655,7 +655,7 @@ class GetTile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final Widget? leading;
+  final dynamic leading;
   final String? title;
   final String? subtitle;
   final Widget? titleChild;
@@ -1204,7 +1204,7 @@ class GetTileRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final Widget? leading;
+  final dynamic leading;
   final Widget? trailing;
   final String? trailingText;
   final TextStyle? trailingStyle;

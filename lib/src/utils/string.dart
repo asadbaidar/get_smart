@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
@@ -103,15 +104,46 @@ extension StringX on String {
 
   bool get boolYN => trim().equalsIgnoreCase("Y");
 
+  int toInt() => int.tryParse(this) ?? 0;
+
+  double toDouble() => double.tryParse(this) ?? 0.0;
+
   Future<String> get encrypted async => await GetCipher.instance.encrypt(this);
 
   Future<String> get decrypted async => await GetCipher.instance.decrypt(this);
 
   get json => jsonDecode(this);
 
-  int toInt() => int.tryParse(this) ?? 0;
+  Uint8List? get base64Decoded {
+    try {
+      return base64Decode(this);
+    } catch (e) {
+      return null;
+    }
+  }
 
-  double toDouble() => double.tryParse(this) ?? 0.0;
+  String get base64Encoded {
+    try {
+      final bytes = toBytes();
+      return bytes == null ? this : base64Encode(bytes);
+    } catch (e) {
+      return this;
+    }
+  }
 
-  List<int> toUTF8() => utf8.encode(this);
+  Uint8List? toBytes() {
+    try {
+      return utf8.encoder.convert(this);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  List<int>? toUTF8() {
+    try {
+      return utf8.encode(this);
+    } catch (e) {
+      return null;
+    }
+  }
 }

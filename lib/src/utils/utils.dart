@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,6 +44,12 @@ extension RandomX on Random {
     return List.generate(length, (_) => charset[nextInt(charset.length)])
         .join();
   }
+}
+
+extension Uint8ListX on Uint8List {
+  /// Convert bytes to memory image
+  MemoryImage? image({double scale = 1.0}) =>
+      isEmpty ? null : MemoryImage(this, scale: scale);
 }
 
 class GetException implements Exception {
