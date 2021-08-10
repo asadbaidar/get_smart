@@ -35,7 +35,7 @@ extension GetWidgetX on Widget {
 
   Widget row({
     Key? key,
-    bool enabled = false,
+    bool enabled = true,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     MainAxisSize mainAxisSize = MainAxisSize.max,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
