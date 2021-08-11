@@ -162,6 +162,8 @@ class GetTheme {
       canvasColor: isDark ? canvasColorDark : canvasColorLight,
       scaffoldBackgroundColor: isDark ? canvasColorDark : canvasColorLight,
       primarySwatch: $cast(_primarySwatch),
+      primaryColor: _primaryBackground,
+      bottomAppBarColor: _bottomBackground,
       accentColor: _accentColor,
       hintColor: theme.hintColor.hinted,
       primaryColorBrightness: _primaryBrightness,
@@ -235,7 +237,7 @@ class GetTheme {
         ),
         toolbarTextStyle: TextStyle(
           fontSize: 14,
-          color: _primaryBackground.contrast.actioned,
+          color: _primaryBackground.contrast.activated,
           fontFamily: fontFamily,
         ),
         foregroundColor: _primaryBackground.contrast,
@@ -301,7 +303,7 @@ class GetTheme {
     //   // systemNavigationBarIconBrightness: brightness,
     //   statusBarBrightness: brightness,
     //   statusBarIconBrightness: brightness,
-    //   // systemNavigationBarColor: Get.theme.bottomAppBarTheme.color,
+    //   // systemNavigationBarColor: Get.bottomBarColor,
     //   statusBarColor: Colors.transparent,
     // ));
     var _systemOverlayStyle = context?.theme.appBarTheme.systemOverlayStyle;
@@ -321,7 +323,35 @@ class GetTheme {
 }
 
 extension GetInterfaceTheme on GetInterface {
+  AppBarTheme get appBarTheme => theme.appBarTheme;
+
   TextTheme get primaryTextTheme => theme.primaryTextTheme;
+
+  /// The background color for primary parts of the app (app bars, tab bars, etc)
+  Color get primaryColor => theme.primaryColor;
+
+  Color? get primaryIconColor => theme.primaryIconTheme.color;
+
+  BottomAppBarTheme get bottomBarTheme => theme.bottomAppBarTheme;
+
+  /// The background color for bottom parts of the app (bottom bars, snack bars, etc)
+  Color get bottomBarColor => theme.bottomAppBarColor;
+}
+
+extension GetContextTheme on BuildContext {
+  AppBarTheme get appBarTheme => theme.appBarTheme;
+
+  TextTheme get primaryTextTheme => theme.primaryTextTheme;
+
+  /// The background color for primary parts of the app (app bars, tab bars, etc)
+  Color get primaryColor => theme.primaryColor;
+
+  Color? get primaryIconColor => theme.primaryIconTheme.color;
+
+  BottomAppBarTheme get bottomBarTheme => theme.bottomAppBarTheme;
+
+  /// The background color for bottom parts of the app (bottom bars, snack bars, etc)
+  Color get bottomBarColor => theme.bottomAppBarColor;
 }
 
 /// Font extension

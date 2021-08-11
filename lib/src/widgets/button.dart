@@ -42,8 +42,8 @@ abstract class GetButton {
 
   static Color resolveColor(Color color, Set<MaterialState> states) {
     if (states.contains(MaterialState.disabled)) return color.dimmed;
-    if (states.contains(MaterialState.hovered)) return color.highlighted;
-    if (states.contains(MaterialState.focused)) return color.highlighted;
+    if (states.contains(MaterialState.hovered)) return color.focused;
+    if (states.contains(MaterialState.focused)) return color.focused;
     if (states.contains(MaterialState.pressed)) return color.hinted;
     return color;
   }
@@ -928,7 +928,7 @@ abstract class GetButton {
   }) =>
       CupertinoButton(
         child: Icon(Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
-        padding: EdgeInsets.only(left: Get.isIOS ? 13 : 8),
+        padding: EdgeInsets.only(left: Get.isIOS ? 5 : 0),
         onPressed: () => Get.canPop ? Get.back() : Get.systemPop(),
       ).tooltip(Get.localization.backButtonTooltip);
 

@@ -24,19 +24,21 @@ extension ColorX on Color {
   MaterialAccentColor? get materialAccent =>
       this is MaterialAccentColor ? this as MaterialAccentColor? : null;
 
-  Color get activated => withOpacity(0.05);
+  Color get highlighted => withOpacity(0.05);
 
-  Color get translucent => withOpacity(0.15);
+  Color get lighted => withOpacity(0.15);
 
   Color get dimmed => withOpacity(0.2);
 
   Color get hinted => withOpacity(0.34);
 
-  Color get subbed => withOpacity(0.5);
+  Color get subbed => withOpacity(0.55);
 
-  Color get highlighted => withOpacity(0.727);
+  Color get focused => withOpacity(0.727);
 
-  Color get actioned => withOpacity(0.9);
+  Color get activated => withOpacity(0.9);
+
+  Color get translucent => withOpacity(0.95);
 
   Color get normal => withOpacity(1);
 }

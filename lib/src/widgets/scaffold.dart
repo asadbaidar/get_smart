@@ -89,7 +89,7 @@ class GetScaffold extends StatelessWidget {
           : hideAbleAppBar == true
               ? AppBar(
                   toolbarHeight: Get.mediaQuery.viewInsets.top.abs(),
-                  elevation: hideToolbars ? Get.theme.appBarTheme.elevation : 0,
+                  elevation: hideToolbars ? context.appBarTheme.elevation : 0,
                 )
               : _appBar,
       bottomNavigationBar: withBottomBar != null
@@ -201,8 +201,7 @@ class GetScaffold extends StatelessWidget {
 
   bool? get _centerTitle {
     if (centerTitle != null) return centerTitle;
-    if (Get.theme.appBarTheme.centerTitle != null)
-      return Get.theme.appBarTheme.centerTitle;
+    if (Get.appBarTheme.centerTitle != null) return Get.appBarTheme.centerTitle;
     switch (Get.platform) {
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

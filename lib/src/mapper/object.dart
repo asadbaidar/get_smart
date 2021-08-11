@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
@@ -64,6 +66,8 @@ abstract class GetObject extends Mappable {
 
   IconData get expandedIcon =>
       isExpanded ? CupertinoIcons.chevron_up : CupertinoIcons.chevron_down;
+
+  Matrix4 get expandedAngle => Matrix4.rotationZ(isExpanded ? pi : 0);
 
   var isChecked = false;
 

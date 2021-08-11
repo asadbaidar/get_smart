@@ -34,7 +34,7 @@ const kTileRowLeadingPadding = const EdgeInsets.only(right: kStandardPaddingX);
 const kTileRowLeadingDensePadding =
     const EdgeInsets.only(right: kDensePaddingX);
 const kTileRowTrailingPadding = const EdgeInsets.only(left: 6);
-const kTileRowChildrenPadding = const EdgeInsets.all(1);
+const kTileRowChildrenPadding = const EdgeInsets.all(0.5);
 const kTileRowConstraints = const BoxConstraints(minHeight: 26.5);
 const kTileRowTrailingSize = 20.0;
 const kTileRowLeadingSize = 20.0;
@@ -559,8 +559,8 @@ class GetTile extends StatelessWidget {
     this.isTitleBold = true,
     this.destructive,
     this.enabled = true,
-    this.horizontalPadding/*= 0*/,
-    this.verticalPadding/*= 0*/,
+    this.horizontalPadding,
+    this.verticalPadding,
     this.topPadding = 0,
     this.bottomPadding = 10,
     this.leftPadding,
@@ -575,6 +575,75 @@ class GetTile extends StatelessWidget {
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
+    this.titleChildrenPadding = kTileRowChildrenPadding,
+    this.subtitleChildrenPadding = kTileRowChildrenPadding,
+    this.constraints = kTileConstraints,
+    this.alignment = CrossAxisAlignment.center,
+    this.onTapTitle,
+    this.onTapSubtitle,
+    this.onTap,
+    this.onTapHead,
+    this.onTapLeading,
+    Key? key,
+  }) : super(key: key);
+
+  /// Tile with no accessory, no background, no side paddings, and not filled
+  /// but oval leading.
+  /// Most compatible to show user profile data.
+  const GetTile.profile({
+    this.leading,
+    this.title,
+    this.subtitle,
+    this.titleChild,
+    this.subtitleChild,
+    this.titleChildren,
+    this.subtitleChildren,
+    this.titleHint,
+    this.subtitleHint,
+    this.trailingTop,
+    this.trailingTopChild,
+    this.trailingBottom,
+    this.trailingBottomChild,
+    this.trailingTitle,
+    this.trailingTitleChild,
+    this.trailingSubtitle,
+    this.trailingSubtitleChild,
+    this.titleStyle,
+    this.subtitleStyle,
+    this.trailingStyle,
+    this.accessory,
+    this.rows,
+    this.belowRows,
+    this.color,
+    this.background = Colors.transparent,
+    this.headColor,
+    this.trailingColor,
+    this.isLeadingFilled = false,
+    this.isLeadingOval = true,
+    this.isDetailed = false,
+    this.padAccessory,
+    this.showAccessory,
+    this.tintAccessory,
+    this.tintAble,
+    this.isTitleBold = true,
+    this.destructive,
+    this.enabled = true,
+    this.horizontalPadding = 0,
+    this.verticalPadding = 0,
+    this.topPadding,
+    this.bottomPadding,
+    this.leftPadding,
+    this.rightPadding,
+    this.trailingPadding,
+    this.titleSize = kTileTitleSize,
+    this.leadingSize,
+    this.accessorySize,
+    this.trailingSize = kTileRowTrailingSize,
+    this.titleMaxLines = 1,
+    this.subtitleMaxLines = 1,
+    this.padding,
+    this.leadingMargin = kTileRowLeadingMargin,
+    this.leadingPadding = const EdgeInsets.only(right: 8),
     this.titleChildrenPadding = kTileRowChildrenPadding,
     this.subtitleChildrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileConstraints,
@@ -763,8 +832,8 @@ class GetTile extends StatelessWidget {
           bottom: _bottomPadding.half,
         );
     return InkWell(
-      highlightColor: tintColor.activated,
-      splashColor: tintColor.translucent,
+      highlightColor: tintColor.highlighted,
+      splashColor: tintColor.lighted,
       onTap: enabled ? onTap : null,
       child: Ink(
         color: background ?? context.theme.backgroundColor,
@@ -1254,7 +1323,12 @@ class GetTileRow extends StatelessWidget {
         context.theme.primaryIconTheme.color ?? context.theme.accentColor;
     final _tintColor = destructive == true ? Colors.red : color ?? _color;
     final _tintAble = destructive == true || tintAble;
-    final _trailingColor = trailingColor ?? (_tintAble ? _tintColor : _color);
+    final _trailingColor = trailingColor ??
+        (isDetailed
+            ? context.theme.hintColor
+            : _tintAble
+                ? _tintColor
+                : _color);
     final _textStyle = textStyle ?? context.textTheme.caption;
     final _constrained = alignment == CrossAxisAlignment.start ||
         alignment == CrossAxisAlignment.end;
@@ -1264,8 +1338,8 @@ class GetTileRow extends StatelessWidget {
     return _text == null && child == null && children?.isNotEmpty != true
         ? Container(height: 0, width: 0)
         : InkWell(
-            highlightColor: _tintColor.activated,
-            splashColor: _tintColor.translucent,
+            highlightColor: _tintColor.highlighted,
+            splashColor: _tintColor.lighted,
             onTap: enabled ? onTap : null,
             child: Ink(
               color: background ??
@@ -1447,7 +1521,7 @@ class GetLineSeparator extends StatelessWidget {
                       ? kStandardPaddingX
                       : kStandardPaddingX.twice + BoxedView.kBoxSize),
         ),
-        color: Get.theme.hintColor.translucent,
+        color: Get.theme.hintColor.lighted,
         height: 0.5,
       );
 }

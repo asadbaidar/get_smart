@@ -34,8 +34,9 @@ class BottomBar extends StatelessWidget {
         if (visible)
           BottomAppBar(
             child: SafeArea(
-              minimum:
-                  EdgeInsets.only(bottom: Get.mediaQuery.viewInsets.bottom),
+              minimum: EdgeInsets.only(
+                bottom: context.mediaQuery.viewInsets.bottom,
+              ),
               left: false,
               right: false,
               top: false,
@@ -192,7 +193,7 @@ class GetSnackBar extends StatelessWidget {
             onDismissed: (direction) => onDismiss?.call(),
             timeout: timeout,
             child: Container(
-              color: Get.theme.bottomAppBarTheme.color,
+              color: context.bottomBarColor,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -211,7 +212,7 @@ class GetSnackBar extends StatelessWidget {
                             message!,
                             style: TextStyle(color: messageColor),
                           ),
-                    backgroundColor: Get.theme.bottomAppBarTheme.color!,
+                    backgroundColor: context.bottomBarColor,
                     mainButton: action == null
                         ? null
                         : GetButton.text(

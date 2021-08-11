@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
@@ -86,7 +85,7 @@ class BoxedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final splash = filled ? color?.darker : color?.translucent;
+    final splash = filled ? color?.darker : color?.lighted;
     return Container(
       margin: margin,
       width: _boxSize,
@@ -94,7 +93,7 @@ class BoxedView extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: oval ? _size?.circularRadius : _size?.roundRadius,
-        highlightColor: splash?.activated,
+        highlightColor: splash?.highlighted,
         splashColor: splash,
         child: Ink(
           height: _wrapSize,
@@ -310,21 +309,55 @@ class MessageView extends StatelessWidget {
   }
 }
 
-class SwipeRefresh extends RefreshIndicator {
-  SwipeRefresh({
-    required Widget child,
-    required Future<void> Function() onRefresh,
-    Key? key,
-  }) : super(
-          key: key,
-          child: child,
-          onRefresh: onRefresh,
-          color: Get.theme.primaryIconTheme.color,
-          backgroundColor: Get.theme.appBarTheme.color,
-        );
+typedef SwipeRefreshState = RefreshIndicatorState;
 
-  static GlobalKey<RefreshIndicatorState> get newKey =>
-      GlobalKey<RefreshIndicatorState>();
+class SwipeRefresh extends StatelessWidget {
+  const SwipeRefresh({
+    required this.child,
+    required this.onRefresh,
+    this.displacement = 40.0,
+    this.edgeOffset = 0.0,
+    this.color,
+    this.backgroundColor,
+    this.notificationPredicate = defaultScrollNotificationPredicate,
+    this.semanticsLabel,
+    this.semanticsValue,
+    this.strokeWidth = 2.0,
+    this.triggerMode = RefreshIndicatorTriggerMode.onEdge,
+    Key? key,
+  }) : _key = key;
+
+  final child;
+  final onRefresh;
+  final double displacement;
+  final double edgeOffset;
+  final Color? color;
+  final Color? backgroundColor;
+  final ScrollNotificationPredicate notificationPredicate;
+  final String? semanticsLabel;
+  final String? semanticsValue;
+  final double strokeWidth;
+  final RefreshIndicatorTriggerMode triggerMode;
+  final Key? _key;
+
+  @override
+  Widget build(BuildContext context) => RefreshIndicator(
+        key: _key,
+        child: child,
+        onRefresh: onRefresh,
+        displacement: displacement,
+        edgeOffset: edgeOffset,
+        notificationPredicate: notificationPredicate,
+        semanticsLabel: semanticsLabel,
+        semanticsValue: semanticsValue,
+        strokeWidth: strokeWidth,
+        triggerMode: triggerMode,
+        color: color ?? context.primaryIconColor,
+        backgroundColor: backgroundColor ?? context.primaryColor,
+      );
+
+  static GlobalKey<SwipeRefreshState> get newKey =>
+      GlobalKey<SwipeRefreshState>();
 }
 
 class CrossFade extends AnimatedCrossFade {
@@ -376,87 +409,160 @@ extension ClickableX on Widget {
       );
 }
 
-class TextBadge extends StatelessWidget {
-  const TextBadge({
-    this.text,
+class TextBox extends StatelessWidget {
+  const TextBox(
+    this.text, {
     this.fontSize = 9,
-    this.textColor,
-    this.backgroundColor,
+    this.color,
+    this.fillColor,
     this.borderColor,
     this.borderWidth,
     this.borderRadius = 5,
-    this.inverted = false,
+    this.filled = false,
+    this.primary = false,
+    this.subbed = false,
     this.padding = 3,
-    this.margin = const EdgeInsets.symmetric(horizontal: 2),
+    this.verticalPadding,
+    this.margin = const EdgeInsets.symmetric(horizontal: 4),
     Key? key,
   }) : super(key: key);
 
-  const TextBadge.round({
-    this.text,
+  const TextBox.primary(
+    this.text, {
     this.fontSize = 9,
-    this.textColor,
-    this.backgroundColor,
+    this.color,
+    this.fillColor,
+    this.borderColor,
+    this.borderWidth,
+    this.borderRadius = 5,
+    this.filled = false,
+    this.primary = true,
+    this.subbed = true,
+    this.padding = 3,
+    this.verticalPadding = 0,
+    this.margin = const EdgeInsets.symmetric(horizontal: 4),
+    Key? key,
+  }) : super(key: key);
+
+  const TextBox.plain(
+    this.text, {
+    this.fontSize = 9,
+    this.color,
+    this.fillColor,
+    this.borderColor,
+    this.borderWidth,
+    this.borderRadius = 5,
+    this.filled = false,
+    this.primary = false,
+    this.subbed = false,
+    this.padding = 3,
+    this.verticalPadding = 0,
+    this.margin = const EdgeInsets.symmetric(horizontal: 4),
+    Key? key,
+  }) : super(key: key);
+
+  const TextBox.filled(
+    this.text, {
+    this.fontSize = 9,
+    this.color,
+    this.fillColor,
+    this.borderColor,
+    this.borderWidth,
+    this.borderRadius = 5,
+    this.filled = true,
+    this.primary = false,
+    this.subbed = false,
+    this.padding = 3,
+    this.verticalPadding = 0,
+    this.margin = const EdgeInsets.symmetric(horizontal: 4),
+    Key? key,
+  }) : super(key: key);
+
+  const TextBox.round(
+    this.text, {
+    this.fontSize = 9,
+    this.color,
+    this.fillColor,
     this.borderColor,
     this.borderWidth,
     this.borderRadius = 20,
-    this.inverted = false,
+    this.filled = false,
+    this.primary = false,
+    this.subbed = false,
     this.padding = 5,
-    this.margin = const EdgeInsets.symmetric(horizontal: 2),
+    this.verticalPadding,
+    this.margin = const EdgeInsets.symmetric(horizontal: 4),
     Key? key,
   }) : super(key: key);
 
   final String? text;
   final double fontSize;
-  final Color? textColor;
-  final Color? backgroundColor;
+  final Color? color;
+  final Color? fillColor;
   final Color? borderColor;
   final double? borderWidth;
   final double? borderRadius;
-  final bool inverted;
-  final EdgeInsetsGeometry? margin;
+  final bool filled;
+  final bool primary;
+  final bool subbed;
   final double padding;
+  final double? verticalPadding;
+  final EdgeInsetsGeometry? margin;
 
-  Color get _textColor => textColor ?? Get.theme.accentColor;
-
-  Color get _backgroundColor => backgroundColor ?? Colors.transparent;
-
-  Color get _borderColor => borderColor ?? Get.theme.accentColor;
+  bool get _filled => filled || fillColor != null;
 
   @override
-  Widget build(BuildContext context) => text == null
-      ? Container(height: 0)
-      : Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              margin: margin,
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(
-                horizontal: padding,
-                vertical: padding.half,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 0.5),
-                child: Text(
-                  text!,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: _textColor.applyIf(inverted, (it) => it.contrast),
-                    fontSize: fontSize,
+  Widget build(BuildContext context) {
+    Color _color = (color ??
+            (primary
+                ? context.primaryTextTheme.bodyText1?.color ??
+                    context.theme.primaryColor.contrast
+                : context.theme.accentColor))
+        .applyIf(subbed, (it) => it.subbed)!;
+
+    Color _fillColor = (fillColor ?? (filled ? _color : null))
+            ?.applyIf(subbed, (it) => it.subbed) ??
+        Colors.transparent;
+
+    Color _borderColor = (borderColor ?? (_filled ? null : fillColor ?? _color))
+            ?.applyIf(subbed, (it) => it.subbed) ??
+        Colors.transparent;
+
+    return text == null
+        ? Container(height: 0, width: 0)
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                margin: margin,
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(
+                  horizontal: padding,
+                  vertical: verticalPadding ?? padding.half,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 1.5),
+                  child: Text(
+                    text!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color:
+                          _color.applyIf(_filled, (_) => _fillColor.contrast),
+                      fontSize: fontSize,
+                    ),
                   ),
                 ),
+                decoration: GetBoxDecoration.all(
+                  1,
+                  color: _fillColor,
+                  borderColor: _borderColor,
+                  borderWidth: borderWidth,
+                  borderRadius: borderRadius,
+                ),
               ),
-              decoration: GetBoxDecoration.all(
-                1,
-                color: inverted ? _textColor : _backgroundColor,
-                borderColor:
-                    inverted ? borderColor ?? _textColor : _borderColor,
-                borderWidth: borderWidth,
-                borderRadius: borderRadius,
-              ),
-            ),
-          ],
-        );
+            ],
+          );
+  }
 }
 
 class GetSearchDelegate extends SearchDelegate {
@@ -475,7 +581,7 @@ class GetSearchDelegate extends SearchDelegate {
         context,
         brightness: Brightness.dark,
       ).copyWith(
-        appBarTheme: context.theme.appBarTheme,
+        appBarTheme: context.appBarTheme,
         scaffoldBackgroundColor: context.theme.scaffoldBackgroundColor,
         inputDecorationTheme: InputDecorationTheme(
           border: InputBorder.none,

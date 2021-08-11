@@ -14,6 +14,8 @@ extension GetFocusNode on FocusNode {
 extension GetWidgetX on Widget {
   WidgetSpan get widgetSpan => WidgetSpan(child: this);
 
+  Widget get sliverFill => SliverFillRemaining(child: this);
+
   Widget tooltip([String? message]) => message?.notEmpty != null
       ? Tooltip(message: message!, child: this)
       : this;

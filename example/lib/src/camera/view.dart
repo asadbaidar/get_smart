@@ -86,10 +86,10 @@ class CameraPage extends StatelessWidget {
               children: [
                 Obx(() {
                   model.observer.value;
-                  return TextBadge(
-                    text: model.duration,
-                    textColor: Colors.red,
-                    inverted: true,
+                  return TextBox(
+                    model.duration,
+                    color: Colors.red,
+                    filled: true,
                     fontSize: 16,
                     padding: 4,
                     margin: EdgeInsets.all(16),
