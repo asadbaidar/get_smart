@@ -33,6 +33,7 @@ class BottomBar extends StatelessWidget {
         if (topChild == null) GetLineSeparator(style: SeparatorStyle.full),
         if (visible)
           BottomAppBar(
+            elevation: topChild == null ? null : 0,
             child: SafeArea(
               minimum: EdgeInsets.only(
                 bottom: context.mediaQuery.viewInsets.bottom,
@@ -212,7 +213,7 @@ class GetSnackBar extends StatelessWidget {
                             message!,
                             style: TextStyle(color: messageColor),
                           ),
-                    backgroundColor: context.bottomBarColor,
+                    backgroundColor: Colors.transparent,
                     mainButton: action == null
                         ? null
                         : GetButton.text(

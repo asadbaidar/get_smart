@@ -92,12 +92,15 @@ class GetScaffold extends StatelessWidget {
                   elevation: hideToolbars ? context.appBarTheme.elevation : 0,
                 )
               : _appBar,
-      bottomNavigationBar: withBottomBar != null
-          ? _bottomAppBar
-          : CrossFade(
-              firstChild: hideToolbars ? Container(height: 0) : bottomBar,
-              secondChild: _bottomAppBar,
-            ),
+      bottomNavigationBar: Blur(
+        blur: 6,
+        child: withBottomBar != null
+            ? _bottomAppBar
+            : CrossFade(
+                firstChild: hideToolbars ? Container(height: 0) : bottomBar,
+                secondChild: _bottomAppBar,
+              ),
+      ),
       body: hideAbleAppBar == true && sliver == null
           ? Column(
               children: [

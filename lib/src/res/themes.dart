@@ -226,7 +226,8 @@ class GetTheme {
         ),
       ),
       appBarTheme: AppBarTheme(
-        elevation: 1,
+        elevation: 1.0,
+        shadowColor: Colors.black,
         color: _primaryBackground,
         brightness: _primaryBrightness,
         titleTextStyle: TextStyle(

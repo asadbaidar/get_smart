@@ -565,6 +565,37 @@ class TextBox extends StatelessWidget {
   }
 }
 
+class Blur extends StatelessWidget {
+  const Blur({
+    this.blur = 0.0,
+    this.tileMode = TileMode.clamp,
+    this.clipBehavior = Clip.hardEdge,
+    this.clipper,
+    this.child,
+    Key? key,
+  }) : super(key: key);
+
+  final double blur;
+  final TileMode tileMode;
+  final Clip clipBehavior;
+  final CustomClipper<Rect>? clipper;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) => ClipRect(
+        clipBehavior: clipBehavior,
+        clipper: clipper,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: blur,
+            sigmaY: blur,
+            tileMode: tileMode,
+          ),
+          child: child ?? Container(),
+        ),
+      );
+}
+
 class GetSearchDelegate extends SearchDelegate {
   GetSearchDelegate({
     String? hint,
