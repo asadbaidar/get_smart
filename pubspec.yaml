@@ -15,7 +15,7 @@ dependencies:
   intl: ^0.17.0
   sprintf: ^6.0.0
   dio: ^4.0.0
-  get: ^4.3.4
+  get: ^4.3.7
   cupertino_icons: ^1.0.3
   url_launcher: ^6.0.9
   shimmer: ^2.0.0
