@@ -928,7 +928,7 @@ abstract class GetButton {
   }) =>
       CupertinoButton(
         child: Icon(Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
-        padding: EdgeInsets.only(left: Get.isIOS ? 5 : 0),
+        padding: EdgeInsets.only(left: Get.isIOS ? 9 : 4),
         onPressed: () => Get.canPop ? Get.back() : Get.systemPop(),
       ).tooltip(Get.localization.backButtonTooltip);
 
