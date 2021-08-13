@@ -422,6 +422,7 @@ class TextBox extends StatelessWidget {
     this.primary = false,
     this.subbed = false,
     this.padding = 3,
+    this.horizontalPadding,
     this.verticalPadding,
     this.margin = const EdgeInsets.symmetric(horizontal: 4),
     Key? key,
@@ -439,6 +440,7 @@ class TextBox extends StatelessWidget {
     this.primary = true,
     this.subbed = true,
     this.padding = 3,
+    this.horizontalPadding,
     this.verticalPadding = 0,
     this.margin = const EdgeInsets.symmetric(horizontal: 4),
     Key? key,
@@ -456,6 +458,7 @@ class TextBox extends StatelessWidget {
     this.primary = false,
     this.subbed = false,
     this.padding = 3,
+    this.horizontalPadding,
     this.verticalPadding = 0,
     this.margin = const EdgeInsets.symmetric(horizontal: 4),
     Key? key,
@@ -473,6 +476,7 @@ class TextBox extends StatelessWidget {
     this.primary = false,
     this.subbed = false,
     this.padding = 3,
+    this.horizontalPadding,
     this.verticalPadding = 0,
     this.margin = const EdgeInsets.symmetric(horizontal: 4),
     Key? key,
@@ -490,6 +494,7 @@ class TextBox extends StatelessWidget {
     this.primary = false,
     this.subbed = false,
     this.padding = 5,
+    this.horizontalPadding = 7,
     this.verticalPadding,
     this.margin = const EdgeInsets.symmetric(horizontal: 4),
     Key? key,
@@ -506,6 +511,7 @@ class TextBox extends StatelessWidget {
   final bool primary;
   final bool subbed;
   final double padding;
+  final double? horizontalPadding;
   final double? verticalPadding;
   final EdgeInsetsGeometry? margin;
 
@@ -537,11 +543,12 @@ class TextBox extends StatelessWidget {
                 margin: margin,
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(
-                  horizontal: padding,
+                  horizontal: horizontalPadding ?? padding,
                   vertical: verticalPadding ?? padding.half,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 1.5),
+                  padding:
+                      EdgeInsets.only(top: 1.5, bottom: Get.isIOS ? 1.5 : 0),
                   child: Text(
                     text!,
                     textAlign: TextAlign.center,
