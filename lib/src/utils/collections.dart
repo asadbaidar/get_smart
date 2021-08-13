@@ -41,3 +41,13 @@ extension ListX<E> on List<E> {
     return null;
   }
 }
+
+extension IterableX<E> on Iterable<E> {
+  E? reduceOrNull(E combine(E value, E element)) {
+    try {
+      return isEmpty ? null : reduce(combine);
+    } catch (e) {
+      return null;
+    }
+  }
+}
