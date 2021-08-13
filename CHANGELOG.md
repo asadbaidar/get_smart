@@ -1,3 +1,7 @@
+## [0.1.1]
+
+* Bug fixes and a lot of Breaking Changes
+
 ## [0.1.0]
 
 * Bug fixes
