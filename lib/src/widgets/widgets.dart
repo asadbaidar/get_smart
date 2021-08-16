@@ -309,7 +309,7 @@ class MessageView extends StatelessWidget {
   }
 }
 
-typedef SwipeRefreshState = RefreshIndicatorState;
+typedef SwipeRefreshState = SwipeRefreshState;
 
 class SwipeRefresh extends StatelessWidget {
   const SwipeRefresh({
