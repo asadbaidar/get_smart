@@ -5,35 +5,37 @@ import 'package:get_smart/get_smart.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({
-    this.leftItems,
-    this.rightItems,
-    this.centerItems,
-    this.topChild,
+    this.left,
+    this.right,
+    this.center,
+    this.children,
+    this.top,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.visible = true,
     Key? key,
   }) : super(key: key);
 
-  final List<Widget>? leftItems;
-  final List<Widget>? rightItems;
-  final List<Widget>? centerItems;
-  final Widget? topChild;
+  final List<Widget>? left;
+  final List<Widget>? right;
+  final List<Widget>? center;
+  final List<Widget>? children;
+  final Widget? top;
   final CrossAxisAlignment crossAxisAlignment;
   final bool visible;
 
   @override
   Widget build(BuildContext context) {
-    var _leftItems = leftItems ?? [];
-    var _rightItems = rightItems ?? [];
-    var _centerItems = centerItems ?? [];
+    var _left = left ?? [];
+    var _right = right ?? [];
+    var _center = center ?? [];
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CrossFade(firstChild: topChild),
-        if (topChild == null) GetLineSeparator(style: SeparatorStyle.full),
+        CrossFade(firstChild: top),
+        if (top == null) GetLineSeparator(style: SeparatorStyle.full),
         if (visible)
           BottomAppBar(
-            elevation: topChild == null ? null : 0,
+            elevation: top == null ? null : 0,
             child: SafeArea(
               minimum: EdgeInsets.only(
                 bottom: context.mediaQuery.viewInsets.bottom,
@@ -50,19 +52,22 @@ class BottomBar extends StatelessWidget {
                   crossAxisAlignment: crossAxisAlignment,
                   children: [
                     SizedBox(width: 2),
-                    ..._leftItems,
-                    if (_leftItems.length < _rightItems.length)
-                      for (int i = 0;
-                          i < _rightItems.length - _leftItems.length;
-                          i++)
-                        GetButton.icon(),
-                    ...(_centerItems.isEmpty ? [Spacer()] : _centerItems),
-                    if (_rightItems.length < _leftItems.length)
-                      for (int i = 0;
-                          i < _leftItems.length - _rightItems.length;
-                          i++)
-                        GetButton.icon(),
-                    ..._rightItems,
+                    ...children ??
+                        [
+                          ..._left,
+                          if (_left.length < _right.length)
+                            for (int i = 0;
+                                i < _right.length - _left.length;
+                                i++)
+                              GetButton.icon(),
+                          ...(_center.isEmpty ? [Spacer()] : _center),
+                          if (_right.length < _left.length)
+                            for (int i = 0;
+                                i < _left.length - _right.length;
+                                i++)
+                              GetButton.icon(),
+                          ..._right
+                        ],
                     SizedBox(width: 2),
                   ],
                 ),

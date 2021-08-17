@@ -7,7 +7,27 @@ void main() {
     expect(text.surround("*"), "*hello*");
     expect(text.surround("*", doFor: 2), "**hello**");
     expect(text.surround("*", doFor: 3), "***hello***");
+    expect(text.surround("*", between: " "), "* hello *");
+    expect(text.surround(null), "hello");
     expect(text.surround("*", doIf: false), "hello");
+  });
+  test('Test StringX: pre', () {
+    final text = "hello";
+    expect(text.pre("*"), "*hello");
+    expect(text.pre("*", doFor: 2), "**hello");
+    expect(text.pre("*", doFor: 3), "***hello");
+    expect(text.pre("*", between: " "), "* hello");
+    expect(text.pre(null), "hello");
+    expect(text.pre("*", doIf: false), "hello");
+  });
+  test('Test StringX: post', () {
+    final text = "hello";
+    expect(text.post("*"), "hello*");
+    expect(text.post("*", doFor: 2), "hello**");
+    expect(text.post("*", doFor: 3), "hello***");
+    expect(text.post("*", between: " "), "hello *");
+    expect(text.post(null), "hello");
+    expect(text.post("*", doIf: false), "hello");
   });
   test('Test DateFormatX:', () {
     final date = Date.from(

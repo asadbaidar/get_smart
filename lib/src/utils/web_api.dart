@@ -163,6 +163,7 @@ abstract class GetWebAPI {
 
   static const currentTime = "CURRENT_TIME";
   static const timeStamp = "DATE_TIME_";
+  static const auth = "auth";
 
   GetWebAPI() : _id = Date.now.inMilliseconds.toString();
 
@@ -201,7 +202,7 @@ abstract class GetWebAPI {
           var parcel = GetRequestParcel<T, GetResult<T>>(
             id: id,
             address: await address,
-            path: path.pre(this.path?.post("/")) ?? "",
+            path: path.pre(this.path?.post("/")),
             method: method,
             result: GetResult<T>(),
             builder: as,
@@ -274,7 +275,7 @@ abstract class GetWebAPI {
         options: Options(
           method: method.keyNAME,
           contentType: isMultipart ? "multipart/form-data" : null,
-          headers: {"auth": authToken},
+          headers: {auth: authToken},
         ),
         cancelToken: cancelToken,
       );

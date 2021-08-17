@@ -105,7 +105,7 @@ extension ObjectX on Object {
 
   /// Apply the [operation] with [T] as parameter if [condition] is `true`
   T? applyIf<T>(bool? condition, T Function(T) operation) {
-    return (condition == true) ? operation(this as T) : this as T?;
+    return (condition == true) ? operation(this as T) : this as T;
   }
 
   /// Repeat the [task] with [T] as parameter for [n] times

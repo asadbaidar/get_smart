@@ -31,6 +31,7 @@ class GetScaffold extends StatelessWidget {
     this.bottomBarLeftItems,
     this.bottomBarRightItems,
     this.bottomBarCenterItems,
+    this.bottomBarChildren,
     this.appBarRightItems,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
@@ -63,6 +64,7 @@ class GetScaffold extends StatelessWidget {
   final List<Widget>? bottomBarLeftItems;
   final List<Widget>? bottomBarRightItems;
   final List<Widget>? bottomBarCenterItems;
+  final List<Widget>? bottomBarChildren;
   final List<Widget>? appBarRightItems;
   final FloatingActionButton? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
@@ -111,7 +113,7 @@ class GetScaffold extends StatelessWidget {
           : _body,
       floatingActionButton: _isInteractive ? floatingActionButton : null,
       floatingActionButtonLocation: floatingActionButtonLocation ??
-          (subtitle?.isBlank ?? true
+          (subtitle?.notBlank == null
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.endDocked),
       bottomSheet: bottomSheet,
@@ -166,27 +168,31 @@ class GetScaffold extends StatelessWidget {
       );
 
   Widget get _bottomAppBar {
-    List<Widget> _bottomBarLeftItems =
+    List<Widget> _bottomBarLeft =
         _isInteractive ? bottomBarLeftItems ?? [] : [];
-    List<Widget> _bottomBarRightItems =
+    List<Widget> _bottomBarRight =
         _isInteractive ? bottomBarRightItems ?? [] : [];
-    List<Widget> _bottomBarCenterItems =
+    List<Widget> _bottomBarCenter =
         _isInteractive ? bottomBarCenterItems ?? [] : [];
-    return (subtitle?.isBlank ?? true) &&
-            _bottomBarLeftItems.isBlank! &&
-            _bottomBarRightItems.isBlank! &&
-            _bottomBarCenterItems.isBlank!
+    List<Widget>? _bottomBarChildren =
+        _isInteractive ? bottomBarChildren : null;
+    return subtitle?.notBlank == null &&
+            _bottomBarLeft.isEmpty &&
+            _bottomBarRight.isEmpty &&
+            _bottomBarCenter.isEmpty &&
+            _bottomBarChildren == null
         ? Container(height: 0)
         : BottomBar(
             visible: !hideToolbars,
-            crossAxisAlignment: subtitle?.isBlank ?? true
+            crossAxisAlignment: subtitle?.notBlank == null
                 ? CrossAxisAlignment.end
                 : CrossAxisAlignment.center,
-            topChild: withBottomBar,
-            leftItems: _bottomBarLeftItems,
-            rightItems: _bottomBarRightItems,
-            centerItems: subtitle?.isBlank ?? true
-                ? _bottomBarCenterItems
+            top: withBottomBar,
+            children: _bottomBarChildren,
+            left: _bottomBarLeft,
+            right: _bottomBarRight,
+            center: subtitle?.notBlank == null
+                ? _bottomBarCenter
                 : [
                     Expanded(
                       child: Padding(

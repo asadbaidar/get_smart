@@ -5,26 +5,46 @@ import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 extension StringX on String {
-  String? pre(String? pre, {int doFor = 1, bool doIf = true}) {
-    return applyFor(
-      doIf == true && pre != null ? doFor : 0,
-      (s) => pre! + s!,
-    );
-  }
+  String pre(
+    String? pre, {
+    int doFor = 1,
+    bool doIf = true,
+    String between = "",
+  }) =>
+      applyFor(
+        doIf == true && pre != null ? doFor : 0,
+        (s) => pre! + between + s!,
+      )!;
 
-  String? post(String? post, {int doFor = 1, bool doIf = true}) {
-    return applyFor(
-      doIf == true && post != null ? doFor : 0,
-      (s) => s! + post!,
-    );
-  }
+  String post(
+    String? post, {
+    int doFor = 1,
+    bool doIf = true,
+    String between = "",
+  }) =>
+      applyFor(
+        doIf == true && post != null ? doFor : 0,
+        (s) => s! + between + post!,
+      )!;
 
-  String? surround(String? surround, {int doFor = 1, bool doIf = true}) {
-    return applyFor(
-      doIf == true && surround != null ? doFor : 0,
-      (s) => s?.pre(surround)?.post(surround),
-    );
-  }
+  String surround(
+    String? surround, {
+    int doFor = 1,
+    bool doIf = true,
+    String between = "",
+  }) =>
+      applyFor(
+        doIf == true && surround != null ? doFor : 0,
+        (s) => s
+            ?.pre(
+              surround,
+              between: between,
+            )
+            .post(
+              surround,
+              between: between,
+            ),
+      )!;
 
   String take([int count = 1]) => characters.take(count).toString();
 
@@ -47,6 +67,8 @@ extension StringX on String {
       characters.skipLastWhile(predicate).toString();
 
   String? get notEmpty => isEmpty ? null : this;
+
+  String? get notBlank => isBlank! ? null : this;
 
   bool get isNotBlank => !isBlank!;
 

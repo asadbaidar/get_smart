@@ -500,6 +500,24 @@ class TextBox extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  const TextBox.roundZero(
+    this.text, {
+    this.fontSize = 9,
+    this.color,
+    this.fillColor,
+    this.borderColor,
+    this.borderWidth,
+    this.borderRadius = 20,
+    this.filled = false,
+    this.primary = false,
+    this.subbed = false,
+    this.padding = 5,
+    this.horizontalPadding = 7,
+    this.verticalPadding,
+    this.margin = EdgeInsets.zero,
+    Key? key,
+  }) : super(key: key);
+
   final String? text;
   final double fontSize;
   final Color? color;
@@ -600,6 +618,42 @@ class Blur extends StatelessWidget {
           ),
           child: child ?? Container(),
         ),
+      );
+}
+
+class Space extends StatelessWidget {
+  const Space.only({
+    this.x,
+    this.y,
+    Key? key,
+  }) : super(key: key);
+
+  const Space.x(
+    this.x, {
+    Key? key,
+  })  : y = null,
+        super(key: key);
+
+  const Space.y(
+    this.y, {
+    Key? key,
+  })  : x = null,
+        super(key: key);
+
+  const Space.all(
+    double? s, {
+    Key? key,
+  })  : x = s,
+        y = s,
+        super(key: key);
+
+  final double? x;
+  final double? y;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+        width: x,
+        height: y,
       );
 }
 

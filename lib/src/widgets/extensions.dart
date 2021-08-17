@@ -221,6 +221,14 @@ extension GetOffset on Offset {
   static Offset all(double d) => Offset(d, d);
 }
 
+extension NumSpace on num {
+  Widget get spaceX => Space.x(toDouble());
+
+  Widget get spaceY => Space.y(toDouble());
+
+  Widget get space => Space.all(toDouble());
+}
+
 extension GetBoxDecoration on BoxDecoration {
   static BoxDecoration only({
     double? top,

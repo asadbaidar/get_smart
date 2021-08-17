@@ -458,5 +458,5 @@ extension TextStyleX on TextStyle {
 
   TextStyle get italic => apply(fontStyle: FontStyle.italic);
 
-  TextStyle get bold => apply(fontWeightDelta: 1);
+  TextStyle get bold => copyWith(fontWeight: FontWeight.w500);
 }

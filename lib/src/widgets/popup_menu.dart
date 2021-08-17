@@ -146,7 +146,7 @@ class PopupMenu<T extends Object> extends StatelessWidget {
                 topPadding: data.topPadding,
                 bottomPadding: data.bottomPadding,
                 trailingPadding: data.trailingPadding,
-                titleSize: data.titleSize ?? titleSize,
+                fontSize: data.titleSize ?? titleSize,
                 accessorySize: data.accessorySize ?? accessorySize,
                 onTapLeading: data.onTapLeading,
               ).popupMenuItem(
