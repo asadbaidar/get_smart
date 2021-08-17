@@ -463,7 +463,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
                         onFieldSubmitted();
                       },
                       validator: (String? value) {
-                        if (dataSet.$firstWhere(
+                        if (dataSet.firstWhereOrNull(
                                 (option) => option.containsIgnoreCase(value)) ==
                             null) {
                           return 'Nothing selected.';
