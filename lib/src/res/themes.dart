@@ -244,7 +244,6 @@ class GetTheme {
         foregroundColor: _primaryBackground.contrast,
         iconTheme: _primaryIconTheme,
         actionsIconTheme: _primaryIconTheme,
-        backwardsCompatibility: false,
         systemOverlayStyle: SystemUiOverlayStyle(
           // systemNavigationBarDividerColor: _bottomBackground,
           // systemNavigationBarIconBrightness: _bottomBrightness.inverse,
