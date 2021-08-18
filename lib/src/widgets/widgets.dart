@@ -657,6 +657,22 @@ class Space extends StatelessWidget {
       );
 }
 
+/// A stateless utility widget whose [build] method uses its
+/// [builder] callback to create the widget's child.
+class GetBuild extends StatelessWidget {
+  /// Creates a widget that delegates its build to a callback.
+  const GetBuild(
+    this.builder, {
+    Key? key,
+  }) : super(key: key);
+
+  /// Called to obtain the child widget.
+  final WidgetBuilder builder;
+
+  @override
+  Widget build(BuildContext context) => builder(context);
+}
+
 class GetSearchDelegate extends SearchDelegate {
   GetSearchDelegate({
     String? hint,

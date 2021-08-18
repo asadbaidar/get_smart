@@ -926,11 +926,16 @@ abstract class GetButton {
     Color? color,
     VoidCallback? onPressed,
   }) =>
-      CupertinoButton(
-        child: Icon(Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
-        padding: EdgeInsets.only(left: Get.isIOS ? 9 : 2),
-        onPressed: () => Get.canPop ? Get.back() : Get.systemPop(),
-      ).tooltip(Get.localization.backButtonTooltip);
+      GetBuild(
+        (context) => CupertinoButton(
+          child: Icon(
+            Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+            color: context.primaryIconColor,
+          ),
+          padding: EdgeInsets.only(left: Get.isIOS ? 9 : 2),
+          onPressed: () => Get.canPop ? Get.back() : Get.systemPop(),
+        ).tooltip(Get.localization.backButtonTooltip),
+      );
 
   static Widget sticker({
     Color? color,
