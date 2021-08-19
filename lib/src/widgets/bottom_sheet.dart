@@ -17,8 +17,6 @@ class GetBottomSheet extends StatelessWidget {
     this.centerTitle,
     this.rounded = true,
     this.isDismissible = true,
-    this.fullscreen,
-    this.onDismiss,
     Key? key,
   }) : super(key: key);
 
@@ -33,8 +31,6 @@ class GetBottomSheet extends StatelessWidget {
   final bool? centerTitle;
   final bool rounded;
   final bool isDismissible;
-  final bool? fullscreen;
-  final void Function(dynamic v)? onDismiss;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -50,7 +46,7 @@ class GetBottomSheet extends StatelessWidget {
           Flexible(
             child: Container(
               decoration: ShapeDecoration(
-                color: context.theme.backgroundColor,
+                color: context.backgroundColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular((rounded) ? 12 : 0),
@@ -68,13 +64,13 @@ class GetBottomSheet extends StatelessWidget {
                       automaticallyImplyLeading: false,
                       title: title,
                       backgroundColor: Colors.transparent,
-                      actionsIconTheme: context.theme.iconTheme,
-                      brightness: context.theme.brightness,
-                      iconTheme: context.theme.iconTheme,
+                      actionsIconTheme: context.iconTheme,
+                      //brightness: context.brightness,
+                      iconTheme: context.iconTheme,
                       toolbarHeight: 44,
                       elevation: 0,
                       centerTitle: centerTitle,
-                      textTheme: context.textTheme,
+                      //textTheme: context.textTheme,
                       primary: false,
                       actions: [...(topActions ?? []), SizedBox(width: 6)],
                       leading: leadingAction,
@@ -125,46 +121,38 @@ class GetBottomSheet extends StatelessWidget {
 
 extension GetBottomSheetX on GetInterface {
   void modalBottomSheet(
-    Widget Function() builder, {
+    WidgetBuilder builder, {
     Color? backgroundColor,
     double? elevation,
     Clip? clipBehavior,
     Color? barrierColor,
     bool? ignoreSafeArea,
-    bool? fullscreen,
+    bool fullscreen = true,
     bool useRootNavigator = false,
     bool isDismissible = true,
     bool enableDrag = true,
     RouteSettings? settings,
-    Duration? enterBottomSheetDuration,
-    Duration? exitBottomSheetDuration,
+    Duration? enterDuration,
+    Duration? exitDuration,
     void Function(dynamic v)? onDismiss,
     FutureOr Function()? onShow,
   }) async {
     await onShow?.call();
-    final _sheet = builder();
-    final _bottomSheet = $cast<GetBottomSheet>(_sheet);
-    final _fullscreen = _bottomSheet?.fullscreen;
-    final _isDismissible = _bottomSheet?.isDismissible;
-    final _onDismiss = _bottomSheet?.onDismiss;
     bottomSheet(
-      _sheet,
+      ThemeBuilder(builder),
       backgroundColor: backgroundColor,
       elevation: elevation,
       clipBehavior: clipBehavior,
       barrierColor: barrierColor,
       ignoreSafeArea: ignoreSafeArea,
-      isScrollControlled: _fullscreen ?? fullscreen ?? true,
+      isScrollControlled: fullscreen,
       useRootNavigator: useRootNavigator,
-      isDismissible: _isDismissible ?? isDismissible,
+      isDismissible: isDismissible,
       enableDrag: enableDrag,
       settings: settings,
-      enterBottomSheetDuration: enterBottomSheetDuration,
-      exitBottomSheetDuration: exitBottomSheetDuration,
-    ).then((value) {
-      onDismiss?.call(value);
-      _onDismiss?.call(value);
-    });
+      enterBottomSheetDuration: enterDuration,
+      exitBottomSheetDuration: exitDuration,
+    ).then((value) => onDismiss?.call(value));
   }
 }
 
@@ -188,7 +176,7 @@ class RoundedHandle extends StatelessWidget {
             margin: EdgeInsets.only(top: 9),
             decoration: visible == true
                 ? ShapeDecoration(
-                    color: (color ?? context.theme.hintColor).withAlpha(50),
+                    color: (color ?? context.hintColor).withAlpha(50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(4)),
                     ),

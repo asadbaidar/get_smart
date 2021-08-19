@@ -14,60 +14,64 @@ class HomePage extends StatelessWidget {
         init: HomeModel(),
         builder: (model) {
           final dataSet = model.alphabets;
-          return GetScaffold(
-            title: "Get Smart Home",
-            progressBar: LinearProgress.standard(
-              color: Colors.blue,
-              visible: model.isBusy,
-            ),
-            child: SwipeRefresh(
-              onRefresh: model.refreshData,
-              child: ListView.separated(
-                itemCount: dataSet.length,
-                separatorBuilder: (_, __) => GetTileSeparator(),
-                itemBuilder: (_, index) {
-                  final data = dataSet[index];
-                  return GetTile.simple(
-                    leading: Text(data.id),
-                    title: data.description,
-                    color: data.color,
-                    accessory: data.attachment?.mapIt(
-                      (icon) => PopupMenu<GetFile>(
-                        cornerRadius: 0,
-                        elevation: 0,
-                        backgroundColor: Colors.transparent,
-                        items: [data.file!],
-                        childBuilder: (onPopup) => GetButton.icon(
-                          child: Icon(icon),
-                          onPressed:
-                              data.file?.isVideo == true ? () => null : onPopup,
-                        ),
-                        itemBuilder: (value, data) => Image(
-                          image: $cast(Get.isWeb
-                              ? NetworkImage(data.path)
-                              : FileImage(File(data.path))),
-                          alignment: Alignment.center,
-                          fit: BoxFit.cover,
-                          width: 207,
-                          height: 330,
-                        ).popupMenuItem(
-                          value: value,
-                          padding: EdgeInsets.symmetric(horizontal: 8),
+          return ThemeBuilder(
+            (context) => GetScaffold(
+              title: "Get Smart Home",
+              progressBar: LinearProgress.standard(
+                color: Colors.blue,
+                visible: model.isBusy,
+              ),
+              child: SwipeRefresh(
+                onRefresh: model.refreshData,
+                child: ListView.separated(
+                  itemCount: dataSet.length,
+                  separatorBuilder: (_, __) => GetTileSeparator(),
+                  itemBuilder: (_, index) {
+                    final data = dataSet[index];
+                    return GetTile.simple(
+                      leading: Text(data.id),
+                      title: data.description,
+                      color: data.color,
+                      accessory: data.attachment?.mapIt(
+                        (icon) => PopupMenu<GetFile>(
+                          cornerRadius: 0,
+                          elevation: 0,
+                          backgroundColor: Colors.transparent,
+                          items: [data.file!],
+                          childBuilder: (onPopup) => GetButton.icon(
+                            child: Icon(icon),
+                            onPressed: data.file?.isVideo == true
+                                ? () => null
+                                : onPopup,
+                          ),
+                          itemBuilder: (value, data) => Image(
+                            image: $cast(Get.isWeb
+                                ? NetworkImage(data.path)
+                                : FileImage(File(data.path))),
+                            alignment: Alignment.center,
+                            fit: BoxFit.cover,
+                            width: 207,
+                            height: 330,
+                          ).popupMenuItem(
+                            value: value,
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                          ),
                         ),
                       ),
-                    ),
-                    tintAccessory: true,
-                    padAccessory: true,
-                    onTap: () => Get.to(
-                      () => const CameraPage(),
-                    )?.then((file) {
-                      data.file = file;
-                      model.update();
-                    }),
-                  );
-                },
+                      tintAccessory: true,
+                      padAccessory: true,
+                      onTap: () => Get.to(
+                        () => const CameraPage(),
+                      )?.then((file) {
+                        data.file = file;
+                        model.update();
+                      }),
+                    );
+                  },
+                ),
               ),
             ),
+            theme: GetTheme.sky(context),
           );
         },
       );

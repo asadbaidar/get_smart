@@ -17,114 +17,118 @@ class CameraPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetBuilder<CameraModel>(
         init: CameraModel(),
-        builder: (model) => GetScaffold(
-          title: "Capture Media",
-          backgroundColor: Colors.black,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          appBarRightItems: [
-            if (model.file == null)
-              GetButton.primaryIcon(
-                child: Icon(model.flashIcon),
-                label: model.flashLabel,
-                onPressed: model.switchFlash,
-              ),
-            if (model.file == null && !model.isRecordingVideo)
-              GetButton.primaryIcon(
-                child: Icon(model.modeIcon),
-                label: model.modeLabel,
-                onPressed: model.switchMode,
-              ),
-            SizedBox(width: 8),
-          ],
-          floatingActionButton: model.file != null
-              ? null
-              : FloatingActionButton(
-                  backgroundColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  child: captureShape(),
-                  onPressed: model.capture,
+        builder: (model) => ThemeBuilder(
+          (context) => GetScaffold(
+            title: "Capture Media",
+            backgroundColor: Colors.black,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            appBarRightItems: [
+              if (model.file == null)
+                GetButton.primaryIcon(
+                  child: Icon(model.flashIcon),
+                  label: model.flashLabel,
+                  onPressed: model.switchFlash,
                 ),
-          bottomBar: model.file == null
-              ? (!model.hasActionError
-                  ? null
-                  : ProgressSnackBar(
-                      status: model.actionStatus,
-                      error: model.actionError,
-                      onCancel: model.cancelAction,
-                      action: GetText.ok(),
-                      isDismissible: true,
-                    ))
-              : Row(children: [
-                  FloatingActionButton(
-                    backgroundColor: Colors.red,
-                    child: Icon(CupertinoIcons.clear),
-                    onPressed: model.cancelAction,
-                    mini: true,
-                    heroTag: null,
-                  ).paddingAll(24),
-                  Spacer(),
-                  if (model.file?.isVideo == true)
+              if (model.file == null && !model.isRecordingVideo)
+                GetButton.primaryIcon(
+                  child: Icon(model.modeIcon),
+                  label: model.modeLabel,
+                  onPressed: model.switchMode,
+                ),
+              SizedBox(width: 8),
+            ],
+            floatingActionButton: model.file != null
+                ? null
+                : FloatingActionButton(
+                    backgroundColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    child: captureShape(),
+                    onPressed: model.capture,
+                  ),
+            bottomBar: model.file == null
+                ? (!model.hasActionError
+                    ? null
+                    : ProgressSnackBar(
+                        status: model.actionStatus,
+                        error: model.actionError,
+                        onCancel: model.cancelAction,
+                        action: GetText.ok(),
+                        isDismissible: true,
+                      ))
+                : Row(children: [
                     FloatingActionButton(
-                      child: Icon(model.playIcon),
-                      onPressed: model.playVideo,
+                      backgroundColor: Colors.red,
+                      child: Icon(CupertinoIcons.clear),
+                      onPressed: model.cancelAction,
+                      mini: true,
                       heroTag: null,
-                    ).paddingAll(16),
-                  Spacer(),
-                  FloatingActionButton(
-                    backgroundColor: Colors.green,
-                    child: Icon(CupertinoIcons.check_mark),
-                    onPressed: model.acceptFile,
-                    mini: true,
-                    heroTag: null,
-                  ).paddingAll(24),
-                ]),
-          showProgress: model.isAnyBusy,
-          childrenAtFront: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Obx(() {
-                  model.observer.value;
-                  return TextBox(
-                    model.duration,
-                    color: Colors.red,
-                    filled: true,
-                    fontSize: 16,
-                    padding: 4,
-                    margin: EdgeInsets.all(16),
-                  );
-                }),
-              ],
-            ),
-          ],
-          child: model.hasError
-              ? MessageView(
-                  error: model.modelError,
-                  onAction: () => model.futureToRun(),
-                )
-              : model.isDataReady
-                  ? SizedBox.expand(
-                      child: FittedBox(
-                        fit: BoxFit.cover,
-                        child: SizedBox(
-                          width: model.cameraState?.previewSize?.height ?? 0,
-                          height: model.cameraState?.previewSize?.width ?? 0,
-                          child: AspectRatio(
-                            aspectRatio: model.videoPlayer?.value.aspectRatio ??
-                                1 / model.cameraState!.aspectRatio,
-                            child: model.file != null
-                                ? (model.file!.isImage
-                                    ? Image.file(File(model.file!.path))
-                                    : model.videoPlayer != null
-                                        ? VideoPlayer(model.videoPlayer!)
-                                        : Container(height: 0))
-                                : CameraPreview(model.camera),
+                    ).paddingAll(24),
+                    Spacer(),
+                    if (model.file?.isVideo == true)
+                      FloatingActionButton(
+                        child: Icon(model.playIcon),
+                        onPressed: model.playVideo,
+                        heroTag: null,
+                      ).paddingAll(16),
+                    Spacer(),
+                    FloatingActionButton(
+                      backgroundColor: Colors.green,
+                      child: Icon(CupertinoIcons.check_mark),
+                      onPressed: model.acceptFile,
+                      mini: true,
+                      heroTag: null,
+                    ).paddingAll(24),
+                  ]),
+            showProgress: model.isAnyBusy,
+            childrenAtFront: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Obx(() {
+                    model.observer.value;
+                    return TextBox(
+                      model.duration,
+                      color: Colors.red,
+                      filled: true,
+                      fontSize: 16,
+                      padding: 4,
+                      margin: EdgeInsets.all(16),
+                    );
+                  }),
+                ],
+              ),
+            ],
+            child: model.hasError
+                ? MessageView(
+                    error: model.modelError,
+                    onAction: () => model.futureToRun(),
+                  )
+                : model.isDataReady
+                    ? SizedBox.expand(
+                        child: FittedBox(
+                          fit: BoxFit.cover,
+                          child: SizedBox(
+                            width: model.cameraState?.previewSize?.height ?? 0,
+                            height: model.cameraState?.previewSize?.width ?? 0,
+                            child: AspectRatio(
+                              aspectRatio:
+                                  model.videoPlayer?.value.aspectRatio ??
+                                      1 / model.cameraState!.aspectRatio,
+                              child: model.file != null
+                                  ? (model.file!.isImage
+                                      ? Image.file(File(model.file!.path))
+                                      : model.videoPlayer != null
+                                          ? VideoPlayer(model.videoPlayer!)
+                                          : Container(height: 0))
+                                  : CameraPreview(model.camera),
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  : null,
+                      )
+                    : null,
+          ),
+          theme: GetTheme.red(context),
         ),
       );
 

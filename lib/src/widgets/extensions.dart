@@ -230,7 +230,8 @@ extension NumSpace on num {
 }
 
 extension GetBoxDecoration on BoxDecoration {
-  static BoxDecoration only({
+  static BoxDecoration only(
+    BuildContext context, {
     double? top,
     double? bottom,
     double? left,
@@ -239,9 +240,9 @@ extension GetBoxDecoration on BoxDecoration {
     Color? borderColor,
     double? borderRadius,
   }) {
-    var _borderColor = borderColor ?? Get.theme.hintColor.dimmed;
+    final _borderColor = borderColor ?? context.hintColor.dimmed;
     return BoxDecoration(
-      color: color ?? Get.theme.backgroundColor,
+      color: color ?? context.backgroundColor,
       borderRadius:
           borderRadius == null ? null : BorderRadius.circular(borderRadius),
       border: Border(
@@ -261,51 +262,51 @@ extension GetBoxDecoration on BoxDecoration {
     );
   }
 
-  static BoxDecoration symmetric({
+  static BoxDecoration symmetric(
+    BuildContext context, {
     double? vertical,
     double? horizontal,
     Color? color,
     Color? borderColor,
-    double? borderWidth,
     double? borderRadius,
-  }) {
-    return only(
-      top: vertical,
-      bottom: vertical,
-      left: horizontal,
-      right: horizontal,
-      color: color,
-      borderColor: borderColor,
-      borderRadius: borderRadius,
-    );
-  }
+  }) =>
+      only(
+        context,
+        top: vertical,
+        bottom: vertical,
+        left: horizontal,
+        right: horizontal,
+        color: color,
+        borderColor: borderColor,
+        borderRadius: borderRadius,
+      );
 
   static BoxDecoration all(
-    double all, {
+    BuildContext context, {
+    double? border,
     Color? color,
     Color? borderColor,
-    double? borderWidth,
     double? borderRadius,
-  }) {
-    return symmetric(
-      vertical: all,
-      horizontal: all,
-      color: color,
-      borderColor: borderColor,
-      borderRadius: borderRadius,
-    );
-  }
+  }) =>
+      symmetric(
+        context,
+        vertical: border,
+        horizontal: border,
+        color: color,
+        borderColor: borderColor,
+        borderRadius: borderRadius,
+      );
 }
 
 extension GetShimmer on Shimmer {
-  static Widget plain() => Column(children: [
+  static Widget plain() => ThemeBuilder((context) => Column(children: [
         Expanded(
           child: Container(
-            color: Get.theme.canvasColor,
+            color: context.canvasColor,
             child: Shimmer.fromColors(
               period: 900.milliseconds,
-              baseColor: Get.theme.canvasColor,
-              highlightColor: Get.theme.backgroundColor,
+              baseColor: context.canvasColor,
+              highlightColor: context.backgroundColor,
               child: Column(children: [
                 AspectRatio(
                   aspectRatio: 1,
@@ -315,18 +316,18 @@ extension GetShimmer on Shimmer {
             ),
           ),
         ),
-      ]);
+      ]));
 
-  static Widget article() => Column(children: [
+  static Widget article() => ThemeBuilder((context) => Column(children: [
         Expanded(
           child: Container(
-            color: Get.theme.canvasColor,
+            color: context.canvasColor,
             padding: EdgeInsets.all(24),
             child: SingleChildScrollView(
               physics: NeverScrollableScrollPhysics(),
               child: Shimmer.fromColors(
-                baseColor: Get.theme.highlightColor,
-                highlightColor: Get.theme.canvasColor,
+                baseColor: context.highlightColor,
+                highlightColor: context.canvasColor,
                 child: Column(children: [
                   Container(
                     color: Colors.grey,
@@ -383,7 +384,7 @@ extension GetShimmer on Shimmer {
             ),
           ),
         ),
-      ]);
+      ]));
 
   static Widget dark() => Column(children: [
         Expanded(

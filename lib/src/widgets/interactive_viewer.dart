@@ -157,7 +157,7 @@ class _GetInteractiveViewerState extends State<GetInteractiveViewer>
 
   @override
   Widget build(BuildContext context) => Container(
-        color: widget.backgroundColor ?? Get.theme.canvasColor,
+        color: widget.backgroundColor ?? context.canvasColor,
         width: placeholder?.width,
         height: placeholder?.height,
         child: placeholder == null ? buildViewer(context) : null,

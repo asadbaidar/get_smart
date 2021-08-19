@@ -35,6 +35,7 @@ class GetScaffold extends StatelessWidget {
     this.appBarRightItems,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.bottomBarAlignment,
     Key? key,
   }) : _key = key as GlobalKey<ScaffoldState>?;
 
@@ -68,9 +69,8 @@ class GetScaffold extends StatelessWidget {
   final List<Widget>? appBarRightItems;
   final FloatingActionButton? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final CrossAxisAlignment? bottomBarAlignment;
   final GlobalKey<ScaffoldState>? _key;
-
-  bool get _isInteractive => isInteractive == true;
 
   double get _progressBarHeight => progressBar?.height ?? 1;
 
@@ -81,19 +81,19 @@ class GetScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GetTheme.resetSystemChrome(context);
-    if (!_isInteractive) context.endEditing();
+    if (!isInteractive) context.endEditing();
     return Scaffold(
       key: _key,
       extendBody: extendBody,
       backgroundColor: backgroundColor,
       appBar: sliver != null
           ? null
-          : hideAbleAppBar == true
+          : hideAbleAppBar
               ? AppBar(
-                  toolbarHeight: Get.mediaQuery.viewInsets.top.abs(),
-                  elevation: hideToolbars ? context.appBarTheme.elevation : 0,
+                  toolbarHeight: context.viewInsets.top.abs(),
+                  elevation: hideToolbars ? context.appBarElevation : 0,
                 )
-              : _appBar,
+              : _appBar(context),
       bottomNavigationBar: Blur(
         blur: 6,
         child: withBottomBar != null
@@ -103,15 +103,15 @@ class GetScaffold extends StatelessWidget {
                 secondChild: _bottomAppBar,
               ),
       ),
-      body: hideAbleAppBar == true && sliver == null
+      body: hideAbleAppBar && sliver == null
           ? Column(
               children: [
-                _hideAbleAppBar,
-                Expanded(child: _body),
+                _hideAbleAppBar(context),
+                Expanded(child: _body(context)),
               ],
             )
-          : _body,
-      floatingActionButton: _isInteractive ? floatingActionButton : null,
+          : _body(context),
+      floatingActionButton: isInteractive ? floatingActionButton : null,
       floatingActionButtonLocation: floatingActionButtonLocation ??
           (subtitle?.notBlank == null
               ? FloatingActionButtonLocation.endFloat
@@ -127,30 +127,28 @@ class GetScaffold extends StatelessWidget {
         children: [Responsive(children: children ?? [])],
       );
 
-  Widget get _body => Stack(children: [
-        sliver ?? (showScrollbar == true ? Scrollbar(child: _child) : _child),
-        if (!_isInteractive) Clickable(),
+  Widget _body(BuildContext context) => Stack(children: [
+        sliver ?? (showScrollbar ? Scrollbar(child: _child) : _child),
+        if (!isInteractive) Clickable(),
         GetAppLifecycle(
-          onDetached: Get.context!.endEditing,
-          onResume: () => GetTheme.resetSystemChrome(Get.context),
+          onDetached: Get.context?.endEditing,
+          onResume: () => GetTheme.resetSystemChrome(context),
         ),
         ...childrenAtFront ?? [],
       ]);
 
-  Widget get _hideAbleAppBar => CrossFade(
+  Widget _hideAbleAppBar(BuildContext context) => CrossFade(
         showFirst: hideToolbars,
         secondChild: SizedBox(
           height: kToolbarHeight + _appBarExtensionSize,
-          child: _appBar,
+          child: _appBar(context),
         ),
       );
 
-  AppBar get _appBar => AppBar(
-        centerTitle: _centerTitle,
+  AppBar _appBar(BuildContext context) => AppBar(
+        centerTitle: _centerTitle(context),
         automaticallyImplyLeading: false,
-        leading: hideAppBarLeading == true
-            ? null
-            : appBarLeading ?? GetButton.back(),
+        leading: hideAppBarLeading ? null : appBarLeading ?? GetButton.back(),
         leadingWidth: 46,
         title: customTitle ??
             (title != null ? Text(title!) : Container(height: 0)),
@@ -164,18 +162,29 @@ class GetScaffold extends StatelessWidget {
           ),
           preferredSize: Size.fromHeight(_appBarExtensionSize),
         ),
-        actions: _isInteractive ? appBarRightItems : null,
+        actions: isInteractive ? appBarRightItems : null,
       );
 
+  bool? _centerTitle(BuildContext context) {
+    if (centerTitle != null) return centerTitle;
+    if (context.appBarTheme.centerTitle != null)
+      return context.appBarTheme.centerTitle;
+    switch (Get.platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return appBarRightItems == null || appBarRightItems!.length < 2;
+      default:
+        return false;
+    }
+  }
+
   Widget get _bottomAppBar {
-    List<Widget> _bottomBarLeft =
-        _isInteractive ? bottomBarLeftItems ?? [] : [];
+    List<Widget> _bottomBarLeft = isInteractive ? bottomBarLeftItems ?? [] : [];
     List<Widget> _bottomBarRight =
-        _isInteractive ? bottomBarRightItems ?? [] : [];
+        isInteractive ? bottomBarRightItems ?? [] : [];
     List<Widget> _bottomBarCenter =
-        _isInteractive ? bottomBarCenterItems ?? [] : [];
-    List<Widget>? _bottomBarChildren =
-        _isInteractive ? bottomBarChildren : null;
+        isInteractive ? bottomBarCenterItems ?? [] : [];
+    List<Widget>? _bottomBarChildren = isInteractive ? bottomBarChildren : null;
     return subtitle?.notBlank == null &&
             _bottomBarLeft.isEmpty &&
             _bottomBarRight.isEmpty &&
@@ -184,9 +193,10 @@ class GetScaffold extends StatelessWidget {
         ? Container(height: 0)
         : BottomBar(
             visible: !hideToolbars,
-            crossAxisAlignment: subtitle?.notBlank == null
-                ? CrossAxisAlignment.end
-                : CrossAxisAlignment.center,
+            alignment: bottomBarAlignment ??
+                (subtitle?.notBlank == null
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.center),
             top: withBottomBar,
             children: _bottomBarChildren,
             left: _bottomBarLeft,
@@ -206,18 +216,6 @@ class GetScaffold extends StatelessWidget {
                     )
                   ],
           );
-  }
-
-  bool? get _centerTitle {
-    if (centerTitle != null) return centerTitle;
-    if (Get.appBarTheme.centerTitle != null) return Get.appBarTheme.centerTitle;
-    switch (Get.platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return appBarRightItems == null || appBarRightItems!.length < 2;
-      default:
-        return false;
-    }
   }
 
   static GlobalKey<ScaffoldState> get newKey => GlobalKey<ScaffoldState>();

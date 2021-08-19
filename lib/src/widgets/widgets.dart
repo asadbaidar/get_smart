@@ -244,34 +244,38 @@ class MessageView extends StatelessWidget {
     this.onAction,
     this.message,
     this.emptyTitle,
+    this.emptyMessage,
     this.error,
   });
 
   final Widget? icon;
   final Widget? errorIcon;
   final String? action;
-  final void Function()? onAction;
+  final VoidCallback? onAction;
   final String? message;
   final String? emptyTitle;
+  final String? emptyMessage;
   final error;
 
   @override
   Widget build(BuildContext context) {
-    final icon = error != null
+    final _icon = error != null
         ? (errorIcon ?? Icon(Icons.cloud_off))
-        : emptyTitle != null
-            ? (this.icon ?? Icon(CupertinoIcons.square_stack_3d_up_slash))
-            : this.icon;
-    final message = error != null
+        : emptyTitle != null || emptyMessage != null
+            ? (icon ?? Icon(CupertinoIcons.square_stack_3d_up_slash))
+            : icon;
+    final _message = error != null
         ? error.toString()
         : emptyTitle != null
             ? "Nothing in $emptyTitle"
-            : this.message;
-    final action = error != null
+            : emptyMessage != null
+                ? emptyMessage
+                : message;
+    final _action = error != null
         ? GetText.retry()
-        : emptyTitle != null
+        : emptyTitle != null || emptyMessage != null
             ? GetText.refresh()
-            : this.action;
+            : action;
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.only(
@@ -283,24 +287,24 @@ class MessageView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (icon != null)
+          if (_icon != null)
             IconTheme(
-              data: Get.theme.iconTheme.copyWith(size: 72),
-              child: icon,
+              data: context.iconTheme.copyWith(size: 72),
+              child: _icon,
             ),
           SizedBox(height: 16),
-          if (message != null)
+          if (_message != null)
             Flexible(
               child: Text(
-                message.toString().trim(),
+                _message.toString().trim(),
                 textAlign: TextAlign.center,
-                style: Get.textTheme.subtitle1!.apply(fontSizeDelta: 1),
+                style: context.subtitle1?.apply(fontSizeDelta: 1),
               ),
             ),
           SizedBox(height: 16),
-          if (action != null)
+          if (_action != null)
             GetButton.outlined(
-              child: Text(action),
+              child: Text(_action),
               onPressed: onAction,
             ),
         ],
@@ -416,7 +420,7 @@ class TextBox extends StatelessWidget {
     this.color,
     this.fillColor,
     this.borderColor,
-    this.borderWidth,
+    this.borderWidth = 1,
     this.borderRadius = 5,
     this.filled = false,
     this.primary = false,
@@ -434,7 +438,7 @@ class TextBox extends StatelessWidget {
     this.color,
     this.fillColor,
     this.borderColor,
-    this.borderWidth,
+    this.borderWidth = 1,
     this.borderRadius = 5,
     this.filled = false,
     this.primary = true,
@@ -452,7 +456,7 @@ class TextBox extends StatelessWidget {
     this.color,
     this.fillColor,
     this.borderColor,
-    this.borderWidth,
+    this.borderWidth = 1,
     this.borderRadius = 5,
     this.filled = false,
     this.primary = false,
@@ -470,7 +474,7 @@ class TextBox extends StatelessWidget {
     this.color,
     this.fillColor,
     this.borderColor,
-    this.borderWidth,
+    this.borderWidth = 1,
     this.borderRadius = 5,
     this.filled = true,
     this.primary = false,
@@ -488,7 +492,7 @@ class TextBox extends StatelessWidget {
     this.color,
     this.fillColor,
     this.borderColor,
-    this.borderWidth,
+    this.borderWidth = 1,
     this.borderRadius = 20,
     this.filled = false,
     this.primary = false,
@@ -506,7 +510,7 @@ class TextBox extends StatelessWidget {
     this.color,
     this.fillColor,
     this.borderColor,
-    this.borderWidth,
+    this.borderWidth = 1,
     this.borderRadius = 20,
     this.filled = false,
     this.primary = false,
@@ -523,7 +527,7 @@ class TextBox extends StatelessWidget {
   final Color? color;
   final Color? fillColor;
   final Color? borderColor;
-  final double? borderWidth;
+  final double borderWidth;
   final double? borderRadius;
   final bool filled;
   final bool primary;
@@ -539,9 +543,9 @@ class TextBox extends StatelessWidget {
   Widget build(BuildContext context) {
     Color _color = (color ??
             (primary
-                ? context.primaryTextTheme.bodyText1?.color ??
-                    context.theme.primaryColor.contrast
-                : context.theme.accentColor))
+                ? context.primaryBodyText1?.color ??
+                    context.primaryColor.contrast
+                : context.secondaryColor))
         .applyIf(subbed, (it) => it.subbed)!;
 
     Color _fillColor = (fillColor ?? (filled ? _color : null))
@@ -578,10 +582,10 @@ class TextBox extends StatelessWidget {
                   ),
                 ),
                 decoration: GetBoxDecoration.all(
-                  1,
+                  context,
+                  border: borderWidth,
                   color: _fillColor,
                   borderColor: _borderColor,
-                  borderWidth: borderWidth,
                   borderRadius: borderRadius,
                 ),
               ),
@@ -658,19 +662,29 @@ class Space extends StatelessWidget {
 }
 
 /// A stateless utility widget whose [build] method uses its
-/// [builder] callback to create the widget's child.
-class GetBuild extends StatelessWidget {
+/// [builder] callback to create the widget's child and apply the [theme] on
+/// descendant widgets if provided.
+class ThemeBuilder extends StatelessWidget {
   /// Creates a widget that delegates its build to a callback.
-  const GetBuild(
+  const ThemeBuilder(
     this.builder, {
+    this.theme,
     Key? key,
   }) : super(key: key);
 
   /// Called to obtain the child widget.
   final WidgetBuilder builder;
 
+  /// Specifies the color and typography values for descendant widgets.
+  final ThemeData? theme;
+
   @override
-  Widget build(BuildContext context) => builder(context);
+  Widget build(BuildContext context) => theme != null
+      ? AnimatedTheme(
+          data: theme!,
+          child: Builder(builder: builder),
+        )
+      : builder(context);
 }
 
 class GetSearchDelegate extends SearchDelegate {
@@ -690,7 +704,7 @@ class GetSearchDelegate extends SearchDelegate {
         brightness: Brightness.dark,
       ).copyWith(
         appBarTheme: context.appBarTheme,
-        scaffoldBackgroundColor: context.theme.scaffoldBackgroundColor,
+        scaffoldBackgroundColor: context.scaffoldBackgroundColor,
         inputDecorationTheme: InputDecorationTheme(
           border: InputBorder.none,
         ),
@@ -706,10 +720,10 @@ class GetSearchDelegate extends SearchDelegate {
       ];
 
   @override
-  Widget buildResults(BuildContext context) => Theme(
-        data: context.theme,
-        child:
+  Widget buildResults(BuildContext context) => ThemeBuilder(
+        (context) =>
             query.trim().isEmpty ? Container(height: 0) : getResults(context),
+        theme: context.theme,
       );
 
   void clear() => query = "";
@@ -748,7 +762,7 @@ class ProgressButton extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 16),
                   child: Text(
                     GetText.busy(),
-                    style: TextStyle(color: Theme.of(context).accentColor),
+                    style: TextStyle(color: context.secondaryColor),
                   ),
                 ),
               )

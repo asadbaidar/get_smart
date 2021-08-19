@@ -939,12 +939,10 @@ class GetTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final _tintAble = destructive == true ? true : (tintAble ?? false);
     final tintColor =
-        destructive == true ? Colors.red : color ?? context.theme.accentColor;
+        destructive == true ? Colors.red : color ?? context.secondaryColor;
     final _trailingColor = _tintAble
         ? tintColor
-        : trailingColor ??
-            context.theme.iconTheme.color ??
-            context.theme.accentColor;
+        : trailingColor ?? context.iconColor ?? context.secondaryColor;
     final isTrailingTop =
         trailingTop?.notEmpty != null || trailingTopChild != null;
     final isTrailingBottom =
@@ -963,10 +961,10 @@ class GetTile extends StatelessWidget {
     final _trailingPadding =
         trailingPadding?.mapIt((it) => EdgeInsets.only(left: it)) ??
             kTileRowTrailingPadding;
-    final _titleStyle = (titleStyle ?? context.textTheme.bodyText2)
+    final _titleStyle = (titleStyle ?? context.bodyText2)
         ?.applyIf(isTitleBold, (TextStyle it) => it.bold);
     final _titleColor = _tintAble ? tintColor : null;
-    final _subtitleStyle = subtitleStyle ?? context.textTheme.bodyText2;
+    final _subtitleStyle = subtitleStyle ?? context.bodyText2;
     final _subtitleColor = _tintAble ? tintColor : _subtitleStyle?.color;
     final _leftPadding = horizontalPadding ?? leftPadding ?? kStandardPaddingX;
     final _rightPadding =
@@ -992,7 +990,7 @@ class GetTile extends StatelessWidget {
       splashColor: tintColor.lighted,
       onTap: enabled ? onTap : null,
       child: Ink(
-        color: background ?? context.theme.backgroundColor,
+        color: background ?? context.backgroundColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1068,7 +1066,7 @@ class GetTile extends StatelessWidget {
               onTapLeading: onTapLeading,
               trailingSize: accessorySize,
               trailingColor:
-                  tintAccessory == true ? tintColor : context.theme.hintColor,
+                  tintAccessory == true ? tintColor : context.hintColor,
               trailingStyle: trailingStyle,
               trailingPadding: _trailingPadding,
               trailing: _showAccessory || isTrailingTop || isTrailingBottom
@@ -1093,8 +1091,7 @@ class GetTile extends StatelessWidget {
                                         )) ??
                                     Text(
                                       trailingTop!,
-                                      style: trailingStyle ??
-                                          Get.textTheme.caption,
+                                      style: trailingStyle ?? context.caption,
                                     ),
                               if (isTrailingTop && isTrailingBottom)
                                 SizedBox(height: 1.5),
@@ -1108,8 +1105,7 @@ class GetTile extends StatelessWidget {
                                         )) ??
                                     Text(
                                       trailingBottom!,
-                                      style: trailingStyle ??
-                                          Get.textTheme.caption,
+                                      style: trailingStyle ?? context.caption,
                                     ),
                             ],
                           ),
@@ -1124,7 +1120,7 @@ class GetTile extends StatelessWidget {
                               data: IconThemeData(
                                 color: tintAccessory == true
                                     ? tintColor
-                                    : context.theme.hintColor,
+                                    : context.hintColor,
                                 size: isDetailed ? 14 : accessorySize,
                               ),
                               child: _accessory!,
@@ -1655,17 +1651,16 @@ class GetTileRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _text = (text ?? hint)?.applyIf(allCaps, (String it) => it.uppercase);
-    final _color =
-        context.theme.primaryIconTheme.color ?? context.theme.accentColor;
+    final _color = context.primaryIconColor ?? context.secondaryColor;
     final _tintColor = destructive == true ? Colors.red : color ?? _color;
     final _tintAble = destructive == true || tintAble;
     final _trailingColor = trailingColor ??
         (isDetailed
-            ? context.theme.hintColor
+            ? context.hintColor
             : _tintAble
                 ? _tintColor
                 : _color);
-    final _textStyle = textStyle ?? context.textTheme.caption;
+    final _textStyle = textStyle ?? context.caption;
     final _constrained = alignment == CrossAxisAlignment.start ||
         alignment == CrossAxisAlignment.end;
     final _trailing = trailing ??
@@ -1679,7 +1674,7 @@ class GetTileRow extends StatelessWidget {
             onTap: enabled ? onTap : null,
             child: Ink(
               color: background ??
-                  (themed == true ? context.theme.backgroundColor : null),
+                  (themed == true ? context.backgroundColor : null),
               padding: padding ??
                   EdgeInsets.only(
                     left: horizontalPadding ?? leftPadding ?? kStandardPaddingX,
@@ -1725,9 +1720,7 @@ class GetTileRow extends StatelessWidget {
                             text: TextSpan(
                               text: _text,
                               style: _textStyle?.copyWith(
-                                color: text == null
-                                    ? context.theme.hintColor
-                                    : null,
+                                color: text == null ? context.hintColor : null,
                                 fontSize: fontSize,
                               ),
                               children: children
@@ -1775,8 +1768,7 @@ class GetTileRow extends StatelessWidget {
                           ),
                           child: trailingText?.notEmpty?.mapIt((t) => Text(
                                     t,
-                                    style: trailingStyle ??
-                                        context.textTheme.caption,
+                                    style: trailingStyle ?? context.caption,
                                   )) ??
                               _trailing,
                         ),
@@ -1826,7 +1818,7 @@ class GetTileSeparator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Ink(
-        color: Get.theme.backgroundColor,
+        color: context.backgroundColor,
         child: GetLineSeparator(
           margin: margin,
           style: style,
@@ -1866,7 +1858,7 @@ class GetLineSeparator extends StatelessWidget {
                       ? kStandardPaddingX
                       : kStandardPaddingX.twice + BoxedView.kBoxSize),
         ),
-        color: Get.theme.hintColor.lighted,
+        color: context.hintColor.lighted,
         height: 0.5,
       );
 }

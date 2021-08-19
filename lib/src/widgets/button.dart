@@ -686,69 +686,69 @@ abstract class GetButton {
     TextStyle? labelStyle,
     bool? enableFeedback = true,
     BoxConstraints? constraints,
-  }) {
-    var labeled = label != null;
-    var labeledOrMini = labeled || mini == true;
-    var _color = primary == true
-        ? Get.theme.primaryIconTheme.color
-        : Get.theme.iconTheme.color;
-    return IconButton(
-      key: key,
-      iconSize: iconSize ??
-          (labeledOrMini
-              ? 20.0
-              : primary == true
-                  ? Get.theme.primaryIconTheme.size
-                  : Get.theme.iconTheme.size) ??
-          24.0,
-      visualDensity: visualDensity,
-      padding: padding ??
-          (labeled
-              ? EdgeInsets.symmetric(vertical: mini ? 4 : 8)
-              : const EdgeInsets.symmetric(horizontal: 8)),
-      alignment: alignment ?? Alignment.center,
-      splashRadius: splashRadius ?? (labeled ? 24 : 18),
-      icon: labeled
-          ? Column(
-              children: [
-                SizedBox(
-                  height: iconSize == null
-                      ? (mini ? 2 : 4)
-                      : ((mini ? 22 : 24) - iconSize).abs(),
-                ),
-                child!,
-                SizedBox(height: mini ? 2 : 2.5),
-                Expanded(
-                  child: Text(
-                    label!,
-                    style: labelStyle ??
-                        TextStyle(
-                          fontSize: 9,
-                          color: enabled == true
-                              ? (tintLabel == true ? _color : null)
-                              : _color?.subbed,
-                        ),
-                  ),
-                ),
-              ],
-            )
-          : (child ?? const SizedBox()),
-      color: color,
-      focusColor: focusColor,
-      hoverColor: hoverColor,
-      highlightColor: highlightColor,
-      splashColor: splashColor,
-      disabledColor: disabledColor ?? _color?.hinted,
-      onPressed: (enabled ?? true) ? onPressed : null,
-      mouseCursor: mouseCursor ?? SystemMouseCursors.click,
-      focusNode: focusNode,
-      autofocus: autofocus ?? false,
-      tooltip: tooltip,
-      enableFeedback: enableFeedback ?? true,
-      constraints: constraints ??
-          (labeled ? BoxConstraints.expand(width: 40) : BoxConstraints()),
-    );
-  }
+  }) =>
+      ThemeBuilder((context) {
+        var labeled = label != null;
+        var labeledOrMini = labeled || mini == true;
+        var _color =
+            primary == true ? context.primaryIconColor : context.iconColor;
+        return IconButton(
+          key: key,
+          iconSize: iconSize ??
+              (labeledOrMini
+                  ? 20.0
+                  : primary == true
+                      ? context.primaryIconTheme.size
+                      : context.iconTheme.size) ??
+              24.0,
+          visualDensity: visualDensity,
+          padding: padding ??
+              (labeled
+                  ? EdgeInsets.symmetric(vertical: mini ? 4 : 8)
+                  : const EdgeInsets.symmetric(horizontal: 8)),
+          alignment: alignment ?? Alignment.center,
+          splashRadius: splashRadius ?? (labeled ? 24 : 18),
+          icon: labeled
+              ? Column(
+                  children: [
+                    SizedBox(
+                      height: iconSize == null
+                          ? (mini ? 2 : 4)
+                          : ((mini ? 22 : 24) - iconSize).abs(),
+                    ),
+                    child!,
+                    SizedBox(height: mini ? 2 : 2.5),
+                    Expanded(
+                      child: Text(
+                        label!,
+                        style: labelStyle ??
+                            TextStyle(
+                              fontSize: 9,
+                              color: enabled == true
+                                  ? (tintLabel == true ? _color : null)
+                                  : _color?.subbed,
+                            ),
+                      ),
+                    ),
+                  ],
+                )
+              : (child ?? const SizedBox()),
+          color: color,
+          focusColor: focusColor,
+          hoverColor: hoverColor,
+          highlightColor: highlightColor,
+          splashColor: splashColor,
+          disabledColor: disabledColor ?? _color?.hinted,
+          onPressed: (enabled ?? true) ? onPressed : null,
+          mouseCursor: mouseCursor ?? SystemMouseCursors.click,
+          focusNode: focusNode,
+          autofocus: autofocus ?? false,
+          tooltip: tooltip,
+          enableFeedback: enableFeedback ?? true,
+          constraints: constraints ??
+              (labeled ? BoxConstraints.expand(width: 40) : BoxConstraints()),
+        );
+      });
 
   /// Create a primary icon button.
   static Widget primaryIcon({
@@ -778,7 +778,7 @@ abstract class GetButton {
     bool enableFeedback = true,
     BoxConstraints? constraints,
   }) =>
-      GetButton.icon(
+      icon(
         key: key,
         iconSize: iconSize,
         visualDensity: visualDensity,
@@ -835,7 +835,7 @@ abstract class GetButton {
     bool enableFeedback = true,
     BoxConstraints? constraints,
   }) =>
-      GetButton.icon(
+      icon(
         key: key,
         iconSize: iconSize,
         visualDensity: visualDensity,
@@ -893,7 +893,7 @@ abstract class GetButton {
     bool enableFeedback = true,
     BoxConstraints? constraints,
   }) =>
-      GetButton.icon(
+      icon(
         key: key,
         iconSize: iconSize,
         visualDensity: visualDensity,
@@ -926,7 +926,7 @@ abstract class GetButton {
     Color? color,
     VoidCallback? onPressed,
   }) =>
-      GetBuild(
+      ThemeBuilder(
         (context) => CupertinoButton(
           child: Icon(
             Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
@@ -949,32 +949,34 @@ abstract class GetButton {
       top: 6,
       left: 6,
     ),
-  }) {
-    var _color = color ?? Get.iconColor ?? Get.theme.accentColor;
-    return Container(
-      width: 20,
-      height: 20,
-      margin: margin,
-      padding: EdgeInsets.only(top: icon != null ? 2.2 : 3),
-      alignment: Alignment.topCenter,
-      decoration: BoxDecoration(
-        border: Border.all(color: _color),
-        borderRadius: BorderRadius.only(
-          topRight: 6.radius,
-          topLeft: 6.radius,
-          bottomLeft: 6.radius,
-          bottomRight: 12.radius,
-        ),
-      ),
-      child: icon != null
-          ? Icon(icon, color: _color, size: 13)
-          : Text(
-              text?.take(3).uppercase ?? "",
-              style: GoogleFonts.ubuntuCondensed(
-                fontSize: 8,
-                color: _color,
-              ),
+  }) =>
+      ThemeBuilder((context) {
+        final _color =
+            color ?? context.primaryIconColor ?? context.secondaryColor;
+        return Container(
+          width: 20,
+          height: 20,
+          margin: margin,
+          padding: EdgeInsets.only(top: icon != null ? 2.2 : 3),
+          alignment: Alignment.topCenter,
+          decoration: BoxDecoration(
+            border: Border.all(color: _color),
+            borderRadius: BorderRadius.only(
+              topRight: 6.radius,
+              topLeft: 6.radius,
+              bottomLeft: 6.radius,
+              bottomRight: 12.radius,
             ),
-    ).clickable(onTap: onPressed).tooltip(tooltip);
-  }
+          ),
+          child: icon != null
+              ? Icon(icon, color: _color, size: 13)
+              : Text(
+                  text?.take(3).uppercase ?? "",
+                  style: GoogleFonts.ubuntuCondensed(
+                    fontSize: 8,
+                    color: _color,
+                  ),
+                ),
+        ).clickable(onTap: onPressed).tooltip(tooltip);
+      });
 }

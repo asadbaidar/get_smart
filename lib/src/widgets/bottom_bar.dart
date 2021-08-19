@@ -10,7 +10,7 @@ class BottomBar extends StatelessWidget {
     this.center,
     this.children,
     this.top,
-    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.visible = true,
     Key? key,
   }) : super(key: key);
@@ -20,7 +20,7 @@ class BottomBar extends StatelessWidget {
   final List<Widget>? center;
   final List<Widget>? children;
   final Widget? top;
-  final CrossAxisAlignment crossAxisAlignment;
+  final CrossAxisAlignment alignment;
   final bool visible;
 
   @override
@@ -38,7 +38,7 @@ class BottomBar extends StatelessWidget {
             elevation: top == null ? null : 0,
             child: SafeArea(
               minimum: EdgeInsets.only(
-                bottom: context.mediaQuery.viewInsets.bottom,
+                bottom: context.viewInsets.bottom,
               ),
               left: false,
               right: false,
@@ -49,7 +49,7 @@ class BottomBar extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: crossAxisAlignment,
+                  crossAxisAlignment: alignment,
                   children: [
                     SizedBox(width: 2),
                     ...children ??

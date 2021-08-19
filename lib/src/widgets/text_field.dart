@@ -261,9 +261,9 @@ class GetTextField extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 6),
                 child: IconTheme(
-                  data: context.theme.iconTheme.copyWith(
+                  data: context.iconTheme.copyWith(
                     size: 16,
-                    color: context.theme.hintColor,
+                    color: context.hintColor,
                   ),
                   child: hintIcon!,
                 ),
