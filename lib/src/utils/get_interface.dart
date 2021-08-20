@@ -20,6 +20,12 @@ extension GetInterfaceX on GetInterface {
 
   bool get isWeb => kIsWeb;
 
+  /// similar to [MediaQuery.of(context).viewPadding]
+  EdgeInsets get viewPadding => mediaQuery.viewPadding;
+
+  /// similar to [MediaQuery.of(context).viewInsets]
+  EdgeInsets get viewInsets => mediaQuery.viewInsets;
+
   bool get canPop => Navigator.canPop(context!);
 
   Future<void> systemPop({bool animated = true}) =>

@@ -202,7 +202,7 @@ abstract class GetWebAPI {
           var parcel = GetRequestParcel<T, GetResult<T>>(
             id: id,
             address: await address,
-            path: path.pre(this.path?.post("/")),
+            path: path.pre(this.path, between: "/"),
             method: method,
             result: GetResult<T>(),
             builder: as,
