@@ -367,6 +367,7 @@ class SwipeRefresh extends StatelessWidget {
 class CrossFade extends AnimatedCrossFade {
   CrossFade({
     bool? showFirst,
+    Duration? duration,
     Widget? firstChild,
     Widget? secondChild,
     Key? key,
@@ -375,7 +376,7 @@ class CrossFade extends AnimatedCrossFade {
           alignment: showFirst ?? firstChild != null
               ? Alignment.topCenter
               : Alignment.bottomCenter,
-          duration: 200.milliseconds,
+          duration: duration ?? 200.milliseconds,
           secondCurve: Curves.fastLinearToSlowEaseIn,
           crossFadeState: showFirst ?? firstChild != null
               ? CrossFadeState.showFirst
