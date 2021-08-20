@@ -979,4 +979,21 @@ abstract class GetButton {
                 ),
         ).clickable(onTap: onPressed).tooltip(tooltip);
       });
+
+  static Widget stickerZero({
+    Color? color,
+    VoidCallback? onPressed,
+    String? tooltip,
+    String? text,
+    IconData? icon,
+    EdgeInsets margin = EdgeInsets.zero,
+  }) =>
+      sticker(
+        color: color,
+        onPressed: onPressed,
+        tooltip: tooltip,
+        text: text,
+        icon: icon,
+        margin: margin,
+      );
 }

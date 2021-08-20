@@ -49,8 +49,8 @@ extension Num on num {
     String? all,
     String? allReplace,
   }) =>
-      toInt().mapIt(
-        (it) => it == 0
+      toInt().mapTo(
+        (int it) => it == 0
             ? allReplace ??
                 zeroReplace ??
                 (zero ?? other ?? all)?.pre(formatted, between: " ") ??

@@ -14,7 +14,8 @@ extension StringX on String {
       applyFor(
         doIf == true && pre != null ? doFor : 0,
         (s) => pre! + between + s!,
-      )!;
+      ) ??
+      this;
 
   String post(
     String? post, {
@@ -25,7 +26,8 @@ extension StringX on String {
       applyFor(
         doIf == true && post != null ? doFor : 0,
         (s) => s! + between + post!,
-      )!;
+      ) ??
+      this;
 
   String surround(
     String? surround, {
@@ -44,7 +46,8 @@ extension StringX on String {
               surround,
               between: between,
             ),
-      )!;
+      ) ??
+      this;
 
   String take([int count = 1]) => characters.take(count).toString();
 

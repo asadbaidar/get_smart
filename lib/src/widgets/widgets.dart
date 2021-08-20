@@ -387,15 +387,15 @@ class CrossFade extends AnimatedCrossFade {
 
 class Clickable extends MouseRegion {
   Clickable({
-    bool enable = true,
+    bool enabled = true,
     VoidCallback? onTap,
     Widget? child,
   }) : super(
-          cursor: enable == true && onTap != null
+          cursor: enabled && onTap != null
               ? MaterialStateMouseCursor.clickable
               : SystemMouseCursors.basic,
           child: GestureDetector(
-            onTap: enable == true ? onTap : null,
+            onTap: enabled ? onTap : null,
             child: child ?? Container(),
           ),
         );
@@ -403,11 +403,11 @@ class Clickable extends MouseRegion {
 
 extension ClickableX on Widget {
   Widget clickable({
-    bool enable = true,
+    bool enabled = true,
     VoidCallback? onTap,
   }) =>
       Clickable(
-        enable: enable,
+        enabled: enabled,
         onTap: onTap,
         child: this,
       );

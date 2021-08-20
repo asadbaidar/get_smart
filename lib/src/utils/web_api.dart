@@ -340,7 +340,7 @@ class GetRequestParcel<T, R> {
         "authToken": authToken,
         "files": files,
         "parameters": parameters,
-        "builder": builder?.toString(),
+        "builder": builder?.typeName,
         "result": result.toString(),
       }.toString();
 }
@@ -377,12 +377,12 @@ class GetIsolate {
     final _completer = completer[parcel.key] = Completer<R>();
     sendPort?.send(parcel);
     return _completer.future.then((result) {
-      print("RequestParcel $result");
+      print("RequestParcel: ${result?.typeName}");
       completer.remove(parcel.key);
       return result;
     }).catchError((e) {
       completer.remove(parcel.key);
-      print(e);
+      print("RequestError: $e");
       return GetResult<T>.error(e.toString()) as R;
     });
   }
@@ -396,7 +396,7 @@ class GetIsolate {
         final isolatePort = data.sendPort;
         _completer.complete(isolatePort);
       } else if (data is GetRequestParcel) {
-        print("[MainPort] request: $data");
+        print("[MainPort] request: ${data.typeName}");
         completer[data.key]?.complete(data.result);
       }
     } catch (e) {
@@ -408,7 +408,7 @@ class GetIsolate {
 
   static Future<void> onIsolate(data, sendPort) async {
     try {
-      print("[IsolatePort] $data");
+      print("[IsolatePort] $sendPort: $data");
       if (data is GetRequestParcel) {
         sendPort?.send(
           data..result = await GetWebAPI._parcelRequest(data),
