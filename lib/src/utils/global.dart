@@ -122,7 +122,7 @@ extension ObjectX on Object {
   String get $hash => hashCode.toString();
 
   /// Returns random integer seeded with [hashCode] and less than [max]
-  int getRandom(int max) => Random(hashCode).nextInt(max);
+  int randomTill(int max) => Random(hashCode).nextInt(max);
 
   /// Returns only name of the enum value with capitalized form
   String get keyName => toString().split('.').last;
