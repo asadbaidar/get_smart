@@ -35,6 +35,28 @@ extension GetWidgetX on Widget {
             )
           : this;
 
+  Widget clipRect({
+    Key? key,
+    bool clip = true,
+    bool oval = false,
+    BorderRadius? borderRadius,
+    Clip clipBehavior = Clip.antiAlias,
+  }) =>
+      clip
+          ? oval
+              ? ClipOval(
+                  key: key,
+                  clipBehavior: clipBehavior,
+                  child: this,
+                )
+              : ClipRRect(
+                  key: key,
+                  borderRadius: borderRadius,
+                  clipBehavior: clipBehavior,
+                  child: this,
+                )
+          : this;
+
   Widget row({
     Key? key,
     bool enabled = true,
@@ -96,54 +118,128 @@ extension GetWidgetX on Widget {
             )
           : this;
 
-  Widget textButton({
+  Widget plainButton({
     Key? key,
     bool enabled = true,
-    EdgeInsetsGeometry? padding = EdgeInsets.zero,
+    bool primary = false,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    double? topPadding,
+    double? bottomPadding,
+    double? leftPadding,
+    double? rightPadding,
     Color? color,
     Color disabledColor = CupertinoColors.quaternarySystemFill,
     double? minSize = kMinInteractiveDimensionCupertino,
+    double? iconSize,
     double? pressedOpacity = 0.4,
     BorderRadius? borderRadius = const BorderRadius.all(Radius.circular(8.0)),
     AlignmentGeometry alignment = Alignment.center,
     VoidCallback? onPressed,
   }) =>
-      CupertinoButton(
+      GetButton.plain(
         key: key,
+        enabled: enabled,
+        primary: primary,
         padding: padding,
+        horizontalPadding: horizontalPadding,
+        verticalPadding: verticalPadding,
+        topPadding: topPadding,
+        bottomPadding: bottomPadding,
+        leftPadding: leftPadding,
+        rightPadding: rightPadding,
         color: color,
         disabledColor: disabledColor,
         minSize: minSize,
+        iconSize: iconSize,
         pressedOpacity: pressedOpacity,
         borderRadius: borderRadius,
         alignment: alignment,
-        onPressed: enabled ? onPressed : null,
+        onPressed: onPressed,
         child: this,
       );
 
-  Widget textButtonZero({
+  Widget plainButtonZero({
     Key? key,
     bool enabled = true,
-    EdgeInsetsGeometry? padding = EdgeInsets.zero,
+    bool primary = false,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    double? topPadding,
+    double? bottomPadding,
+    double? leftPadding,
+    double? rightPadding,
     Color? color,
     Color disabledColor = CupertinoColors.quaternarySystemFill,
     double? minSize = 0,
+    double? iconSize,
     double? pressedOpacity = 0.4,
     BorderRadius? borderRadius = const BorderRadius.all(Radius.circular(8.0)),
     AlignmentGeometry alignment = Alignment.center,
     VoidCallback? onPressed,
   }) =>
-      CupertinoButton(
+      plainButton(
         key: key,
+        enabled: enabled,
+        primary: primary,
         padding: padding,
+        horizontalPadding: horizontalPadding,
+        verticalPadding: verticalPadding,
+        topPadding: topPadding,
+        bottomPadding: bottomPadding,
+        leftPadding: leftPadding,
+        rightPadding: rightPadding,
         color: color,
         disabledColor: disabledColor,
         minSize: minSize,
+        iconSize: iconSize,
         pressedOpacity: pressedOpacity,
         borderRadius: borderRadius,
         alignment: alignment,
-        onPressed: enabled ? onPressed : null,
-        child: this,
+        onPressed: onPressed,
+      );
+
+  Widget plainButtonMini({
+    Key? key,
+    bool enabled = true,
+    bool primary = false,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    double? topPadding,
+    double? bottomPadding,
+    double? leftPadding = 12,
+    double? rightPadding = 12,
+    Color? color,
+    Color disabledColor = CupertinoColors.quaternarySystemFill,
+    double? minSize = 0,
+    double? iconSize = 20,
+    double? pressedOpacity = 0.4,
+    BorderRadius? borderRadius = const BorderRadius.all(Radius.circular(8.0)),
+    AlignmentGeometry alignment = Alignment.center,
+    VoidCallback? onPressed,
+  }) =>
+      plainButton(
+        key: key,
+        enabled: enabled,
+        primary: primary,
+        padding: padding,
+        horizontalPadding: horizontalPadding,
+        verticalPadding: verticalPadding,
+        topPadding: topPadding,
+        bottomPadding: bottomPadding,
+        leftPadding: leftPadding,
+        rightPadding: rightPadding,
+        color: color,
+        disabledColor: disabledColor,
+        minSize: minSize,
+        iconSize: iconSize,
+        pressedOpacity: pressedOpacity,
+        borderRadius: borderRadius,
+        alignment: alignment,
+        onPressed: onPressed,
       );
 }
 

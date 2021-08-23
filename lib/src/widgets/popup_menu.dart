@@ -146,7 +146,7 @@ class PopupMenu<T extends Object> extends StatelessWidget {
                 topPadding: data.topPadding,
                 bottomPadding: data.bottomPadding,
                 trailingPadding: data.trailingPadding,
-                fontSize: data.titleSize ?? titleSize,
+                titleSize: data.titleSize ?? titleSize,
                 accessorySize: data.accessorySize ?? accessorySize,
                 onTapLeading: data.onTapLeading,
               ).popupMenuItem(
@@ -164,7 +164,7 @@ class PopupMenu<T extends Object> extends StatelessWidget {
                 _separatorBuilder(v, d),
               ])
           .toList()
-            ..removeLast())
+        ..removeLast())
       : items.mapIndexed(_itemBuilder).toList();
 
   _onSelected(value) {

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -82,6 +84,9 @@ extension Num on num {
           : doIf == true
               ? toString().padLeft(width, withPadding)
               : toString();
+
+  /// Returns random integer less than number
+  int get random => Random().nextInt(toInt());
 }
 
 extension DurationX on Duration {

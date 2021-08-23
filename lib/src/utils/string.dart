@@ -81,9 +81,9 @@ extension StringX on String {
       s == null ? false : lowercase.contains(s.lowercase);
 
   Color get materialPrimary =>
-      Colors.primaries[random(Colors.primaries.length)];
+      Colors.primaries[getRandom(Colors.primaries.length)];
 
-  Color get materialAccent => Colors.accents[random(Colors.accents.length)];
+  Color get materialAccent => Colors.accents[getRandom(Colors.accents.length)];
 
   bool isPasswordStrong({int min = 8}) {
     if (isBlank!) return false;

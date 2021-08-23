@@ -81,31 +81,35 @@ class BoxedView extends StatelessWidget {
   final double? fontSize;
   final double? iconSize;
   final EdgeInsetsGeometry? margin;
-  final void Function()? onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final splash = filled ? color?.darker : color?.lighted;
+    final splash =
+        (filled ? color?.darker : color?.lighted) ?? Colors.black.lighted;
     return Container(
       margin: margin,
       width: _boxSize,
       alignment: Alignment.center,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: oval ? _size?.circularRadius : _size?.roundRadius,
-        highlightColor: splash?.highlighted,
-        splashColor: splash,
-        child: Ink(
-          height: _wrapSize,
-          width: _wrapSize,
-          decoration: oval
-              ? _size?.circularBox(color: color)
-              : _size?.roundBox(color: color),
-          child: Container(
-            alignment: Alignment.center,
-            child: _text() ??
-                _icon() ??
-                (_image() ?? _child())?.clipOval(clip: oval),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: oval ? _size?.circularRadius : _size?.roundRadius,
+          highlightColor: splash.highlighted,
+          splashColor: splash,
+          child: Ink(
+            height: _wrapSize,
+            width: _wrapSize,
+            decoration: oval
+                ? _size?.circularBox(color: color)
+                : _size?.roundBox(color: color),
+            child: Container(
+              alignment: Alignment.center,
+              child: _text() ??
+                  _icon() ??
+                  (_image() ?? _child())?.clipOval(clip: oval),
+            ),
           ),
         ),
       ),
