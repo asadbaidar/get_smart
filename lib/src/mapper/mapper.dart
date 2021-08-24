@@ -48,9 +48,9 @@ class Mapper {
     _builders.forEach((builder) {
       Mappable.factories.putIfAbsent(builder().runtimeType, () => builder);
     });
-    print(Mappable.factories);
+    $debugPrint(Mappable.factories);
     final object = toObject<T>(as?.runtimeType);
-    print("Mappable: ${object?.typeName}");
+    $debugPrint(object?.typeName);
     _builders.forEach((builder) {
       Mappable.factories.remove(builder().runtimeType);
     });

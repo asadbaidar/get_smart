@@ -1361,7 +1361,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kTileRowMaxLines,
     this.fontSize,
     this.leadingSize,
-    this.leadingBoxSize = BoxedView.kBoxSize,
+    this.leadingBoxSize = BoxView.kBoxSize,
     this.trailingSize = kTileRowTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
@@ -1412,7 +1412,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kTileRowMaxLines,
     this.fontSize,
     this.leadingSize,
-    this.leadingBoxSize = BoxedView.kBoxSize,
+    this.leadingBoxSize = BoxView.kBoxSize,
     this.trailingSize = kTileRowTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
@@ -1463,7 +1463,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kTileRowMaxLines,
     this.fontSize,
     this.leadingSize,
-    this.leadingBoxSize = BoxedView.kBoxSize,
+    this.leadingBoxSize = BoxView.kBoxSize,
     this.trailingSize = kTileRowTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
@@ -1514,7 +1514,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kTileRowMaxLines,
     this.fontSize,
     this.leadingSize,
-    this.leadingBoxSize = BoxedView.kBoxSize,
+    this.leadingBoxSize = BoxView.kBoxSize,
     this.trailingSize = kTileRowTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
@@ -1565,7 +1565,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kTileRowMaxLines,
     this.fontSize,
     this.leadingSize,
-    this.leadingBoxSize = BoxedView.kBoxSize,
+    this.leadingBoxSize = BoxView.kBoxSize,
     this.trailingSize = kTileRowTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
@@ -1617,7 +1617,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kTileRowMaxLines,
     this.fontSize,
     this.leadingSize,
-    this.leadingBoxSize = BoxedView.kBoxSize,
+    this.leadingBoxSize = BoxView.kBoxSize,
     this.trailingSize = kTileRowTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
@@ -1719,7 +1719,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kTileRowMaxLines,
     this.fontSize = kTileRowFontSize,
     this.leadingSize = kTileRowLeadingSize,
-    this.leadingBoxSize = BoxedView.kBoxSize,
+    this.leadingBoxSize = BoxView.kBoxSize,
     this.trailingSize = kTileRowTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
@@ -1770,7 +1770,7 @@ class GetTileRow extends StatelessWidget {
     this.maxLines = kTileRowMaxLines,
     this.fontSize,
     this.leadingSize,
-    this.leadingBoxSize = BoxedView.kBoxSize,
+    this.leadingBoxSize = BoxView.kBoxSize,
     this.trailingSize = kTileRowTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
@@ -1868,7 +1868,7 @@ class GetTileRow extends StatelessWidget {
         alignment == CrossAxisAlignment.end;
     final _trailing = trailing ??
         (isDetailed ? const Icon(CupertinoIcons.chevron_right) : null);
-    final _boxedView = $cast<BoxedView>(leading);
+    final _boxedView = $cast<BoxView>(leading);
     return _text == null && child == null && children?.isNotEmpty != true
         ? Container(height: 0, width: 0)
         : InkWell(
@@ -1898,7 +1898,7 @@ class GetTileRow extends StatelessWidget {
                             constraints: _constrained ? constraints : null,
                             alignment: Alignment.center,
                             padding: leadingMargin,
-                            child: BoxedView(
+                            child: BoxView(
                               child: _boxedView?.child ?? leading!,
                               color: _boxedView?.color ?? _tintColor,
                               filled: _boxedView?.filled ?? isLeadingFilled,
@@ -2059,7 +2059,7 @@ class GetLineSeparator extends StatelessWidget {
                   ? 0
                   : style == SeparatorStyle.notLeading
                       ? kStandardPaddingX
-                      : kStandardPaddingX.twice + BoxedView.kBoxSize),
+                      : kStandardPaddingX.twice + BoxView.kBoxSize),
         ),
         color: context.hintColor.lighted,
         height: 0.5,

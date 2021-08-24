@@ -13,9 +13,8 @@ extension StringX on String {
   }) =>
       applyFor(
         doIf == true && pre != null ? doFor : 0,
-        (s) => pre! + between + s!,
-      ) ??
-      this;
+        (s) => pre! + between + s,
+      );
 
   String post(
     String? post, {
@@ -25,9 +24,8 @@ extension StringX on String {
   }) =>
       applyFor(
         doIf == true && post != null ? doFor : 0,
-        (s) => s! + between + post!,
-      ) ??
-      this;
+        (s) => s + between + post!,
+      );
 
   String surround(
     String? surround, {
@@ -38,7 +36,7 @@ extension StringX on String {
       applyFor(
         doIf == true && surround != null ? doFor : 0,
         (s) => s
-            ?.pre(
+            .pre(
               surround,
               between: between,
             )
@@ -46,8 +44,59 @@ extension StringX on String {
               surround,
               between: between,
             ),
-      ) ??
-      this;
+      );
+
+  String takeInitialsWithoutGarbage(
+    int count, {
+    bool fill = false,
+    List<String> garbage = const ["(", ")", "-"],
+  }) =>
+      takeInitials(
+        count,
+        fill: fill,
+        withoutGarbage: true,
+        garbage: garbage,
+      );
+
+  String takeInitials(
+    int count, {
+    bool fill = false,
+    bool withoutGarbage = false,
+    List<String> garbage = const ["(", ")", "-"],
+  }) {
+    var source = replaceAll(RegExp(r"\s+"), " ").trim();
+    if (!source.isEmpty) {
+      if (withoutGarbage)
+        source = source
+            .applyForIndexed<String>(
+                garbage.length,
+                (s, i) => s.replaceAll(
+                      RegExp(r"\s*\" + garbage[i] + r"\s*",
+                          caseSensitive: false),
+                      " ",
+                    ))
+            .trim();
+      if (!source.contains(" ")) {
+        return source.take(fill ? count : 1).trim().uppercase;
+      }
+      final initials = StringBuffer("");
+      final sourceParts = source.split(" ");
+      for (int i = 0; i < sourceParts.length; i++) {
+        if (i == count) break;
+        try {
+          initials.write(sourceParts[i].trim().take());
+        } catch (e) {
+          $debugPrint(e, source);
+        }
+      }
+      final _initials = initials.toString();
+      return (fill && _initials.length < count
+              ? source.take(count).trim()
+              : _initials)
+          .uppercase;
+    }
+    return source;
+  }
 
   String take([int count = 1]) => characters.take(count).toString();
 

@@ -292,10 +292,10 @@ class GetDismissibleState extends State<GetDismissible> {
   void startTimer() {
     if (!(widget.autoDismissible && widget.autoDismiss)) return;
     if (_timer == null && widget.enabled == true && !_dismissed) {
-      print("startTimer");
+      $debugPrint("startTimer");
       _time = widget.timeout.inSeconds;
       _timer = Timer.periodic(1.seconds, (_) {
-        print("time $_time");
+        $debugPrint("time $_time");
         if (_time == 0) {
           dismiss();
         } else

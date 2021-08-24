@@ -259,7 +259,7 @@ abstract class GetWebAPI {
         ..receiveTimeout = 60000
         ..validateStatus = (status) => status == 200;
       final cancelToken = _cancelTokens[id] = CancelToken();
-      print("Request ID $id");
+      $debugLog(id, "Request ID", GetWebAPI);
       GetResponse response = await dio.request(
         path,
         queryParameters:
@@ -377,12 +377,12 @@ class GetIsolate {
     final _completer = completer[parcel.key] = Completer<R>();
     sendPort?.send(parcel);
     return _completer.future.then((result) {
-      print("RequestParcel: ${result?.typeName}");
+      $debugPrint("RequestParcel: ${result?.typeName}");
       completer.remove(parcel.key);
       return result;
     }).catchError((e) {
       completer.remove(parcel.key);
-      print("RequestError: $e");
+      $debugPrint("RequestError: $e");
       return GetResult<T>.error(e.toString()) as R;
     });
   }
@@ -392,15 +392,15 @@ class GetIsolate {
   void onMain(data, Completer _completer) {
     try {
       if (data is GetIsolateEntry) {
-        print("[MainPort] init: $data");
+        $debugPrint("init: $data", "MainPort");
         final isolatePort = data.sendPort;
         _completer.complete(isolatePort);
       } else if (data is GetRequestParcel) {
-        print("[MainPort] request: ${data.typeName}");
+        $debugPrint(data.typeName, "MainPort");
         completer[data.key]?.complete(data.result);
       }
     } catch (e) {
-      print("[MainPort] Error: $e");
+      $debugPrint("Error: $e", "MainPort");
     }
   }
 
@@ -408,7 +408,7 @@ class GetIsolate {
 
   static Future<void> onIsolate(data, sendPort) async {
     try {
-      print("[IsolatePort] $sendPort: $data");
+      $debugLog("$sendPort: $data", "IsolatePort", GetIsolate);
       if (data is GetRequestParcel) {
         sendPort?.send(
           data..result = await GetWebAPI._parcelRequest(data),
@@ -417,7 +417,7 @@ class GetIsolate {
         GetWebAPI._cancelTokens.remove(data.id)?.cancel();
       }
     } catch (e) {
-      print("[IsolatePort] Error: $e");
+      $debugLog("Error: $e", "IsolatePort", GetIsolate);
     }
   }
 

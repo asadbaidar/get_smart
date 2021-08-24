@@ -29,6 +29,19 @@ void main() {
     expect(text.post(null), "hello");
     expect(text.post("*", doIf: false), "hello");
   });
+  test('Test StringX: takeInitials', () {
+    final text1 = "Hello   World  (   Greetings )   -    Program";
+    expect(text1.takeInitials(1), "H");
+    expect(text1.takeInitials(2), "HW");
+    expect(text1.takeInitialsWithoutGarbage(3), "HWG");
+    expect(text1.takeInitials(4), "HW(G");
+    expect(text1.takeInitialsWithoutGarbage(5), "HWGP");
+    expect(text1.takeInitialsWithoutGarbage(5, fill: true), "HELLO");
+
+    final text2 = "Text 2";
+    expect(text2.takeInitials(5, fill: true), "TEXT");
+    expect(text2.takeInitials(5), "T2");
+  });
   test('Test DateFormatX:', () {
     final date = Date.from(
       day: 1,

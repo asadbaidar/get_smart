@@ -27,20 +27,20 @@ String $route(Type type) => "/" + $name(type);
 void $debugLog([
   dynamic value,
   dynamic tag,
-  String name = "",
+  Object? name = "",
 ]) {
   final _tag = tag == null ? "" : "$tag: ";
   developer.log(
     "$_tag${value ?? ""}".trim(),
     time: Date.now,
-    name: name,
+    name: name?.toString() ?? "",
   );
 }
 
 void $log([
   dynamic value,
   dynamic tag,
-  String? name,
+  Object? name,
 ]) {
   final _name = name == null ? "" : "[$name] ";
   final _tag = tag == null ? "" : "$tag: ";
@@ -80,10 +80,10 @@ Future<T> scheduleTask<T>(FutureOr<T> Function() task) async {
 
 Future<T> profileTask<T>(Future<T> Function() task) async {
   var time = Date.now.inMilliseconds;
-  print("${T.toString()}: Started task");
+  $debugLog("Started task", "profile", T.typeName);
   var result = await task();
-  print("${T.toString()}: Finished task "
-      "in ${Date.now.inMilliseconds - time}ms.");
+  $debugLog("Finished task in ${Date.now.inMilliseconds - time}ms.", "profile",
+      T.typeName);
   return result;
 }
 
@@ -109,10 +109,17 @@ extension ObjectX on Object {
   }
 
   /// Repeat the [task] with [T] as parameter for [n] times
-  T? applyFor<T>(int n, T? Function(T?) task) {
-    Object? value = this;
-    n.repeatsFor(() => value = task(value as T?));
-    return value as T?;
+  T applyFor<T>(int n, T Function(T) task) {
+    T value = this as T;
+    n.repeatsFor(() => value = task(value));
+    return value;
+  }
+
+  /// Repeat the [task] with [T] as parameter for [n] times
+  T applyForIndexed<T>(int n, T Function(T v, int i) task) {
+    T value = this as T;
+    n.repeatsForIndexed((i) => value = task(value, i));
+    return value;
   }
 
   /// Wrap the value of [T] into [Future.value]

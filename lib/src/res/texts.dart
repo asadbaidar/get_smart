@@ -47,8 +47,8 @@ Map<Locale, Map<GetText, String>> _getTextMap = {
     GetText.invalid: "Invalid %s.",
     GetText.value: "Value",
     GetText.location_denied_permanently:
-        "Location permission is denied permanently. Please turn it on from the app settings.",
-    GetText.location_denied: "Location permission is denied.",
+        "Location permission denied permanently. Please turn it on from the app settings.",
+    GetText.location_denied: "Location permission denied.",
     GetText.location_disabled: "Location services are disabled.",
     GetText.location_mocked:
         "Mock location detected. Please turn it off to continue.",

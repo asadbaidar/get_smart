@@ -213,7 +213,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   }
 
   void focusListener() {
-    print("Focus ${focusNode.hasFocus}");
+    $debugPrint(focusNode.hasFocus, "Focus");
     if (onFocusChanged != null) {
       onFocusChanged!(focusNode.hasFocus);
     }
@@ -297,7 +297,8 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   Future<void> updateOverlay(
       {String? query, bool withoutFilter = false}) async {
     if (!mounted) return;
-    print("updateOverlay NoFilter $withoutFilter Focus ${focusNode.hasFocus}");
+    $debugPrint(
+        "NoFilter $withoutFilter Focus ${focusNode.hasFocus}", "updateOverlay");
     filteredItems = withoutFilter == true
         ? items
         : await getItems(items, itemSorter, itemFilter, itemCount, query);
@@ -306,7 +307,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
       final width = textFieldSize.width;
       final height = textFieldSize.height;
       itemsOverlayEntry = OverlayEntry(builder: (context) {
-        print("OverlayEntryFocus ${focusNode.hasFocus}");
+        $debugPrint("Focus ${focusNode.hasFocus}", "OverlayEntry");
         if (!focusNode.hasFocus) clearOverlay();
         return Positioned(
           width: width,
@@ -385,7 +386,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   @override
   void deactivate() {
-    print("$runtimeType deactivate");
+    $debugPrint("deactivate");
     clearOverlay();
     super.deactivate();
   }
@@ -397,7 +398,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   @override
   void dispose() {
-    print("$runtimeType dispose");
+    $debugPrint("dispose");
     focusNode.dispose();
     controller.dispose();
     super.dispose();
@@ -427,7 +428,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
         enableSuggestions: !showAllOnFocus,
         onChanged: (v) {
           currentText = v;
-          print("onChanged");
+          $debugPrint("onChanged");
           updateOverlay(query: v);
           if (textChanged != null) textChanged!(v);
           removeError();

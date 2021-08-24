@@ -8,10 +8,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_smart/get_smart.dart';
 
-class BoxedView extends StatelessWidget {
+class BoxView extends StatelessWidget {
   static const double kBoxSize = 30;
 
-  const BoxedView({
+  const BoxView({
     required this.child,
     this.color,
     this.filled = true,
@@ -26,7 +26,7 @@ class BoxedView extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  const BoxedView.zero({
+  const BoxView.zero({
     required this.child,
     this.color,
     this.filled = true,
@@ -41,7 +41,7 @@ class BoxedView extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  const BoxedView.wrap({
+  const BoxView.wrap({
     required this.child,
     this.color,
     this.filled = false,
@@ -56,7 +56,7 @@ class BoxedView extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  const BoxedView.oval({
+  const BoxView.oval({
     required this.child,
     this.color,
     this.filled = true,
