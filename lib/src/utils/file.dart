@@ -105,6 +105,13 @@ extension GetFileX on String {
   /// return the file type without dot i.e. pdf.
   String get fileType => takeLastWhile((s) => s != ".").lowercase;
 
+  /// return the mime type description i.e. Image.
+  String? get mimeDescription => mediaType?.type.capitalized;
+
+  /// return the mime type description with type i.e. Image.jpg.
+  String? fileDescription([String? append]) =>
+      mimeDescription?.post(append, between: "-").post(fileType, between: ".");
+
   /// Parses a string to mime type.
   String? get mimeType => mime(this);
 

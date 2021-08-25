@@ -399,16 +399,19 @@ extension GetShimmer on Shimmer {
         Expanded(
           child: Container(
             color: context.canvasColor,
-            child: Shimmer.fromColors(
-              period: 900.milliseconds,
-              baseColor: context.canvasColor,
-              highlightColor: context.backgroundColor,
-              child: Column(children: [
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: Container(color: Colors.grey),
-                ),
-              ]),
+            child: SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(),
+              child: Shimmer.fromColors(
+                period: 900.milliseconds,
+                baseColor: context.canvasColor,
+                highlightColor: context.backgroundColor,
+                child: Column(children: [
+                  Container(
+                    height: Get.mediaQuery.size.height,
+                    color: Colors.grey,
+                  ),
+                ]),
+              ),
             ),
           ),
         ),
