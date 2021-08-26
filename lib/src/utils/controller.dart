@@ -84,7 +84,7 @@ abstract class GetController extends MultipleFutureGetController {
 
   @override
   Map<Object, Future Function()> get futuresMap => {
-        $name(GetPrefs): GetPrefs.instance.reload,
+        if (loadPrefsOnInit) $name(GetPrefs): GetPrefs.instance.reload,
         typeName: futureToRun,
         ...futuresToRun,
       };
@@ -97,6 +97,9 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Single future to run at the startup
   Future futureToRun() => Future.value();
+
+  /// To mark, if prefs should be reloaded [onInit]. Defaults to true.
+  bool get loadPrefsOnInit => true;
 
   /// Returns true if all objects have succeeded.
   bool get isAllSucceeded => dataMap.keys.every((k) => succeeded(k));
