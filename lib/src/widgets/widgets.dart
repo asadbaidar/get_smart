@@ -169,6 +169,7 @@ class BoxView extends StatelessWidget {
 
 class CircularProgress extends StatelessWidget {
   const CircularProgress({
+    this.visible = true,
     this.size = 14,
     this.margin = 0,
     this.strokeWidth = 1.4,
@@ -177,6 +178,7 @@ class CircularProgress extends StatelessWidget {
   });
 
   const CircularProgress.small({
+    this.visible = true,
     this.size = 10,
     this.margin = 0,
     this.strokeWidth = 1,
@@ -184,6 +186,7 @@ class CircularProgress extends StatelessWidget {
     this.value,
   });
 
+  final bool visible;
   final double size;
   final double margin;
   final double strokeWidth;
@@ -194,17 +197,18 @@ class CircularProgress extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            height: size,
-            width: size,
-            margin: EdgeInsets.all(margin),
-            child: CircularProgressIndicator(
-              strokeWidth: strokeWidth,
-              backgroundColor: Colors.transparent,
-              color: color,
-              value: value,
+          if (visible)
+            Container(
+              height: size,
+              width: size,
+              margin: EdgeInsets.all(margin),
+              child: CircularProgressIndicator(
+                strokeWidth: strokeWidth,
+                backgroundColor: Colors.transparent,
+                color: color,
+                value: value,
+              ),
             ),
-          ),
         ],
       );
 }

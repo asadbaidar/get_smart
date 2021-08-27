@@ -6,6 +6,9 @@ class StackList<T> {
 
   StackList() : _underlyingQueue = Queue<T>();
 
+  StackList.from(Iterable elements)
+      : _underlyingQueue = Queue<T>.from(elements);
+
   int get length => _underlyingQueue.length;
 
   bool get isEmpty => _underlyingQueue.isEmpty;
@@ -26,7 +29,10 @@ class StackList<T> {
     return lastElement;
   }
 
-  void push(final T element) => _underlyingQueue.addLast(element);
+  T push(T element) {
+    _underlyingQueue.addLast(element);
+    return element;
+  }
 }
 
 extension MapX<K, V> on Map<K, V> {

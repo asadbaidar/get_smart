@@ -417,6 +417,49 @@ extension GetShimmer on Shimmer {
         ),
       ]));
 
+  static Widget custom(WidgetBuilder builder) =>
+      ThemeBuilder((context) => Container(
+            color: context.backgroundColor,
+            child: Shimmer.fromColors(
+              baseColor: context.highlightColor,
+              highlightColor: context.canvasColor,
+              child: builder(context),
+            ),
+          ));
+
+  static Widget tileOvalLeading({
+    String? title,
+    String? subtitle,
+    bool leading = true,
+  }) =>
+      tile(
+        title: title,
+        subtitle: subtitle,
+        leading: leading,
+        isLeadingOval: true,
+      );
+
+  static Widget tile({
+    String? title,
+    String? subtitle,
+    bool leading = true,
+    bool isLeadingOval = false,
+  }) =>
+      custom((context) => GetTile.dense(
+          leading: leading ? 24.space : null,
+          isLeadingOval: isLeadingOval,
+          titleChild: title?.mapIt((it) => Container(
+                color: Colors.grey,
+                child: Text(it, style: context.overline),
+              )),
+          verticalSpacing: 6,
+          subtitleChild: subtitle?.mapIt(
+            (it) => Container(
+              color: Colors.grey,
+              child: Text(it, style: context.overline),
+            ),
+          )));
+
   static Widget article() => ThemeBuilder((context) => Column(children: [
         Expanded(
           child: Container(
