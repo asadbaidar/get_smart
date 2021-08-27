@@ -54,7 +54,7 @@ extension GetDebugUtils<T> on T {
   ]) {
     $print(value, tag);
     $debugLog(
-      value ?? this,
+      value ?? this.toString(),
       tag,
       $name(runtimeType),
     );
@@ -65,7 +65,7 @@ extension GetDebugUtils<T> on T {
     dynamic tag,
   ]) =>
       $log(
-        value ?? this,
+        value ?? this.toString(),
         tag,
         $name(runtimeType),
       );

@@ -177,6 +177,8 @@ abstract class GetWebAPI {
 
   FutureOr<String> get authToken => GetCipher.instance.authToken;
 
+  FutureOr<Map<String, String>> get headers async => {auth: await authToken};
+
   void cancel() {
     _cancelTokens.remove(id)?.cancel();
     isolate?.cancelRequest(id);
