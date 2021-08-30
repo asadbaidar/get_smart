@@ -328,6 +328,23 @@ abstract class GetController extends MultipleFutureGetController {
     update();
   }
 
+  StackList<Future> _futureQueue = StackList.from([Future.value()]);
+
+  /// Sets the key for error logs, runs the future in queue which means next
+  /// future will not run unless the previous gets completed.
+  ///
+  /// key: by default `typeName`, if null, status will be update in default key
+  Future runFutureQueue(
+    Future Function() future, {
+    Object? key,
+    bool throwException = false,
+  }) =>
+      (_futureQueue.pop() ?? Future.value()).whenComplete(() => runErrorFuture(
+            _futureQueue.push(future()),
+            key: key,
+            throwException: throwException,
+          ));
+
   /// Sets the key to busy, runs the runner and then sets it to not busy
   /// when completed.
   ///
@@ -335,7 +352,7 @@ abstract class GetController extends MultipleFutureGetController {
   ///
   /// rethrows [Exception] after setting busy to false by key
   Future runBusyRunner(
-    Future Function() busyAction, {
+    Future Function() busyRunner, {
     Object? key,
     bool throwException = false,
   }) {
@@ -343,7 +360,7 @@ abstract class GetController extends MultipleFutureGetController {
     final runner = () async {
       setDataFor(_key, null);
       return await runBusyFuture(
-        busyAction(),
+        busyRunner(),
         key: _key,
         throwException: throwException,
       );
