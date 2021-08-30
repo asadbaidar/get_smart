@@ -1,3 +1,7 @@
+## [0.1.1+1]
+
+* Bug fixes
+
 ## [0.1.1]
 
 * Bug fixes and a lot of Breaking Changes
