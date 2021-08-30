@@ -118,31 +118,34 @@ extension GetFileX on String {
   /// Parses a string to media type.
   MediaType? get mediaType => mimeType?.mapIt((it) => MediaType.parse(it));
 
-  /// Checks if string is a video file.
+  /// Checks if string is a wmv file name.
+  bool get isWMVFile => lowercase.endsWith("wmv");
+
+  /// Checks if string is a video file name.
   bool get isVideo {
     final file = lowercase;
     return GetFile.videoTypes.any(file.endsWith);
   }
 
-  /// Checks if string is an image file.
+  /// Checks if string is an image file name.
   bool get isImage {
     final file = lowercase;
     return GetFile.imageTypes.any(file.endsWith);
   }
 
-  /// Checks if string is an audio file.
+  /// Checks if string is an audio file name.
   bool get isAudio {
     final file = lowercase;
     return GetFile.audioTypes.any(file.endsWith);
   }
 
-  /// Checks if string is a document file.
+  /// Checks if string is a document file name.
   bool get isDocument {
     final file = lowercase;
     return GetFile.docTypes.any(file.endsWith);
   }
 
-  /// Checks if string is an image, video, audio or document file.
+  /// Checks if string is an image, video, audio or document file name.
   bool get isMediaOrDocs {
     final file = lowercase;
     return GetFile.mediaAndDocTypes.any(file.endsWith);

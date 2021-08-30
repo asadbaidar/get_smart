@@ -376,7 +376,7 @@ abstract class GetController extends MultipleFutureGetController {
     } catch (e) {
       setBusyFor(_key, false);
       if (throwException) rethrow;
-      return GetResult();
+      return GetResult.error(e.toString());
     }
   }
 
@@ -398,7 +398,7 @@ abstract class GetController extends MultipleFutureGetController {
       setErrorFor(_key, e);
       onError(e, _key);
       if (throwException) rethrow;
-      return GetResult();
+      return GetResult.error(e.toString());
     }
   }
 }
