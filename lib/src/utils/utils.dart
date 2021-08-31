@@ -6,15 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
 
 extension UrlX on String {
-  void launchUrl({bool inApp = false, bool httpOnly = false}) async {
+  void launchUrl({bool? inApp, bool httpOnly = false}) async {
     var url = !httpOnly || startsWith(RegExp("^(http|https)://"))
         ? this
         : "http://$this";
     if (await canLaunch(url)) {
       await launch(
         url,
-        forceSafariVC: inApp,
-        forceWebView: inApp,
+        forceSafariVC: inApp ?? Get.isIOS,
+        forceWebView: inApp ?? Get.isIOS,
         statusBarBrightness:
             GetTheme.isDarkMode ? Brightness.dark : Brightness.light,
       );

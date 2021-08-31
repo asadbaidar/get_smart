@@ -6,29 +6,29 @@ import 'package:get_smart/get_smart.dart';
 
 extension StringX on String {
   String pre(
-    String? pre, {
+    pre, {
     int doFor = 1,
     bool doIf = true,
     String between = "",
   }) =>
       applyFor(
         doIf == true && pre != null ? doFor : 0,
-        (s) => pre! + between + s,
+        (s) => pre!.toString() + between + s,
       );
 
   String post(
-    String? post, {
+    post, {
     int doFor = 1,
     bool doIf = true,
     String between = "",
   }) =>
       applyFor(
         doIf == true && post != null ? doFor : 0,
-        (s) => s + between + post!,
+        (s) => s + between + post!.toString(),
       );
 
   String surround(
-    String? surround, {
+    surround, {
     int doFor = 1,
     bool doIf = true,
     String between = "",

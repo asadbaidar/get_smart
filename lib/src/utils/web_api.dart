@@ -261,6 +261,9 @@ abstract class GetWebAPI {
         ..receiveTimeout = 60000
         ..validateStatus = (status) => status == 200;
       final cancelToken = _cancelTokens[id] = CancelToken();
+      parameters = Map.fromEntries(
+        parameters.entries.map((e) => MapEntry(e.key, e.value ?? "")),
+      );
       $debugLog(id, "Request ID", GetWebAPI);
       GetResponse response = await dio.request(
         path,

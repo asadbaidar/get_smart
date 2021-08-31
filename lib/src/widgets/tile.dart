@@ -158,6 +158,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -230,6 +232,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -302,6 +306,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -374,6 +380,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -446,6 +454,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -518,6 +528,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -590,6 +602,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -662,6 +676,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = true,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -734,6 +750,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -806,6 +824,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -878,6 +898,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -952,6 +974,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -1025,6 +1049,8 @@ class GetTile extends StatelessWidget {
     this.tintAccessory = true,
     this.tintAble,
     this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
     this.destructive,
     this.titleExpanded = false,
     this.subtitleExpanded = false,
@@ -1095,6 +1121,8 @@ class GetTile extends StatelessWidget {
   final bool? tintAccessory;
   final bool? tintAble;
   final bool isTitleBold;
+  final bool isTitleSubbed;
+  final bool isSubtitleSubbed;
   final bool? destructive;
   final bool titleExpanded;
   final bool subtitleExpanded;
@@ -1163,7 +1191,7 @@ class GetTile extends StatelessWidget {
             kTileRowTrailingPadding;
     final _titleStyle = (titleStyle ?? context.bodyText2)
         ?.applyIf(isTitleBold, (TextStyle it) => it.bold);
-    final _titleColor = _tintAble ? tintColor : null;
+    final _titleColor = _tintAble ? tintColor : _titleStyle?.color;
     final _subtitleStyle = subtitleStyle ?? context.bodyText2;
     final _subtitleColor = _tintAble ? tintColor : _subtitleStyle?.color;
     final _leftPadding = horizontalPadding ?? leftPadding ?? kStandardPaddingX;
@@ -1203,7 +1231,10 @@ class GetTile extends StatelessWidget {
                   childrenPadding: titleChildrenPadding,
                   text: title?.notEmpty,
                   textStyle: _titleStyle?.copyWith(
-                    color: _titleColor,
+                    color: _titleColor?.applyIf(
+                      isTitleSubbed,
+                      (it) => it.subbed,
+                    ),
                   ),
                   fontSize: titleSize,
                   hint: titleHint,
@@ -1230,7 +1261,10 @@ class GetTile extends StatelessWidget {
                   childrenPadding: subtitleChildrenPadding,
                   text: subtitle?.notEmpty,
                   textStyle: _subtitleStyle?.copyWith(
-                    color: _subtitleColor?.subbed,
+                    color: _subtitleColor?.applyIf(
+                      isSubtitleSubbed,
+                      (it) => it.subbed,
+                    ),
                   ),
                   fontSize: subtitleSize,
                   hint: subtitleHint,
