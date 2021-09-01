@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -1060,11 +1062,42 @@ abstract class GetButton {
         (context) => CupertinoButton(
           child: Icon(
             Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-            color: context.primaryIconColor,
+            color: color ?? context.primaryIconColor,
           ),
           padding: EdgeInsets.only(left: Get.isIOS ? 9 : 2),
-          onPressed: () => Get.canPop ? Get.back() : Get.systemPop(),
+          onPressed:
+              onPressed ?? () => Get.canPop ? Get.back() : Get.systemPop(),
         ).tooltip(Get.localization.backButtonTooltip),
+      );
+
+  static Widget detail({
+    IconData? icon,
+    Color? color,
+    String? tooltip,
+    double size = 14,
+    Matrix4? transform,
+    bool? angle180,
+    bool? angle90,
+    VoidCallback? onPressed,
+  }) =>
+      ThemeBuilder(
+        (context) => CupertinoButton(
+          child: AnimatedContainer(
+            duration: 200.milliseconds,
+            transformAlignment: Alignment.center,
+            transform: transform ??
+                angle180?.mapIt((it) => Matrix4.rotationZ(it ? pi : 0)) ??
+                angle90?.mapIt((it) => Matrix4.rotationZ(it ? pi / 2 : 0)),
+            child: Icon(
+              icon ?? CupertinoIcons.chevron_right,
+              color: color ?? context.hintColor,
+              size: size,
+            ),
+          ),
+          minSize: 0,
+          padding: EdgeInsets.zero,
+          onPressed: onPressed,
+        ).tooltip(tooltip),
       );
 
   static Widget sticker({

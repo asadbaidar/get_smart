@@ -118,6 +118,34 @@ extension GetWidgetX on Widget {
             )
           : this;
 
+  Widget material({
+    Key? key,
+    MaterialType type = MaterialType.transparency,
+    double elevation = 0.0,
+    Color? color,
+    Color? shadowColor,
+    TextStyle? textStyle,
+    BorderRadiusGeometry? borderRadius,
+    ShapeBorder? shape,
+    bool borderOnForeground = true,
+    Clip clipBehavior = Clip.none,
+    Duration animationDuration = kThemeChangeDuration,
+  }) =>
+      Material(
+        child: this,
+        key: key,
+        type: type,
+        elevation: elevation,
+        color: color,
+        shadowColor: shadowColor,
+        textStyle: textStyle,
+        borderRadius: borderRadius,
+        shape: shape,
+        borderOnForeground: borderOnForeground,
+        clipBehavior: clipBehavior,
+        animationDuration: animationDuration,
+      );
+
   Widget plainButton({
     Key? key,
     bool enabled = true,

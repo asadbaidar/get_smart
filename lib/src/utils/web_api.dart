@@ -382,7 +382,7 @@ class GetIsolate {
     final _completer = completer[parcel.key] = Completer<R>();
     sendPort?.send(parcel);
     return _completer.future.then((result) {
-      $debugPrint("RequestParcel: ${result?.typeName}");
+      $debugPrint("RequestParcel: ${result}");
       completer.remove(parcel.key);
       return result;
     }).catchError((e) {

@@ -1902,6 +1902,7 @@ class GetTileRow extends StatelessWidget {
         alignment == CrossAxisAlignment.end;
     final _trailing = trailing ??
         (isDetailed ? const Icon(CupertinoIcons.chevron_right) : null);
+    final _showTrailing = trailing != null || trailingText?.notEmpty != null;
     final _boxedView = $cast<BoxView>(leading);
     return _text == null && child == null && children?.isNotEmpty != true
         ? Container(height: 0, width: 0)
@@ -1987,7 +1988,7 @@ class GetTileRow extends StatelessWidget {
                           ),
                     ),
                   ).flex(enabled: !wrap, expanded: true),
-                  if (_trailing != null)
+                  if (_showTrailing)
                     Container(
                       constraints: _constrained ? constraints : null,
                       alignment: Alignment.center,
@@ -2007,7 +2008,8 @@ class GetTileRow extends StatelessWidget {
                                     t,
                                     style: trailingStyle ?? context.caption,
                                   )) ??
-                              _trailing,
+                              _trailing ??
+                              0.space,
                         ),
                       ),
                     ),
