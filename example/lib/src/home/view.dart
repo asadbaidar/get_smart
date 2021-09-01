@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
                       title: data.description,
                       color: data.color,
                       accessory: data.attachment?.mapIt(
-                        (icon) => PopupMenu<GetFile>(
+                        (icon) => GetPopupMenu<GetFile>(
                           cornerRadius: 0,
                           elevation: 0,
                           backgroundColor: Colors.transparent,

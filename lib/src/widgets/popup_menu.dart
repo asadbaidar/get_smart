@@ -4,19 +4,19 @@ import 'package:get_smart/get_smart.dart';
 /// Signature for the callback invoked when a menu item is selected. The
 /// argument is the index of the selected item and value of [T] that caused its
 /// menu to be dismissed.
-typedef PopupMenuItemSelected<T> = void Function(int value, T data);
+typedef GetPopupMenuItemSelected<T> = void Function(int value, T data);
 
-/// Signature used by [PopupMenu] to lazily construct the child widget that can
+/// Signature used by [GetPopupMenu] to lazily construct the child widget that can
 /// show the menu if onPopup method is called from the argument.
-typedef PopupMenuChildBuilder = Widget Function(VoidCallback? onPopup);
+typedef GetPopupMenuChildBuilder = Widget Function(VoidCallback? onPopup);
 
-/// Signature used by [PopupMenu] to lazily construct the items shown when
+/// Signature used by [GetPopupMenu] to lazily construct the items shown when
 /// the button is pressed.
-typedef PopupMenuItemBuilder<T> = PopupMenuEntry<int> Function(
+typedef GetPopupMenuItemBuilder<T> = PopupMenuEntry<int> Function(
   int value,
   T data,
 );
-typedef PopupMenuSeparatorBuilder<T> = PopupMenuEntry<int> Function(
+typedef GetPopupMenuSeparatorBuilder<T> = PopupMenuEntry<int> Function(
   int value,
   T data,
 );
@@ -24,11 +24,11 @@ typedef PopupMenuSeparatorBuilder<T> = PopupMenuEntry<int> Function(
 /// Displays a menu when pressed and calls [onSelected] when the menu is dismissed
 /// because an item was selected. The value passed to [onSelected] is the value of
 /// the selected menu item.
-class PopupMenu<T extends Object> extends StatelessWidget {
+class GetPopupMenu<T extends Object> extends StatelessWidget {
   /// Creates a widget that shows a popup menu.
   ///
   /// The [items] argument must not be null.
-  const PopupMenu({
+  const GetPopupMenu({
     this.childBuilder,
     this.itemBuilder,
     this.separatorBuilder,
@@ -54,17 +54,17 @@ class PopupMenu<T extends Object> extends StatelessWidget {
   });
 
   /// If provided, [childBuilder] is the widget used for this button
-  final PopupMenuChildBuilder? childBuilder;
+  final GetPopupMenuChildBuilder? childBuilder;
 
   /// Called when the button is pressed to create the items to show in the menu.
-  final PopupMenuItemBuilder<T>? itemBuilder;
-  final PopupMenuSeparatorBuilder<T>? separatorBuilder;
+  final GetPopupMenuItemBuilder<T>? itemBuilder;
+  final GetPopupMenuSeparatorBuilder<T>? separatorBuilder;
 
   /// Called when the user selects a value from the popup menu.
   ///
   /// If the popup menu is dismissed without selecting a value, [onCanceled] is
   /// called instead.
-  final PopupMenuItemSelected<T>? onSelected;
+  final GetPopupMenuItemSelected<T>? onSelected;
 
   /// Called when the user dismisses the popup menu without selecting an item.
   ///
@@ -108,17 +108,17 @@ class PopupMenu<T extends Object> extends StatelessWidget {
   final bool useRootNavigator;
   final String? semanticLabel;
 
-  PopupMenuChildBuilder get _childBuilder =>
+  GetPopupMenuChildBuilder get _childBuilder =>
       childBuilder ??
       (onPressed) => GetButton.primaryIcon(
             child: Icon(Icons.more_vert),
             onPressed: onPressed,
           );
 
-  PopupMenuSeparatorBuilder<T> get _separatorBuilder =>
+  GetPopupMenuSeparatorBuilder<T> get _separatorBuilder =>
       separatorBuilder ?? (value, data) => const PopupMenuDivider(height: 1.5);
 
-  PopupMenuItemBuilder<T> get _itemBuilder =>
+  GetPopupMenuItemBuilder<T> get _itemBuilder =>
       itemBuilder ??
       (value, data) =>
           $cast<GetTileData>(data)?.mapTo((GetTileData data) => GetTile.item(
@@ -179,7 +179,8 @@ class PopupMenu<T extends Object> extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       _childBuilder(items.isNotEmpty && enabled
-          ? /*onPressed:*/ () => showMenu(
+          ? () => showMenu(
+                // onPressed
                 context: context,
                 items: _items,
                 position: context.position(offset: offset),
@@ -195,7 +196,7 @@ class PopupMenu<T extends Object> extends StatelessWidget {
           : null);
 }
 
-extension PopupMenuWidget on Widget {
+extension GetPopupMenuWidget on Widget {
   PopupMenuItem<T> popupMenuItem<T>({
     T? value,
     bool enabled = true,
