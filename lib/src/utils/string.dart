@@ -176,8 +176,6 @@ extension StringX on String {
           ? uppercase
           : this[0].uppercase + substring(1).lowercase;
 
-  bool get boolYN => trim().equalsIgnoreCase("Y");
-
   int toInt() => int.tryParse(this) ?? 0;
 
   double toDouble() => double.tryParse(this) ?? 0.0;

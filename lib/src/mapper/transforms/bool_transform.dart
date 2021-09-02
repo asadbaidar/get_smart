@@ -28,7 +28,7 @@ bool _boolFromJson(value, fallback) {
   try {
     if (value == null) return fallback;
     if (value is bool) return value;
-    if (value is String) return value.boolYN;
+    if (value is String) return value.boolYN || value.boolTF;
     return fallback;
   } catch (e) {
     return fallback;
@@ -42,4 +42,12 @@ String _boolToJson(bool? value, fallback) {
 
 extension Bool on bool {
   String get stringYN => this ? "Y" : "N";
+
+  String get stringTF => this ? "true" : "false";
+}
+
+extension BoolString on String {
+  bool get boolYN => trim().take().equalsIgnoreCase("Y");
+
+  bool get boolTF => trim().equalsIgnoreCase("true");
 }

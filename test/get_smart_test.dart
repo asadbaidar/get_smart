@@ -1,8 +1,8 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:get_smart/get_smart.dart';
+import "package:flutter_test/flutter_test.dart";
+import "package:get_smart/get_smart.dart";
 
 void main() {
-  test('Test StringX: surround', () {
+  test("Test StringX: surround", () {
     final text = "hello";
     expect(text.surround("*"), "*hello*");
     expect(text.surround("*", doFor: 2), "**hello**");
@@ -11,7 +11,7 @@ void main() {
     expect(text.surround(null), "hello");
     expect(text.surround("*", doIf: false), "hello");
   });
-  test('Test StringX: pre', () {
+  test("Test StringX: pre", () {
     final text = "hello";
     expect(text.pre("*"), "*hello");
     expect(text.pre("*", doFor: 2), "**hello");
@@ -20,7 +20,7 @@ void main() {
     expect(text.pre(null), "hello");
     expect(text.pre("*", doIf: false), "hello");
   });
-  test('Test StringX: post', () {
+  test("Test StringX: post", () {
     final text = "hello";
     expect(text.post("*"), "hello*");
     expect(text.post("*", doFor: 2), "hello**");
@@ -29,7 +29,7 @@ void main() {
     expect(text.post(null), "hello");
     expect(text.post("*", doIf: false), "hello");
   });
-  test('Test StringX: takeInitials', () {
+  test("Test StringX: takeInitials", () {
     final text1 = "Hello   World  (   Greetings )   -    Program";
     expect(text1.takeInitials(1), "H");
     expect(text1.takeInitials(2), "HW");
@@ -42,7 +42,20 @@ void main() {
     expect(text2.takeInitials(5, fill: true), "TEXT");
     expect(text2.takeInitials(5), "T2");
   });
-  test('Test DateFormatX:', () {
+  test("Test BoolTransform:", () {
+    final boolTransform = BoolTransform();
+    expect(boolTransform.fromJson(true), true);
+    expect(boolTransform.fromJson("true"), true);
+    expect(boolTransform.fromJson("Yes"), true);
+    expect(boolTransform.fromJson("Y"), true);
+    expect(boolTransform.fromJson(false), false);
+    expect(boolTransform.fromJson("false"), false);
+    expect(boolTransform.fromJson("No"), false);
+    expect(boolTransform.fromJson("N"), false);
+    expect(boolTransform.toJson(true), "Y");
+    expect(boolTransform.toJson(false), "N");
+  });
+  test("Test DateFormatX:", () {
     final date = Date.from(
       day: 1,
       month: 2,
