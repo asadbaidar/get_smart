@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 /// Signature for the callback invoked when a menu item is selected. The
-/// argument is the index of the selected item and value of [T] that caused its
+/// argument is the index of the selected item and value of `T` that caused its
 /// menu to be dismissed.
 typedef GetPopupMenuItemSelected<T> = void Function(int value, T data);
 
@@ -72,7 +74,8 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
   final VoidCallback? onCanceled;
   final List<T> items;
 
-  /// The value of the menu item, if any, that should be highlighted when the menu opens.
+  /// The value of the menu item, if any, that should be highlighted when the
+  /// menu opens.
   final int? initialSelected;
 
   /// The z-coordinate at which to place the menu when open. This controls the
@@ -89,9 +92,8 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
 
   /// If provided, the background color used for the menu.
   ///
-  /// If this property is null, then [PopupMenuThemeData.color] is used.
-  /// If [PopupMenuThemeData.color] is also null, then
-  /// Theme.of(context).cardColor is used.
+  /// If this property is null, then `PopupMenuThemeData.color` is used.
+  /// If that is also null, then `Theme.of(context).cardColor` is used.
   final Color? backgroundColor;
   final EdgeInsets padding;
 
@@ -167,7 +169,7 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
         ..removeLast())
       : items.mapIndexed(_itemBuilder).toList();
 
-  _onSelected(value) {
+  FutureOr _onSelected(int? value) {
     final data = items.get(value);
     if (value != null && data != null) {
       onSelected?.call(value, data);
@@ -179,8 +181,8 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       _childBuilder(items.isNotEmpty && enabled
+          // onPressed
           ? () => showMenu(
-                // onPressed
                 context: context,
                 items: _items,
                 position: context.position(offset: offset),
