@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -286,22 +284,19 @@ class GetDismissibleState extends State<GetDismissible> {
     if (mounted) setState(() => _dismissed = true);
   }
 
-  Timer? _timer;
-  var _time = 6;
+  GetTimer? _timer;
 
   void startTimer() {
     if (!(widget.autoDismissible && widget.autoDismiss)) return;
     if (_timer == null && widget.enabled == true && !_dismissed) {
-      $debugPrint("startTimer");
-      _time = widget.timeout.inSeconds;
-      _timer = Timer.periodic(1.seconds, (_) {
-        $debugPrint("time $_time");
-        if (_time == 0) {
-          dismiss();
-        } else
-          _time--;
-      });
-    } else if (_timer != null && widget.enabled != true && !_dismissed) {
+      _timer = GetTimer.countDown(
+        widget.timeout,
+        onCancel: (_) => dismiss(),
+      )..start();
+    } else if (_timer != null &&
+        _timer?.isCanceled != true &&
+        widget.enabled != true &&
+        !_dismissed) {
       stopTimer();
     }
   }
