@@ -39,6 +39,16 @@ extension MapX<K, V> on Map<K, V> {
   String get jsonString => jsonEncode(this);
 }
 
+extension MapDynamic<K> on Map<K, dynamic> {
+  Map<K, dynamic> get replaceNullWithEmpty => isEmpty
+      ? this
+      : entries.map((e) => MapEntry(e.key, e.value ?? "")).toMap();
+}
+
+extension IterableMapEntry<K, V> on Iterable<MapEntry<K, V>> {
+  Map<K, V> toMap() => Map<K, V>.fromEntries(this);
+}
+
 extension ListX<E> on List<E> {
   E? get(int? index) {
     if (index != null && index < length) {

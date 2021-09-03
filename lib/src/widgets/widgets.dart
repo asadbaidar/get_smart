@@ -681,6 +681,13 @@ class ThemeBuilder extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Creates a widget that delegates its build to a callback.
+  const ThemeBuilder.theme(
+    this.theme, {
+    required this.builder,
+    Key? key,
+  }) : super(key: key);
+
   /// Called to obtain the child widget.
   final WidgetBuilder builder;
 
@@ -708,7 +715,7 @@ class GetSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) => buildResults(context);
 
   @override
-  ThemeData appBarTheme(BuildContext context) => GetTheme.black(
+  ThemeData appBarTheme(BuildContext context) => GetTheme.blackWhite(
         context,
         brightness: Brightness.dark,
       ).copyWith(

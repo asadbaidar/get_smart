@@ -44,6 +44,7 @@ extension ColorX on Color {
 }
 
 abstract class GetColors {
+  static const black85 = const Color(0xFF1D1D1D);
   static const black90 = const Color(0xFF131313);
   static const black93 = const Color(0xFF0C0C0C);
 

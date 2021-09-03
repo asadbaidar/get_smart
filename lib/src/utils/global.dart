@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_smart/get_smart.dart';
@@ -29,12 +30,14 @@ void $debugLog([
   dynamic tag,
   Object? name = "",
 ]) {
-  final _tag = tag == null ? "" : "$tag: ";
-  developer.log(
-    "$_tag${value ?? ""}".trim(),
-    time: Date.now,
-    name: name?.toString() ?? "",
-  );
+  if (kDebugMode) {
+    final _tag = tag == null ? "" : "$tag: ";
+    developer.log(
+      "$_tag${value ?? ""}".trim(),
+      time: Date.now,
+      name: name?.toString() ?? "",
+    );
+  }
 }
 
 void $log([
@@ -42,9 +45,11 @@ void $log([
   dynamic tag,
   Object? name,
 ]) {
-  final _name = name == null ? "" : "[$name] ";
-  final _tag = tag == null ? "" : "$tag: ";
-  print("$_name$_tag${value ?? ""}".trim());
+  if (kDebugMode) {
+    final _name = name == null ? "" : "[$name] ";
+    final _tag = tag == null ? "" : "$tag: ";
+    print("$_name$_tag${value ?? ""}".trim());
+  }
 }
 
 extension GetDebugUtils<T> on T {

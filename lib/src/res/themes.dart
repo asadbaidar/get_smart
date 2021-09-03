@@ -45,7 +45,7 @@ class GetTheme {
         ),
       );
 
-  static ThemeData black(
+  static ThemeData blackWhite(
     BuildContext context, {
     Brightness? brightness,
     String? fontFamily,
@@ -55,9 +55,11 @@ class GetTheme {
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
     Brightness primaryBrightness = Brightness.dark,
+    // light theme attributes
     Color primaryBackgroundLight = Colors.black,
     Color bottomBackgroundLight = Colors.white,
     Color bottomForegroundLight = Colors.black,
+    // dark theme attributes
     Color primaryBackgroundDark = GetColors.black90,
     Color bottomBackgroundDark = GetColors.black90,
     Color bottomForegroundDark = Colors.white,
@@ -91,20 +93,147 @@ class GetTheme {
   static ThemeData sky(
     BuildContext context, {
     Brightness? brightness,
+    Brightness? primaryBrightness,
     String? fontFamily,
     TextTheme? textTheme,
+    IconThemeData? primaryIconTheme,
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
+    // light theme attributes
+    Color secondaryColorLight = kSecondaryColor,
+    Color primarySwatchLight = kPrimarySwatch,
+    Color backgroundLight = kBackgroundLight,
+    Color canvasColorLight = kCanvasColorLight,
+    Color primaryBackgroundLight = kPrimaryBackgroundLight,
+    // dark theme attributes
+    Color secondaryColorDark = kSecondaryColor,
+    Color primarySwatchDark = kPrimarySwatch,
+    Color backgroundDark = kBackgroundDark,
+    Color canvasColorDark = kCanvasColorDark,
+    Color primaryBackgroundDark = kPrimaryBackgroundDark,
+  }) =>
+      simpleBuilder(
+        context,
+        brightness: brightness,
+        primaryBrightness: primaryBrightness,
+        fontFamily: fontFamily,
+        textTheme: textTheme,
+        primaryIconTheme: primaryIconTheme,
+        elevatedButtonStyle: elevatedButtonStyle,
+        outlinedButtonStyle: outlinedButtonStyle,
+        textButtonStyle: textButtonStyle,
+        // light theme attributes
+        secondaryColorLight: secondaryColorLight,
+        primarySwatchLight: primarySwatchLight,
+        backgroundLight: backgroundLight,
+        canvasColorLight: canvasColorLight,
+        primaryBackgroundLight: primaryBackgroundLight,
+        // dark theme attributes
+        secondaryColorDark: secondaryColorDark,
+        primarySwatchDark: primarySwatchDark,
+        backgroundDark: backgroundDark,
+        canvasColorDark: canvasColorDark,
+        primaryBackgroundDark: primaryBackgroundDark,
+      );
+
+  static ThemeData black(
+    BuildContext context, {
+    Brightness? brightness,
+    Brightness? primaryBrightness,
+    String? fontFamily,
+    TextTheme? textTheme,
+    IconThemeData? primaryIconTheme,
+    ButtonStyle? elevatedButtonStyle,
+    ButtonStyle? outlinedButtonStyle,
+    ButtonStyle? textButtonStyle,
+    // light theme attributes
+    Color secondaryColorLight = Colors.black,
+    Color primarySwatchLight = GetColors.black,
+    Color backgroundLight = kBackgroundLight,
+    Color canvasColorLight = kCanvasColorLight,
+    Color primaryBackgroundLight = kPrimaryBackgroundLight,
+    // dark theme attributes
+    Color secondaryColorDark = Colors.white,
+    Color primarySwatchDark = GetColors.white,
+    Color backgroundDark = GetColors.black93,
+    Color canvasColorDark = GetColors.black90,
+    Color primaryBackgroundDark = GetColors.black85,
+  }) =>
+      simpleBuilder(
+        context,
+        brightness: brightness,
+        primaryBrightness: primaryBrightness,
+        fontFamily: fontFamily,
+        textTheme: textTheme,
+        primaryIconTheme: primaryIconTheme,
+        elevatedButtonStyle: elevatedButtonStyle,
+        outlinedButtonStyle: outlinedButtonStyle,
+        textButtonStyle: textButtonStyle,
+        // light theme attributes
+        secondaryColorLight: secondaryColorLight,
+        primarySwatchLight: primarySwatchLight,
+        backgroundLight: backgroundLight,
+        canvasColorLight: canvasColorLight,
+        primaryBackgroundLight: primaryBackgroundLight,
+        // dark theme attributes
+        secondaryColorDark: secondaryColorDark,
+        primarySwatchDark: primarySwatchDark,
+        backgroundDark: backgroundDark,
+        canvasColorDark: canvasColorDark,
+        primaryBackgroundDark: primaryBackgroundDark,
+      );
+
+  static ThemeData simpleBuilder(
+    BuildContext context, {
+    Brightness? brightness,
+    Brightness? primaryBrightness,
+    String? fontFamily,
+    TextTheme? textTheme,
+    IconThemeData? primaryIconTheme,
+    ButtonStyle? elevatedButtonStyle,
+    ButtonStyle? outlinedButtonStyle,
+    ButtonStyle? textButtonStyle,
+    // light theme attributes
+    Color secondaryColorLight = kSecondaryColor,
+    Color primarySwatchLight = kPrimarySwatch,
+    Color backgroundLight = kBackgroundLight,
+    Color canvasColorLight = kCanvasColorLight,
+    Color primaryBackgroundLight = kPrimaryBackgroundLight,
+    // dark theme attributes
+    Color secondaryColorDark = kSecondaryColor,
+    Color primarySwatchDark = kPrimarySwatch,
+    Color backgroundDark = kBackgroundDark,
+    Color canvasColorDark = kCanvasColorDark,
+    Color primaryBackgroundDark = kPrimaryBackgroundDark,
   }) =>
       builder(
         context,
         brightness: brightness,
+        primaryBrightness: primaryBrightness,
+        bottomBrightness: primaryBrightness,
         fontFamily: fontFamily,
         textTheme: textTheme,
+        primaryIconTheme: primaryIconTheme,
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
         textButtonStyle: textButtonStyle,
+        // light theme attributes
+        secondaryColorLight: secondaryColorLight,
+        primarySwatchLight: primarySwatchLight,
+        backgroundLight: backgroundLight,
+        canvasColorLight: canvasColorLight,
+        primaryBackgroundLight: primaryBackgroundLight,
+        bottomBackgroundLight: primaryBackgroundLight,
+        bottomForegroundLight: secondaryColorLight,
+        // dark theme attributes
+        secondaryColorDark: secondaryColorDark,
+        primarySwatchDark: primarySwatchDark,
+        backgroundDark: backgroundDark,
+        canvasColorDark: canvasColorDark,
+        primaryBackgroundDark: primaryBackgroundDark,
+        bottomBackgroundDark: primaryBackgroundDark,
+        bottomForegroundDark: secondaryColorDark,
       );
 
   static ThemeData builder(
@@ -118,6 +247,7 @@ class GetTheme {
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
+    // light theme attributes
     Color secondaryColorLight = kSecondaryColor,
     Color primarySwatchLight = kPrimarySwatch,
     Color backgroundLight = kBackgroundLight,
@@ -125,6 +255,7 @@ class GetTheme {
     Color primaryBackgroundLight = kPrimaryBackgroundLight,
     Color bottomBackgroundLight = kPrimaryBackgroundLight,
     Color bottomForegroundLight = kSecondaryColor,
+    // dark theme attributes
     Color secondaryColorDark = kSecondaryColor,
     Color primarySwatchDark = kPrimarySwatch,
     Color backgroundDark = kBackgroundDark,

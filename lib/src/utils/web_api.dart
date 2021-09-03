@@ -109,7 +109,8 @@ abstract class GetWebAPI {
     required String path,
     bool encrypted = false,
     bool inIsolate = true,
-    Map<String, dynamic> parameters = const {},
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   }) =>
       request<T>(
         as: as,
@@ -117,7 +118,8 @@ abstract class GetWebAPI {
         method: GetMethod.get,
         encrypted: encrypted,
         inIsolate: inIsolate,
-        parameters: parameters,
+        query: query,
+        body: body,
       );
 
   Future<GetResult<T>> post<T>({
@@ -126,7 +128,8 @@ abstract class GetWebAPI {
     bool encrypted = false,
     bool inIsolate = true,
     List<GetFile>? files,
-    Map<String, dynamic> parameters = const {},
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   }) =>
       request<T>(
         as: as,
@@ -135,7 +138,8 @@ abstract class GetWebAPI {
         encrypted: encrypted,
         inIsolate: inIsolate,
         files: files,
-        parameters: parameters,
+        query: query,
+        body: body,
       );
 
   Future<GetResult<T>> delete<T>({
@@ -143,7 +147,8 @@ abstract class GetWebAPI {
     required String path,
     bool encrypted = false,
     bool inIsolate = true,
-    Map<String, dynamic> parameters = const {},
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   }) =>
       request<T>(
         as: as,
@@ -151,13 +156,16 @@ abstract class GetWebAPI {
         method: GetMethod.delete,
         encrypted: encrypted,
         inIsolate: inIsolate,
-        parameters: parameters,
+        query: query,
+        body: body,
       );
 
   download<T>({
     required String path,
     String? name,
-    Map<String, dynamic> parameters = const {},
+    String? description,
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   }) =>
       throw UnimplementedError();
 
@@ -191,16 +199,23 @@ abstract class GetWebAPI {
     bool encrypted = false,
     bool inIsolate = true,
     List<GetFile>? files,
-    Map<String, dynamic> parameters = const {},
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   }) async =>
       scheduleTask(() async {
         try {
-          if (encrypted)
+          if (encrypted) {
             await Future.forEach(
-              parameters.keys,
+              query.keys,
               (dynamic key) async =>
-                  parameters[key] = await parameters[key]?.toString().encrypted,
+                  query[key] = await query[key]?.toString().encrypted,
             );
+            await Future.forEach(
+              body.keys,
+              (dynamic key) async =>
+                  body[key] = await body[key]?.toString().encrypted,
+            );
+          }
           var parcel = GetRequestParcel<T, GetResult<T>>(
             id: id,
             address: await address,
@@ -210,7 +225,8 @@ abstract class GetWebAPI {
             builder: as,
             authToken: await authToken,
             files: files,
-            parameters: parameters,
+            query: query,
+            body: body,
           );
           return inIsolate && isolate != null
               ? isolate!.httpRequest(parcel)
@@ -230,7 +246,8 @@ abstract class GetWebAPI {
         authToken: parcel.authToken,
         builder: parcel.builder,
         files: parcel.files,
-        parameters: parcel.parameters,
+        query: parcel.query,
+        body: parcel.body,
       );
 
   static Map<String, CancelToken> _cancelTokens = {};
@@ -244,7 +261,8 @@ abstract class GetWebAPI {
     required T result,
     Object? builder,
     List<GetFile>? files,
-    Map<String, dynamic> parameters = const {},
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   }) async {
     Dio? dio;
     final getResult = $cast<Mappable>(result)!.builders.first;
@@ -261,22 +279,18 @@ abstract class GetWebAPI {
         ..receiveTimeout = 60000
         ..validateStatus = (status) => status == 200;
       final cancelToken = _cancelTokens[id] = CancelToken();
-      parameters = Map.fromEntries(
-        parameters.entries.map((e) => MapEntry(e.key, e.value ?? "")),
-      );
+      query = query.replaceNullWithEmpty;
+      body = body.replaceNullWithEmpty;
       $debugLog(id, "Request ID", GetWebAPI);
       GetResponse response = await dio.request(
         path,
-        queryParameters:
-            method == GetMethod.post || isMultipart ? null : parameters,
-        data: method == GetMethod.get
-            ? null
-            : isMultipart
-                ? GetFormData.fromMap({
-                    "data": parameters.jsonString,
-                    "files": await GetFile.toMultipart(files!),
-                  })
-                : parameters,
+        queryParameters: query,
+        data: isMultipart
+            ? GetFormData.fromMap({
+                "data": body.jsonString,
+                "files": await GetFile.toMultipart(files!),
+              })
+            : body,
         options: Options(
           method: method.keyNAME,
           contentType: isMultipart ? "multipart/form-data" : null,
@@ -319,7 +333,8 @@ class GetRequestParcel<T, R> {
     required this.result,
     this.builder,
     this.files,
-    this.parameters = const {},
+    this.query = const {},
+    this.body = const {},
   });
 
   final String id;
@@ -330,7 +345,8 @@ class GetRequestParcel<T, R> {
   R result;
   final T? builder;
   final List<GetFile>? files;
-  final Map<String, dynamic> parameters;
+  final Map<String, dynamic> query;
+  final Map<String, dynamic> body;
 
   String get key => authToken;
 
@@ -344,7 +360,8 @@ class GetRequestParcel<T, R> {
         "method": method,
         "authToken": authToken,
         "files": files,
-        "parameters": parameters,
+        "query": query,
+        "body": body,
         "builder": builder?.typeName,
         "result": result.toString(),
       }.toString();

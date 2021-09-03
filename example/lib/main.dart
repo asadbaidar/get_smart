@@ -9,7 +9,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) => GetMaterialApp(
         title: 'Get Smart Demo',
         builder: (context, child) => Theme(
-          data: GetTheme.black(context),
+          data: GetTheme.blackWhite(context),
           child: child!,
         ),
         localizationsDelegates: [GetLocalizations.delegate],
