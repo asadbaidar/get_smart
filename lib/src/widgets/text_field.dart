@@ -100,7 +100,7 @@ class GetTextField extends StatelessWidget {
     this.semanticCounterText,
     this.alignLabelWithHint,
     Key? key,
-  }) : super(key: key);
+  }) : _key = key;
 
   /// If provided, it disables any explicit [controller].
   final String? initialText;
@@ -203,6 +203,7 @@ class GetTextField extends StatelessWidget {
   final InputBorder? border;
   final String? semanticCounterText;
   final bool? alignLabelWithHint;
+  final Key? _key;
 
   String get _hint => hint ?? label?.lowercase ?? GetText.value().lowercase;
 
@@ -280,6 +281,7 @@ class GetTextField extends StatelessWidget {
         margin: margin ?? EdgeInsets.zero,
         color: background ?? Colors.transparent,
         child: TextFormField(
+          key: _key,
           initialValue: initialText,
           controller: _controller,
           focusNode: focusNode,
@@ -368,6 +370,8 @@ class GetTextField extends StatelessWidget {
           ),
         ),
       );
+
+  static GlobalKey<FormFieldState> get newKey => GlobalKey<FormFieldState>();
 }
 
 /// An optional container for grouping together multiple form field widgets
