@@ -491,13 +491,13 @@ extension GetShimmer on Shimmer {
   static Widget article() => ThemeBuilder((context) => Column(children: [
         Expanded(
           child: Container(
-            color: context.canvasColor,
+            color: context.backgroundColor,
             padding: EdgeInsets.all(24),
             child: SingleChildScrollView(
               physics: NeverScrollableScrollPhysics(),
               child: Shimmer.fromColors(
-                baseColor: context.highlightColor,
-                highlightColor: context.canvasColor,
+                baseColor: context.highlightColor.withOpacity(0.3),
+                highlightColor: context.highlightColor.withOpacity(0.2),
                 child: Column(children: [
                   Container(
                     color: Colors.grey,
@@ -560,7 +560,7 @@ extension GetShimmer on Shimmer {
         Expanded(
           child: Container(
             color: GetColors.black93,
-            padding: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.only(top: 4),
             child: SingleChildScrollView(
               physics: NeverScrollableScrollPhysics(),
               child: Shimmer.fromColors(
@@ -570,7 +570,7 @@ extension GetShimmer on Shimmer {
                   Container(
                     color: Colors.grey,
                     margin: EdgeInsets.symmetric(horizontal: 30),
-                    constraints: BoxConstraints.expand(height: 22),
+                    constraints: BoxConstraints.expand(height: 18),
                   ),
                   Container(constraints: BoxConstraints.expand(height: 8)),
                   Container(
