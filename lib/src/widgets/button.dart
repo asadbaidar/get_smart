@@ -1106,21 +1106,22 @@ abstract class GetButton {
     String? tooltip,
     String? text,
     IconData? icon,
+    double size = 22,
     EdgeInsets margin = const EdgeInsets.only(
-      bottom: 6,
+      bottom: 5,
       right: 8,
-      top: 6,
-      left: 6,
+      top: 5,
+      left: 5,
     ),
   }) =>
       ThemeBuilder((context) {
         final _color =
             color ?? context.primaryIconColor ?? context.secondaryColor;
         return Container(
-          width: 20,
-          height: 20,
+          width: size,
+          height: size,
           margin: margin,
-          padding: EdgeInsets.only(top: icon != null ? 2.2 : 3),
+          padding: EdgeInsets.only(top: icon != null ? 3.2 : 4),
           alignment: Alignment.topCenter,
           decoration: BoxDecoration(
             border: Border.all(color: _color),
@@ -1149,6 +1150,7 @@ abstract class GetButton {
     String? tooltip,
     String? text,
     IconData? icon,
+    double size = 22,
     EdgeInsets margin = EdgeInsets.zero,
   }) =>
       sticker(
@@ -1157,6 +1159,7 @@ abstract class GetButton {
         tooltip: tooltip,
         text: text,
         icon: icon,
+        size: size,
         margin: margin,
       );
 }

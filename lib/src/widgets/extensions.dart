@@ -459,12 +459,14 @@ extension GetShimmer on Shimmer {
     String? title,
     String? subtitle,
     bool leading = true,
+    double topPadding = kMediumPaddingY,
   }) =>
       tile(
         title: title,
         subtitle: subtitle,
         leading: leading,
         isLeadingOval: true,
+        topPadding: topPadding,
       );
 
   static Widget tile({
@@ -472,15 +474,17 @@ extension GetShimmer on Shimmer {
     String? subtitle,
     bool leading = true,
     bool isLeadingOval = false,
+    double topPadding = kMediumPaddingY,
   }) =>
-      custom((context) => GetTile.dense(
+      custom((context) => GetTile.medium(
           leading: leading ? 24.space : null,
           isLeadingOval: isLeadingOval,
+          topPadding: topPadding + topPadding.half,
           titleChild: title?.mapIt((it) => Container(
                 color: Colors.grey,
                 child: Text(it, style: context.overline),
               )),
-          verticalSpacing: 6,
+          verticalSpacing: 8,
           subtitleChild: subtitle?.mapIt(
             (it) => Container(
               color: Colors.grey,

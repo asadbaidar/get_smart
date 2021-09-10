@@ -2,20 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
-const kStandardPadding = 16.0;
-const kStandardPaddingX = 16.0;
-const kStandardPaddingY = 11.0;
-
 const kDensePadding = 8.0;
 const kDensePaddingX = 8.0;
 const kDensePaddingY = 8.0;
+
+const kMediumPadding = 12.0;
+const kMediumPaddingX = 12.0;
+const kMediumPaddingY = 12.0;
+
+const kStandardPadding = 16.0;
+const kStandardPaddingX = 16.0;
+const kStandardPaddingY = 11.0;
 
 const kExtendedPadding = 16.0;
 const kExtendedPaddingX = 16.0;
 const kExtendedPaddingY = 14.0;
 
-const kStandardPaddingAll = const EdgeInsets.all(kStandardPadding);
 const kDensePaddingAll = const EdgeInsets.all(kDensePadding);
+const kMediumPaddingAll = const EdgeInsets.all(kMediumPadding);
+const kStandardPaddingAll = const EdgeInsets.all(kStandardPadding);
+const kExtendedPaddingAll = const EdgeInsets.all(kExtendedPadding);
+
 const kStandardPaddingH = const EdgeInsets.symmetric(
   horizontal: kStandardPaddingX,
 );
@@ -33,13 +40,17 @@ const kTileRowFontSize = 12.0;
 
 const kTileRowLeadingMargin = EdgeInsets.zero;
 const kTileRowLeadingPadding = const EdgeInsets.only(right: kStandardPaddingX);
-const kTileRowLeadingDensePadding =
-    const EdgeInsets.only(right: kDensePaddingX);
+const kTileRowLeadingDensePadding = const EdgeInsets.only(
+  right: kDensePaddingX,
+);
+const kTileRowLeadingMediumPadding = const EdgeInsets.only(
+  right: kMediumPaddingX,
+);
 const kTileRowTrailingPadding = const EdgeInsets.only(left: 6);
 const kTileRowChildrenPadding = const EdgeInsets.all(0.5);
 const kTileRowConstraints = const BoxConstraints(minHeight: 26.5);
 const kTileRowTrailingSize = 20.0;
-const kTileRowLeadingSize = 20.0;
+const kTileRowLeadingSmallSize = 20.0;
 const kTileRowMaxLines = 2;
 
 class GetTileData extends GetObject {
@@ -490,6 +501,80 @@ class GetTile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Tile with no accessory and medium paddings
+  const GetTile.medium({
+    this.leading,
+    this.title,
+    this.subtitle,
+    this.titleChild,
+    this.subtitleChild,
+    this.titleChildren,
+    this.subtitleChildren,
+    this.titleHint,
+    this.subtitleHint,
+    this.trailingTop,
+    this.trailingTopChild,
+    this.trailingBottom,
+    this.trailingBottomChild,
+    this.trailingTitle,
+    this.trailingTitleChild,
+    this.trailingSubtitle,
+    this.trailingSubtitleChild,
+    this.titleStyle,
+    this.subtitleStyle,
+    this.trailingStyle,
+    this.accessory,
+    this.rows,
+    this.belowRows,
+    this.color,
+    this.background,
+    this.headColor,
+    this.trailingColor,
+    this.isLeadingFilled = true,
+    this.isLeadingSmall = false,
+    this.isLeadingOval = false,
+    this.isDetailed = false,
+    this.padAccessory,
+    this.showAccessory,
+    this.tintAccessory,
+    this.tintAble,
+    this.isTitleBold = true,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
+    this.destructive,
+    this.titleExpanded = false,
+    this.subtitleExpanded = false,
+    this.enabled = true,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding = kMediumPaddingY,
+    this.bottomPadding = kMediumPaddingY,
+    this.leftPadding = kMediumPaddingX,
+    this.rightPadding = kMediumPaddingX,
+    this.trailingPadding,
+    this.verticalSpacing = 0,
+    this.titleSize = kTileFontSize,
+    this.subtitleSize = kTileFontSize,
+    this.leadingSize,
+    this.accessorySize,
+    this.trailingSize = kTileRowTrailingSize,
+    this.titleMaxLines,
+    this.subtitleMaxLines,
+    this.padding,
+    this.leadingMargin = kTileRowLeadingMargin,
+    this.leadingPadding = kTileRowLeadingMediumPadding,
+    this.titleChildrenPadding = kTileRowChildrenPadding,
+    this.subtitleChildrenPadding = kTileRowChildrenPadding,
+    this.constraints = kTileConstraints,
+    this.alignment = CrossAxisAlignment.center,
+    this.onTapTitle,
+    this.onTapSubtitle,
+    this.onTap,
+    this.onTapHead,
+    this.onTapLeading,
+    Key? key,
+  }) : super(key: key);
+
   /// Tile with no accessory and centered content alignment
   const GetTile.centered({
     this.leading,
@@ -612,8 +697,8 @@ class GetTile extends StatelessWidget {
     this.verticalPadding,
     this.topPadding,
     this.bottomPadding,
-    this.leftPadding = 12,
-    this.rightPadding = 12,
+    this.leftPadding = kMediumPaddingX,
+    this.rightPadding = kMediumPaddingX,
     this.trailingPadding,
     this.verticalSpacing = 5,
     this.titleSize = kTileRowFontSize,
@@ -625,7 +710,7 @@ class GetTile extends StatelessWidget {
     this.subtitleMaxLines,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
-    this.leadingPadding = const EdgeInsets.only(right: 12),
+    this.leadingPadding = kTileRowLeadingMediumPadding,
     this.titleChildrenPadding = kTileRowChildrenPadding,
     this.subtitleChildrenPadding = kTileRowChildrenPadding,
     this.constraints = const BoxConstraints(minHeight: 34),
@@ -760,8 +845,8 @@ class GetTile extends StatelessWidget {
     this.verticalPadding,
     this.topPadding = kStandardPaddingY,
     this.bottomPadding = kStandardPaddingY,
-    this.leftPadding = 12,
-    this.rightPadding = 12,
+    this.leftPadding = kMediumPaddingX,
+    this.rightPadding = kMediumPaddingX,
     this.trailingPadding,
     this.verticalSpacing = 5,
     this.titleSize = kTileRowFontSize,
@@ -773,7 +858,7 @@ class GetTile extends StatelessWidget {
     this.subtitleMaxLines,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
-    this.leadingPadding = const EdgeInsets.only(right: 12),
+    this.leadingPadding = kTileRowLeadingMediumPadding,
     this.titleChildrenPadding = kTileRowChildrenPadding,
     this.subtitleChildrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
@@ -997,7 +1082,7 @@ class GetTile extends StatelessWidget {
     this.subtitleMaxLines = 1,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
-    this.leadingPadding = const EdgeInsets.only(right: 8),
+    this.leadingPadding = kTileRowLeadingDensePadding,
     this.titleChildrenPadding = kTileRowChildrenPadding,
     this.subtitleChildrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileConstraints,
@@ -1480,6 +1565,57 @@ class GetTileRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Row with simple content and medium paddings
+  const GetTileRow.medium({
+    this.leading,
+    this.trailing,
+    this.trailingText,
+    this.trailingStyle,
+    this.children,
+    this.child,
+    this.text,
+    this.textStyle,
+    this.hint,
+    this.color,
+    this.background,
+    this.trailingColor,
+    this.maxLines = kTileRowMaxLines,
+    this.fontSize,
+    this.leadingSize,
+    this.leadingBoxSize = BoxView.kBoxSize,
+    this.trailingSize = kTileRowTrailingSize,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding = kMediumPaddingY,
+    this.bottomPadding = kMediumPaddingY,
+    this.leftPadding = kMediumPaddingX,
+    this.rightPadding = kMediumPaddingX,
+    this.expanded = false,
+    this.isLeadingFilled = false,
+    this.isLeadingSmall = true,
+    this.isLeadingOval = false,
+    this.themed = false,
+    this.wrap = false,
+    this.enabled = true,
+    this.tintAble = false,
+    this.destructive,
+    this.isDetailed = false,
+    this.allCaps = false,
+    this.header = false,
+    this.topSeparator,
+    this.bottomSeparator,
+    this.padding,
+    this.leadingMargin = kTileRowLeadingMargin,
+    this.leadingPadding = kTileRowLeadingMediumPadding,
+    this.trailingPadding = kTileRowTrailingPadding,
+    this.childrenPadding = kTileRowChildrenPadding,
+    this.constraints = kTileRowConstraints,
+    this.alignment: CrossAxisAlignment.center,
+    this.onTap,
+    this.onTapLeading,
+    Key? key,
+  }) : super(key: key);
+
   /// Row with extended content
   const GetTileRow.extended({
     this.leading,
@@ -1701,15 +1837,15 @@ class GetTileRow extends StatelessWidget {
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
     this.fontSize = kTileRowFontSize,
-    this.leadingSize = kTileRowLeadingSize,
-    this.leadingBoxSize = kTileRowLeadingSize,
+    this.leadingSize,
+    this.leadingBoxSize = 24,
     this.trailingSize = kTileRowTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding = 0,
     this.bottomPadding = 0,
-    this.leftPadding = 12,
-    this.rightPadding = 12,
+    this.leftPadding = kStandardPaddingX,
+    this.rightPadding = kStandardPaddingX,
     this.expanded = false,
     this.isLeadingFilled = false,
     this.isLeadingSmall = true,
@@ -1726,7 +1862,7 @@ class GetTileRow extends StatelessWidget {
     this.bottomSeparator,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
-    this.leadingPadding = const EdgeInsets.only(right: 8),
+    this.leadingPadding = kTileRowLeadingDensePadding,
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
@@ -1752,15 +1888,15 @@ class GetTileRow extends StatelessWidget {
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
     this.fontSize = kTileRowFontSize,
-    this.leadingSize = kTileRowLeadingSize,
+    this.leadingSize = kTileRowLeadingSmallSize,
     this.leadingBoxSize = BoxView.kBoxSize,
     this.trailingSize = kTileRowTrailingSize,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding = 0,
     this.bottomPadding = 0,
-    this.leftPadding = 12,
-    this.rightPadding = 12,
+    this.leftPadding = kStandardPaddingX,
+    this.rightPadding = kStandardPaddingX,
     this.expanded = false,
     this.isLeadingFilled = true,
     this.isLeadingSmall = true,
@@ -1777,7 +1913,7 @@ class GetTileRow extends StatelessWidget {
     this.bottomSeparator,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
-    this.leadingPadding = const EdgeInsets.only(right: 12),
+    this.leadingPadding = kTileRowLeadingPadding,
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
