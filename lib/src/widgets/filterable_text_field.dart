@@ -119,7 +119,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   State<StatefulWidget> createState() => GetFilterableTextFieldState<T>(
         itemSubmitted: itemSubmitted,
         itemBuilder: itemBuilder ??
-            ((_, data, onTap) => GetTile.centered(
+            ((_, data, onTap) => GetTile.center500(
                   title: data.toString(),
                   onTap: onTap,
                 )),

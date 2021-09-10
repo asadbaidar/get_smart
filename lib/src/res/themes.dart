@@ -56,6 +56,7 @@ class GetTheme {
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
+    TextStyle? titleTextStyle,
     // light theme attributes
     Color secondaryColorLight = Colors.black,
     Color primarySwatchLight = GetColors.black,
@@ -84,6 +85,7 @@ class GetTheme {
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
         textButtonStyle: textButtonStyle,
+        titleTextStyle: titleTextStyle,
         // light theme attributes
         secondaryColorLight: secondaryColorLight,
         primarySwatchLight: primarySwatchLight,
@@ -112,6 +114,7 @@ class GetTheme {
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
+    TextStyle? titleTextStyle,
     // light theme attributes
     Color secondaryColorLight = kSecondaryColor,
     Color primarySwatchLight = kPrimarySwatch,
@@ -135,6 +138,7 @@ class GetTheme {
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
         textButtonStyle: textButtonStyle,
+        titleTextStyle: titleTextStyle,
         // light theme attributes
         secondaryColorLight: secondaryColorLight,
         primarySwatchLight: primarySwatchLight,
@@ -159,6 +163,7 @@ class GetTheme {
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
+    TextStyle? titleTextStyle,
     // light theme attributes
     Color secondaryColorLight = Colors.black,
     Color primarySwatchLight = GetColors.black,
@@ -182,6 +187,7 @@ class GetTheme {
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
         textButtonStyle: textButtonStyle,
+        titleTextStyle: titleTextStyle,
         // light theme attributes
         secondaryColorLight: secondaryColorLight,
         primarySwatchLight: primarySwatchLight,
@@ -206,6 +212,7 @@ class GetTheme {
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
+    TextStyle? titleTextStyle,
     // light theme attributes
     Color secondaryColorLight = kSecondaryColor,
     Color primarySwatchLight = kPrimarySwatch,
@@ -230,6 +237,7 @@ class GetTheme {
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
         textButtonStyle: textButtonStyle,
+        titleTextStyle: titleTextStyle,
         // light theme attributes
         secondaryColorLight: secondaryColorLight,
         primarySwatchLight: primarySwatchLight,
@@ -259,6 +267,7 @@ class GetTheme {
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
+    TextStyle? titleTextStyle,
     // light theme attributes
     Color secondaryColorLight = kSecondaryColor,
     Color primarySwatchLight = kPrimarySwatch,
@@ -376,10 +385,10 @@ class GetTheme {
         shadowColor: Colors.black,
         color: _primaryBackground,
         titleTextStyle: TextStyle(
-          fontSize: 18,
-          color: _primaryBackground.contrast,
-          fontWeight: FontWeight.w500,
-          fontFamily: fontFamily,
+          fontSize: titleTextStyle?.fontSize ?? 18,
+          color: titleTextStyle?.color ?? _primaryBackground.contrast,
+          fontWeight: titleTextStyle?.fontWeight ?? FontWeight.w600,
+          fontFamily: titleTextStyle?.fontFamily ?? fontFamily,
         ),
         toolbarTextStyle: TextStyle(
           fontSize: 14,
@@ -459,7 +468,7 @@ extension TextStyleX on TextStyle {
 
   TextStyle get italic => apply(fontStyle: FontStyle.italic);
 
-  TextStyle get bold => copyWith(fontWeight: FontWeight.w500);
+  TextStyle get bold => copyWith(fontWeight: FontWeight.w600);
 }
 
 extension GetContextTheme on BuildContext {

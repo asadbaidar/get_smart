@@ -11,6 +11,7 @@ class GetScaffold extends StatelessWidget {
     this.subtitle,
     this.customTitle,
     this.backgroundColor,
+    this.titleTextStyle,
     this.centerTitle,
     this.extendBody = true,
     this.showProgress = false,
@@ -45,6 +46,7 @@ class GetScaffold extends StatelessWidget {
   final String? subtitle;
   final Widget? customTitle;
   final Color? backgroundColor;
+  final TextStyle? titleTextStyle;
   final bool? centerTitle;
   final bool extendBody;
   final bool showProgress;
@@ -148,6 +150,12 @@ class GetScaffold extends StatelessWidget {
   AppBar _appBar(BuildContext context) => AppBar(
         centerTitle: _centerTitle(context),
         automaticallyImplyLeading: false,
+        titleTextStyle: context.appBarTheme.titleTextStyle?.copyWith(
+          fontSize: titleTextStyle?.fontSize,
+          color: titleTextStyle?.color,
+          fontWeight: titleTextStyle?.fontWeight,
+          fontFamily: titleTextStyle?.fontFamily,
+        ),
         leading: hideAppBarLeading ? null : appBarLeading ?? GetButton.back(),
         leadingWidth: 46,
         title: customTitle ??

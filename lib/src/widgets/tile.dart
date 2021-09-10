@@ -168,7 +168,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -206,7 +207,7 @@ class GetTile extends StatelessWidget {
   }) : super(key: key);
 
   /// Tile with detail accessory and should be used if have extended content
-  const GetTile.detailExtended({
+  const GetTile.detailExtend({
     this.leading,
     this.title,
     this.subtitle,
@@ -242,7 +243,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -316,7 +318,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -354,7 +357,7 @@ class GetTile extends StatelessWidget {
   }) : super(key: key);
 
   /// Tile with no accessory and should be used if have extended content
-  const GetTile.extended({
+  const GetTile.extend({
     this.leading,
     this.title,
     this.subtitle,
@@ -390,7 +393,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -464,7 +468,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -538,7 +543,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -576,7 +582,7 @@ class GetTile extends StatelessWidget {
   }) : super(key: key);
 
   /// Tile with no accessory and centered content alignment
-  const GetTile.centered({
+  const GetTile.center({
     this.leading,
     this.title,
     this.subtitle,
@@ -612,7 +618,83 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
+    this.isTitleSubbed = false,
+    this.isSubtitleSubbed = true,
+    this.destructive,
+    this.titleExpanded = false,
+    this.subtitleExpanded = false,
+    this.enabled = true,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
+    this.leftPadding,
+    this.rightPadding,
+    this.trailingPadding,
+    this.verticalSpacing = 0,
+    this.titleSize = kTileFontSize,
+    this.subtitleSize = kTileFontSize,
+    this.leadingSize,
+    this.accessorySize,
+    this.trailingSize = kTileRowTrailingSize,
+    this.titleMaxLines,
+    this.subtitleMaxLines,
+    this.padding,
+    this.leadingMargin = kTileRowLeadingMargin,
+    this.leadingPadding = kTileRowLeadingPadding,
+    this.titleChildrenPadding = kTileRowChildrenPadding,
+    this.subtitleChildrenPadding = kTileRowChildrenPadding,
+    this.constraints = kTileConstraints,
+    this.alignment = CrossAxisAlignment.center,
+    this.onTapTitle,
+    this.onTapSubtitle,
+    this.onTap,
+    this.onTapHead,
+    this.onTapLeading,
+    Key? key,
+  }) : super(key: key);
+
+  /// Tile with no accessory, w500 title and simple centered content alignment
+  const GetTile.center500({
+    this.leading,
+    this.title,
+    this.subtitle,
+    this.titleChild,
+    this.subtitleChild,
+    this.titleChildren,
+    this.subtitleChildren,
+    this.titleHint,
+    this.subtitleHint,
+    this.trailingTop,
+    this.trailingTopChild,
+    this.trailingBottom,
+    this.trailingBottomChild,
+    this.trailingTitle,
+    this.trailingTitleChild,
+    this.trailingSubtitle,
+    this.trailingSubtitleChild,
+    this.titleStyle,
+    this.subtitleStyle,
+    this.trailingStyle,
+    this.accessory,
+    this.rows,
+    this.belowRows,
+    this.color,
+    this.background,
+    this.headColor,
+    this.trailingColor,
+    this.isLeadingFilled = true,
+    this.isLeadingSmall = false,
+    this.isLeadingOval = false,
+    this.isDetailed = false,
+    this.padAccessory,
+    this.showAccessory,
+    this.tintAccessory,
+    this.tintAble,
+    this.titleWeight = FontWeight.w500,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -686,7 +768,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -760,7 +843,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = true,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -834,7 +918,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -845,8 +930,8 @@ class GetTile extends StatelessWidget {
     this.verticalPadding,
     this.topPadding = kStandardPaddingY,
     this.bottomPadding = kStandardPaddingY,
-    this.leftPadding = kMediumPaddingX,
-    this.rightPadding = kMediumPaddingX,
+    this.leftPadding = kStandardPaddingX,
+    this.rightPadding = kStandardPaddingX,
     this.trailingPadding,
     this.verticalSpacing = 5,
     this.titleSize = kTileRowFontSize,
@@ -858,7 +943,7 @@ class GetTile extends StatelessWidget {
     this.subtitleMaxLines,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
-    this.leadingPadding = kTileRowLeadingMediumPadding,
+    this.leadingPadding = kTileRowLeadingPadding,
     this.titleChildrenPadding = kTileRowChildrenPadding,
     this.subtitleChildrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
@@ -872,7 +957,7 @@ class GetTile extends StatelessWidget {
   }) : super(key: key);
 
   /// Tile having row features with no accessory and anchored leading at top
-  const GetTile.rowExtended({
+  const GetTile.rowExtend({
     this.leading,
     this.title,
     this.subtitle,
@@ -908,7 +993,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -982,7 +1068,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -1058,7 +1145,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -1133,7 +1221,8 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory = true,
     this.tintAble,
-    this.isTitleBold = true,
+    this.titleWeight = FontWeight.w600,
+    this.subtitleWeight,
     this.isTitleSubbed = false,
     this.isSubtitleSubbed = true,
     this.destructive,
@@ -1205,7 +1294,8 @@ class GetTile extends StatelessWidget {
   final bool? showAccessory;
   final bool? tintAccessory;
   final bool? tintAble;
-  final bool isTitleBold;
+  final FontWeight? titleWeight;
+  final FontWeight? subtitleWeight;
   final bool isTitleSubbed;
   final bool isSubtitleSubbed;
   final bool? destructive;
@@ -1274,8 +1364,7 @@ class GetTile extends StatelessWidget {
     final _trailingPadding =
         trailingPadding?.mapIt((it) => EdgeInsets.only(left: it)) ??
             kTileRowTrailingPadding;
-    final _titleStyle = (titleStyle ?? context.bodyText2)
-        ?.applyIf(isTitleBold, (TextStyle it) => it.bold);
+    final _titleStyle = (titleStyle ?? context.bodyText2);
     final _titleColor = _tintAble ? tintColor : _titleStyle?.color;
     final _subtitleStyle = subtitleStyle ?? context.bodyText2;
     final _subtitleColor = _tintAble ? tintColor : _subtitleStyle?.color;
@@ -1321,6 +1410,7 @@ class GetTile extends StatelessWidget {
                       (it) => it.subbed,
                     ),
                   ),
+                  fontWeight: titleWeight,
                   fontSize: titleSize,
                   hint: titleHint,
                   trailingText: trailingTitle,
@@ -1351,6 +1441,7 @@ class GetTile extends StatelessWidget {
                       (it) => it.subbed,
                     ),
                   ),
+                  fontWeight: subtitleWeight,
                   fontSize: subtitleSize,
                   hint: subtitleHint,
                   trailingText: trailingSubtitle,
@@ -1478,6 +1569,7 @@ class GetTileRow extends StatelessWidget {
     this.background,
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
+    this.fontWeight,
     this.fontSize,
     this.leadingSize,
     this.leadingBoxSize = BoxView.kBoxSize,
@@ -1529,6 +1621,7 @@ class GetTileRow extends StatelessWidget {
     this.background,
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
+    this.fontWeight,
     this.fontSize,
     this.leadingSize,
     this.leadingBoxSize = BoxView.kBoxSize,
@@ -1580,6 +1673,7 @@ class GetTileRow extends StatelessWidget {
     this.background,
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
+    this.fontWeight,
     this.fontSize,
     this.leadingSize,
     this.leadingBoxSize = BoxView.kBoxSize,
@@ -1617,7 +1711,7 @@ class GetTileRow extends StatelessWidget {
   }) : super(key: key);
 
   /// Row with extended content
-  const GetTileRow.extended({
+  const GetTileRow.extend({
     this.leading,
     this.trailing,
     this.trailingText,
@@ -1631,6 +1725,7 @@ class GetTileRow extends StatelessWidget {
     this.background,
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
+    this.fontWeight,
     this.fontSize,
     this.leadingSize,
     this.leadingBoxSize = BoxView.kBoxSize,
@@ -1682,6 +1777,7 @@ class GetTileRow extends StatelessWidget {
     this.background,
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
+    this.fontWeight,
     this.fontSize,
     this.leadingSize,
     this.leadingBoxSize = BoxView.kBoxSize,
@@ -1733,6 +1829,7 @@ class GetTileRow extends StatelessWidget {
     this.background,
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
+    this.fontWeight,
     this.fontSize,
     this.leadingSize,
     this.leadingBoxSize = BoxView.kBoxSize,
@@ -1785,6 +1882,7 @@ class GetTileRow extends StatelessWidget {
     this.background,
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
+    this.fontWeight,
     this.fontSize,
     this.leadingSize,
     this.leadingBoxSize = BoxView.kBoxSize,
@@ -1836,6 +1934,7 @@ class GetTileRow extends StatelessWidget {
     this.background,
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
+    this.fontWeight,
     this.fontSize = kTileRowFontSize,
     this.leadingSize,
     this.leadingBoxSize = 24,
@@ -1887,6 +1986,7 @@ class GetTileRow extends StatelessWidget {
     this.background,
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
+    this.fontWeight,
     this.fontSize = kTileRowFontSize,
     this.leadingSize = kTileRowLeadingSmallSize,
     this.leadingBoxSize = BoxView.kBoxSize,
@@ -1938,6 +2038,7 @@ class GetTileRow extends StatelessWidget {
     this.background,
     this.trailingColor,
     this.maxLines = kTileRowMaxLines,
+    this.fontWeight,
     this.fontSize,
     this.leadingSize,
     this.leadingBoxSize = BoxView.kBoxSize,
@@ -1987,6 +2088,7 @@ class GetTileRow extends StatelessWidget {
   final Color? background;
   final Color? trailingColor;
   final int? maxLines;
+  final FontWeight? fontWeight;
   final double? fontSize;
   final double? leadingSize;
   final double leadingBoxSize;
@@ -2033,7 +2135,8 @@ class GetTileRow extends StatelessWidget {
             : _tintAble
                 ? _tintColor
                 : _color);
-    final _textStyle = textStyle ?? context.caption;
+    final _textStyle =
+        (textStyle ?? context.caption)?.copyWith(fontWeight: fontWeight);
     final _constrained = alignment == CrossAxisAlignment.start ||
         alignment == CrossAxisAlignment.end;
     final _trailing = trailing ??
