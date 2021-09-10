@@ -65,7 +65,7 @@ extension StringX on String {
     List<String> garbage = const ["(", ")", "-"],
   }) {
     var source = replaceAll(RegExp(r"\s+"), " ").trim();
-    if (!source.isEmpty) {
+    if (source.isNotEmpty) {
       if (withoutGarbage)
         source = source
             .applyForIndexed<String>(
