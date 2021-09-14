@@ -228,23 +228,3 @@ class GetScaffold extends StatelessWidget {
 
   static GlobalKey<ScaffoldState> get newKey => GlobalKey<ScaffoldState>();
 }
-
-/*
-
-    NestedScrollView(
-      headerSliverBuilder: (context, innerBoxIsScrolled) {
-        return [
-          SliverAppBar(
-            title: Text("Hello"),
-            floating: true,
-            forceElevated: innerBoxIsScrolled,
-          ),
-        ];
-      },
-      body: PageView.builder(
-        itemCount: pages.length,
-        itemBuilder: (context, index) => Container(height: 0),
-      ),
-    );
-
-*/
