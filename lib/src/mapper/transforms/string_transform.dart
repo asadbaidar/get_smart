@@ -40,8 +40,7 @@ String _stringFromJson(value, bool capitalize, fallback) {
 String _$stringFromJson(value, fallback) {
   try {
     if (value == null) return fallback;
-    if (value is String) return value.trim();
-    return fallback;
+    return value.toString().trim();
   } catch (e) {
     return fallback;
   }

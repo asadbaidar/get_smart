@@ -2,10 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get_smart/get_smart.dart';
 
 class BoxView extends StatelessWidget {
@@ -242,6 +239,11 @@ class LinearProgress extends StatelessWidget {
           value: value,
         )
       : Container(height: height);
+
+  PreferredSize get preferredSize => PreferredSize(
+        preferredSize: Size.fromHeight(height),
+        child: this,
+      );
 }
 
 class MessageView extends StatelessWidget {
@@ -319,57 +321,6 @@ class MessageView extends StatelessWidget {
       ),
     );
   }
-}
-
-typedef SwipeRefreshState = RefreshIndicatorState;
-
-class SwipeRefresh extends StatelessWidget {
-  const SwipeRefresh({
-    required this.child,
-    required this.onRefresh,
-    this.displacement = 40.0,
-    this.edgeOffset = 0.0,
-    this.color,
-    this.backgroundColor,
-    this.notificationPredicate = defaultScrollNotificationPredicate,
-    this.semanticsLabel,
-    this.semanticsValue,
-    this.strokeWidth = 2.0,
-    this.triggerMode = RefreshIndicatorTriggerMode.onEdge,
-    Key? key,
-  }) : _key = key;
-
-  final child;
-  final onRefresh;
-  final double displacement;
-  final double edgeOffset;
-  final Color? color;
-  final Color? backgroundColor;
-  final ScrollNotificationPredicate notificationPredicate;
-  final String? semanticsLabel;
-  final String? semanticsValue;
-  final double strokeWidth;
-  final RefreshIndicatorTriggerMode triggerMode;
-  final Key? _key;
-
-  @override
-  Widget build(BuildContext context) => RefreshIndicator(
-        key: _key,
-        child: child,
-        onRefresh: onRefresh,
-        displacement: displacement,
-        edgeOffset: edgeOffset,
-        notificationPredicate: notificationPredicate,
-        semanticsLabel: semanticsLabel,
-        semanticsValue: semanticsValue,
-        strokeWidth: strokeWidth,
-        triggerMode: triggerMode,
-        color: color ?? context.primaryIconColor,
-        backgroundColor: backgroundColor ?? context.primaryColor,
-      );
-
-  static GlobalKey<SwipeRefreshState> get newKey =>
-      GlobalKey<SwipeRefreshState>();
 }
 
 class CrossFade extends AnimatedCrossFade {

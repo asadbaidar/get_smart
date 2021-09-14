@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -227,4 +228,238 @@ class GetScaffold extends StatelessWidget {
   }
 
   static GlobalKey<ScaffoldState> get newKey => GlobalKey<ScaffoldState>();
+}
+
+class GetAppBar {
+  static List<Widget> slivers({
+    Widget? leading,
+    Widget? bottom, // CupertinoSearchTextField()
+    Widget? refreshSliver,
+    List<Widget>? actions,
+    List<Widget>? largeActions,
+    LinearProgress? progress,
+    Widget? customTitle,
+    Widget? customLargeTitle,
+    String? title,
+    TextStyle? titleStyle,
+    TextStyle? largeTitleStyle,
+    bool largeTitle = true,
+    bool floating = false,
+    bool pinned = true,
+    bool autoLeading = true,
+    double bottomHeight = 0.0, // 36
+    double largeTitleHeight = 48.0,
+    double topPadding = kStandardPadding,
+    double bottomPadding = kStandardPadding,
+    double leftPadding = kStandardPaddingX,
+    double rightPadding = kStandardPaddingX,
+    double? verticalPadding,
+    double? horizontalPadding,
+  }) {
+    if (leading == null &&
+        bottom == null &&
+        refreshSliver == null &&
+        (actions == null || actions.isEmpty) &&
+        (largeActions == null || largeActions.isEmpty) &&
+        progress == null &&
+        customTitle == null &&
+        (customLargeTitle == null || !largeTitle) &&
+        (title == null || title.isEmpty)) {
+      return [];
+    }
+    final _topPadding = verticalPadding ?? topPadding;
+    final _bottomPadding = verticalPadding ?? bottomPadding;
+    final _leftPadding = horizontalPadding ?? leftPadding;
+    final _rightPadding = horizontalPadding ?? rightPadding;
+    final _toolbarHeight =
+        Get.isIOS ? kMinInteractiveDimensionCupertino : kToolbarHeight;
+    final _largeTitleHeight = largeTitleHeight;
+    final _bottomHeight = (progress?.height ?? 0) +
+        (bottom == null
+            ? 0
+            : bottomHeight + _topPadding.half.half + _bottomPadding - 2);
+    return [
+      SliverLayoutBuilder(
+        builder: (context, constraints) {
+          // $debugPrint(constraints);
+          final offset = constraints.scrollOffset;
+          final elevation = floating
+              ? context.appBarElevation
+              : ((offset * 1.01) - 48).clamp(0.0, context.appBarElevation);
+          final blur = ((offset * 1.01) - 48).clamp(0.0, 6.0);
+          final opacity = ((offset - 15) / 15).clamp(0.0, 1.0);
+          final dy = ((offset * -1.01) + 30).clamp(0.0, 14.0);
+
+          final iOpacity = ((25 - offset) / 25).clamp(0.0, 1.0);
+          // final iDy = offset.clamp(0.0, 20.0);
+          final overlapping = offset >= _largeTitleHeight;
+          // $debugPrint(elevation);
+          return SliverAppBar(
+            leadingWidth: 40,
+            titleSpacing: 8,
+            automaticallyImplyLeading: false,
+            leading: leading ?? (autoLeading ? GetButton.back() : null),
+            backgroundColor:
+                context.primaryColor.applyIf(blur > 0, (it) => it.translucent),
+            title: customTitle ??
+                title?.mapIt((it) => Transform.translate(
+                      offset: GetOffset.only(dy: dy),
+                      child: Opacity(
+                        opacity: opacity /*!floating ? 0 : opacity*/,
+                        child: Text(it),
+                      ),
+                    )),
+            titleTextStyle: titleStyle,
+            actions: actions,
+            elevation: elevation,
+            toolbarHeight: _toolbarHeight,
+            // flexibleSpace: Blur(blur: blur),
+            floating: floating,
+            pinned: pinned,
+            bottom: floating || overlapping && pinned
+                ? PreferredSize(
+                    child: Column(children: [
+                      if (floating &&
+                          (customLargeTitle != null ||
+                              (title != null && largeTitle) ||
+                              largeActions?.isNotEmpty == true))
+                        SizedBox(
+                          height: _largeTitleHeight * iOpacity,
+                          child: Opacity(
+                            opacity: iOpacity,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                top: 5,
+                                left: _leftPadding,
+                                right: _rightPadding,
+                                bottom: _bottomPadding.half,
+                              ),
+                              child: Row(
+                                children: [
+                                  if (customLargeTitle != null)
+                                    customLargeTitle,
+                                  if (customLargeTitle == null &&
+                                      title != null &&
+                                      largeTitle)
+                                    AutoSizeText(
+                                      title,
+                                      textAlign: TextAlign.start,
+                                      minFontSize: iOpacity < 1 ? 30 : 12,
+                                      style: largeTitleStyle ??
+                                          context.headline5?.copyWith(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ...largeActions ?? [],
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (bottom != null)
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: _topPadding.half.half,
+                            bottom: _bottomPadding - 2,
+                            left: _leftPadding,
+                            right: _rightPadding,
+                          ),
+                          child: bottom,
+                        ),
+                      if (progress != null && (!floating || overlapping))
+                        progress,
+                    ]),
+                    preferredSize: Size.fromHeight(
+                      _bottomHeight +
+                          (floating ? _largeTitleHeight * iOpacity : 0.0),
+                    ),
+                  )
+                : null,
+          );
+        },
+      ),
+      if (refreshSliver != null) refreshSliver,
+      SliverLayoutBuilder(
+        builder: (context, constraints) {
+          // $debugPrint(constraints);
+          final offset = constraints.scrollOffset == 0
+              ? constraints.overlap
+              : constraints.scrollOffset;
+          final opacity = ((25 - offset) / 25).clamp(0.0, 1.0);
+          final dy = offset.clamp(0.0, 20.0);
+          final overlapping = constraints.overlap >= _largeTitleHeight;
+          // $debugPrint(offset);
+          return SliverToBoxAdapter(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Material(
+                  color: context.primaryColor,
+                  shadowColor: context.appBarShadowColor,
+                  elevation: context.appBarElevation * 0.8,
+                  child: floating
+                      ? Container(
+                          color: Colors.transparent,
+                          height: context.appBarElevation + 0.5,
+                        )
+                      : Container(
+                          padding: EdgeInsets.only(
+                            left: _leftPadding,
+                            right: _rightPadding,
+                            bottom: _bottomPadding.half,
+                          ),
+                          child: Column(
+                            children: [
+                              if (customLargeTitle != null ||
+                                  (title != null && largeTitle) ||
+                                  largeActions?.isNotEmpty == true)
+                                Transform.translate(
+                                  offset: GetOffset.only(dy: -dy),
+                                  child: Opacity(
+                                    opacity: opacity,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 6),
+                                      child: Row(
+                                        children: [
+                                          if (customLargeTitle != null)
+                                            customLargeTitle,
+                                          if (customLargeTitle == null &&
+                                              title != null &&
+                                              largeTitle)
+                                            AutoSizeText(
+                                              title,
+                                              textAlign: TextAlign.start,
+                                              style: largeTitleStyle ??
+                                                  context.headline5?.copyWith(
+                                                    fontSize: 30,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ...largeActions ?? [],
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              if (!overlapping && bottom != null)
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: _topPadding.half,
+                                    bottom: _bottomPadding.half,
+                                  ),
+                                  child: bottom,
+                                ),
+                            ],
+                          ),
+                        ),
+                ),
+                if (!overlapping && progress != null) progress,
+              ],
+            ),
+          );
+        },
+      ),
+    ];
+  }
 }
