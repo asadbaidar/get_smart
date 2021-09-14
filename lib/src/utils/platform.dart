@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:get_smart/get_smart.dart';
 
 class GetPlatformChannel {
   static GetPlatformChannel instance = GetPlatformChannel();
 
   GetPlatformChannel() {
     init();
-    print("GetPlatformChannel: init");
+    $debugPrint("init");
   }
 
   void init() {}

@@ -1,31 +1,101 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:mime_type/mime_type.dart';
-import 'package:path/path.dart' as PATH;
 
 extension StringX on String {
-  String? pre(String? pre, {int doFor = 1, bool doIf = true}) {
-    return applyFor(
-      doIf == true && pre != null ? doFor : 0,
-      (s) => pre! + s!,
-    );
-  }
+  String pre(
+    pre, {
+    int doFor = 1,
+    bool doIf = true,
+    String between = "",
+  }) =>
+      applyFor(
+        doIf == true && pre != null ? doFor : 0,
+        (s) => pre!.toString() + between + s,
+      );
 
-  String? post(String? post, {int doFor = 1, bool doIf = true}) {
-    return applyFor(
-      doIf == true && post != null ? doFor : 0,
-      (s) => s! + post!,
-    );
-  }
+  String post(
+    post, {
+    int doFor = 1,
+    bool doIf = true,
+    String between = "",
+  }) =>
+      applyFor(
+        doIf == true && post != null ? doFor : 0,
+        (s) => s + between + post!.toString(),
+      );
 
-  String? surround(String? surround, {int doFor = 1, bool doIf = true}) {
-    return applyFor(
-      doIf == true && surround != null ? doFor : 0,
-      (s) => s?.pre(surround)?.post(surround),
-    );
+  String surround(
+    surround, {
+    int doFor = 1,
+    bool doIf = true,
+    String between = "",
+  }) =>
+      applyFor(
+        doIf == true && surround != null ? doFor : 0,
+        (s) => s
+            .pre(
+              surround,
+              between: between,
+            )
+            .post(
+              surround,
+              between: between,
+            ),
+      );
+
+  String takeInitialsWithoutGarbage(
+    int count, {
+    bool fill = false,
+    List<String> garbage = const ["(", ")", "-"],
+  }) =>
+      takeInitials(
+        count,
+        fill: fill,
+        withoutGarbage: true,
+        garbage: garbage,
+      );
+
+  String takeInitials(
+    int count, {
+    bool fill = false,
+    bool withoutGarbage = false,
+    List<String> garbage = const ["(", ")", "-"],
+  }) {
+    var source = replaceAll(RegExp(r"\s+"), " ").trim();
+    if (source.isNotEmpty) {
+      if (withoutGarbage)
+        source = source
+            .applyForIndexed<String>(
+                garbage.length,
+                (s, i) => s.replaceAll(
+                      RegExp(r"\s*\" + garbage[i] + r"\s*",
+                          caseSensitive: false),
+                      " ",
+                    ))
+            .trim();
+      if (!source.contains(" ")) {
+        return source.take(fill ? count : 1).trim().uppercase;
+      }
+      final initials = StringBuffer("");
+      final sourceParts = source.split(" ");
+      for (int i = 0; i < sourceParts.length; i++) {
+        if (i == count) break;
+        try {
+          initials.write(sourceParts[i].trim().take());
+        } catch (e) {
+          $debugPrint(e, source);
+        }
+      }
+      final _initials = initials.toString();
+      return (fill && _initials.length < count
+              ? source.take(count).trim()
+              : _initials)
+          .uppercase;
+    }
+    return source;
   }
 
   String take([int count = 1]) => characters.take(count).toString();
@@ -50,17 +120,9 @@ extension StringX on String {
 
   String? get notEmpty => isEmpty ? null : this;
 
+  String? get notBlank => isBlank! ? null : this;
+
   bool get isNotBlank => !isBlank!;
-
-  String get fileName => PATH.basename(this);
-
-  String get fileNameWithoutType => PATH.basenameWithoutExtension(this);
-
-  String get fileType => takeLastWhile((s) => s != ".").lowercase;
-
-  String? get mimeType => mime(this);
-
-  MediaType? get mediaType => mimeType?.mapIt((it) => MediaType.parse(it));
 
   bool equalsIgnoreCase(String? s) => lowercase == s?.lowercase;
 
@@ -68,9 +130,9 @@ extension StringX on String {
       s == null ? false : lowercase.contains(s.lowercase);
 
   Color get materialPrimary =>
-      Colors.primaries[random(Colors.primaries.length)];
+      Colors.primaries[randomTill(Colors.primaries.length)];
 
-  Color get materialAccent => Colors.accents[random(Colors.accents.length)];
+  Color get materialAccent => Colors.accents[randomTill(Colors.accents.length)];
 
   bool isPasswordStrong({int min = 8}) {
     if (isBlank!) return false;
@@ -114,7 +176,9 @@ extension StringX on String {
           ? uppercase
           : this[0].uppercase + substring(1).lowercase;
 
-  bool get boolYN => trim().equalsIgnoreCase("Y");
+  int toInt() => int.tryParse(this) ?? 0;
+
+  double toDouble() => double.tryParse(this) ?? 0.0;
 
   Future<String> get encrypted async => await GetCipher.instance.encrypt(this);
 
@@ -122,9 +186,36 @@ extension StringX on String {
 
   get json => jsonDecode(this);
 
-  int toInt() => int.tryParse(this) ?? 0;
+  Uint8List? get base64Decoded {
+    try {
+      return base64Decode(this);
+    } catch (e) {
+      return null;
+    }
+  }
 
-  double toDouble() => double.tryParse(this) ?? 0.0;
+  String get base64Encoded {
+    try {
+      final bytes = toBytes();
+      return bytes == null ? this : base64Encode(bytes);
+    } catch (e) {
+      return this;
+    }
+  }
 
-  List<int> toUTF8() => utf8.encode(this);
+  Uint8List? toBytes() {
+    try {
+      return utf8.encoder.convert(this);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  List<int>? toUTF8() {
+    try {
+      return utf8.encode(this);
+    } catch (e) {
+      return null;
+    }
+  }
 }

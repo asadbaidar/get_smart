@@ -84,7 +84,7 @@ abstract class GetController extends MultipleFutureGetController {
 
   @override
   Map<Object, Future Function()> get futuresMap => {
-        $name(GetPrefs): GetPrefs.instance.reload,
+        if (loadPrefsOnInit) $name(GetPrefs): GetPrefs.instance.reload,
         typeName: futureToRun,
         ...futuresToRun,
       };
@@ -97,6 +97,9 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Single future to run at the startup
   Future futureToRun() => Future.value();
+
+  /// To mark, if prefs should be reloaded [onInit]. Defaults to true.
+  bool get loadPrefsOnInit => true;
 
   /// Returns true if all objects have succeeded.
   bool get isAllSucceeded => dataMap.keys.every((k) => succeeded(k));
@@ -262,18 +265,18 @@ abstract class GetController extends MultipleFutureGetController {
   void setErrorFor(key, value) => setErrorForObject(key, value);
 
   /// Sets the data by key
-  void setDataFor(Object key, value) => dataMap[key.hash] = value;
+  void setDataFor(Object key, value) => dataMap[key.$hash] = value;
 
   /// Sets the runner by key
   void setRunnerFor(Object key, Future Function() value) =>
-      runnerMap[key.hash] = value;
+      runnerMap[key.$hash] = value;
 
   /// Returns the runner by key
   Future Function() runner(Object key) =>
-      runnerMap[key.hash] ?? () => Future.value();
+      runnerMap[key.$hash] ?? () => Future.value();
 
   /// Returns the data by key
-  GetResult<T>? data<T>(Object key) => $cast<GetResult<T>>(dataMap[key.hash]);
+  GetResult<T>? data<T>(Object key) => $cast<GetResult<T>>(dataMap[key.$hash]);
 
   /// Returns the success message by key
   String? success(Object key) => data(key)?.success;
@@ -325,6 +328,23 @@ abstract class GetController extends MultipleFutureGetController {
     update();
   }
 
+  StackList<Future> _futureQueue = StackList.from([Future.value()]);
+
+  /// Sets the key for error logs, runs the future in queue which means next
+  /// future will not run unless the previous gets completed.
+  ///
+  /// key: by default `typeName`, if null, status will be update in default key
+  Future runFutureQueue(
+    Future Function() future, {
+    Object? key,
+    bool throwException = false,
+  }) =>
+      (_futureQueue.pop() ?? Future.value()).whenComplete(() => runErrorFuture(
+            _futureQueue.push(future()),
+            key: key,
+            throwException: throwException,
+          ));
+
   /// Sets the key to busy, runs the runner and then sets it to not busy
   /// when completed.
   ///
@@ -332,7 +352,7 @@ abstract class GetController extends MultipleFutureGetController {
   ///
   /// rethrows [Exception] after setting busy to false by key
   Future runBusyRunner(
-    Future Function() busyAction, {
+    Future Function() busyRunner, {
     Object? key,
     bool throwException = false,
   }) {
@@ -340,7 +360,7 @@ abstract class GetController extends MultipleFutureGetController {
     final runner = () async {
       setDataFor(_key, null);
       return await runBusyFuture(
-        busyAction(),
+        busyRunner(),
         key: _key,
         throwException: throwException,
       );
@@ -373,7 +393,7 @@ abstract class GetController extends MultipleFutureGetController {
     } catch (e) {
       setBusyFor(_key, false);
       if (throwException) rethrow;
-      return GetResult();
+      return GetResult.error(e.toString());
     }
   }
 
@@ -395,7 +415,7 @@ abstract class GetController extends MultipleFutureGetController {
       setErrorFor(_key, e);
       onError(e, _key);
       if (throwException) rethrow;
-      return GetResult();
+      return GetResult.error(e.toString());
     }
   }
 }

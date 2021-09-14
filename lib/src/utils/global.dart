@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_smart/get_smart.dart';
@@ -27,24 +28,28 @@ String $route(Type type) => "/" + $name(type);
 void $debugLog([
   dynamic value,
   dynamic tag,
-  String name = "",
+  Object? name = "",
 ]) {
-  final _tag = tag == null ? "" : "$tag: ";
-  developer.log(
-    "$_tag${value ?? ""}".trim(),
-    time: Date.now,
-    name: name,
-  );
+  if (kDebugMode) {
+    final _tag = tag == null ? "" : "$tag: ";
+    developer.log(
+      "$_tag${value ?? ""}".trim(),
+      time: Date.now,
+      name: name?.toString() ?? "",
+    );
+  }
 }
 
 void $log([
   dynamic value,
   dynamic tag,
-  String? name,
+  Object? name,
 ]) {
-  final _name = name == null ? "" : "[$name] ";
-  final _tag = tag == null ? "" : "$tag: ";
-  print("$_name$_tag${value ?? ""}".trim());
+  if (kDebugMode) {
+    final _name = name == null ? "" : "[$name] ";
+    final _tag = tag == null ? "" : "$tag: ";
+    print("$_name$_tag${value ?? ""}".trim());
+  }
 }
 
 extension GetDebugUtils<T> on T {
@@ -54,7 +59,7 @@ extension GetDebugUtils<T> on T {
   ]) {
     $print(value, tag);
     $debugLog(
-      value ?? this,
+      value ?? this.toString(),
       tag,
       $name(runtimeType),
     );
@@ -65,7 +70,7 @@ extension GetDebugUtils<T> on T {
     dynamic tag,
   ]) =>
       $log(
-        value ?? this,
+        value ?? this.toString(),
         tag,
         $name(runtimeType),
       );
@@ -80,10 +85,10 @@ Future<T> scheduleTask<T>(FutureOr<T> Function() task) async {
 
 Future<T> profileTask<T>(Future<T> Function() task) async {
   var time = Date.now.inMilliseconds;
-  print("${T.toString()}: Started task");
+  $debugLog("Started task", "profile", T.typeName);
   var result = await task();
-  print("${T.toString()}: Finished task "
-      "in ${Date.now.inMilliseconds - time}ms.");
+  $debugLog("Finished task in ${Date.now.inMilliseconds - time}ms.", "profile",
+      T.typeName);
   return result;
 }
 
@@ -105,24 +110,31 @@ extension ObjectX on Object {
 
   /// Apply the [operation] with [T] as parameter if [condition] is `true`
   T? applyIf<T>(bool? condition, T Function(T) operation) {
-    return (condition == true) ? operation(this as T) : this as T?;
+    return (condition == true) ? operation(this as T) : this as T;
   }
 
   /// Repeat the [task] with [T] as parameter for [n] times
-  T? applyFor<T>(int n, T? Function(T?) task) {
-    Object? value = this;
-    n.repeatsFor(() => value = task(value as T?));
-    return value as T?;
+  T applyFor<T>(int n, T Function(T) task) {
+    T value = this as T;
+    n.repeatsFor(() => value = task(value));
+    return value;
+  }
+
+  /// Repeat the [task] with [T] as parameter for [n] times
+  T applyForIndexed<T>(int n, T Function(T v, int i) task) {
+    T value = this as T;
+    n.repeatsForIndexed((i) => value = task(value, i));
+    return value;
   }
 
   /// Wrap the value of [T] into [Future.value]
   FutureOr<T> future<T>() => Future.value(this as T);
 
   /// Returns [hashCode] as [String]
-  String get hash => hashCode.toString();
+  String get $hash => hashCode.toString();
 
   /// Returns random integer seeded with [hashCode] and less than [max]
-  int random(int max) => Random(hashCode).nextInt(max);
+  int randomTill(int max) => Random(hashCode).nextInt(max);
 
   /// Returns only name of the enum value with capitalized form
   String get keyName => toString().split('.').last;

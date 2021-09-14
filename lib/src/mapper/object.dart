@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -57,12 +60,21 @@ abstract class GetObject extends Mappable {
 
   Color get materialPrimary => description.materialPrimary;
 
+  late final String initials = description.takeInitials(2);
+
+  late final String initialsFilled = description.takeInitials(2, fill: true);
+
+  late final String initialsWithoutGarbage =
+      description.takeInitialsWithoutGarbage(2);
+
   var isExpanded = false;
 
   bool toggleExpand() => isExpanded = !isExpanded;
 
   IconData get expandedIcon =>
-      isExpanded ? Icons.expand_less : Icons.expand_more;
+      isExpanded ? CupertinoIcons.chevron_up : CupertinoIcons.chevron_down;
+
+  Matrix4 get expandedAngle => Matrix4.rotationZ(isExpanded ? pi : 0);
 
   var isChecked = false;
 

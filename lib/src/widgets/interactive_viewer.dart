@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get_smart/get_smart.dart';
 
+/// A widget that enables pan and zoom interactions with its child.
 class GetInteractiveViewer extends StatefulWidget {
+  /// Create an GetInteractiveViewer.
+  ///
+  /// The [child] parameter must not be null.
   const GetInteractiveViewer({
     required this.child,
     this.minScale = 1.0,
@@ -17,7 +21,19 @@ class GetInteractiveViewer extends StatefulWidget {
   }) : super(key: key);
 
   final Widget child;
+
+  /// The minimum allowed scale.
+  ///
+  /// The scale will be clamped between this and [maxScale] inclusively.
+  ///
+  /// Defaults to 1.0.
   final double minScale;
+
+  /// The maximum allowed scale.
+  ///
+  /// The scale will be clamped between this and [minScale] inclusively.
+  ///
+  /// Defaults to 2.5.
   final double maxScale;
   final Color barrierColor;
   final Color? backgroundColor;
@@ -141,7 +157,7 @@ class _GetInteractiveViewerState extends State<GetInteractiveViewer>
 
   @override
   Widget build(BuildContext context) => Container(
-        color: widget.backgroundColor ?? Get.theme.canvasColor,
+        color: widget.backgroundColor ?? context.canvasColor,
         width: placeholder?.width,
         height: placeholder?.height,
         child: placeholder == null ? buildViewer(context) : null,

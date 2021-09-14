@@ -48,9 +48,9 @@ class Mapper {
     _builders.forEach((builder) {
       Mappable.factories.putIfAbsent(builder().runtimeType, () => builder);
     });
-    print(Mappable.factories);
+    $debugPrint(Mappable.factories);
     final object = toObject<T>(as?.runtimeType);
-    print(object);
+    $debugPrint(object?.typeName);
     _builders.forEach((builder) {
       Mappable.factories.remove(builder().runtimeType);
     });
@@ -95,8 +95,8 @@ class Mapper {
     Transformable? transform,
   ]) {
     final field = fields.firstWhere(
-      (it) => json[it]?.toString().notEmpty != null,
-      orElse: () => fields.$first ?? "",
+      (f) => json[f]?.toString().notEmpty != null,
+      orElse: () => fields.firstOrNull ?? "",
     );
     switch (_mappingType) {
       case MapperType.fromJson:
@@ -111,111 +111,119 @@ class Mapper {
     }
   }
 
-  _fromJson<T>(
+  void _fromJson<T>(
     String field,
     MapperSetter setter, [
     Transformable? transform,
   ]) {
-    var v = json[field];
-    final type = _getValueType(v);
+    try {
+      var v = json[field];
+      final type = _getValueType(v);
 
-    // Transform
-    if (transform != null) {
-      if (transform is GetTransform) {
-        setter(transform.fromJson(v != null ? v : json));
-      } else if (type == ValueType.list) {
-        assert(
-            T.toString() != "dynamic", "Missing type at mapping for `$field`");
-        final List<T> list = [];
-        for (int i = 0; i < v.length; i++) {
-          final item = transform.fromJson(v[i]);
-          if (item != null) list.add(item);
+      // Transform
+      if (transform != null) {
+        if (transform is GetTransform) {
+          setter(transform.fromJson(v != null ? v : json));
+        } else if (type == ValueType.list) {
+          assert(T.toString() != "dynamic",
+              "Missing type at mapping for `$field`");
+          final List<T> list = [];
+          for (int i = 0; i < v.length; i++) {
+            final item = transform.fromJson(v[i]);
+            if (item != null) list.add(item);
+          }
+          setter(list);
+        } else {
+          v = transform.fromJson(v);
+          setter(v);
         }
-        setter(list);
-      } else {
-        v = transform.fromJson(v);
-        setter(v);
+
+        return;
       }
 
-      return;
-    }
+      switch (type) {
+        // List
+        case ValueType.list:
+          // Return it-self, if T is not set
+          if (T.toString() == "dynamic") return setter(v);
+          final List<T> list = [];
 
-    switch (type) {
-      // List
-      case ValueType.list:
-        // Return it-self, if T is not set
-        if (T.toString() == "dynamic") return setter(v);
-        final List<T> list = [];
+          for (int i = 0; i < v.length; i++) {
+            final item = _itemBuilder<T>(v[i], MapperType.fromJson);
+            if (item != null) list.add(item);
+          }
 
-        for (int i = 0; i < v.length; i++) {
-          final item = _itemBuilder<T>(v[i], MapperType.fromJson);
-          if (item != null) list.add(item);
-        }
+          setter(list);
+          break;
 
-        setter(list);
-        break;
+        // Map
+        case ValueType.map:
+          setter(_itemBuilder<T>(v, MapperType.fromJson));
+          break;
 
-      // Map
-      case ValueType.map:
-        setter(_itemBuilder<T>(v, MapperType.fromJson));
-        break;
-
-      default:
-        setter(v);
+        default:
+          setter(v);
+      }
+    } catch (e) {
+      $debugPrint(e, "MappingError.fromJson");
     }
   }
 
-  _toJson<T>(
+  void _toJson<T>(
     String field,
     value,
     MapperSetter? setter, [
     Transformable? transform,
   ]) {
-    if (setter != null) value = setter(null);
-    if (value == null) return;
+    try {
+      if (setter != null) value = setter(null);
+      if (value == null) return;
 
-    final type = _getValueType(value);
+      final type = _getValueType(value);
 
-    // Transform
-    if (transform != null) {
-      if (type == ValueType.list) {
-        final list = [];
-        for (int i = 0; i < value.length; i++) {
-          final item = transform.toJson(value[i]);
-          if (item != null) list.add(item);
+      // Transform
+      if (transform != null) {
+        if (type == ValueType.list) {
+          final list = [];
+          for (int i = 0; i < value.length; i++) {
+            final item = transform.toJson(value[i]);
+            if (item != null) list.add(item);
+          }
+          this.json[field] = list;
+        } else {
+          value = transform.toJson(value);
+          this.json[field] = value;
         }
-        this.json[field] = list;
-      } else {
-        value = transform.toJson(value);
-        this.json[field] = value;
+        return;
       }
-      return;
-    }
 
-    switch (type) {
-      // List
-      case ValueType.list:
-        final list = [];
+      switch (type) {
+        // List
+        case ValueType.list:
+          final list = [];
 
-        for (int i = 0; i < value.length; i++) {
-          final item = _itemBuilder<T>(value[i], MapperType.toJson);
-          if (item != null) list.add(item);
-        }
+          for (int i = 0; i < value.length; i++) {
+            final item = _itemBuilder<T>(value[i], MapperType.toJson);
+            if (item != null) list.add(item);
+          }
 
-        this.json[field] = list;
-        break;
+          this.json[field] = list;
+          break;
 
-      // Map
-      case ValueType.map:
-        this.json[field] = value;
-        break;
+        // Map
+        case ValueType.map:
+          this.json[field] = value;
+          break;
 
-      default:
-        if (value is Mappable) {
-          this.json[field] = value.toJson();
-          return;
-        }
-        this.json[field] = value;
+        default:
+          if (value is Mappable) {
+            this.json[field] = value.toJson();
+            return;
+          }
+          this.json[field] = value;
+      }
+    } catch (e) {
+      $debugPrint(e, "MappingError.toJson");
     }
   }
 

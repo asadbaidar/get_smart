@@ -1,3 +1,59 @@
+## [0.1.2+1]
+
+* Dependencies updated
+
+## [0.1.2]
+
+* Bug fixes
+
+## [0.1.1+9]
+
+* Bug fixes
+
+## [0.1.1+8]
+
+* Bug fixes
+
+## [0.1.1+7]
+
+* Bug fixes
+
+## [0.1.1+6]
+
+* Bug fixes
+
+## [0.1.1+5]
+
+* Bug fixes
+
+## [0.1.1+4]
+
+* Bug fixes
+
+## [0.1.1+3]
+
+* Bug fixes
+
+## [0.1.1+2]
+
+* Bug fixes
+
+## [0.1.1+1]
+
+* Bug fixes
+
+## [0.1.1]
+
+* Bug fixes and a lot of Breaking Changes
+
+## [0.1.0]
+
+* Bug fixes
+
+## [0.1.0-nullsafety.9]
+
+* Bug fixes
+
 ## [0.1.0-nullsafety.8]
 
 * Bug fixes

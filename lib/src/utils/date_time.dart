@@ -54,45 +54,91 @@ extension Date on DateTime {
 
   static DateTime get now => DateTime.now();
 
-  String get formatEMMMdy => GetDateFormat.inEMMMdy.format(this);
+  String get formatEMMMdY => isCurrentYear ? formatEMMMd : formatEMMMdy;
 
-  String get formatEEEEMMMMdy => GetDateFormat.inEEEEMMMMdy.format(this);
+  String get formatEMMMdYHma =>
+      isCurrentYear ? formatEMMMdHma : formatEMMMdyHma;
+
+  String get formatEMMMdy => GetDateFormat.inEMMMdy.format(this);
 
   String get formatEMMMdyHma => GetDateFormat.inEMMMdyHma.format(this);
 
+  String get formatEMMMd => GetDateFormat.inEMMMd.format(this);
+
+  String get formatEMMMdHma => GetDateFormat.inEMMMdHma.format(this);
+
+  String get formatEEEEMMMMdY =>
+      isCurrentYear ? formatEEEEMMMMd : formatEEEEMMMMdy;
+
+  String get formatEEEEMMMMdYHma =>
+      isCurrentYear ? formatEEEEMMMMdHma : formatEEEEMMMMdyHma;
+
+  String get formatEEEEMMMMdy => GetDateFormat.inEEEEMMMMdy.format(this);
+
   String get formatEEEEMMMMdyHma => GetDateFormat.inEEEEMMMMdyHma.format(this);
+
+  String get formatEEEEMMMMd => GetDateFormat.inEEEEMMMMd.format(this);
+
+  String get formatEEEEMMMMdHma => GetDateFormat.inEEEEMMMMdHma.format(this);
+
+  String get formatMMMMdY => isCurrentYear ? formatMMMMd : formatMMMMdy;
+
+  String get formatMMMMdYHma =>
+      isCurrentYear ? formatMMMMdHma : formatMMMMdyHma;
 
   String get formatMMMMdy => GetDateFormat.inMMMMdy.format(this);
 
+  String get formatMMMMdyHma => GetDateFormat.inMMMMdyHma.format(this);
+
   String get formatMMMMd => GetDateFormat.inMMMMd.format(this);
 
-  String get formatMMMd => GetDateFormat.inMMMd.format(this);
+  String get formatMMMMdHma => GetDateFormat.inMMMMdHma.format(this);
+
+  String get formatMMMdY => isCurrentYear ? formatMMMd : formatMMMdy;
+
+  String get formatMMMdYHma => isCurrentYear ? formatMMMdHma : formatMMMdyHma;
 
   String get formatMMMdy => GetDateFormat.inMMMdy.format(this);
 
   String get formatMMMdyHma => GetDateFormat.inMMMdyHma.format(this);
 
+  String get formatMMMd => GetDateFormat.inMMMd.format(this);
+
+  String get formatMMMdHma => GetDateFormat.inMMMdHma.format(this);
+
+  String get formatMdY => isCurrentYear ? formatMd : formatMdy;
+
+  String get formatMdYHma => isCurrentYear ? formatMdHma : formatMdyHma;
+
   String get formatMdy => GetDateFormat.inMdy.format(this);
 
   String get formatMdyHma => GetDateFormat.inMdyHma.format(this);
 
+  String get formatMd => GetDateFormat.inMd.format(this);
+
+  String get formatMdHma => GetDateFormat.inMdHma.format(this);
+
   String get formatDMMMy => GetDateFormat.inDMMMy.format(this);
 
-  String get formatHma => GetDateFormat.inHma.format(this);
+  String get formatDMMMyHm => GetDateFormat.inDMMMyHm.format(this);
 
   String get formatDMMy => GetDateFormat.inDMMy.format(this);
 
-  String get formatYMMd => GetDateFormat.inYMMd.format(this);
-
-  String get formatHm => GetDateFormat.inHm.format(this);
-
   String get formatDMMyHm => GetDateFormat.inDMMyHm.format(this);
 
-  String get formatHms => GetDateFormat.inHms.format(this);
+  String get formatYMMd => GetDateFormat.inYMMd.format(this);
 
   String get formatYMMdHms => GetDateFormat.inYMMdHms.format(this);
 
+  String get formatHma => GetDateFormat.inHma.format(this);
+
+  String get formatHm => GetDateFormat.inHm.format(this);
+
+  String get formatHms => GetDateFormat.inHms.format(this);
+
   int get inMilliseconds => millisecondsSinceEpoch;
+
+  bool get isCurrentYear => year == now.year;
 
   TimeOfDay get timeOfDay => TimeOfDay.fromDateTime(this);
 
@@ -113,41 +159,61 @@ extension Date on DateTime {
 extension GetDateFormat on DateFormat {
   static DateFormat get inEMMMdy => DateFormat.yMMMEd();
 
-  static DateFormat get inEEEEMMMMdy => DateFormat.yMMMMEEEEd();
-
   static DateFormat get inEMMMdyHma => inEMMMdy.add(inHma, ", ");
+
+  static DateFormat get inEMMMd => DateFormat.MMMEd();
+
+  static DateFormat get inEMMMdHma => inEMMMd.add(inHma, ", ");
+
+  static DateFormat get inEEEEMMMMdy => DateFormat.yMMMMEEEEd();
 
   static DateFormat get inEEEEMMMMdyHma => inEEEEMMMMdy.add(inHma, ", ");
 
+  static DateFormat get inEEEEMMMMd => DateFormat.MMMMEEEEd();
+
+  static DateFormat get inEEEEMMMMdHma => inEEEEMMMMd.add(inHma, ", ");
+
   static DateFormat get inMMMMdy => DateFormat.yMMMMd();
+
+  static DateFormat get inMMMMdyHma => inMMMMdy.add(inHma, ", ");
 
   static DateFormat get inMMMMd => DateFormat.MMMMd();
 
-  static DateFormat get inMMMd => DateFormat.MMMd();
+  static DateFormat get inMMMMdHma => inMMMMd.add(inHma, ", ");
 
   static DateFormat get inMMMdy => DateFormat.yMMMd();
 
   static DateFormat get inMMMdyHma => inMMMdy.add(inHma, ", ");
 
+  static DateFormat get inMMMd => DateFormat.MMMd();
+
+  static DateFormat get inMMMdHma => inMMMd.add(inHma, ", ");
+
   static DateFormat get inMdy => DateFormat.yMd();
 
   static DateFormat get inMdyHma => inMdy.add(inHma, ", ");
 
+  static DateFormat get inMd => DateFormat.Md();
+
+  static DateFormat get inMdHma => inMd.add(inHma, ", ");
+
   static DateFormat get inDMMMy => DateFormat("dd-MMM-yyyy");
 
-  static DateFormat get inHma => DateFormat("h:mm a");
+  static DateFormat get inDMMMyHm => inDMMMy.add_Hm();
 
   static DateFormat get inDMMy => DateFormat("dd-MM-yyyy");
 
+  static DateFormat get inDMMyHm => inDMMy.add_Hm();
+
   static DateFormat get inYMMd => DateFormat("yyyy-MM-dd");
+
+  static DateFormat get inYMMdHms => inYMMd.add_Hms();
+
+  static DateFormat get inHma => DateFormat("h:mm a");
 
   static DateFormat get inHm => DateFormat.Hm();
 
   static DateFormat get inHms => DateFormat.Hms();
-
-  static DateFormat get inDMMyHm => inDMMy.add_Hm();
-
-  static DateFormat get inYMMdHms => inYMMd.add_Hms();
 
   /// Add [format] to this instance as a pattern.
   ///

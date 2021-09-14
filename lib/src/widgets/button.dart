@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -42,8 +44,8 @@ abstract class GetButton {
 
   static Color resolveColor(Color color, Set<MaterialState> states) {
     if (states.contains(MaterialState.disabled)) return color.dimmed;
-    if (states.contains(MaterialState.hovered)) return color.highlighted;
-    if (states.contains(MaterialState.focused)) return color.highlighted;
+    if (states.contains(MaterialState.hovered)) return color.focused;
+    if (states.contains(MaterialState.focused)) return color.focused;
     if (states.contains(MaterialState.pressed)) return color.hinted;
     return color;
   }
@@ -686,69 +688,69 @@ abstract class GetButton {
     TextStyle? labelStyle,
     bool? enableFeedback = true,
     BoxConstraints? constraints,
-  }) {
-    var labeled = label != null;
-    var labeledOrMini = labeled || mini == true;
-    var _color = primary == true
-        ? Get.theme.primaryIconTheme.color
-        : Get.theme.iconTheme.color;
-    return IconButton(
-      key: key,
-      iconSize: iconSize ??
-          (labeledOrMini
-              ? 20.0
-              : primary == true
-                  ? Get.theme.primaryIconTheme.size
-                  : Get.theme.iconTheme.size) ??
-          24.0,
-      visualDensity: visualDensity,
-      padding: padding ??
-          (labeled
-              ? EdgeInsets.symmetric(vertical: mini ? 4 : 8)
-              : const EdgeInsets.all(8)),
-      alignment: alignment ?? Alignment.center,
-      splashRadius: splashRadius ?? (labeled ? 24 : 18),
-      icon: labeled
-          ? Column(
-              children: [
-                SizedBox(
-                  height: iconSize == null
-                      ? (mini ? 2 : 4)
-                      : ((mini ? 22 : 24) - iconSize).abs(),
-                ),
-                child!,
-                SizedBox(height: mini ? 2 : 2.5),
-                Expanded(
-                  child: Text(
-                    label!,
-                    style: labelStyle ??
-                        TextStyle(
-                          fontSize: 9,
-                          color: enabled == true
-                              ? (tintLabel == true ? _color : null)
-                              : _color?.subbed,
-                        ),
-                  ),
-                ),
-              ],
-            )
-          : (child ?? const SizedBox()),
-      color: color,
-      focusColor: focusColor,
-      hoverColor: hoverColor,
-      highlightColor: highlightColor,
-      splashColor: splashColor,
-      disabledColor: disabledColor ?? _color?.hinted,
-      onPressed: (enabled ?? true) ? onPressed : null,
-      mouseCursor: mouseCursor ?? SystemMouseCursors.click,
-      focusNode: focusNode,
-      autofocus: autofocus ?? false,
-      tooltip: tooltip,
-      enableFeedback: enableFeedback ?? true,
-      constraints: constraints ??
-          (labeled ? BoxConstraints.expand(width: 40) : BoxConstraints()),
-    );
-  }
+  }) =>
+      ThemeBuilder((context) {
+        var labeled = label != null;
+        var labeledOrMini = labeled || mini == true;
+        var _color =
+            primary == true ? context.primaryIconColor : context.iconColor;
+        return IconButton(
+          key: key,
+          iconSize: iconSize ??
+              (labeledOrMini
+                  ? 20.0
+                  : primary == true
+                      ? context.primaryIconTheme.size
+                      : context.iconTheme.size) ??
+              24.0,
+          visualDensity: visualDensity,
+          padding: padding ??
+              (labeled
+                  ? EdgeInsets.symmetric(vertical: mini ? 4 : 8)
+                  : const EdgeInsets.symmetric(horizontal: 8)),
+          alignment: alignment ?? Alignment.center,
+          splashRadius: splashRadius ?? (labeled ? 24 : 18),
+          icon: labeled
+              ? Column(
+                  children: [
+                    SizedBox(
+                      height: iconSize == null
+                          ? (mini ? 2 : 4)
+                          : ((mini ? 22 : 24) - iconSize).abs(),
+                    ),
+                    child!,
+                    SizedBox(height: mini ? 2 : 2.5),
+                    Expanded(
+                      child: Text(
+                        label!,
+                        style: labelStyle ??
+                            TextStyle(
+                              fontSize: 9,
+                              color: enabled == true
+                                  ? (tintLabel == true ? _color : null)
+                                  : _color?.subbed,
+                            ),
+                      ),
+                    ),
+                  ],
+                )
+              : (child ?? const SizedBox()),
+          color: color,
+          focusColor: focusColor,
+          hoverColor: hoverColor,
+          highlightColor: highlightColor,
+          splashColor: splashColor,
+          disabledColor: disabledColor ?? _color?.hinted,
+          onPressed: (enabled ?? true) ? onPressed : null,
+          mouseCursor: mouseCursor ?? SystemMouseCursors.click,
+          focusNode: focusNode,
+          autofocus: autofocus ?? false,
+          tooltip: tooltip,
+          enableFeedback: enableFeedback ?? true,
+          constraints: constraints ??
+              (labeled ? BoxConstraints.expand(width: 40) : BoxConstraints()),
+        );
+      });
 
   /// Create a primary icon button.
   static Widget primaryIcon({
@@ -778,7 +780,7 @@ abstract class GetButton {
     bool enableFeedback = true,
     BoxConstraints? constraints,
   }) =>
-      GetButton.icon(
+      icon(
         key: key,
         iconSize: iconSize,
         visualDensity: visualDensity,
@@ -835,7 +837,7 @@ abstract class GetButton {
     bool enableFeedback = true,
     BoxConstraints? constraints,
   }) =>
-      GetButton.icon(
+      icon(
         key: key,
         iconSize: iconSize,
         visualDensity: visualDensity,
@@ -864,23 +866,239 @@ abstract class GetButton {
         constraints: constraints,
       );
 
+  /// Create an anchored icon button.
+  static Widget anchoredIcon({
+    Key? key,
+    double? iconSize,
+    VisualDensity? visualDensity,
+    EdgeInsetsGeometry? padding,
+    AlignmentGeometry? alignment,
+    double? splashRadius,
+    Widget? child,
+    Color? color,
+    Color? focusColor,
+    Color? hoverColor,
+    Color? highlightColor,
+    Color? splashColor,
+    Color? disabledColor,
+    void Function()? onPressed,
+    MouseCursor? mouseCursor,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool primary = false,
+    bool enabled = true,
+    bool mini = false,
+    bool tintLabel = true,
+    String? tooltip,
+    String? label,
+    TextStyle? labelStyle,
+    bool enableFeedback = true,
+    BoxConstraints? constraints,
+  }) =>
+      icon(
+        key: key,
+        iconSize: iconSize,
+        visualDensity: visualDensity,
+        padding: padding ?? const EdgeInsets.all(8),
+        alignment: alignment,
+        splashRadius: splashRadius,
+        child: child,
+        color: color,
+        focusColor: focusColor,
+        hoverColor: hoverColor,
+        highlightColor: highlightColor,
+        splashColor: splashColor,
+        disabledColor: disabledColor,
+        onPressed: onPressed,
+        mouseCursor: mouseCursor,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        primary: primary,
+        enabled: enabled,
+        mini: mini,
+        tintLabel: tintLabel,
+        tooltip: tooltip,
+        label: label,
+        labelStyle: labelStyle,
+        enableFeedback: enableFeedback,
+        constraints: constraints,
+      );
+
+  static Widget plain({
+    Key? key,
+    bool enabled = true,
+    bool primary = false,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    double? topPadding,
+    double? bottomPadding,
+    double? leftPadding,
+    double? rightPadding,
+    Color? color,
+    Color disabledColor = CupertinoColors.quaternarySystemFill,
+    double? minSize = kMinInteractiveDimensionCupertino,
+    double? iconSize,
+    double? pressedOpacity = 0.4,
+    BorderRadius? borderRadius = const BorderRadius.all(Radius.circular(8.0)),
+    AlignmentGeometry alignment = Alignment.center,
+    VoidCallback? onPressed,
+    Widget? child,
+  }) =>
+      ThemeBuilder((context) => CupertinoButton(
+            key: key,
+            padding: padding ??
+                EdgeInsets.only(
+                  top: verticalPadding ?? topPadding ?? 0,
+                  bottom: verticalPadding ?? bottomPadding ?? 0,
+                  left: horizontalPadding ?? leftPadding ?? 0,
+                  right: horizontalPadding ?? rightPadding ?? 0,
+                ),
+            color: color,
+            disabledColor: disabledColor,
+            minSize: minSize,
+            pressedOpacity: pressedOpacity,
+            borderRadius: borderRadius,
+            alignment: alignment,
+            onPressed: enabled ? onPressed : null,
+            child: IconTheme(
+              data: (primary ? context.primaryIconTheme : context.iconTheme)
+                  .copyWith(size: iconSize),
+              child: child ?? const SizedBox(),
+            ),
+          ));
+
+  static Widget plainZero({
+    Key? key,
+    bool enabled = true,
+    bool primary = false,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    double? topPadding,
+    double? bottomPadding,
+    double? leftPadding,
+    double? rightPadding,
+    Color? color,
+    Color disabledColor = CupertinoColors.quaternarySystemFill,
+    double? minSize = 0,
+    double? iconSize,
+    double? pressedOpacity = 0.4,
+    BorderRadius? borderRadius = const BorderRadius.all(Radius.circular(8.0)),
+    AlignmentGeometry alignment = Alignment.center,
+    VoidCallback? onPressed,
+    Widget? child,
+  }) =>
+      plain(
+        key: key,
+        enabled: enabled,
+        primary: primary,
+        padding: padding,
+        horizontalPadding: horizontalPadding,
+        verticalPadding: verticalPadding,
+        topPadding: topPadding,
+        bottomPadding: bottomPadding,
+        leftPadding: leftPadding,
+        rightPadding: rightPadding,
+        color: color,
+        disabledColor: disabledColor,
+        minSize: minSize,
+        iconSize: iconSize,
+        pressedOpacity: pressedOpacity,
+        borderRadius: borderRadius,
+        alignment: alignment,
+        onPressed: onPressed,
+        child: child,
+      );
+
+  static Widget plainMini({
+    Key? key,
+    bool enabled = true,
+    bool primary = false,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    double? topPadding,
+    double? bottomPadding,
+    double? leftPadding = 12,
+    double? rightPadding = 12,
+    Color? color,
+    Color disabledColor = CupertinoColors.quaternarySystemFill,
+    double? minSize = 0,
+    double? iconSize = 20,
+    double? pressedOpacity = 0.4,
+    BorderRadius? borderRadius = const BorderRadius.all(Radius.circular(8.0)),
+    AlignmentGeometry alignment = Alignment.center,
+    VoidCallback? onPressed,
+    Widget? child,
+  }) =>
+      plain(
+        key: key,
+        enabled: enabled,
+        primary: primary,
+        padding: padding,
+        horizontalPadding: horizontalPadding,
+        verticalPadding: verticalPadding,
+        topPadding: topPadding,
+        bottomPadding: bottomPadding,
+        leftPadding: leftPadding,
+        rightPadding: rightPadding,
+        color: color,
+        disabledColor: disabledColor,
+        minSize: minSize,
+        iconSize: iconSize,
+        pressedOpacity: pressedOpacity,
+        borderRadius: borderRadius,
+        alignment: alignment,
+        onPressed: onPressed,
+        child: child,
+      );
+
   static Widget back({
     Color? color,
     VoidCallback? onPressed,
-  }) {
-    var _onPressed = () => Get.canPop ? Get.back() : Get.systemPop();
-    return Get.isIOS
-        ? CupertinoNavigationBarBackButton(
-            color: color ?? Get.theme.primaryIconTheme.color,
-            onPressed: _onPressed,
-          )
-        : icon(
-            child: const BackButtonIcon(),
-            color: color ?? Get.theme.primaryIconTheme.color,
-            tooltip: Get.localization.backButtonTooltip,
-            onPressed: _onPressed,
-          );
-  }
+  }) =>
+      ThemeBuilder(
+        (context) => CupertinoButton(
+          child: Icon(
+            Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+            color: color ?? context.primaryIconColor,
+          ),
+          padding: EdgeInsets.only(left: Get.isIOS ? 9 : 2),
+          onPressed:
+              onPressed ?? () => Get.canPop ? Get.back() : Get.systemPop(),
+        ).tooltip(Get.localization.backButtonTooltip),
+      );
+
+  static Widget detail({
+    IconData? icon,
+    Color? color,
+    String? tooltip,
+    double size = 14,
+    Matrix4? transform,
+    bool? angle180,
+    bool? angle90,
+    VoidCallback? onPressed,
+  }) =>
+      ThemeBuilder(
+        (context) => CupertinoButton(
+          child: AnimatedContainer(
+            duration: 200.milliseconds,
+            transformAlignment: Alignment.center,
+            transform: transform ??
+                angle180?.mapIt((it) => Matrix4.rotationZ(it ? pi : 0)) ??
+                angle90?.mapIt((it) => Matrix4.rotationZ(it ? pi / 2 : 0)),
+            child: Icon(
+              icon ?? CupertinoIcons.chevron_right,
+              color: color ?? context.hintColor,
+              size: size,
+            ),
+          ),
+          minSize: 0,
+          padding: EdgeInsets.zero,
+          onPressed: onPressed,
+        ).tooltip(tooltip),
+      );
 
   static Widget sticker({
     Color? color,
@@ -888,38 +1106,60 @@ abstract class GetButton {
     String? tooltip,
     String? text,
     IconData? icon,
+    double size = 22,
     EdgeInsets margin = const EdgeInsets.only(
-      bottom: 6,
+      bottom: 5,
       right: 8,
-      top: 6,
-      left: 6,
+      top: 5,
+      left: 5,
     ),
-  }) {
-    var _color = color ?? Get.iconColor ?? Get.theme.accentColor;
-    return Container(
-      width: 20,
-      height: 20,
-      margin: margin,
-      padding: EdgeInsets.only(top: icon != null ? 2.2 : 3),
-      alignment: Alignment.topCenter,
-      decoration: BoxDecoration(
-        border: Border.all(color: _color),
-        borderRadius: BorderRadius.only(
-          topRight: 6.radius,
-          topLeft: 6.radius,
-          bottomLeft: 6.radius,
-          bottomRight: 12.radius,
-        ),
-      ),
-      child: icon != null
-          ? Icon(icon, color: _color, size: 13)
-          : Text(
-              text?.take(3).uppercase ?? "",
-              style: GoogleFonts.ubuntuCondensed(
-                fontSize: 8,
-                color: _color,
-              ),
+  }) =>
+      ThemeBuilder((context) {
+        final _color =
+            color ?? context.primaryIconColor ?? context.secondaryColor;
+        return Container(
+          width: size,
+          height: size,
+          margin: margin,
+          padding: EdgeInsets.only(top: icon != null ? 3.2 : 4),
+          alignment: Alignment.topCenter,
+          decoration: BoxDecoration(
+            border: Border.all(color: _color),
+            borderRadius: BorderRadius.only(
+              topRight: 6.radius,
+              topLeft: 6.radius,
+              bottomLeft: 6.radius,
+              bottomRight: 12.radius,
             ),
-    ).clickable(onTap: onPressed).tooltip(tooltip);
-  }
+          ),
+          child: icon != null
+              ? Icon(icon, color: _color, size: 13)
+              : Text(
+                  text?.take(3).uppercase ?? "",
+                  style: GoogleFonts.ubuntuCondensed(
+                    fontSize: 8,
+                    color: _color,
+                  ),
+                ),
+        ).clickable(onTap: onPressed).tooltip(tooltip);
+      });
+
+  static Widget stickerZero({
+    Color? color,
+    VoidCallback? onPressed,
+    String? tooltip,
+    String? text,
+    IconData? icon,
+    double size = 22,
+    EdgeInsets margin = EdgeInsets.zero,
+  }) =>
+      sticker(
+        color: color,
+        onPressed: onPressed,
+        tooltip: tooltip,
+        text: text,
+        icon: icon,
+        size: size,
+        margin: margin,
+      );
 }

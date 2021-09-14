@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -33,9 +35,49 @@ extension Num on num {
       }
   }
 
+  void repeatsForIndexed<T>(Function(int i) apply) {
+    if (this > 0)
+      for (int i = 0; i < this; i++) {
+        apply(i);
+      }
+  }
+
   DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(toInt());
 
   String get formatted => Get.localization.formatDecimal(toInt());
+
+  String? formatWith({
+    String? zero,
+    String? zeroReplace,
+    String? one,
+    String? oneReplace,
+    String? many,
+    String? manyReplace,
+    String? other,
+    String? otherReplace,
+    String? all,
+    String? allReplace,
+  }) =>
+      toInt().mapTo(
+        (int it) => it == 0
+            ? allReplace ??
+                zeroReplace ??
+                (zero ?? other ?? all)?.pre(formatted, between: " ") ??
+                otherReplace
+            : it == 1
+                ? allReplace ??
+                    oneReplace ??
+                    (one ?? other ?? all)?.pre(formatted, between: " ") ??
+                    otherReplace
+                : it > 1
+                    ? allReplace ??
+                        manyReplace ??
+                        (many ?? other ?? all)?.pre(formatted, between: " ") ??
+                        otherReplace
+                    : allReplace ??
+                        otherReplace ??
+                        (other ?? all)?.pre(formatted, between: " "),
+      );
 
   bool inRange(int start, int end) => this >= start && this < end;
 
@@ -49,6 +91,9 @@ extension Num on num {
           : doIf == true
               ? toString().padLeft(width, withPadding)
               : toString();
+
+  /// Returns random integer less than number
+  int get random => Random().nextInt(toInt());
 }
 
 extension DurationX on Duration {
@@ -62,11 +107,11 @@ extension DurationX on Duration {
     var _secondsWidth = minutesWidth > 0 ? secondsWidth : 0;
     String hours = inHours
         .padLeft(_hoursWidth)
-        .post(":", doIf: _hoursWidth > 0 && minutesWidth > 0)!;
+        .post(":", doIf: _hoursWidth > 0 && minutesWidth > 0);
     String minutes = inMinutes
         .remainder(60)
         .padLeft(minutesWidth)
-        .post(":", doIf: minutesWidth > 0 && _secondsWidth > 0)!;
+        .post(":", doIf: minutesWidth > 0 && _secondsWidth > 0);
     String seconds = inSeconds.remainder(60).padLeft(_secondsWidth);
     return hours + minutes + seconds;
   }

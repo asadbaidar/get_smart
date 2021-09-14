@@ -6,6 +6,9 @@ class StackList<T> {
 
   StackList() : _underlyingQueue = Queue<T>();
 
+  StackList.from(Iterable elements)
+      : _underlyingQueue = Queue<T>.from(elements);
+
   int get length => _underlyingQueue.length;
 
   bool get isEmpty => _underlyingQueue.isEmpty;
@@ -26,11 +29,24 @@ class StackList<T> {
     return lastElement;
   }
 
-  void push(final T element) => _underlyingQueue.addLast(element);
+  T push(T element) {
+    _underlyingQueue.addLast(element);
+    return element;
+  }
 }
 
 extension MapX<K, V> on Map<K, V> {
   String get jsonString => jsonEncode(this);
+}
+
+extension MapDynamic<K> on Map<K, dynamic> {
+  Map<K, dynamic> get replaceNullWithEmpty => isEmpty
+      ? this
+      : entries.map((e) => MapEntry(e.key, e.value ?? "")).toMap();
+}
+
+extension IterableMapEntry<K, V> on Iterable<MapEntry<K, V>> {
+  Map<K, V> toMap() => Map<K, V>.fromEntries(this);
 }
 
 extension ListX<E> on List<E> {
@@ -40,19 +56,14 @@ extension ListX<E> on List<E> {
     }
     return null;
   }
+}
 
-  E? get $first {
-    Iterator<E> it = iterator;
-    if (!it.moveNext()) {
+extension IterableX<E> on Iterable<E> {
+  E? reduceOrNull(E combine(E value, E element)) {
+    try {
+      return isEmpty ? null : reduce(combine);
+    } catch (e) {
       return null;
     }
-    return it.current;
-  }
-
-  E? $firstWhere(bool test(E element)) {
-    for (E element in this) {
-      if (test(element)) return element;
-    }
-    return null;
   }
 }

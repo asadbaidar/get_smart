@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_smart/get_smart.dart';
 
 class Responsive extends StatelessWidget {
   Responsive({
@@ -147,7 +148,7 @@ class Div extends StatelessWidget {
   Widget _createDivWidget(Widget child, BuildContext context) {
     int _col = 0;
     int _offsetWithCol = 0;
-    double width = MediaQuery.of(context).size.width;
+    double width = context.mediaQuery.size.width;
     if (width < _widthMobile) {
       _col = colS;
       _offsetWithCol = (offsetS + _col >= 12) ? 12 : offsetS + _col;

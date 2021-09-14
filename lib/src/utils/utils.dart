@@ -1,19 +1,21 @@
+import 'dart:async';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
 
 extension UrlX on String {
-  void launchUrl({bool inApp = false, bool httpOnly = false}) async {
+  void launchUrl({bool? inApp, bool httpOnly = false}) async {
     var url = !httpOnly || startsWith(RegExp("^(http|https)://"))
         ? this
         : "http://$this";
     if (await canLaunch(url)) {
       await launch(
         url,
-        forceSafariVC: inApp,
-        forceWebView: inApp,
+        forceSafariVC: inApp ?? Get.isIOS,
+        forceWebView: inApp ?? Get.isIOS,
         statusBarBrightness:
             GetTheme.isDarkMode ? Brightness.dark : Brightness.light,
       );
@@ -45,10 +47,103 @@ extension RandomX on Random {
   }
 }
 
-class GetException implements Exception {
-  final dynamic message;
+extension Uint8ListX on Uint8List {
+  /// Convert bytes to memory image
+  MemoryImage? image({double scale = 1.0}) =>
+      isEmpty ? null : MemoryImage(this, scale: scale);
+}
 
+class GetException implements Exception {
   GetException([this.message]);
 
+  final dynamic message;
+
   String toString() => message == null ? GetText.failed() : message;
+}
+
+typedef GetTimerCallback = void Function(Duration elapsed);
+
+class GetTimer {
+  GetTimer({
+    Duration duration = Duration.zero,
+    this.period = const Duration(seconds: 1),
+    this.extendable = false,
+    this.onCancel,
+    this.onTick,
+  })  : countDown = false,
+        duration = duration - period,
+        tag = "Timer" {
+    elapsed = this.duration;
+  }
+
+  GetTimer.countDown(
+    Duration? duration, {
+    this.period = const Duration(seconds: 1),
+    this.extendable = true,
+    this.onCancel,
+    this.onTick,
+  })  : countDown = true,
+        duration = duration?.let((it) => it! - period) ?? Duration.zero,
+        tag = "CountDown" {
+    elapsed = this.duration;
+  }
+
+  final String tag;
+  final Duration duration;
+  final Duration period;
+  final bool extendable;
+  final bool countDown;
+  final GetTimerCallback? onCancel;
+  final GetTimerCallback? onTick;
+
+  Timer? _timer;
+  final _elapsed = Duration.zero.obs;
+
+  set elapsed(v) => _elapsed.value = v;
+
+  Duration get elapsed => _elapsed.value;
+
+  Duration get elapsedPeriod => elapsed + period;
+
+  void start() {
+    if (extendable) reset();
+    if (_timer == null) {
+      reset();
+      _onTick();
+      _timer = Timer.periodic(period, (_) {
+        if (countDown && _elapsed.value <= Duration.zero ||
+            !countDown &&
+                duration != Duration.zero &&
+                _elapsed.value >= duration)
+          _onCancel();
+        else
+          _onTick();
+      });
+    }
+  }
+
+  void _onCancel() {
+    $debugPrint("elapsed $elapsed", tag);
+    cancel();
+    onCancel?.call(elapsed);
+  }
+
+  void _onTick() {
+    $debugPrint("elapsed $elapsed", tag);
+    if (countDown)
+      _elapsed.value -= period;
+    else
+      _elapsed.value += period;
+    onTick?.call(elapsed);
+  }
+
+  void reset() => elapsed = countDown ? duration : Duration.zero;
+
+  void cancel() {
+    _timer?.cancel();
+    _timer = null;
+    if (countDown) elapsed = Duration.zero;
+  }
+
+  bool get isCanceled => _timer == null;
 }

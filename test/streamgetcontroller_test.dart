@@ -1,13 +1,21 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_smart/get_smart.dart';
 
-Stream<int> numberStream(int dataBack, {required bool fail, int? delay}) async* {
+Stream<int> numberStream(
+  int dataBack, {
+  required bool fail,
+  int? delay,
+}) async* {
   if (fail) throw Exception('numberStream failed');
   if (delay != null) await Future.delayed(Duration(milliseconds: delay));
   yield dataBack;
 }
 
-Stream<String> textStream(String dataBack, {required bool fail, int? delay}) async* {
+Stream<String> textStream(
+  String dataBack, {
+  required bool fail,
+  int? delay,
+}) async* {
   if (fail) throw Exception('textStream failed');
   if (delay != null) await Future.delayed(Duration(milliseconds: delay));
   yield dataBack;

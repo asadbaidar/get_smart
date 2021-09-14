@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,9 +14,261 @@ extension GetFocusNode on FocusNode {
 extension GetWidgetX on Widget {
   WidgetSpan get widgetSpan => WidgetSpan(child: this);
 
+  Widget get sliverFill => SliverFillRemaining(child: this);
+
   Widget tooltip([String? message]) => message?.notEmpty != null
       ? Tooltip(message: message!, child: this)
       : this;
+
+  Widget clipOval({
+    Key? key,
+    bool clip = true,
+    CustomClipper<Rect>? clipper,
+    Clip clipBehavior = Clip.antiAlias,
+  }) =>
+      clip
+          ? ClipOval(
+              key: key,
+              clipper: clipper,
+              clipBehavior: clipBehavior,
+              child: this,
+            )
+          : this;
+
+  Widget clipRect({
+    Key? key,
+    bool clip = true,
+    bool oval = false,
+    BorderRadius? borderRadius,
+    Clip clipBehavior = Clip.antiAlias,
+  }) =>
+      clip
+          ? oval
+              ? ClipOval(
+                  key: key,
+                  clipBehavior: clipBehavior,
+                  child: this,
+                )
+              : ClipRRect(
+                  key: key,
+                  borderRadius: borderRadius,
+                  clipBehavior: clipBehavior,
+                  child: this,
+                )
+          : this;
+
+  Widget row({
+    Key? key,
+    bool enabled = true,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    MainAxisSize mainAxisSize = MainAxisSize.max,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
+    VerticalDirection verticalDirection = VerticalDirection.down,
+    TextBaseline? textBaseline,
+    List<Widget> before = const [],
+    List<Widget> after = const [],
+  }) =>
+      enabled
+          ? Row(
+              key: key,
+              mainAxisAlignment: mainAxisAlignment,
+              mainAxisSize: mainAxisSize,
+              crossAxisAlignment: crossAxisAlignment,
+              verticalDirection: verticalDirection,
+              textBaseline: textBaseline,
+              children: [...before, this, ...after],
+            )
+          : this;
+
+  Widget column({
+    Key? key,
+    bool enabled = true,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    MainAxisSize mainAxisSize = MainAxisSize.max,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
+    VerticalDirection verticalDirection = VerticalDirection.down,
+    TextBaseline? textBaseline,
+    List<Widget> before = const [],
+    List<Widget> after = const [],
+  }) =>
+      enabled
+          ? Column(
+              key: key,
+              mainAxisAlignment: mainAxisAlignment,
+              mainAxisSize: mainAxisSize,
+              crossAxisAlignment: crossAxisAlignment,
+              verticalDirection: verticalDirection,
+              textBaseline: textBaseline,
+              children: [...before, this, ...after],
+            )
+          : this;
+
+  Widget flex({
+    Key? key,
+    int flex = 1,
+    bool enabled = true,
+    bool expanded = false,
+  }) =>
+      enabled
+          ? Flexible(
+              key: key,
+              flex: flex,
+              fit: expanded ? FlexFit.tight : FlexFit.loose,
+              child: this,
+            )
+          : this;
+
+  Widget material({
+    Key? key,
+    MaterialType type = MaterialType.transparency,
+    double elevation = 0.0,
+    Color? color,
+    Color? shadowColor,
+    TextStyle? textStyle,
+    BorderRadiusGeometry? borderRadius,
+    ShapeBorder? shape,
+    bool borderOnForeground = true,
+    Clip clipBehavior = Clip.none,
+    Duration animationDuration = kThemeChangeDuration,
+  }) =>
+      Material(
+        child: this,
+        key: key,
+        type: type,
+        elevation: elevation,
+        color: color,
+        shadowColor: shadowColor,
+        textStyle: textStyle,
+        borderRadius: borderRadius,
+        shape: shape,
+        borderOnForeground: borderOnForeground,
+        clipBehavior: clipBehavior,
+        animationDuration: animationDuration,
+      );
+
+  Widget plainButton({
+    Key? key,
+    bool enabled = true,
+    bool primary = false,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    double? topPadding,
+    double? bottomPadding,
+    double? leftPadding,
+    double? rightPadding,
+    Color? color,
+    Color disabledColor = CupertinoColors.quaternarySystemFill,
+    double? minSize = kMinInteractiveDimensionCupertino,
+    double? iconSize,
+    double? pressedOpacity = 0.4,
+    BorderRadius? borderRadius = const BorderRadius.all(Radius.circular(8.0)),
+    AlignmentGeometry alignment = Alignment.center,
+    VoidCallback? onPressed,
+  }) =>
+      GetButton.plain(
+        key: key,
+        enabled: enabled,
+        primary: primary,
+        padding: padding,
+        horizontalPadding: horizontalPadding,
+        verticalPadding: verticalPadding,
+        topPadding: topPadding,
+        bottomPadding: bottomPadding,
+        leftPadding: leftPadding,
+        rightPadding: rightPadding,
+        color: color,
+        disabledColor: disabledColor,
+        minSize: minSize,
+        iconSize: iconSize,
+        pressedOpacity: pressedOpacity,
+        borderRadius: borderRadius,
+        alignment: alignment,
+        onPressed: onPressed,
+        child: this,
+      );
+
+  Widget plainButtonZero({
+    Key? key,
+    bool enabled = true,
+    bool primary = false,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    double? topPadding,
+    double? bottomPadding,
+    double? leftPadding,
+    double? rightPadding,
+    Color? color,
+    Color disabledColor = CupertinoColors.quaternarySystemFill,
+    double? minSize = 0,
+    double? iconSize,
+    double? pressedOpacity = 0.4,
+    BorderRadius? borderRadius = const BorderRadius.all(Radius.circular(8.0)),
+    AlignmentGeometry alignment = Alignment.center,
+    VoidCallback? onPressed,
+  }) =>
+      plainButton(
+        key: key,
+        enabled: enabled,
+        primary: primary,
+        padding: padding,
+        horizontalPadding: horizontalPadding,
+        verticalPadding: verticalPadding,
+        topPadding: topPadding,
+        bottomPadding: bottomPadding,
+        leftPadding: leftPadding,
+        rightPadding: rightPadding,
+        color: color,
+        disabledColor: disabledColor,
+        minSize: minSize,
+        iconSize: iconSize,
+        pressedOpacity: pressedOpacity,
+        borderRadius: borderRadius,
+        alignment: alignment,
+        onPressed: onPressed,
+      );
+
+  Widget plainButtonMini({
+    Key? key,
+    bool enabled = true,
+    bool primary = false,
+    EdgeInsetsGeometry? padding,
+    double? horizontalPadding,
+    double? verticalPadding,
+    double? topPadding,
+    double? bottomPadding,
+    double? leftPadding = 12,
+    double? rightPadding = 12,
+    Color? color,
+    Color disabledColor = CupertinoColors.quaternarySystemFill,
+    double? minSize = 0,
+    double? iconSize = 20,
+    double? pressedOpacity = 0.4,
+    BorderRadius? borderRadius = const BorderRadius.all(Radius.circular(8.0)),
+    AlignmentGeometry alignment = Alignment.center,
+    VoidCallback? onPressed,
+  }) =>
+      plainButton(
+        key: key,
+        enabled: enabled,
+        primary: primary,
+        padding: padding,
+        horizontalPadding: horizontalPadding,
+        verticalPadding: verticalPadding,
+        topPadding: topPadding,
+        bottomPadding: bottomPadding,
+        leftPadding: leftPadding,
+        rightPadding: rightPadding,
+        color: color,
+        disabledColor: disabledColor,
+        minSize: minSize,
+        iconSize: iconSize,
+        pressedOpacity: pressedOpacity,
+        borderRadius: borderRadius,
+        alignment: alignment,
+        onPressed: onPressed,
+      );
 }
 
 extension GetDiagnosticable on Diagnosticable {
@@ -58,6 +311,14 @@ extension GetContext on BuildContext {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 
+  void endIfEditing() {
+    final focus = FocusScope.of(this);
+    if (focus.hasFocus == true) {
+      FocusScope.of(this).unfocus();
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
+  }
+
   NavigatorState get navigator => Navigator.of(this);
 
   RelativeRect position({Offset? offset}) {
@@ -84,8 +345,17 @@ extension GetOffset on Offset {
   static Offset all(double d) => Offset(d, d);
 }
 
+extension NumSpace on num {
+  Widget get spaceX => Space.x(toDouble());
+
+  Widget get spaceY => Space.y(toDouble());
+
+  Widget get space => Space.all(toDouble());
+}
+
 extension GetBoxDecoration on BoxDecoration {
-  static BoxDecoration only({
+  static BoxDecoration only(
+    BuildContext context, {
     double? top,
     double? bottom,
     double? left,
@@ -94,9 +364,9 @@ extension GetBoxDecoration on BoxDecoration {
     Color? borderColor,
     double? borderRadius,
   }) {
-    var _borderColor = borderColor ?? Get.theme.hintColor.dimmed;
+    final _borderColor = borderColor ?? context.hintColor.dimmed;
     return BoxDecoration(
-      color: color ?? Get.theme.backgroundColor,
+      color: color ?? context.backgroundColor,
       borderRadius:
           borderRadius == null ? null : BorderRadius.circular(borderRadius),
       border: Border(
@@ -116,72 +386,122 @@ extension GetBoxDecoration on BoxDecoration {
     );
   }
 
-  static BoxDecoration symmetric({
+  static BoxDecoration symmetric(
+    BuildContext context, {
     double? vertical,
     double? horizontal,
     Color? color,
     Color? borderColor,
-    double? borderWidth,
     double? borderRadius,
-  }) {
-    return only(
-      top: vertical,
-      bottom: vertical,
-      left: horizontal,
-      right: horizontal,
-      color: color,
-      borderColor: borderColor,
-      borderRadius: borderRadius,
-    );
-  }
+  }) =>
+      only(
+        context,
+        top: vertical,
+        bottom: vertical,
+        left: horizontal,
+        right: horizontal,
+        color: color,
+        borderColor: borderColor,
+        borderRadius: borderRadius,
+      );
 
   static BoxDecoration all(
-    double all, {
+    BuildContext context, {
+    double? border,
     Color? color,
     Color? borderColor,
-    double? borderWidth,
     double? borderRadius,
-  }) {
-    return symmetric(
-      vertical: all,
-      horizontal: all,
-      color: color,
-      borderColor: borderColor,
-      borderRadius: borderRadius,
-    );
-  }
+  }) =>
+      symmetric(
+        context,
+        vertical: border,
+        horizontal: border,
+        color: color,
+        borderColor: borderColor,
+        borderRadius: borderRadius,
+      );
 }
 
 extension GetShimmer on Shimmer {
-  static Widget plain() => Column(children: [
+  static Widget plain() => ThemeBuilder((context) => Column(children: [
         Expanded(
           child: Container(
-            color: Get.theme.canvasColor,
-            child: Shimmer.fromColors(
-              period: 900.milliseconds,
-              baseColor: Get.theme.canvasColor,
-              highlightColor: Get.theme.backgroundColor,
-              child: Column(children: [
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: Container(color: Colors.grey),
-                ),
-              ]),
+            color: context.canvasColor,
+            child: SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(),
+              child: Shimmer.fromColors(
+                period: 900.milliseconds,
+                baseColor: context.canvasColor,
+                highlightColor: context.backgroundColor,
+                child: Column(children: [
+                  Container(
+                    height: Get.mediaQuery.size.height,
+                    color: Colors.grey,
+                  ),
+                ]),
+              ),
             ),
           ),
         ),
-      ]);
+      ]));
 
-  static Widget article() => Column(children: [
+  static Widget custom(WidgetBuilder builder) =>
+      ThemeBuilder((context) => Container(
+            color: context.backgroundColor,
+            child: Shimmer.fromColors(
+              baseColor: context.highlightColor,
+              highlightColor: context.canvasColor,
+              child: builder(context),
+            ),
+          ));
+
+  static Widget tileOvalLeading({
+    String? title,
+    String? subtitle,
+    bool leading = true,
+    double topPadding = kMediumPaddingY,
+  }) =>
+      tile(
+        title: title,
+        subtitle: subtitle,
+        leading: leading,
+        isLeadingOval: true,
+        topPadding: topPadding,
+      );
+
+  static Widget tile({
+    String? title,
+    String? subtitle,
+    bool leading = true,
+    bool isLeadingOval = false,
+    double topPadding = kMediumPaddingY,
+  }) =>
+      custom((context) => GetTile.medium(
+          leading: leading ? 24.space : null,
+          isLeadingOval: isLeadingOval,
+          topPadding: topPadding + topPadding.half,
+          titleChild: title?.mapIt((it) => Container(
+                color: Colors.grey,
+                child: Text(it, style: context.overline),
+              )),
+          verticalSpacing: 8,
+          subtitleChild: subtitle?.mapIt(
+            (it) => Container(
+              color: Colors.grey,
+              child: Text(it, style: context.overline),
+            ),
+          )));
+
+  static Widget article() => ThemeBuilder((context) => Column(children: [
         Expanded(
           child: Container(
-            color: Get.theme.canvasColor,
+            color: context.backgroundColor,
             padding: EdgeInsets.all(24),
             child: SingleChildScrollView(
               physics: NeverScrollableScrollPhysics(),
               child: Shimmer.fromColors(
-                baseColor: Get.theme.highlightColor,
-                highlightColor: Get.theme.canvasColor,
+                baseColor: context.highlightColor.withOpacity(0.3),
+                highlightColor: context.highlightColor.withOpacity(0.2),
                 child: Column(children: [
                   Container(
                     color: Colors.grey,
@@ -238,13 +558,13 @@ extension GetShimmer on Shimmer {
             ),
           ),
         ),
-      ]);
+      ]));
 
   static Widget dark() => Column(children: [
         Expanded(
           child: Container(
             color: GetColors.black93,
-            padding: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.only(top: 4),
             child: SingleChildScrollView(
               physics: NeverScrollableScrollPhysics(),
               child: Shimmer.fromColors(
@@ -254,7 +574,7 @@ extension GetShimmer on Shimmer {
                   Container(
                     color: Colors.grey,
                     margin: EdgeInsets.symmetric(horizontal: 30),
-                    constraints: BoxConstraints.expand(height: 22),
+                    constraints: BoxConstraints.expand(height: 18),
                   ),
                   Container(constraints: BoxConstraints.expand(height: 8)),
                   Container(

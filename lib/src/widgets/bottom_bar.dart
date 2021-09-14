@@ -1,41 +1,43 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({
-    this.leftItems,
-    this.rightItems,
-    this.centerItems,
-    this.topChild,
-    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.left,
+    this.right,
+    this.center,
+    this.children,
+    this.top,
+    this.alignment = CrossAxisAlignment.center,
     this.visible = true,
     Key? key,
   }) : super(key: key);
 
-  final List<Widget>? leftItems;
-  final List<Widget>? rightItems;
-  final List<Widget>? centerItems;
-  final Widget? topChild;
-  final CrossAxisAlignment crossAxisAlignment;
+  final List<Widget>? left;
+  final List<Widget>? right;
+  final List<Widget>? center;
+  final List<Widget>? children;
+  final Widget? top;
+  final CrossAxisAlignment alignment;
   final bool visible;
 
   @override
   Widget build(BuildContext context) {
-    var _leftItems = leftItems ?? [];
-    var _rightItems = rightItems ?? [];
-    var _centerItems = centerItems ?? [];
+    var _left = left ?? [];
+    var _right = right ?? [];
+    var _center = center ?? [];
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CrossFade(firstChild: topChild),
-        if (topChild == null) GetLineSeparator(style: SeparatorStyle.full),
+        CrossFade(firstChild: top),
+        if (top == null) GetLineSeparator(style: SeparatorStyle.full),
         if (visible)
           BottomAppBar(
+            elevation: top == null ? null : 0,
             child: SafeArea(
-              minimum:
-                  EdgeInsets.only(bottom: Get.mediaQuery.viewInsets.bottom),
+              minimum: EdgeInsets.only(
+                bottom: context.viewInsets.bottom,
+              ),
               left: false,
               right: false,
               top: false,
@@ -45,22 +47,25 @@ class BottomBar extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: crossAxisAlignment,
+                  crossAxisAlignment: alignment,
                   children: [
                     SizedBox(width: 2),
-                    ..._leftItems,
-                    if (_leftItems.length < _rightItems.length)
-                      for (int i = 0;
-                          i < _rightItems.length - _leftItems.length;
-                          i++)
-                        GetButton.icon(),
-                    ...(_centerItems.isEmpty ? [Spacer()] : _centerItems),
-                    if (_rightItems.length < _leftItems.length)
-                      for (int i = 0;
-                          i < _leftItems.length - _rightItems.length;
-                          i++)
-                        GetButton.icon(),
-                    ..._rightItems,
+                    ...children ??
+                        [
+                          ..._left,
+                          if (_left.length < _right.length)
+                            for (int i = 0;
+                                i < _right.length - _left.length;
+                                i++)
+                              GetButton.icon(),
+                          ...(_center.isEmpty ? [Spacer()] : _center),
+                          if (_right.length < _left.length)
+                            for (int i = 0;
+                                i < _left.length - _right.length;
+                                i++)
+                              GetButton.icon(),
+                          ..._right
+                        ],
                     SizedBox(width: 2),
                   ],
                 ),
@@ -192,7 +197,7 @@ class GetSnackBar extends StatelessWidget {
             onDismissed: (direction) => onDismiss?.call(),
             timeout: timeout,
             child: Container(
-              color: Get.theme.bottomAppBarTheme.color,
+              color: context.bottomBarColor,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -211,7 +216,7 @@ class GetSnackBar extends StatelessWidget {
                             message!,
                             style: TextStyle(color: messageColor),
                           ),
-                    backgroundColor: Get.theme.bottomAppBarTheme.color!,
+                    backgroundColor: Colors.transparent,
                     mainButton: action == null
                         ? null
                         : GetButton.text(
@@ -279,22 +284,19 @@ class GetDismissibleState extends State<GetDismissible> {
     if (mounted) setState(() => _dismissed = true);
   }
 
-  Timer? _timer;
-  var _time = 6;
+  GetTimer? _timer;
 
   void startTimer() {
     if (!(widget.autoDismissible && widget.autoDismiss)) return;
     if (_timer == null && widget.enabled == true && !_dismissed) {
-      print("startTimer");
-      _time = widget.timeout.inSeconds;
-      _timer = Timer.periodic(1.seconds, (_) {
-        print("time $_time");
-        if (_time == 0) {
-          dismiss();
-        } else
-          _time--;
-      });
-    } else if (_timer != null && widget.enabled != true && !_dismissed) {
+      _timer = GetTimer.countDown(
+        widget.timeout,
+        onCancel: (_) => dismiss(),
+      )..start();
+    } else if (_timer != null &&
+        _timer?.isCanceled != true &&
+        widget.enabled != true &&
+        !_dismissed) {
       stopTimer();
     }
   }

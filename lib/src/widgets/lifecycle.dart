@@ -22,7 +22,7 @@ class GetAppLifecycle extends StatefulWidget {
   }) : super(key: key);
 
   /// The application is visible and responding to user input.
-  final void Function()? onResume;
+  final VoidCallback? onResume;
 
   /// The application is in an inactive state and is not receiving user input.
   ///
@@ -39,7 +39,7 @@ class GetAppLifecycle extends StatefulWidget {
   ///
   /// Apps in this state should assume that they may be
   /// [AppLifecycleState.paused] at any time.
-  final void Function()? onInactive;
+  final VoidCallback? onInactive;
 
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
@@ -47,7 +47,7 @@ class GetAppLifecycle extends StatefulWidget {
   /// When the application is in this state, the engine will not call the
   /// [PlatformDispatcher.onBeginFrame] and [PlatformDispatcher.onDrawFrame]
   /// callbacks.
-  final void Function()? onPaused;
+  final VoidCallback? onPaused;
 
   /// The application is still hosted on a flutter engine but is detached from
   /// any host views.
@@ -56,7 +56,7 @@ class GetAppLifecycle extends StatefulWidget {
   /// a view. It can either be in the progress of attaching a view when engine
   /// was first initializes, or after the view being destroyed due to a Navigator
   /// pop.
-  final void Function()? onDetached;
+  final VoidCallback? onDetached;
 
   @override
   _GetAppLifecycleState createState() => _GetAppLifecycleState();
@@ -67,12 +67,12 @@ class _GetAppLifecycleState extends State<GetAppLifecycle>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 

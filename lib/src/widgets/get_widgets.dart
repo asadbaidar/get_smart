@@ -1,5 +1,6 @@
 // utils
 
+export "auto_size_text.dart";
 export "bottom_bar.dart";
 export "bottom_sheet.dart";
 export "button.dart";

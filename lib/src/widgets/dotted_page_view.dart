@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -15,7 +17,7 @@ class DottedPageView extends StatefulWidget {
     this.pageSnapping = true,
     this.onPageChanged,
     this.itemBuilder,
-    this.itemCount,
+    this.itemCount = 0,
     this.dragStartBehavior = DragStartBehavior.start,
     this.allowImplicitScrolling = false,
     this.restorationId,
@@ -34,7 +36,7 @@ class DottedPageView extends StatefulWidget {
   final bool pageSnapping;
   final void Function(int)? onPageChanged;
   final IndexedWidgetBuilder? itemBuilder;
-  final int? itemCount;
+  final int itemCount;
   final DragStartBehavior dragStartBehavior;
   final bool allowImplicitScrolling;
   final String? restorationId;
@@ -78,51 +80,50 @@ class _DottedPageViewState extends State<DottedPageView>
   void updatePage() {
     if (widget.controller.hasClients)
       widget.controller.animateToPage(
-        _index.value == widget.itemCount! - 1 ? 0 : _index.value + 1,
+        _index.value == widget.itemCount - 1 ? 0 : _index.value + 1,
         duration: 1500.milliseconds,
         curve: Curves.easeOut,
       );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        PageView.builder(
-          key: widget._key,
-          scrollDirection: widget.scrollDirection,
-          reverse: widget.reverse,
-          controller: widget.controller,
-          physics: widget.physics,
-          pageSnapping: widget.pageSnapping,
-          onPageChanged: (index) {
-            this._index.value = index;
-            widget.onPageChanged?.call(index);
-          },
-          itemBuilder: widget.itemBuilder!,
-          itemCount: widget.itemCount,
-          dragStartBehavior: widget.dragStartBehavior,
-          allowImplicitScrolling: widget.allowImplicitScrolling,
-          restorationId: widget.restorationId,
-          clipBehavior: widget.clipBehavior,
-        ),
-        Obx(
-          () => DotsIndicator(
-            decorator: DotsDecorator(
-              color: widget.dotColor,
-              activeColor: widget.dotActiveColor,
-              size: const Size.square(8),
-              activeSize: const Size.square(8),
-              spacing: EdgeInsets.all(4),
-            ),
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            dotsCount: widget.itemCount!,
-            position: _index.toDouble(),
+  Widget build(BuildContext context) => Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          PageView.builder(
+            key: widget._key,
+            scrollDirection: widget.scrollDirection,
+            reverse: widget.reverse,
+            controller: widget.controller,
+            physics: widget.physics,
+            pageSnapping: widget.pageSnapping,
+            onPageChanged: (index) {
+              this._index.value = index;
+              widget.onPageChanged?.call(index);
+            },
+            itemBuilder: widget.itemBuilder!,
+            itemCount: widget.itemCount,
+            dragStartBehavior: widget.dragStartBehavior,
+            allowImplicitScrolling: widget.allowImplicitScrolling,
+            restorationId: widget.restorationId,
+            clipBehavior: widget.clipBehavior,
           ),
-        ),
-      ],
-    );
-  }
+          if (widget.itemCount > 1)
+            Obx(
+              () => DotsIndicator(
+                decorator: DotsDecorator(
+                  color: widget.dotColor,
+                  activeColor: widget.dotActiveColor,
+                  size: const Size.square(8),
+                  activeSize: const Size.square(8),
+                  spacing: EdgeInsets.all(4),
+                ),
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                dotsCount: widget.itemCount,
+                position: min(_index.value, widget.itemCount - 1).toDouble(),
+              ),
+            ),
+        ],
+      );
 }

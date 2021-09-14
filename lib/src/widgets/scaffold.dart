@@ -11,6 +11,7 @@ class GetScaffold extends StatelessWidget {
     this.subtitle,
     this.customTitle,
     this.backgroundColor,
+    this.titleTextStyle,
     this.centerTitle,
     this.extendBody = true,
     this.showProgress = false,
@@ -31,9 +32,11 @@ class GetScaffold extends StatelessWidget {
     this.bottomBarLeftItems,
     this.bottomBarRightItems,
     this.bottomBarCenterItems,
+    this.bottomBarChildren,
     this.appBarRightItems,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.bottomBarAlignment,
     Key? key,
   }) : _key = key as GlobalKey<ScaffoldState>?;
 
@@ -43,6 +46,7 @@ class GetScaffold extends StatelessWidget {
   final String? subtitle;
   final Widget? customTitle;
   final Color? backgroundColor;
+  final TextStyle? titleTextStyle;
   final bool? centerTitle;
   final bool extendBody;
   final bool showProgress;
@@ -63,52 +67,55 @@ class GetScaffold extends StatelessWidget {
   final List<Widget>? bottomBarLeftItems;
   final List<Widget>? bottomBarRightItems;
   final List<Widget>? bottomBarCenterItems;
+  final List<Widget>? bottomBarChildren;
   final List<Widget>? appBarRightItems;
   final FloatingActionButton? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final CrossAxisAlignment? bottomBarAlignment;
   final GlobalKey<ScaffoldState>? _key;
-
-  bool get _isInteractive => isInteractive == true;
 
   double get _progressBarHeight => progressBar?.height ?? 1;
 
   double get _appBarExtensionSize => (appBarExtension != null
-      ? kToolbarHeight + _progressBarHeight + (appBarExtensionSize ?? 0)
+      ? 48 + _progressBarHeight + (appBarExtensionSize ?? 0)
       : _progressBarHeight);
 
   @override
   Widget build(BuildContext context) {
     GetTheme.resetSystemChrome(context);
-    if (!_isInteractive) context.endEditing();
+    if (!isInteractive) context.endEditing();
     return Scaffold(
       key: _key,
       extendBody: extendBody,
       backgroundColor: backgroundColor,
       appBar: sliver != null
           ? null
-          : hideAbleAppBar == true
+          : hideAbleAppBar
               ? AppBar(
-                  toolbarHeight: Get.mediaQuery.viewInsets.top.abs(),
-                  elevation: hideToolbars ? Get.theme.appBarTheme.elevation : 0,
+                  toolbarHeight: context.viewInsets.top.abs(),
+                  elevation: hideToolbars ? context.appBarElevation : 0,
                 )
-              : _appBar,
-      bottomNavigationBar: withBottomBar != null
-          ? _bottomAppBar
-          : CrossFade(
-              firstChild: hideToolbars ? Container(height: 0) : bottomBar,
-              secondChild: _bottomAppBar,
-            ),
-      body: hideAbleAppBar == true && sliver == null
+              : _appBar(context),
+      bottomNavigationBar: Blur(
+        blur: 6,
+        child: withBottomBar != null
+            ? _bottomAppBar
+            : CrossFade(
+                firstChild: hideToolbars ? Container(height: 0) : bottomBar,
+                secondChild: _bottomAppBar,
+              ),
+      ),
+      body: hideAbleAppBar && sliver == null
           ? Column(
               children: [
-                _hideAbleAppBar,
-                Expanded(child: _body),
+                _hideAbleAppBar(context),
+                Expanded(child: _body(context)),
               ],
             )
-          : _body,
-      floatingActionButton: _isInteractive ? floatingActionButton : null,
+          : _body(context),
+      floatingActionButton: isInteractive ? floatingActionButton : null,
       floatingActionButtonLocation: floatingActionButtonLocation ??
-          (subtitle?.isBlank ?? true
+          (subtitle?.notBlank == null
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.endDocked),
       bottomSheet: bottomSheet,
@@ -122,30 +129,35 @@ class GetScaffold extends StatelessWidget {
         children: [Responsive(children: children ?? [])],
       );
 
-  Widget get _body => Stack(children: [
-        sliver ?? (showScrollbar == true ? Scrollbar(child: _child) : _child),
-        if (!_isInteractive) Clickable(),
+  Widget _body(BuildContext context) => Stack(children: [
+        sliver ?? (showScrollbar ? Scrollbar(child: _child) : _child),
+        if (!isInteractive) Clickable(),
         GetAppLifecycle(
-          onDetached: Get.context!.endEditing,
-          onResume: () => GetTheme.resetSystemChrome(Get.context),
+          onDetached: Get.context?.endEditing,
+          onResume: () => GetTheme.resetSystemChrome(context),
         ),
         ...childrenAtFront ?? [],
       ]);
 
-  Widget get _hideAbleAppBar => CrossFade(
+  Widget _hideAbleAppBar(BuildContext context) => CrossFade(
         showFirst: hideToolbars,
         secondChild: SizedBox(
           height: kToolbarHeight + _appBarExtensionSize,
-          child: _appBar,
+          child: _appBar(context),
         ),
       );
 
-  AppBar get _appBar => AppBar(
-        centerTitle: _centerTitle,
+  AppBar _appBar(BuildContext context) => AppBar(
+        centerTitle: _centerTitle(context),
         automaticallyImplyLeading: false,
-        leading: hideAppBarLeading == true
-            ? null
-            : appBarLeading ?? GetButton.back(),
+        titleTextStyle: context.appBarTheme.titleTextStyle?.copyWith(
+          fontSize: titleTextStyle?.fontSize,
+          color: titleTextStyle?.color,
+          fontWeight: titleTextStyle?.fontWeight,
+          fontFamily: titleTextStyle?.fontFamily,
+        ),
+        leading: hideAppBarLeading ? null : appBarLeading ?? GetButton.back(),
+        leadingWidth: 46,
         title: customTitle ??
             (title != null ? Text(title!) : Container(height: 0)),
         bottom: PreferredSize(
@@ -158,31 +170,47 @@ class GetScaffold extends StatelessWidget {
           ),
           preferredSize: Size.fromHeight(_appBarExtensionSize),
         ),
-        actions: _isInteractive ? appBarRightItems : null,
+        actions: isInteractive ? appBarRightItems : null,
       );
 
+  bool? _centerTitle(BuildContext context) {
+    if (centerTitle != null) return centerTitle;
+    if (context.appBarTheme.centerTitle != null)
+      return context.appBarTheme.centerTitle;
+    switch (Get.platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return appBarRightItems == null || appBarRightItems!.length < 2;
+      default:
+        return false;
+    }
+  }
+
   Widget get _bottomAppBar {
-    List<Widget> _bottomBarLeftItems =
-        _isInteractive ? bottomBarLeftItems ?? [] : [];
-    List<Widget> _bottomBarRightItems =
-        _isInteractive ? bottomBarRightItems ?? [] : [];
-    List<Widget> _bottomBarCenterItems =
-        _isInteractive ? bottomBarCenterItems ?? [] : [];
-    return (subtitle?.isBlank ?? true) &&
-            _bottomBarLeftItems.isBlank! &&
-            _bottomBarRightItems.isBlank! &&
-            _bottomBarCenterItems.isBlank!
+    List<Widget> _bottomBarLeft = isInteractive ? bottomBarLeftItems ?? [] : [];
+    List<Widget> _bottomBarRight =
+        isInteractive ? bottomBarRightItems ?? [] : [];
+    List<Widget> _bottomBarCenter =
+        isInteractive ? bottomBarCenterItems ?? [] : [];
+    List<Widget>? _bottomBarChildren = isInteractive ? bottomBarChildren : null;
+    return subtitle?.notBlank == null &&
+            _bottomBarLeft.isEmpty &&
+            _bottomBarRight.isEmpty &&
+            _bottomBarCenter.isEmpty &&
+            _bottomBarChildren == null
         ? Container(height: 0)
         : BottomBar(
             visible: !hideToolbars,
-            crossAxisAlignment: subtitle?.isBlank ?? true
-                ? CrossAxisAlignment.end
-                : CrossAxisAlignment.center,
-            topChild: withBottomBar,
-            leftItems: _bottomBarLeftItems,
-            rightItems: _bottomBarRightItems,
-            centerItems: subtitle?.isBlank ?? true
-                ? _bottomBarCenterItems
+            alignment: bottomBarAlignment ??
+                (subtitle?.notBlank == null
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.center),
+            top: withBottomBar,
+            children: _bottomBarChildren,
+            left: _bottomBarLeft,
+            right: _bottomBarRight,
+            center: subtitle?.notBlank == null
+                ? _bottomBarCenter
                 : [
                     Expanded(
                       child: Padding(
@@ -196,20 +224,6 @@ class GetScaffold extends StatelessWidget {
                     )
                   ],
           );
-  }
-
-  bool? get _centerTitle {
-    if (centerTitle != null) return centerTitle;
-    if (customTitle != null) return true;
-    if (Get.theme.appBarTheme.centerTitle != null)
-      return Get.theme.appBarTheme.centerTitle;
-    switch (Get.platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return appBarRightItems == null || appBarRightItems!.length < 2;
-      default:
-        return false;
-    }
   }
 
   static GlobalKey<ScaffoldState> get newKey => GlobalKey<ScaffoldState>();

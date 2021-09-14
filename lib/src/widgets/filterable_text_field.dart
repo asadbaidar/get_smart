@@ -12,8 +12,7 @@ typedef ItemSubmitted<T>(T data);
 
 typedef StringCallback(String data);
 
-/// Build on top of TextFormField, extending its capabilities to get
-/// the list options to select from and filtering based on text entered.
+/// A wrapper of [GetTextField] with filterable suggestion features.
 class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   /// Callback to filter item: return true or false depending on input text
   final Filter<T>? itemFilter;
@@ -120,7 +119,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   State<StatefulWidget> createState() => GetFilterableTextFieldState<T>(
         itemSubmitted: itemSubmitted,
         itemBuilder: itemBuilder ??
-            ((_, data, onTap) => GetTile.simpleDense(
+            ((_, data, onTap) => GetTile.center500(
                   title: data.toString(),
                   onTap: onTap,
                 )),
@@ -213,7 +212,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   }
 
   void focusListener() {
-    print("Focus ${focusNode.hasFocus}");
+    $debugPrint(focusNode.hasFocus, "Focus");
     if (onFocusChanged != null) {
       onFocusChanged!(focusNode.hasFocus);
     }
@@ -259,7 +258,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
     if (!readOnly &&
         onlyAcceptItem &&
         !filteredItems.map((it) => it.toString()).contains(controller.text)) {
-      var item = filteredItems.$first;
+      var item = filteredItems.firstOrNull;
       controller.text = item?.toString() ?? "";
       if (item == null)
         clear();
@@ -297,7 +296,8 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
   Future<void> updateOverlay(
       {String? query, bool withoutFilter = false}) async {
     if (!mounted) return;
-    print("updateOverlay NoFilter $withoutFilter Focus ${focusNode.hasFocus}");
+    $debugPrint(
+        "NoFilter $withoutFilter Focus ${focusNode.hasFocus}", "updateOverlay");
     filteredItems = withoutFilter == true
         ? items
         : await getItems(items, itemSorter, itemFilter, itemCount, query);
@@ -306,7 +306,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
       final width = textFieldSize.width;
       final height = textFieldSize.height;
       itemsOverlayEntry = OverlayEntry(builder: (context) {
-        print("OverlayEntryFocus ${focusNode.hasFocus}");
+        $debugPrint("Focus ${focusNode.hasFocus}", "OverlayEntry");
         if (!focusNode.hasFocus) clearOverlay();
         return Positioned(
           width: width,
@@ -385,7 +385,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   @override
   void deactivate() {
-    print("$runtimeType deactivate");
+    $debugPrint("deactivate");
     clearOverlay();
     super.deactivate();
   }
@@ -397,7 +397,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   @override
   void dispose() {
-    print("$runtimeType dispose");
+    $debugPrint("dispose");
     focusNode.dispose();
     controller.dispose();
     super.dispose();
@@ -427,7 +427,7 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
         enableSuggestions: !showAllOnFocus,
         onChanged: (v) {
           currentText = v;
-          print("onChanged");
+          $debugPrint("onChanged");
           updateOverlay(query: v);
           if (textChanged != null) textChanged!(v);
           removeError();

@@ -154,7 +154,7 @@ class CameraModel extends GetController {
         try {
           if (Get.isIOS) await camera.prepareForVideoRecording();
           return camera.startVideoRecording().then((_) {
-            startTimer();
+            _timer.start();
             return GetResult.success();
           }).catchError((e) => GetResult.error(
               $cast<CameraException>(e)?.description ?? e?.toString()));
@@ -168,7 +168,7 @@ class CameraModel extends GetController {
   Future stopVideoRecording() => runBusyAction(() async {
         try {
           return camera.stopVideoRecording().then((video) {
-            stopTimer();
+            _timer.cancel();
             return prepareVideoPlayer(GetFile(
               path: video.path,
               name: video.name,
@@ -200,30 +200,16 @@ class CameraModel extends GetController {
             ));
   }
 
+  GetTimer _timer = GetTimer();
+
   String? get duration => (isRecordingVideo
-          ? _duration.value.seconds
+          ? _timer.elapsed
           : file == null
               ? null
               : isPlayingVideo
                   ? videoState?.position
                   : videoState?.duration)
       ?.formattedHHmmSS;
-
-  final _duration = 0.obs;
-  Timer? _timer;
-
-  void startTimer() {
-    _duration.value = 0;
-    _timer = Timer.periodic(1.seconds, (timer) {
-      _duration.value = timer.tick;
-    });
-  }
-
-  void stopTimer() {
-    _timer?.cancel();
-    _timer = null;
-    _duration.value = 0;
-  }
 
   bool get isPlayingVideo => videoState?.isPlaying == true;
 

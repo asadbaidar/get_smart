@@ -2,16 +2,14 @@ import 'package:example/src/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
-Future<void> main() async {
-  runApp(App());
-}
+void main() => runApp(App());
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetMaterialApp(
         title: 'Get Smart Demo',
         builder: (context, child) => Theme(
-          data: GetTheme.black(context),
+          data: GetTheme.blackWhite(context),
           child: child!,
         ),
         localizationsDelegates: [GetLocalizations.delegate],
