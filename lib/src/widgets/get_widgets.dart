@@ -1,4 +1,5 @@
 // widgets
+export "app_bar.dart";
 export "auto_size_text.dart";
 export "bottom_bar.dart";
 export "bottom_sheet.dart";

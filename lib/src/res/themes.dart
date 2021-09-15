@@ -496,6 +496,20 @@ extension GetContextTheme on BuildContext {
   /// [AppBar.shadowColor] in all descendant widgets. Defaults to [Colors.black].
   Color get appBarShadowColor => appBarTheme.shadowColor ?? Colors.black;
 
+  /// Whether the title should be centered.
+  /// Overrides or returns the default value for [AppBar.centerTitle].
+  bool? appBarCenterTitle(bool? centerTitle, {List<Widget>? actions}) {
+    if (centerTitle != null) return centerTitle;
+    if (appBarTheme.centerTitle != null) return appBarTheme.centerTitle;
+    switch (Get.platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return actions == null || actions.length < 2;
+      default:
+        return false;
+    }
+  }
+
   /// A text theme that contrasts with the primary color.
   TextTheme get primaryTextTheme => theme.primaryTextTheme;
 

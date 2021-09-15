@@ -23,7 +23,7 @@ class CameraPage extends StatelessWidget {
             backgroundColor: Colors.black,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
-            appBarRightItems: [
+            appBarActions: [
               if (model.file == null)
                 GetButton.primaryIcon(
                   child: Icon(model.flashIcon),

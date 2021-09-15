@@ -11,7 +11,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GetScaffold(
-        hideAppBarLeading: true,
+        showAppBarLeading: false,
         centerTitle: true,
         title: "Log In",
         children: [

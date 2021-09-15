@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
           return ThemeBuilder(
             (context) => GetScaffold(
               title: "Get Smart Home",
-              progressBar: LinearProgress.standard(
+              progress: LinearProgress.standard(
                 color: Colors.blue,
                 visible: model.isBusy,
               ),
