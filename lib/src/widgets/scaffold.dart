@@ -123,16 +123,6 @@ class GetScaffold extends StatelessWidget {
         children: [Responsive(children: children ?? [])],
       );
 
-  Widget _bottomBar(BuildContext context) => Blur(
-        blur: 6,
-        child: withBottomBar != null
-            ? _bottomAppBar
-            : CrossFade(
-                firstChild: hideToolbars ? Container(height: 0) : bottomBar,
-                secondChild: _bottomAppBar,
-              ),
-      );
-
   Widget _hideAbleAppBar(BuildContext context) {
     final appBar = _buildAppBar(context);
     return CrossFade(
@@ -166,6 +156,16 @@ class GetScaffold extends StatelessWidget {
               showLeading: showAppBarLeading,
               bottomHeight: appBarBottomHeight,
             );
+
+  Widget _bottomBar(BuildContext context) => Blur(
+        blur: 6,
+        child: withBottomBar != null
+            ? _bottomAppBar
+            : CrossFade(
+                firstChild: hideToolbars ? Container(height: 0) : bottomBar,
+                secondChild: _bottomAppBar,
+              ),
+      );
 
   Widget get _bottomAppBar {
     List<Widget> _bottomBarLeft = interactive ? bottomBarLeftItems ?? [] : [];
