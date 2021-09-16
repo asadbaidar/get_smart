@@ -1241,7 +1241,7 @@ class GetTile extends StatelessWidget {
     this.showAccessory,
     this.tintAccessory = true,
     this.tintAble,
-    this.titleWeight = null,
+    this.titleWeight,
     this.subtitleWeight,
     this.titleSubbed = false,
     this.subtitleSubbed = true,
