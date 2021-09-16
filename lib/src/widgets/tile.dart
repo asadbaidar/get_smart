@@ -90,7 +90,7 @@ class GetTileData extends GetObject {
     this.value,
     this.header,
     this.isHeader = false,
-    this.isLeadingFilled,
+    this.leadingFilled,
     this.detail = false,
     this.padAccessory,
     this.showAccessory,
@@ -122,7 +122,7 @@ class GetTileData extends GetObject {
   dynamic value;
   dynamic header;
   bool isHeader;
-  bool? isLeadingFilled;
+  bool? leadingFilled;
   bool detail;
   bool? padAccessory;
   bool? showAccessory;

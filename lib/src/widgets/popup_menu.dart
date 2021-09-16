@@ -134,7 +134,7 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
                     ? data.materialPrimary
                     : (data.tintColor ?? tintColor),
                 background: data.background ?? Colors.transparent,
-                leadingFilled: data.isLeadingFilled ?? false,
+                leadingFilled: data.leadingFilled ?? false,
                 detail: data.detail,
                 padAccessory: data.padAccessory ?? true,
                 showAccessory: data.showAccessory,

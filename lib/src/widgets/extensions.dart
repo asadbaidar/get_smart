@@ -465,7 +465,7 @@ extension GetShimmer on Shimmer {
         title: title,
         subtitle: subtitle,
         leading: leading,
-        isLeadingOval: true,
+        leadingOval: true,
         topPadding: topPadding,
       );
 
@@ -473,12 +473,12 @@ extension GetShimmer on Shimmer {
     String? title,
     String? subtitle,
     bool leading = true,
-    bool isLeadingOval = false,
+    bool leadingOval = false,
     double topPadding = kMediumPaddingY,
   }) =>
       custom((context) => GetTile.medium(
           leading: leading ? 24.space : null,
-          leadingOval: isLeadingOval,
+          leadingOval: leadingOval,
           topPadding: topPadding + topPadding.half,
           titleChild: title?.mapIt((it) => Container(
                 color: Colors.grey,
