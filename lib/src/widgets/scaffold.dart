@@ -147,13 +147,14 @@ class GetScaffold extends StatelessWidget {
               leading: appBarLeading,
               bottom: appBarBottom,
               actions: appBarActions,
-              progress: progress ?? LinearProgress(visible: showProgress),
+              progress: progress,
               customTitle: customTitle,
               title: title,
               titleStyle: titleStyle,
               centerTitle: centerTitle,
               interactive: interactive,
               showLeading: showAppBarLeading,
+              showProgress: showProgress,
               bottomHeight: appBarBottomHeight,
             );
 

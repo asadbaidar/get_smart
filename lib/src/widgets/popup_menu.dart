@@ -124,9 +124,8 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
       itemBuilder ??
       (value, data) =>
           $cast<GetTileData>(data)?.mapTo((GetTileData data) => GetTile.item(
-                leading: data.icon?.mapIt((it) => Icon(it)),
+                leading: data.leading?.mapIt((it) => Icon(it)),
                 title: data.title,
-                titleWeight: null,
                 subtitle: data.subtitle,
                 trailingTop: data.trailingTop,
                 trailingBottom: data.trailingBottom,
@@ -135,8 +134,8 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
                     ? data.materialPrimary
                     : (data.tintColor ?? tintColor),
                 background: data.background ?? Colors.transparent,
-                isLeadingFilled: data.isLeadingFilled ?? false,
-                isDetailed: data.isDetailed,
+                leadingFilled: data.isLeadingFilled ?? false,
+                detail: data.detail,
                 padAccessory: data.padAccessory ?? true,
                 showAccessory: data.showAccessory,
                 tintAccessory: data.tintAccessory ?? true,

@@ -105,13 +105,30 @@ class CupertinoSliverSwipeRefresh extends StatelessWidget {
   ///
   /// The [onRefresh] argument will be called when pulled far enough to trigger
   /// a refresh.
-  const CupertinoSliverSwipeRefresh({
+  CupertinoSliverSwipeRefresh({
     this.refreshTriggerPullDistance = 100.0,
     this.refreshIndicatorExtent = 60.0,
-    this.builder = buildRefreshIndicator,
+    RefreshControlIndicatorBuilder? builder,
+    bool? enabled,
     this.onRefresh,
     Key? key,
-  }) : _key = key;
+  })  : _key = key,
+        builder = builder ??
+            ((
+              context,
+              refreshState,
+              pulledExtent,
+              refreshTriggerPullDistance,
+              refreshIndicatorExtent,
+            ) =>
+                buildRefreshIndicator(
+                  context,
+                  refreshState,
+                  pulledExtent,
+                  refreshTriggerPullDistance,
+                  refreshIndicatorExtent,
+                  enabled ?? onRefresh != null,
+                ));
 
   final Key? _key;
 
@@ -177,6 +194,7 @@ class CupertinoSliverSwipeRefresh extends StatelessWidget {
     double pulledExtent,
     double refreshTriggerPullDistance,
     double refreshIndicatorExtent,
+    bool enabled,
   ) {
     final double percentageComplete =
         (pulledExtent / refreshTriggerPullDistance).clamp(0.0, 1.0);
@@ -194,16 +212,17 @@ class CupertinoSliverSwipeRefresh extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Positioned(
-            // top: 12.0,
-            // left: 0.0,
-            // right: 0.0,
-            child: _buildIndicatorForRefreshState(
-              refreshState,
-              14.0,
-              percentageComplete,
+          if (enabled)
+            Positioned(
+              // top: 12.0,
+              // left: 0.0,
+              // right: 0.0,
+              child: _buildIndicatorForRefreshState(
+                refreshState,
+                14.0,
+                percentageComplete,
+              ),
             ),
-          ),
         ],
       ),
     );

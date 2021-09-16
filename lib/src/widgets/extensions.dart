@@ -478,7 +478,7 @@ extension GetShimmer on Shimmer {
   }) =>
       custom((context) => GetTile.medium(
           leading: leading ? 24.space : null,
-          isLeadingOval: isLeadingOval,
+          leadingOval: isLeadingOval,
           topPadding: topPadding + topPadding.half,
           titleChild: title?.mapIt((it) => Container(
                 color: Colors.grey,

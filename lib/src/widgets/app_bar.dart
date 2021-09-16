@@ -26,15 +26,19 @@ class GetAppBar {
     bool? centerTitle,
     bool interactive = true,
     bool showLeading = true,
+    bool? showProgress,
     double bottomHeight = 0.0,
     double bottomConstant = 48.0,
     double leadingWidth: 40.0,
     double titleSpacing: 8.0,
   }) {
     final _actions = interactive ? actions : null;
+
+    final _progress = progress ??
+        (showProgress != null ? LinearProgress(visible: showProgress) : null);
     final _toolbarHeight =
         Get.isIOS ? kMinInteractiveDimensionCupertino : kToolbarHeight;
-    final _bottomHeight = (progress?.height ?? 0) +
+    final _bottomHeight = (_progress?.height ?? 0) +
         (bottom == null ? 0 : bottomHeight + bottomConstant);
     return PreferredSize(
       preferredSize: Size.fromHeight(_toolbarHeight + _bottomHeight),
@@ -59,7 +63,7 @@ class GetAppBar {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (bottom != null) bottom,
-                  if (progress != null) progress,
+                  if (_progress != null) _progress,
                 ],
               ),
               preferredSize: Size.fromHeight(_bottomHeight),
@@ -69,10 +73,10 @@ class GetAppBar {
     );
   }
 
-  static GetSliverAppBar slivers({
+  static GetSliverAppBar sliver({
     Widget? leading,
     Widget? bottom, // CupertinoSearchTextField()
-    Widget? refreshSliver,
+    Widget? sliverRefresh,
     List<Widget>? actions,
     List<Widget>? largeActions,
     LinearProgress? progress,
@@ -87,8 +91,10 @@ class GetAppBar {
     bool pinned = true,
     bool interactive = true,
     bool showLeading = true,
-    double bottomHeight = 0.0, // 36
-    double largeTitleHeight = 48.0,
+    bool? showProgress,
+    double bottomHeight = 0.0,
+    double bottomConstant = 36.0,
+    double largeTitleHeight = 47.0,
     double leadingWidth: 40.0,
     double titleSpacing: 8.0,
     double topPadding = kStandardPadding,
@@ -97,15 +103,17 @@ class GetAppBar {
     double rightPadding = kStandardPaddingX,
     double? verticalPadding,
     double? horizontalPadding,
+    SwipeRefreshCallback? onRefresh,
   }) {
     final _actions = interactive ? actions : null;
     final _largeActions = interactive ? largeActions : null;
     if (leading == null &&
         bottom == null &&
-        refreshSliver == null &&
+        sliverRefresh == null &&
         (_actions == null || _actions.isEmpty) &&
         (_largeActions == null || _largeActions.isEmpty) &&
         progress == null &&
+        showProgress == null &&
         customTitle == null &&
         (customLargeTitle == null || !largeTitle) &&
         (title == null || title.isEmpty)) {
@@ -115,18 +123,32 @@ class GetAppBar {
     final _bottomPadding = verticalPadding ?? bottomPadding;
     final _leftPadding = horizontalPadding ?? leftPadding;
     final _rightPadding = horizontalPadding ?? rightPadding;
+
+    final _progress = progress ??
+        (showProgress != null ? LinearProgress(visible: showProgress) : null);
+
     final _toolbarHeight =
         Get.isIOS ? kMinInteractiveDimensionCupertino : kToolbarHeight;
-    final _largeTitleHeight = largeTitleHeight;
-
-    final _bottomHeight = (progress?.height ?? 0) +
-        (bottom == null
-            ? 0
-            : bottomHeight + _topPadding.half.half + _bottomPadding - 2);
 
     final _hasLargeTitle = customLargeTitle != null ||
         (title != null && largeTitle) ||
         _largeActions?.isNotEmpty == true;
+
+    final _largeTitleHeight =
+        (_progress?.height ?? 0) + (_hasLargeTitle ? largeTitleHeight : 0);
+
+    final _bottomHeight = (_progress?.height ?? 0) +
+        (bottom == null
+            ? 0
+            : bottomHeight +
+                bottomConstant +
+                _topPadding.half.half +
+                _bottomPadding -
+                2);
+
+    double _floatingBottomHeight({double visibility = 1.0}) =>
+        _bottomHeight +
+        (floating ? (_hasLargeTitle ? largeTitleHeight : 0) * visibility : 0.0);
 
     TextStyle? _titleTextStyle(BuildContext context, {bool large = false}) {
       final _style = large ? largeTitleStyle : titleStyle;
@@ -187,13 +209,15 @@ class GetAppBar {
           backgroundColor:
               context.primaryColor.applyIf(_blur > 0, (it) => it.translucent),
           title: customTitle ??
-              title?.mapIt((it) => Transform.translate(
-                    offset: GetOffset.only(dy: _dy),
-                    child: Opacity(
-                      opacity: _opacity,
-                      child: Text(it),
-                    ),
-                  )),
+              title?.mapIt((it) => !_hasLargeTitle
+                  ? Text(it)
+                  : Transform.translate(
+                      offset: GetOffset.only(dy: _dy),
+                      child: Opacity(
+                        opacity: _opacity,
+                        child: Text(it),
+                      ),
+                    )),
           titleTextStyle: _titleTextStyle(context),
           actions: _actions,
           elevation: _elevation,
@@ -235,19 +259,18 @@ class GetAppBar {
                           ),
                           child: bottom,
                         ),
-                      if (progress != null && (!floating || _overlapping))
-                        progress,
+                      if (_progress != null && (!floating || _overlapping))
+                        _progress,
                     ],
                   ),
                   preferredSize: Size.fromHeight(
-                    _bottomHeight +
-                        (floating ? _largeTitleHeight * _visibility : 0.0),
+                    _floatingBottomHeight(visibility: _visibility),
                   ),
                 )
               : null,
         );
       }),
-      if (refreshSliver != null) refreshSliver,
+      sliverRefresh ?? CupertinoSliverSwipeRefresh(onRefresh: onRefresh),
       SliverLayoutBuilder(builder: (context, constraints) {
         // $debugPrint(constraints);
         final _offset = constraints.scrollOffset == 0
@@ -265,10 +288,12 @@ class GetAppBar {
                 color: context.primaryColor,
                 shadowColor: context.appBarShadowColor,
                 elevation: context.appBarElevation * 0.8,
-                child: floating
+                child: floating ||
+                        !(_hasLargeTitle || !_overlapping && bottom != null)
                     ? Container(
                         color: Colors.transparent,
-                        height: context.appBarElevation + 0.5,
+                        height: context.appBarElevation +
+                            (floating ? 0 : _largeTitleHeight),
                       )
                     : Container(
                         padding: EdgeInsets.only(
@@ -302,7 +327,7 @@ class GetAppBar {
                         ),
                       ),
               ),
-              if (!_overlapping && progress != null) progress,
+              if (!_overlapping && _progress != null) _progress,
             ],
           ),
         );
