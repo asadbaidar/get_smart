@@ -17,7 +17,7 @@ dependencies:
   dio: ^4.0.0
   get: ^4.3.8
   cupertino_icons: ^1.0.3
-  url_launcher: ^6.0.10
+  url_launcher: ^6.0.11
   shimmer: ^2.0.0
   dots_indicator: ^2.0.0
   google_fonts: ^2.1.0
