@@ -60,6 +60,8 @@ abstract class GetObject extends Mappable {
 
   Color get materialPrimary => description.materialPrimary;
 
+  late final String initial = description.takeInitials(1);
+
   late final String initials = description.takeInitials(2);
 
   late final String initialsFilled = description.takeInitials(2, fill: true);
