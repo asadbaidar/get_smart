@@ -1,3 +1,7 @@
+## [0.1.2+2]
+
+* Bug fixes
+
 ## [0.1.2+1]
 
 * Dependencies updated
