@@ -104,6 +104,65 @@ class GetTheme {
         bottomForegroundDark: bottomForegroundDark,
       );
 
+  static ThemeData blackWhiteFlat(
+    BuildContext context, {
+    Brightness? brightness,
+    Brightness primaryBrightness = Brightness.dark,
+    Brightness? bottomBrightness,
+    String? fontFamily,
+    TextTheme? textTheme,
+    IconThemeData? primaryIconTheme,
+    ButtonStyle? elevatedButtonStyle,
+    ButtonStyle? outlinedButtonStyle,
+    ButtonStyle? textButtonStyle,
+    TextStyle? titleTextStyle,
+    // light theme attributes
+    Color secondaryColorLight = Colors.black,
+    Color primarySwatchLight = GetColors.black,
+    Color backgroundLight = Colors.white,
+    Color canvasColorLight = Colors.white,
+    Color primaryBackgroundLight = Colors.black,
+    Color bottomBackgroundLight = Colors.white,
+    Color bottomForegroundLight = Colors.black,
+    // dark theme attributes
+    Color secondaryColorDark = Colors.white,
+    Color primarySwatchDark = GetColors.white,
+    Color backgroundDark = GetColors.black93,
+    Color canvasColorDark = GetColors.black93,
+    Color primaryBackgroundDark = GetColors.black90,
+    Color bottomBackgroundDark = GetColors.black90,
+    Color bottomForegroundDark = Colors.white,
+  }) =>
+      builder(
+        context,
+        brightness: brightness,
+        primaryBrightness: primaryBrightness,
+        bottomBrightness: bottomBrightness,
+        fontFamily: fontFamily,
+        textTheme: textTheme,
+        primaryIconTheme: primaryIconTheme,
+        elevatedButtonStyle: elevatedButtonStyle,
+        outlinedButtonStyle: outlinedButtonStyle,
+        textButtonStyle: textButtonStyle,
+        titleTextStyle: titleTextStyle,
+        // light theme attributes
+        secondaryColorLight: secondaryColorLight,
+        primarySwatchLight: primarySwatchLight,
+        backgroundLight: backgroundLight,
+        canvasColorLight: canvasColorLight,
+        primaryBackgroundLight: primaryBackgroundLight,
+        bottomBackgroundLight: bottomBackgroundLight,
+        bottomForegroundLight: bottomForegroundLight,
+        // dark theme attributes
+        secondaryColorDark: secondaryColorDark,
+        primarySwatchDark: primarySwatchDark,
+        backgroundDark: backgroundDark,
+        canvasColorDark: canvasColorDark,
+        primaryBackgroundDark: primaryBackgroundDark,
+        bottomBackgroundDark: bottomBackgroundDark,
+        bottomForegroundDark: bottomForegroundDark,
+      );
+
   static ThemeData sky(
     BuildContext context, {
     Brightness? brightness,
@@ -469,6 +528,8 @@ extension TextStyleX on TextStyle {
   TextStyle get italic => apply(fontStyle: FontStyle.italic);
 
   TextStyle get bold => copyWith(fontWeight: FontWeight.w600);
+
+  TextStyle get bolder => copyWith(fontWeight: FontWeight.bold);
 }
 
 extension GetContextTheme on BuildContext {
