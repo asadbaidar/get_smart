@@ -92,7 +92,7 @@ class ProgressSnackBar extends StatelessWidget {
     this.timeout = const Duration(seconds: 6),
     this.progress,
     this.enabled,
-    this.isDismissible,
+    this.dismissible,
     this.autoDismissible = true,
     this.autoDismissIfNotBusy,
     Key? key,
@@ -111,7 +111,7 @@ class ProgressSnackBar extends StatelessWidget {
   final Duration timeout;
   final double? progress;
   final bool? enabled;
-  final bool? isDismissible;
+  final bool? dismissible;
   final bool autoDismissible;
   final bool? autoDismissIfNotBusy;
 
@@ -136,8 +136,8 @@ class ProgressSnackBar extends StatelessWidget {
                 : onDone,
         onDismiss: onCancel,
         showProgress: _status.isBusy,
-        isDismissible: !_status.isBusy &&
-            (isDismissible ?? autoDismissIfNotBusy ?? _status.isFailed),
+        dismissible: !_status.isBusy &&
+            (dismissible ?? autoDismissIfNotBusy ?? _status.isFailed),
         autoDismiss:
             autoDismissIfNotBusy == true ? !_status.isBusy : _status.isFailed,
         autoDismissible: autoDismissible,
@@ -161,7 +161,7 @@ class GetSnackBar extends StatelessWidget {
     this.progress,
     this.showProgress = true,
     this.withBottomBar = false,
-    this.isDismissible = false,
+    this.dismissible = false,
     this.autoDismissible = true,
     this.autoDismiss = false,
     Key? key,
@@ -177,7 +177,7 @@ class GetSnackBar extends StatelessWidget {
   final double? progress;
   final bool showProgress;
   final bool? withBottomBar;
-  final bool isDismissible;
+  final bool dismissible;
   final bool autoDismissible;
   final bool autoDismiss;
 
@@ -190,7 +190,7 @@ class GetSnackBar extends StatelessWidget {
         children: [
           GetDismissible(
             key: _dismissible,
-            enabled: isDismissible,
+            enabled: dismissible,
             autoDismissible: autoDismissible,
             autoDismiss: autoDismiss,
             direction: DismissDirection.down,

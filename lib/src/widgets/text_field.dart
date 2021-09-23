@@ -24,7 +24,7 @@ class GetTextField extends StatelessWidget {
     this.validateLength,
     this.validateEmpty = true,
     this.showCounter,
-    this.isDense,
+    this.dense,
     this.filled,
     this.obscureText,
     this.enableSuggestions,
@@ -75,7 +75,7 @@ class GetTextField extends StatelessWidget {
     this.errorStyle,
     this.errorMaxLines,
     this.floatingLabelBehavior = FloatingLabelBehavior.auto,
-    this.isCollapsed = false,
+    this.collapsed = false,
     this.contentPadding,
     this.prefixIcon,
     this.prefixIconConstraints,
@@ -128,7 +128,7 @@ class GetTextField extends StatelessWidget {
   final bool? validateLength;
   final bool validateEmpty;
   final bool? showCounter;
-  final bool? isDense;
+  final bool? dense;
   final bool? filled;
   final bool? obscureText;
   final bool? enableSuggestions;
@@ -179,7 +179,7 @@ class GetTextField extends StatelessWidget {
   final TextStyle? errorStyle;
   final int? errorMaxLines;
   final FloatingLabelBehavior floatingLabelBehavior;
-  final bool isCollapsed;
+  final bool collapsed;
   final EdgeInsetsGeometry? contentPadding;
   final Widget? prefixIcon;
   final BoxConstraints? prefixIconConstraints;
@@ -327,7 +327,7 @@ class GetTextField extends StatelessWidget {
           autofillHints: autofillHints,
           decoration: InputDecoration(
             prefix: _prefix(context),
-            isDense: isDense,
+            isDense: dense,
             filled: filled,
             labelText: label,
             hintText: hint,
@@ -344,7 +344,7 @@ class GetTextField extends StatelessWidget {
             hintMaxLines: hintMaxLines,
             errorStyle: errorStyle,
             floatingLabelBehavior: floatingLabelBehavior,
-            isCollapsed: isCollapsed,
+            isCollapsed: collapsed,
             contentPadding: contentPadding,
             prefixIcon: prefixIcon,
             prefixIconConstraints: prefixIconConstraints,

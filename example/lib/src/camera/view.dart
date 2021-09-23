@@ -54,7 +54,7 @@ class CameraPage extends StatelessWidget {
                         error: model.actionError,
                         onCancel: model.cancelAction,
                         action: GetText.ok(),
-                        isDismissible: true,
+                        dismissible: true,
                       ))
                 : Row(children: [
                     FloatingActionButton(

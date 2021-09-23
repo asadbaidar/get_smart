@@ -16,7 +16,7 @@ class GetBottomSheet extends StatelessWidget {
     this.showHandle = true,
     this.centerTitle,
     this.rounded = true,
-    this.isDismissible = true,
+    this.dismissible = true,
     Key? key,
   }) : super(key: key);
 
@@ -30,7 +30,7 @@ class GetBottomSheet extends StatelessWidget {
   final bool showHandle;
   final bool? centerTitle;
   final bool rounded;
-  final bool isDismissible;
+  final bool dismissible;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -41,7 +41,7 @@ class GetBottomSheet extends StatelessWidget {
               constraints: BoxConstraints.expand(height: kToolbarHeight),
               color: Colors.transparent,
             ),
-            onTap: () => isDismissible ? Get.back() : null,
+            onTap: () => dismissible ? Get.back() : null,
           ),
           Flexible(
             child: Container(
@@ -129,7 +129,7 @@ extension GetBottomSheetX on GetInterface {
     bool? ignoreSafeArea,
     bool fullscreen = true,
     bool useRootNavigator = false,
-    bool isDismissible = true,
+    bool dismissible = true,
     bool enableDrag = true,
     RouteSettings? settings,
     Duration? enterDuration,
@@ -147,7 +147,7 @@ extension GetBottomSheetX on GetInterface {
       ignoreSafeArea: ignoreSafeArea,
       isScrollControlled: fullscreen,
       useRootNavigator: useRootNavigator,
-      isDismissible: isDismissible,
+      isDismissible: dismissible,
       enableDrag: enableDrag,
       settings: settings,
       enterBottomSheetDuration: enterDuration,
