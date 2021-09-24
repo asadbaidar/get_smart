@@ -476,10 +476,12 @@ class GetTheme {
         selectedLabelStyle: TextStyle(
           fontSize: 10,
           fontFamily: fontFamily,
+          height: 2,
         ),
         unselectedLabelStyle: TextStyle(
           fontSize: 9.8,
           fontFamily: fontFamily,
+          height: 2,
         ),
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: true,
@@ -487,6 +489,8 @@ class GetTheme {
         backgroundColor: _bottomBackground,
         selectedItemColor: _bottomForeground,
         unselectedItemColor: bottomTheme.hintColor.hinted,
+        selectedIconTheme: IconThemeData(size: 20),
+        unselectedIconTheme: IconThemeData(size: 20),
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: _bottomBackground,

@@ -2,7 +2,7 @@ name: get_smart
 description: A package of widgets and utils to make flutter easy and smart.
 homepage: https://github.com/asadbaidar/get_smart
 
-version: 0.1.2+4
+version: 0.1.2+5
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -42,25 +42,11 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # To add Flutter specific assets to your application, add an assets section:
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-  # assets:
-  #  - assets/icon/
-  #  - assets/image/
+  assets:
+    - assets/icon/
+    - assets/image/
 
-  # This adds Flutter specific custom fonts to your application
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
-  #fonts:
-  #  - family: AvenirNext
-  #    fonts:
-  #      - asset: fonts/AvenirNextLTPro-Regular.otf
-  #      - asset: fonts/AvenirNextLTPro-Demi.otf
-  #        weight: 600
-  #      - asset: fonts/AvenirNextLTPro-Bold.otf
-  #        weight: 700
-  #      - asset: fonts/AvenirNextLTPro-Italic.otf
-  #        style: italic
+  fonts:
+    - family:  GetIcons
+      fonts:
+        - asset: fonts/GetIcons.ttf
