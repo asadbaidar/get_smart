@@ -9,22 +9,32 @@ extension StringX on String {
     pre, {
     int doFor = 1,
     bool doIf = true,
-    String between = "",
+    between,
+    post,
   }) =>
       applyFor(
         doIf == true && pre != null ? doFor : 0,
-        (s) => pre!.toString() + between + s,
+        (s) =>
+            pre!.toString() +
+            (between?.toString() ?? "") +
+            s +
+            (post?.toString() ?? ""),
       );
 
   String post(
     post, {
     int doFor = 1,
     bool doIf = true,
-    String between = "",
+    between,
+    pre,
   }) =>
       applyFor(
         doIf == true && post != null ? doFor : 0,
-        (s) => s + between + post!.toString(),
+        (s) =>
+            (pre?.toString() ?? "") +
+            s +
+            (between?.toString() ?? "") +
+            post!.toString(),
       );
 
   String surround(
