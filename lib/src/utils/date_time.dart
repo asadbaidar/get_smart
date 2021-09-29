@@ -54,6 +54,40 @@ extension Date on DateTime {
 
   static DateTime get now => DateTime.now();
 
+  int get inMilliseconds => millisecondsSinceEpoch;
+
+  bool get isCurrentYear => year == now.year;
+
+  TimeOfDay get timeOfDay => TimeOfDay.fromDateTime(this);
+
+  DateTime get afterYear => add(365.days);
+
+  DateTime get after3Month => add(93.days);
+
+  DateTime get afterMonth => add(31.days);
+
+  DateTime get startOfDay => setting(
+        hour: 0,
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+        microsecond: 0,
+      );
+
+  DateTime get endOfDay => setting(
+        hour: 23,
+        minute: 59,
+        second: 59,
+        millisecond: 0,
+        microsecond: 0,
+      );
+
+  String get webTimeStamp => GetWebAPI.timeStamp + inMilliseconds.toString();
+
+  bool operator >(DateTime other) => isAfter(other);
+
+  bool operator <(DateTime other) => other.isAfter(this);
+
   String get formatEMMMdY => isCurrentYear ? formatEMMMd : formatEMMMdy;
 
   String get formatEMMMdYHma =>
@@ -135,25 +169,6 @@ extension Date on DateTime {
   String get formatHm => GetDateFormat.inHm.format(this);
 
   String get formatHms => GetDateFormat.inHms.format(this);
-
-  int get inMilliseconds => millisecondsSinceEpoch;
-
-  bool get isCurrentYear => year == now.year;
-
-  TimeOfDay get timeOfDay => TimeOfDay.fromDateTime(this);
-
-  DateTime get endOfDay => setting(
-        hour: 23,
-        minute: 59,
-        millisecond: 0,
-        microsecond: 0,
-      );
-
-  String get webTimeStamp => GetWebAPI.timeStamp + inMilliseconds.toString();
-
-  bool operator >(DateTime other) => isAfter(other);
-
-  bool operator <(DateTime other) => other.isAfter(this);
 }
 
 extension GetDateFormat on DateFormat {
@@ -236,7 +251,8 @@ extension GetDateTimePickerX on GetInterface {
     TransitionBuilder? builder,
     bool useRootNavigator = true,
     RouteSettings? routeSettings,
-    required Function(DateTime? time) onPick,
+    required void Function(DateTime time) onPick,
+    VoidCallback? onCancel,
   }) async {
     var time = await showTimePicker(
       context: context!,
@@ -249,9 +265,10 @@ extension GetDateTimePickerX on GetInterface {
       useRootNavigator: useRootNavigator,
       routeSettings: routeSettings,
     );
-    onPick(time == null && withTime == null
-        ? null
-        : (withTime?.setting(timeOfDay: time) ?? Date.from(timeOfDay: time)));
+    if (time != null)
+      onPick(withTime?.setting(timeOfDay: time) ?? Date.from(timeOfDay: time));
+    else
+      onCancel?.call();
   }
 
   Future<void> datePicker({
@@ -273,7 +290,8 @@ extension GetDateTimePickerX on GetInterface {
     bool useRootNavigator = true,
     RouteSettings? routeSettings,
     TransitionBuilder? builder,
-    required Function(DateTime? date) onPick,
+    required void Function(DateTime date) onPick,
+    VoidCallback? onCancel,
   }) async {
     var date = await showDatePicker(
       context: context!,
@@ -296,8 +314,9 @@ extension GetDateTimePickerX on GetInterface {
       routeSettings: routeSettings,
       builder: builder,
     );
-    onPick(date == null && withDate == null
-        ? null
-        : (withDate?.setting(date: date) ?? date));
+    if (date != null)
+      onPick(withDate?.setting(date: date) ?? date);
+    else
+      onCancel?.call();
   }
 }
