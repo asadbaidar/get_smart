@@ -4,16 +4,23 @@ class StringTransform implements Transformable<String, String> {
   StringTransform({
     this.capitalize = false,
     this.capitalizeFirst = false,
+    this.withoutGarbage = false,
     this.fallback = "",
   });
 
   final bool capitalize;
   final bool capitalizeFirst;
+  final bool withoutGarbage;
   final String fallback;
 
   @override
-  String fromJson(value) =>
-      _stringFromJson(value, capitalize, capitalizeFirst, fallback);
+  String fromJson(value) => _stringFromJson(
+        value,
+        capitalize,
+        capitalizeFirst,
+        withoutGarbage,
+        fallback,
+      );
 
   @override
   String toJson(String? value) => _stringToJson(value, fallback);
@@ -23,23 +30,38 @@ class RxStringTransform implements Transformable<RxString, String?> {
   RxStringTransform({
     this.capitalize = false,
     this.capitalizeFirst = false,
+    this.withoutGarbage = false,
     this.fallback = "",
   });
 
   final bool capitalize;
   final bool capitalizeFirst;
+  final bool withoutGarbage;
   final String fallback;
 
   @override
-  RxString fromJson(value) =>
-      _stringFromJson(value, capitalize, capitalizeFirst, fallback).obs;
+  RxString fromJson(value) => _stringFromJson(
+        value,
+        capitalize,
+        capitalizeFirst,
+        withoutGarbage,
+        fallback,
+      ).obs;
 
   @override
   String toJson(RxString? value) => _stringToJson(value?.value, fallback);
 }
 
-String _stringFromJson(value, bool capitalize, bool capitalizeFirst, fallback) {
-  final string = _$stringFromJson(value, fallback);
+String _stringFromJson(
+  value,
+  bool capitalize,
+  bool capitalizeFirst,
+  bool withoutGarbage,
+  fallback,
+) {
+  var string = _$stringFromJson(value, fallback);
+  string =
+      withoutGarbage && StringX.garbage.any((g) => g == string) ? "" : string;
   return capitalize
       ? string.capitalized
       : capitalizeFirst

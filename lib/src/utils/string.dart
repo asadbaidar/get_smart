@@ -56,12 +56,12 @@ extension StringX on String {
             ),
       );
 
-  static const _garbage = const ["(", ")", "-", "&", "/"];
+  static const garbage = const ["(", ")", "-", "&", "/", "."];
 
   String takeInitialsWithoutGarbage(
     int count, {
     bool fill = false,
-    List<String> garbage = _garbage,
+    List<String> garbage = garbage,
   }) =>
       takeInitials(
         count,
@@ -74,7 +74,7 @@ extension StringX on String {
     int count, {
     bool fill = false,
     bool withoutGarbage = false,
-    List<String> garbage = _garbage,
+    List<String> garbage = garbage,
   }) {
     var source = replaceAll(RegExp(r"\s+"), " ").trim();
     if (source.isNotEmpty) {

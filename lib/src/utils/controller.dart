@@ -22,7 +22,7 @@ abstract class GetController extends MultipleFutureGetController {
   }
 
   @override
-  Future initialise() {
+  Future initialise() async {
     _futuresCompleter = Completer();
     _initialiseData();
     // We set busy manually as well because when notify listeners is called
@@ -30,6 +30,7 @@ abstract class GetController extends MultipleFutureGetController {
     clearErrors();
     setBusy(true);
     update();
+    if (loadPrefsOnInit) await GetPrefs.instance.reload();
 
     for (var key in futuresMap.keys) {
       runErrorFuture(
@@ -84,7 +85,6 @@ abstract class GetController extends MultipleFutureGetController {
 
   @override
   Map<Object, Future Function()> get futuresMap => {
-        if (loadPrefsOnInit) $name(GetPrefs): GetPrefs.instance.reload,
         typeName: futureToRun,
         ...futuresToRun,
       };

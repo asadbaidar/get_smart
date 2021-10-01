@@ -2319,7 +2319,9 @@ class GetTileRow extends StatelessWidget {
         trailing ?? (detail ? const Icon(CupertinoIcons.chevron_right) : null);
     final _showTrailing = trailing != null || trailingText?.notEmpty != null;
     final _boxedView = $cast<BoxView>(leading);
-    return _text == null && child == null && children?.isNotEmpty != true
+    return _text?.notEmpty == null &&
+            child == null &&
+            children?.isNotEmpty != true
         ? Container(height: 0, width: 0)
         : InkWell(
             highlightColor: _tintColor.highlighted,
