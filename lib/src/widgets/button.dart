@@ -73,47 +73,58 @@ abstract class GetButton {
     bool? autofocus = false,
     bool round = false,
     bool enabled = true,
+    bool busy = false,
     Clip? clipBehavior = Clip.none,
     Widget? child,
   }) =>
-      Container(
-        margin: margin ??
-            (horizontalMargin != null || verticalMargin != null
-                ? EdgeInsets.symmetric(
-                    horizontal: horizontalMargin ?? 0,
-                    vertical: verticalMargin ?? 0,
+      Builder(
+        builder: (context) => Container(
+          margin: margin ??
+              (horizontalMargin != null || verticalMargin != null
+                  ? EdgeInsets.symmetric(
+                      horizontal: horizontalMargin ?? 0,
+                      vertical: verticalMargin ?? 0,
+                    )
+                  : null),
+          child: ElevatedButton(
+            key: key,
+            onPressed: enabled
+                ? busy
+                    ? () => null
+                    : onPressed
+                : null,
+            onLongPress: onLongPress,
+            style: ElevatedButton.styleFrom(
+              minimumSize: minimumSize,
+              padding: padding ??
+                  (horizontalPadding != null || verticalPadding != null
+                      ? EdgeInsets.symmetric(
+                          horizontal: horizontalPadding ?? 0,
+                          vertical: verticalPadding ?? 0,
+                        )
+                      : null),
+              shape: shape ??
+                  (round == true
+                      ? RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        )
+                      : null),
+              side: side,
+              primary: primary,
+              onPrimary: onPrimary,
+              onSurface: onSurface,
+              elevation: elevation,
+              textStyle: textStyle,
+            ),
+            focusNode: focusNode,
+            autofocus: autofocus ?? false,
+            clipBehavior: clipBehavior ?? Clip.none,
+            child: busy
+                ? CircularProgress.small(
+                    color: onPrimary ?? context.elevatedButtonForegroundColor,
                   )
-                : null),
-        child: ElevatedButton(
-          key: key,
-          onPressed: enabled ? onPressed : null,
-          onLongPress: onLongPress,
-          style: ElevatedButton.styleFrom(
-            minimumSize: minimumSize,
-            padding: padding ??
-                (horizontalPadding != null || verticalPadding != null
-                    ? EdgeInsets.symmetric(
-                        horizontal: horizontalPadding ?? 0,
-                        vertical: verticalPadding ?? 0,
-                      )
-                    : null),
-            shape: shape ??
-                (round == true
-                    ? RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      )
-                    : null),
-            side: side,
-            primary: primary,
-            onPrimary: onPrimary,
-            onSurface: onSurface,
-            elevation: elevation,
-            textStyle: textStyle,
+                : child,
           ),
-          focusNode: focusNode,
-          autofocus: autofocus ?? false,
-          clipBehavior: clipBehavior ?? Clip.none,
-          child: child,
         ),
       );
 
@@ -140,50 +151,63 @@ abstract class GetButton {
     bool? autofocus = false,
     bool round = false,
     bool enabled = true,
+    bool busy = false,
     Clip? clipBehavior = Clip.none,
     required Widget icon,
     required Widget label,
   }) =>
-      Container(
-        margin: margin ??
-            (horizontalMargin != null || verticalMargin != null
-                ? EdgeInsets.symmetric(
-                    horizontal: horizontalMargin ?? 0,
-                    vertical: verticalMargin ?? 0,
-                  )
-                : null),
-        child: ElevatedButton.icon(
-          key: key,
-          onPressed: enabled ? onPressed : null,
-          onLongPress: onLongPress,
-          style: ElevatedButton.styleFrom(
-            minimumSize: minimumSize,
-            padding: padding ??
-                (horizontalPadding != null || verticalPadding != null
+      Builder(
+        builder: (context) {
+          return Container(
+            margin: margin ??
+                (horizontalMargin != null || verticalMargin != null
                     ? EdgeInsets.symmetric(
-                        horizontal: horizontalPadding ?? 0,
-                        vertical: verticalPadding ?? 0,
+                        horizontal: horizontalMargin ?? 0,
+                        vertical: verticalMargin ?? 0,
                       )
                     : null),
-            shape: shape ??
-                (round == true
-                    ? RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      )
-                    : null),
-            side: side,
-            primary: primary,
-            onPrimary: onPrimary,
-            onSurface: onSurface,
-            elevation: elevation,
-            textStyle: textStyle,
-          ),
-          focusNode: focusNode,
-          autofocus: autofocus ?? false,
-          clipBehavior: clipBehavior ?? Clip.none,
-          icon: icon,
-          label: label,
-        ),
+            child: ElevatedButton.icon(
+              key: key,
+              onPressed: enabled
+                  ? busy
+                      ? () => null
+                      : onPressed
+                  : null,
+              onLongPress: onLongPress,
+              style: ElevatedButton.styleFrom(
+                minimumSize: minimumSize,
+                padding: padding ??
+                    (horizontalPadding != null || verticalPadding != null
+                        ? EdgeInsets.symmetric(
+                            horizontal: horizontalPadding ?? 0,
+                            vertical: verticalPadding ?? 0,
+                          )
+                        : null),
+                shape: shape ??
+                    (round == true
+                        ? RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          )
+                        : null),
+                side: side,
+                primary: primary,
+                onPrimary: onPrimary,
+                onSurface: onSurface,
+                elevation: elevation,
+                textStyle: textStyle,
+              ),
+              focusNode: focusNode,
+              autofocus: autofocus ?? false,
+              clipBehavior: clipBehavior ?? Clip.none,
+              icon: busy
+                  ? CircularProgress.small(
+                      color: onPrimary ?? context.elevatedButtonForegroundColor,
+                    )
+                  : icon,
+              label: label,
+            ),
+          );
+        },
       );
 
   /// Create an elevated button with fully round corner.
@@ -207,6 +231,7 @@ abstract class GetButton {
     FocusNode? focusNode,
     bool autofocus = false,
     bool enabled = true,
+    bool busy = false,
     Clip clipBehavior = Clip.none,
     Widget? child,
   }) =>
@@ -231,6 +256,7 @@ abstract class GetButton {
         autofocus: autofocus,
         round: true,
         enabled: enabled,
+        busy: busy,
         clipBehavior: clipBehavior,
         child: child,
       );
@@ -257,48 +283,62 @@ abstract class GetButton {
     FocusNode? focusNode,
     bool? autofocus = false,
     bool round = false,
+    bool enabled = true,
+    bool busy = false,
     Clip? clipBehavior = Clip.none,
     required Widget child,
   }) =>
-      Container(
-        margin: margin ??
-            (horizontalMargin != null || verticalMargin != null
-                ? EdgeInsets.symmetric(
-                    horizontal: horizontalMargin ?? 0,
-                    vertical: verticalMargin ?? 0,
-                  )
-                : null),
-        child: OutlinedButton(
-          key: key,
-          onPressed: onPressed,
-          onLongPress: onLongPress,
-          style: OutlinedButton.styleFrom(
-            minimumSize: minimumSize,
-            padding: padding ??
-                (horizontalPadding != null || verticalPadding != null
+      Builder(
+        builder: (context) {
+          return Container(
+            margin: margin ??
+                (horizontalMargin != null || verticalMargin != null
                     ? EdgeInsets.symmetric(
-                        horizontal: horizontalPadding ?? 0,
-                        vertical: verticalPadding ?? 0,
+                        horizontal: horizontalMargin ?? 0,
+                        vertical: verticalMargin ?? 0,
                       )
                     : null),
-            shape: shape ??
-                (round == true
-                    ? RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      )
-                    : null),
-            side: side,
-            primary: primary,
-            backgroundColor: backgroundColor,
-            onSurface: onSurface,
-            elevation: elevation,
-            textStyle: textStyle,
-          ),
-          focusNode: focusNode,
-          autofocus: autofocus ?? false,
-          clipBehavior: clipBehavior ?? Clip.none,
-          child: child,
-        ),
+            child: OutlinedButton(
+              key: key,
+              onPressed: enabled
+                  ? busy
+                      ? () => null
+                      : onPressed
+                  : null,
+              onLongPress: onLongPress,
+              style: OutlinedButton.styleFrom(
+                minimumSize: minimumSize,
+                padding: padding ??
+                    (horizontalPadding != null || verticalPadding != null
+                        ? EdgeInsets.symmetric(
+                            horizontal: horizontalPadding ?? 0,
+                            vertical: verticalPadding ?? 0,
+                          )
+                        : null),
+                shape: shape ??
+                    (round == true
+                        ? RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          )
+                        : null),
+                side: side,
+                primary: primary,
+                backgroundColor: backgroundColor,
+                onSurface: onSurface,
+                elevation: elevation,
+                textStyle: textStyle,
+              ),
+              focusNode: focusNode,
+              autofocus: autofocus ?? false,
+              clipBehavior: clipBehavior ?? Clip.none,
+              child: busy
+                  ? CircularProgress.small(
+                      color: primary ?? context.outlinedButtonForegroundColor,
+                    )
+                  : child,
+            ),
+          );
+        },
       );
 
   /// Create an outlined button with fully round corner.
@@ -321,6 +361,8 @@ abstract class GetButton {
     TextStyle? textStyle,
     FocusNode? focusNode,
     bool autofocus = false,
+    bool enabled = true,
+    bool busy = false,
     Clip clipBehavior = Clip.none,
     required Widget child,
   }) =>
@@ -342,6 +384,8 @@ abstract class GetButton {
         elevation: elevation,
         textStyle: textStyle,
         round: true,
+        enabled: enabled,
+        busy: busy,
         focusNode: focusNode,
         autofocus: autofocus,
         clipBehavior: clipBehavior,
@@ -370,47 +414,59 @@ abstract class GetButton {
     FocusNode? focusNode,
     bool autofocus = false,
     bool round = false,
+    bool enabled = true,
+    bool busy = false,
     Clip clipBehavior = Clip.none,
     required Widget child,
   }) =>
-      Container(
-        margin: margin ??
-            (horizontalMargin != null || verticalMargin != null
-                ? EdgeInsets.symmetric(
-                    horizontal: horizontalMargin ?? 0,
-                    vertical: verticalMargin ?? 0,
+      Builder(
+        builder: (context) => Container(
+          margin: margin ??
+              (horizontalMargin != null || verticalMargin != null
+                  ? EdgeInsets.symmetric(
+                      horizontal: horizontalMargin ?? 0,
+                      vertical: verticalMargin ?? 0,
+                    )
+                  : null),
+          child: TextButton(
+            key: key,
+            onPressed: enabled
+                ? busy
+                    ? () => null
+                    : onPressed
+                : null,
+            onLongPress: onLongPress,
+            style: TextButton.styleFrom(
+              minimumSize: minimumSize,
+              padding: padding ??
+                  (horizontalPadding != null || verticalPadding != null
+                      ? EdgeInsets.symmetric(
+                          horizontal: horizontalPadding ?? 0,
+                          vertical: verticalPadding ?? 0,
+                        )
+                      : null),
+              shape: shape ??
+                  (round == true
+                      ? RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        )
+                      : null),
+              side: side,
+              primary: primary,
+              backgroundColor: backgroundColor,
+              onSurface: onSurface,
+              elevation: elevation,
+              textStyle: textStyle,
+            ),
+            focusNode: focusNode,
+            autofocus: autofocus,
+            clipBehavior: clipBehavior,
+            child: busy
+                ? CircularProgress.small(
+                    color: primary ?? context.textButtonForegroundColor,
                   )
-                : null),
-        child: TextButton(
-          key: key,
-          onPressed: onPressed,
-          onLongPress: onLongPress,
-          style: TextButton.styleFrom(
-            minimumSize: minimumSize,
-            padding: padding ??
-                (horizontalPadding != null || verticalPadding != null
-                    ? EdgeInsets.symmetric(
-                        horizontal: horizontalPadding ?? 0,
-                        vertical: verticalPadding ?? 0,
-                      )
-                    : null),
-            shape: shape ??
-                (round == true
-                    ? RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      )
-                    : null),
-            side: side,
-            primary: primary,
-            backgroundColor: backgroundColor,
-            onSurface: onSurface,
-            elevation: elevation,
-            textStyle: textStyle,
+                : child,
           ),
-          focusNode: focusNode,
-          autofocus: autofocus,
-          clipBehavior: clipBehavior,
-          child: child,
         ),
       );
 
@@ -434,6 +490,8 @@ abstract class GetButton {
     TextStyle? textStyle,
     FocusNode? focusNode,
     bool autofocus = false,
+    bool enabled = true,
+    bool busy = false,
     Clip clipBehavior = Clip.none,
     required Widget child,
   }) =>
@@ -455,6 +513,8 @@ abstract class GetButton {
         elevation: elevation,
         textStyle: textStyle,
         round: true,
+        enabled: enabled,
+        busy: busy,
         focusNode: focusNode,
         autofocus: autofocus,
         clipBehavior: clipBehavior,
@@ -482,17 +542,16 @@ abstract class GetButton {
     FocusNode? focusNode,
     bool autofocus = false,
     bool enabled = true,
+    bool busy = false,
     Clip clipBehavior = Clip.none,
     required Widget child,
   }) =>
       text(
         key: key,
-        onPressed: enabled != true
-            ? null
-            : () {
-                onPressed?.call();
-                Get.back();
-              },
+        onPressed: () {
+          onPressed?.call();
+          Get.back();
+        },
         onLongPress: onLongPress,
         minimumSize: minimumSize,
         padding: padding,
@@ -509,6 +568,8 @@ abstract class GetButton {
         textStyle: textStyle,
         focusNode: focusNode,
         autofocus: autofocus,
+        enabled: enabled,
+        busy: busy,
         clipBehavior: clipBehavior,
         child: child,
       );
@@ -535,6 +596,7 @@ abstract class GetButton {
     FocusNode? focusNode,
     bool autofocus = false,
     bool enabled = true,
+    bool busy = false,
     Clip clipBehavior = Clip.none,
   }) =>
       dialogText(
@@ -557,6 +619,7 @@ abstract class GetButton {
         focusNode: focusNode,
         autofocus: autofocus,
         enabled: enabled,
+        busy: busy,
         clipBehavior: clipBehavior,
         child: Text((label ?? GetText.cancel()).uppercase),
       );
@@ -582,16 +645,15 @@ abstract class GetButton {
     FocusNode? focusNode,
     bool autofocus = false,
     bool enabled = true,
+    bool busy = false,
     Clip clipBehavior = Clip.none,
     Widget? child,
   }) =>
       elevated(
-        onPressed: enabled != true
-            ? null
-            : () {
-                onPressed?.call();
-                Get.back();
-              },
+        onPressed: () {
+          onPressed?.call();
+          Get.back();
+        },
         onLongPress: onLongPress,
         minimumSize: minimumSize,
         padding: padding,
@@ -608,6 +670,8 @@ abstract class GetButton {
         textStyle: textStyle,
         focusNode: focusNode,
         autofocus: autofocus,
+        enabled: enabled,
+        busy: busy,
         clipBehavior: clipBehavior,
         child: child,
       );
@@ -634,6 +698,7 @@ abstract class GetButton {
     FocusNode? focusNode,
     bool autofocus = false,
     bool enabled = true,
+    bool busy = false,
     Clip clipBehavior = Clip.none,
   }) =>
       dialogElevated(
@@ -656,6 +721,7 @@ abstract class GetButton {
         focusNode: focusNode,
         autofocus: autofocus,
         enabled: enabled,
+        busy: busy,
         clipBehavior: clipBehavior,
         child: Text((label ?? GetText.ok()).uppercase),
       );
@@ -675,12 +741,13 @@ abstract class GetButton {
     Color? highlightColor,
     Color? splashColor,
     Color? disabledColor,
-    void Function()? onPressed,
+    VoidCallback? onPressed,
     MouseCursor? mouseCursor,
     FocusNode? focusNode,
     bool? autofocus = false,
     bool primary = false,
-    bool? enabled = true,
+    bool enabled = true,
+    bool busy = false,
     bool mini = false,
     bool tintLabel = true,
     String? tooltip,
@@ -690,19 +757,20 @@ abstract class GetButton {
     BoxConstraints? constraints,
   }) =>
       ThemeBuilder((context) {
-        var labeled = label != null;
-        var labeledOrMini = labeled || mini == true;
-        var _color =
+        final labeled = label != null;
+        final labeledOrMini = labeled || mini == true;
+        final _color =
             primary == true ? context.primaryIconColor : context.iconColor;
+        final _iconSize = iconSize ??
+            (labeledOrMini
+                ? 20.0
+                : primary == true
+                    ? context.primaryIconTheme.size
+                    : context.iconTheme.size) ??
+            24.0;
         return IconButton(
           key: key,
-          iconSize: iconSize ??
-              (labeledOrMini
-                  ? 20.0
-                  : primary == true
-                      ? context.primaryIconTheme.size
-                      : context.iconTheme.size) ??
-              24.0,
+          iconSize: _iconSize,
           visualDensity: visualDensity,
           padding: padding ??
               (labeled
@@ -718,7 +786,10 @@ abstract class GetButton {
                           ? (mini ? 2 : 4)
                           : ((mini ? 22 : 24) - iconSize).abs(),
                     ),
-                    child!,
+                    busy
+                        ? CircularProgress.small(color: _color)
+                            .sizedCenter(size: _iconSize)
+                        : child!,
                     SizedBox(height: mini ? 2 : 2.5),
                     Expanded(
                       child: Text(
@@ -726,7 +797,7 @@ abstract class GetButton {
                         style: labelStyle ??
                             TextStyle(
                               fontSize: 9,
-                              color: enabled == true
+                              color: enabled
                                   ? (tintLabel == true ? _color : null)
                                   : _color?.subbed,
                             ),
@@ -734,14 +805,20 @@ abstract class GetButton {
                     ),
                   ],
                 )
-              : (child ?? const SizedBox()),
+              : busy
+                  ? CircularProgress.small(color: _color)
+                  : (child ?? const SizedBox()),
           color: color,
           focusColor: focusColor,
           hoverColor: hoverColor,
           highlightColor: highlightColor,
           splashColor: splashColor,
           disabledColor: disabledColor ?? _color?.hinted,
-          onPressed: (enabled ?? true) ? onPressed : null,
+          onPressed: enabled
+              ? busy
+                  ? () => null
+                  : onPressed
+              : null,
           mouseCursor: mouseCursor ?? SystemMouseCursors.click,
           focusNode: focusNode,
           autofocus: autofocus ?? false,
@@ -767,7 +844,7 @@ abstract class GetButton {
     Color? highlightColor,
     Color? splashColor,
     Color? disabledColor,
-    void Function()? onPressed,
+    VoidCallback? onPressed,
     MouseCursor? mouseCursor,
     FocusNode? focusNode,
     bool autofocus = false,
@@ -778,6 +855,7 @@ abstract class GetButton {
     String? label,
     TextStyle? labelStyle,
     bool enableFeedback = true,
+    bool busy = false,
     BoxConstraints? constraints,
   }) =>
       icon(
@@ -800,6 +878,7 @@ abstract class GetButton {
         autofocus: autofocus,
         primary: true,
         enabled: enabled,
+        busy: busy,
         mini: mini,
         tintLabel: tintLabel,
         tooltip: tooltip,
@@ -824,7 +903,7 @@ abstract class GetButton {
     Color? highlightColor,
     Color? splashColor,
     Color? disabledColor,
-    void Function()? onPressed,
+    VoidCallback? onPressed,
     MouseCursor? mouseCursor,
     FocusNode? focusNode,
     bool autofocus = false,
@@ -835,6 +914,7 @@ abstract class GetButton {
     String? label,
     TextStyle? labelStyle,
     bool enableFeedback = true,
+    bool busy = false,
     BoxConstraints? constraints,
   }) =>
       icon(
@@ -857,6 +937,7 @@ abstract class GetButton {
         autofocus: autofocus,
         primary: primary,
         enabled: enabled,
+        busy: busy,
         mini: true,
         tintLabel: tintLabel,
         tooltip: tooltip,
@@ -881,7 +962,7 @@ abstract class GetButton {
     Color? highlightColor,
     Color? splashColor,
     Color? disabledColor,
-    void Function()? onPressed,
+    VoidCallback? onPressed,
     MouseCursor? mouseCursor,
     FocusNode? focusNode,
     bool autofocus = false,
@@ -893,6 +974,7 @@ abstract class GetButton {
     String? label,
     TextStyle? labelStyle,
     bool enableFeedback = true,
+    bool busy = false,
     BoxConstraints? constraints,
   }) =>
       icon(
@@ -915,6 +997,7 @@ abstract class GetButton {
         autofocus: autofocus,
         primary: primary,
         enabled: enabled,
+        busy: busy,
         mini: mini,
         tintLabel: tintLabel,
         tooltip: tooltip,
@@ -928,6 +1011,7 @@ abstract class GetButton {
     Key? key,
     bool enabled = true,
     bool primary = false,
+    bool busy = false,
     EdgeInsetsGeometry? padding,
     double? horizontalPadding,
     double? verticalPadding,
@@ -957,14 +1041,19 @@ abstract class GetButton {
             color: color,
             disabledColor: disabledColor,
             minSize: minSize,
-            pressedOpacity: pressedOpacity,
+            pressedOpacity: busy ? null : pressedOpacity,
             borderRadius: borderRadius,
             alignment: alignment,
-            onPressed: enabled ? onPressed : null,
+            onPressed: enabled
+                ? busy
+                    ? () => null
+                    : onPressed
+                : null,
             child: IconTheme(
               data: (primary ? context.primaryIconTheme : context.iconTheme)
                   .copyWith(size: iconSize),
-              child: child ?? const SizedBox(),
+              child:
+                  busy ? CircularProgress.small() : child ?? const SizedBox(),
             ),
           ));
 
@@ -972,6 +1061,7 @@ abstract class GetButton {
     Key? key,
     bool enabled = true,
     bool primary = false,
+    bool busy = false,
     EdgeInsetsGeometry? padding,
     double? horizontalPadding,
     double? verticalPadding,
@@ -993,6 +1083,7 @@ abstract class GetButton {
         key: key,
         enabled: enabled,
         primary: primary,
+        busy: busy,
         padding: padding,
         horizontalPadding: horizontalPadding,
         verticalPadding: verticalPadding,
@@ -1015,6 +1106,7 @@ abstract class GetButton {
     Key? key,
     bool enabled = true,
     bool primary = false,
+    bool busy = false,
     EdgeInsetsGeometry? padding,
     double? horizontalPadding,
     double? verticalPadding,
@@ -1036,6 +1128,7 @@ abstract class GetButton {
         key: key,
         enabled: enabled,
         primary: primary,
+        busy: busy,
         padding: padding,
         horizontalPadding: horizontalPadding,
         verticalPadding: verticalPadding,

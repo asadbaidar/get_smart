@@ -53,6 +53,26 @@ extension Uint8ListX on Uint8List {
       isEmpty ? null : MemoryImage(this, scale: scale);
 }
 
+extension MaterialStatePropertyX<T> on MaterialStateProperty<T> {
+  T? get normal => resolve({});
+
+  T? get hovered => resolve({MaterialState.hovered});
+
+  T? get focused => resolve({MaterialState.focused});
+
+  T? get pressed => resolve({MaterialState.pressed});
+
+  T? get dragged => resolve({MaterialState.dragged});
+
+  T? get selected => resolve({MaterialState.selected});
+
+  T? get scrolledUnder => resolve({MaterialState.scrolledUnder});
+
+  T? get disabled => resolve({MaterialState.disabled});
+
+  T? get error => resolve({MaterialState.error});
+}
+
 class GetException implements Exception {
   GetException([this.message]);
 

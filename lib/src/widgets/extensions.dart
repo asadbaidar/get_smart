@@ -118,6 +118,17 @@ extension GetWidgetX on Widget {
             )
           : this;
 
+  Widget sizedCenter({
+    Key? key,
+    double? size,
+  }) =>
+      Container(
+        alignment: Alignment.center,
+        width: size,
+        height: size,
+        child: this,
+      );
+
   Widget material({
     Key? key,
     MaterialType type = MaterialType.transparency,
