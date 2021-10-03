@@ -476,12 +476,12 @@ class GetTheme {
         selectedLabelStyle: TextStyle(
           fontSize: 10,
           fontFamily: fontFamily,
-          height: 2,
+          height: 1.6,
         ),
         unselectedLabelStyle: TextStyle(
           fontSize: 9.8,
           fontFamily: fontFamily,
-          height: 2,
+          height: 1.6,
         ),
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: true,

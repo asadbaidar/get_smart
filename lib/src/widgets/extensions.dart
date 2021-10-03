@@ -118,15 +118,26 @@ extension GetWidgetX on Widget {
             )
           : this;
 
-  Widget sizedCenter({
+  Widget sizedBox(
+    double? size, {
     Key? key,
-    double? size,
+    Alignment? alignment,
   }) =>
       Container(
-        alignment: Alignment.center,
+        alignment: alignment,
         width: size,
         height: size,
         child: this,
+      );
+
+  Widget sizedCenter(
+    double? size, {
+    Key? key,
+  }) =>
+      sizedBox(
+        size,
+        key: key,
+        alignment: Alignment.center,
       );
 
   Widget material({

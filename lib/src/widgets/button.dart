@@ -788,7 +788,7 @@ abstract class GetButton {
                     ),
                     busy
                         ? CircularProgress.small(color: _color)
-                            .sizedCenter(size: _iconSize)
+                            .sizedCenter(_iconSize)
                         : child!,
                     SizedBox(height: mini ? 2 : 2.5),
                     Expanded(
