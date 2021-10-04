@@ -196,6 +196,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
@@ -271,6 +273,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding = kExtendedPaddingY,
@@ -346,6 +350,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
@@ -421,6 +427,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding = kExtendedPaddingY,
@@ -496,6 +504,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding = kDensePaddingY,
@@ -571,6 +581,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding = kMediumPaddingY,
@@ -646,6 +658,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
@@ -721,6 +735,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
@@ -796,6 +812,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
@@ -871,6 +889,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding = kDensePaddingY,
@@ -946,6 +966,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding = kStandardPaddingY,
@@ -1021,6 +1043,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding = kDensePaddingY,
@@ -1096,6 +1120,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding = 0,
@@ -1173,6 +1199,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding = 0,
@@ -1249,6 +1277,8 @@ class GetTile extends StatelessWidget {
     this.titleExpanded = false,
     this.subtitleExpanded = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.horizontalPadding,
     this.verticalPadding,
     this.topPadding,
@@ -1322,6 +1352,8 @@ class GetTile extends StatelessWidget {
   final bool titleExpanded;
   final bool subtitleExpanded;
   final bool enabled;
+  final bool highlighted;
+  final bool? checked;
   final double? horizontalPadding;
   final double? verticalPadding;
   final double? topPadding;
@@ -1367,7 +1399,11 @@ class GetTile extends StatelessWidget {
     final isTrailingSubtitle =
         trailingSubtitle?.notEmpty != null || trailingSubtitleChild != null;
     final _accessory = accessory ??
-        (detail == true ? const Icon(CupertinoIcons.chevron_right) : null);
+        (checked == true
+            ? const Icon(CupertinoIcons.check_mark)
+            : detail
+                ? const Icon(CupertinoIcons.chevron_right)
+                : null);
     final _isTitle = title?.notEmpty != null ||
         titleHint?.notEmpty != null ||
         titleChild != null ||
@@ -1376,7 +1412,9 @@ class GetTile extends StatelessWidget {
         subtitleHint?.notEmpty != null ||
         subtitleChild != null ||
         subtitleChildren?.isNotEmpty == true;
-    final _showAccessory = _accessory != null && (showAccessory ?? true);
+    final _showAccessory =
+        _accessory != null && (showAccessory ?? checked ?? true);
+    final _highlighted = highlighted || checked == true;
     final _showTrailing = isTrailingTop ||
         isTrailingBottom ||
         isTrailingTitle ||
@@ -1569,6 +1607,10 @@ class GetTile extends StatelessWidget {
           ],
         ),
       ),
+    ).material(
+      enabled: _highlighted,
+      type: MaterialType.card,
+      color: tintColor.highlighted,
     );
   }
 }
@@ -1607,6 +1649,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -1659,6 +1703,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -1711,6 +1757,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -1763,6 +1811,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -1815,6 +1865,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -1867,6 +1919,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -1919,6 +1973,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -1971,6 +2027,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -2023,6 +2081,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -2076,6 +2136,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -2128,6 +2190,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = true,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -2180,6 +2244,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = false,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -2232,6 +2298,8 @@ class GetTileRow extends StatelessWidget {
     this.themed = true,
     this.wrap = false,
     this.enabled = true,
+    this.highlighted = false,
+    this.checked,
     this.tintAble = false,
     this.destructive,
     this.detail = false,
@@ -2282,6 +2350,8 @@ class GetTileRow extends StatelessWidget {
   final bool themed;
   final bool wrap;
   final bool enabled;
+  final bool highlighted;
+  final bool? checked;
   final bool tintAble;
   final bool? destructive;
   final bool detail;
@@ -2315,9 +2385,14 @@ class GetTileRow extends StatelessWidget {
         (textStyle ?? context.caption)?.copyWith(fontWeight: fontWeight);
     final _constrained = alignment == CrossAxisAlignment.start ||
         alignment == CrossAxisAlignment.end;
-    final _trailing =
-        trailing ?? (detail ? const Icon(CupertinoIcons.chevron_right) : null);
+    final _trailing = trailing ??
+        (checked == true
+            ? const Icon(CupertinoIcons.check_mark)
+            : detail
+                ? const Icon(CupertinoIcons.chevron_right)
+                : null);
     final _showTrailing = trailing != null || trailingText?.notEmpty != null;
+    final _highlighted = highlighted || checked == true;
     final _boxedView = $cast<BoxView>(leading);
     return _text?.notEmpty == null &&
             child == null &&
@@ -2433,7 +2508,13 @@ class GetTileRow extends StatelessWidget {
                 ],
               ),
             ),
-          ).column(
+          )
+            .material(
+            enabled: _highlighted,
+            type: MaterialType.card,
+            color: _tintColor.highlighted,
+          )
+            .column(
             // enabled: header,
             crossAxisAlignment:
                 header ? CrossAxisAlignment.stretch : CrossAxisAlignment.start,

@@ -142,6 +142,7 @@ extension GetWidgetX on Widget {
 
   Widget material({
     Key? key,
+    bool enabled = true,
     MaterialType type = MaterialType.transparency,
     double elevation = 0.0,
     Color? color,
@@ -153,20 +154,22 @@ extension GetWidgetX on Widget {
     Clip clipBehavior = Clip.none,
     Duration animationDuration = kThemeChangeDuration,
   }) =>
-      Material(
-        child: this,
-        key: key,
-        type: type,
-        elevation: elevation,
-        color: color,
-        shadowColor: shadowColor,
-        textStyle: textStyle,
-        borderRadius: borderRadius,
-        shape: shape,
-        borderOnForeground: borderOnForeground,
-        clipBehavior: clipBehavior,
-        animationDuration: animationDuration,
-      );
+      enabled
+          ? Material(
+              child: this,
+              key: key,
+              type: type,
+              elevation: elevation,
+              color: color,
+              shadowColor: shadowColor,
+              textStyle: textStyle,
+              borderRadius: borderRadius,
+              shape: shape,
+              borderOnForeground: borderOnForeground,
+              clipBehavior: clipBehavior,
+              animationDuration: animationDuration,
+            )
+          : this;
 
   Widget plainButton({
     Key? key,
