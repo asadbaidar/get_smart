@@ -57,6 +57,25 @@ extension GetWidgetX on Widget {
                 )
           : this;
 
+  Widget stack({
+    Key? key,
+    bool enabled = true,
+    AlignmentGeometry alignment = AlignmentDirectional.topStart,
+    StackFit fit = StackFit.loose,
+    Clip clipBehavior = Clip.hardEdge,
+    List<Widget> back = const [],
+    List<Widget> front = const [],
+  }) =>
+      enabled
+          ? Stack(
+              key: key,
+              alignment: alignment,
+              fit: fit,
+              clipBehavior: clipBehavior,
+              children: [...back, this, ...front],
+            )
+          : this;
+
   Widget row({
     Key? key,
     bool enabled = true,
