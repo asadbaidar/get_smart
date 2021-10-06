@@ -117,7 +117,7 @@ class GetTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final TextInputAction? textInputAction;
   final FocusNode? focusNode;
-  final Function? onTap;
+  final VoidCallback? onTap;
   final void Function(String v)? onSubmitted;
   final void Function(String? v)? onSaved;
   final void Function(String v)? onChanged;
@@ -298,7 +298,7 @@ class GetTextField extends StatelessWidget {
           maxLines: maxLines,
           onSaved: onSaved,
           validator: _validate,
-          onTap: readOnly == true ? null : onTap as void Function()?,
+          onTap: readOnly == true ? null : onTap,
           onChanged: onChanged,
           onFieldSubmitted: onSubmitted,
           textCapitalization: textCapitalization,

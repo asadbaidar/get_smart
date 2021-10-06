@@ -162,7 +162,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.2+8"
+    version: "0.1.2+9"
   google_fonts:
     dependency: transitive
     description:

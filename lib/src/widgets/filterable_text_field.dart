@@ -69,8 +69,9 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
   final TextCapitalization textCapitalization;
-  final TextEditingController controller;
-  final FocusNode focusNode;
+  final TextEditingController? controller;
+  final dynamic initialValue;
+  final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
 
   /// Suggestions that will be displayed
@@ -108,12 +109,11 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
     this.minLength = 0,
     this.readOnly = false,
     this.validateEmpty = false,
-    TextEditingController? controller,
-    FocusNode? focusNode,
+    this.controller,
+    this.initialValue,
+    this.focusNode,
     this.nextFocusNode,
-  })  : this.focusNode = focusNode ?? FocusNode(),
-        this.controller = controller ?? TextEditingController(),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => GetFilterableTextFieldState<T>(
@@ -131,7 +131,8 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
       );
 }
 
-class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
+class GetFilterableTextFieldState<T extends Comparable>
+    extends State<GetFilterableTextField> {
   final LayerLink _layerLink = LayerLink();
 
   ItemSubmitted<T?> itemSubmitted;
@@ -196,9 +197,12 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   TextInputAction get textInputAction => widget.textInputAction;
 
-  TextEditingController get controller => widget.controller;
+  TextEditingController get controller =>
+      widget.controller ?? use(TextEditingController());
 
-  FocusNode get focusNode => widget.focusNode;
+  String? get initialValue => widget.initialValue?.toString();
+
+  FocusNode get focusNode => widget.focusNode ?? use(FocusNode());
 
   FocusNode? get nextFocusNode => widget.nextFocusNode;
 
@@ -208,6 +212,8 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
 
   void initState() {
     super.initState();
+    if (controller.text.isEmpty && initialValue?.notEmpty != null)
+      controller.text = initialValue!;
     currentText = controller.text;
   }
 
@@ -308,6 +314,9 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
       itemsOverlayEntry = OverlayEntry(builder: (context) {
         $debugPrint("Focus ${focusNode.hasFocus}", "OverlayEntry");
         if (!focusNode.hasFocus) clearOverlay();
+        final listHeight = filteredItems.length > visibleCount
+            ? (visibleCount * itemHeight).toDouble() + 6
+            : null;
         return Positioned(
           width: width,
           child: CompositedTransformFollower(
@@ -316,17 +325,15 @@ class GetFilterableTextFieldState<T> extends State<GetFilterableTextField> {
             offset: Offset(0.0, (height - 24).abs()),
             child: SizedBox(
               width: width,
-              height: filteredItems.length > visibleCount
-                  ? (visibleCount * itemHeight).toDouble() + 6
-                  : null,
+              height: listHeight,
               child: Card(
                 child: Scrollbar(
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
+                    shrinkWrap: listHeight == null,
                     itemCount: filteredItems.length,
-                    shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      final item = filteredItems[index]!;
+                      final item = filteredItems[index];
                       return Row(children: [
                         Expanded(
                           child: itemBuilder(
