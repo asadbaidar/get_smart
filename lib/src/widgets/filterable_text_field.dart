@@ -198,20 +198,25 @@ class GetFilterableTextFieldState<T extends Comparable>
   TextInputAction get textInputAction => widget.textInputAction;
 
   TextEditingController get controller =>
-      widget.controller ?? use(TextEditingController());
+      widget.controller ?? _controller ?? TextEditingController();
 
   String? get initialValue => widget.initialValue?.toString();
 
-  FocusNode get focusNode => widget.focusNode ?? use(FocusNode());
+  FocusNode get focusNode => widget.focusNode ?? _focusNode ?? FocusNode();
 
   FocusNode? get nextFocusNode => widget.nextFocusNode;
 
+  TextEditingController? _controller;
+  FocusNode? _focusNode;
   OverlayEntry? itemsOverlayEntry;
   List<T> filteredItems = [];
   String currentText = "";
 
   void initState() {
     super.initState();
+    $debugPrint("init");
+    if (widget.focusNode == null) _focusNode = FocusNode();
+    if (widget.controller == null) _controller = TextEditingController();
     if (controller.text.isEmpty && initialValue?.notEmpty != null)
       controller.text = initialValue!;
     currentText = controller.text;
