@@ -28,6 +28,8 @@ int _intFromJson(value, fallback) {
   try {
     if (value == null) return fallback;
     if (value is num) return value.toInt();
+    final parsed = int.tryParse(value.toString());
+    if (parsed != null) return parsed;
     return fallback;
   } catch (e) {
     return fallback;

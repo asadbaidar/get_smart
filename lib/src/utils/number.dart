@@ -52,6 +52,15 @@ extension Num on num {
 
   String get formatted => Get.localization.formatDecimal(toInt());
 
+  String formatDecimal([int? fractionDigits = null]) =>
+      Get.localization.formatDecimal(toInt()).post(
+          fractionDigits != null
+              ? toStringAsFixed(fractionDigits).afterDot
+              : this is double
+                  ? toString().afterDot
+                  : null,
+          between: GetLocalizations.current?.symbols.DECIMAL_SEP);
+
   String? formatWith({
     String? zero,
     String? zeroReplace,
@@ -133,4 +142,12 @@ extension DurationX on Duration {
   String get formattedHHmm => formatted(secondsWidth: 0);
 
   String get formattedHHmmSS => formatted();
+}
+
+extension CurrencyNum on num {
+  String get inPKR => "$this PKR";
+}
+
+extension CurrencyString on String {
+  String get inPKR => "$this PKR";
 }

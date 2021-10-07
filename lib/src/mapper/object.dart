@@ -41,9 +41,11 @@ abstract class GetObject extends Mappable {
     return this;
   }
 
+  get notEmpty => isEmpty ? null : this;
+
   bool get isEmpty => id.isEmpty && description.isEmpty;
 
-  bool get isNotEmpty => id.isNotEmpty && description.isNotEmpty;
+  bool get isNotEmpty => !isEmpty;
 
   @override
   String toString() => description;

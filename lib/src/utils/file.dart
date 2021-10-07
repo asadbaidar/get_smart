@@ -103,7 +103,7 @@ extension GetFileX on String {
   String get fileNameWithoutType => PATH.basenameWithoutExtension(this);
 
   /// return the file type without dot i.e. pdf.
-  String get fileType => takeLastWhile((s) => s != ".").lowercase;
+  String get fileType => afterDot.lowercase;
 
   /// return the mime type description i.e. Image.
   String? get mimeDescription => mediaType?.type.capitalized;

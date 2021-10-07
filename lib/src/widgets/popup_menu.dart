@@ -125,7 +125,7 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
       (value, data) =>
           $cast<GetTileData>(data)?.mapTo((GetTileData data) => GetTile.item(
                 leading: data.leading?.mapIt((it) => Icon(it)),
-                title: data.title,
+                title: data.description,
                 subtitle: data.subtitle,
                 trailingTop: data.trailingTop,
                 trailingBottom: data.trailingBottom,

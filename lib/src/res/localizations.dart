@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
+import 'package:intl/number_symbols.dart';
+import 'package:intl/number_symbols_data.dart';
 
 /// Platform localization to add multi-language support
 /// * Usage
@@ -18,9 +20,11 @@ class GetLocalizations {
   static const GetLocalizationsDelegate delegate =
       const GetLocalizationsDelegate();
 
-  GetLocalizations(this.locale);
+  GetLocalizations(this.locale)
+      : symbols = numberFormatSymbols[locale.toString()];
 
   final Locale locale;
+  final NumberSymbols symbols;
 
   static GetLocalizations? get current {
     return Localizations.of<GetLocalizations>(Get.context!, GetLocalizations);

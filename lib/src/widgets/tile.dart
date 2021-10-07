@@ -80,7 +80,9 @@ class GetTileData extends GetObject {
   GetTileData({
     this.leading,
     this.title,
+    this.titleHint,
     this.subtitle,
+    this.subtitleHint,
     this.trailingTop,
     this.trailingBottom,
     this.accessory,
@@ -112,7 +114,9 @@ class GetTileData extends GetObject {
 
   IconData? leading;
   String? title;
+  String? titleHint;
   String? subtitle;
+  String? subtitleHint;
   String? trailingTop;
   String? trailingBottom;
   IconData? accessory;
@@ -144,7 +148,14 @@ class GetTileData extends GetObject {
   bool get hasSubTiles => subTiles.isNotEmpty == true;
 
   @override
-  String get description => title ?? "";
+  GetTileData? get notEmpty => super.notEmpty;
+
+  @override
+  bool get isEmpty =>
+      title?.notEmpty == null && subtitle?.notEmpty == null && !hasSubTiles;
+
+  @override
+  String get description => super.description.notEmpty ?? title ?? "";
 
   @override
   Color get color => tintColor ?? title?.materialAccent ?? super.color;
@@ -1309,6 +1320,84 @@ class GetTile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Tile with no accessory, no background and no filled leading and
+  /// have tinted accessory, and standard horizontal padding.
+  const GetTile.itemPad({
+    this.leading,
+    this.title,
+    this.subtitle,
+    this.titleChild,
+    this.subtitleChild,
+    this.titleChildren,
+    this.subtitleChildren,
+    this.titleHint,
+    this.subtitleHint,
+    this.trailingTop,
+    this.trailingTopChild,
+    this.trailingBottom,
+    this.trailingBottomChild,
+    this.trailingTitle,
+    this.trailingTitleChild,
+    this.trailingSubtitle,
+    this.trailingSubtitleChild,
+    this.titleStyle,
+    this.subtitleStyle,
+    this.trailingStyle,
+    this.accessory,
+    this.rows,
+    this.belowRows,
+    this.color,
+    this.background = Colors.transparent,
+    this.headColor,
+    this.trailingColor,
+    this.leadingFilled = false,
+    this.leadingSmall = true,
+    this.leadingOval = false,
+    this.detail = false,
+    this.padAccessory = true,
+    this.showAccessory,
+    this.tintAccessory = true,
+    this.tintAble,
+    this.titleWeight,
+    this.subtitleWeight,
+    this.titleSubbed = false,
+    this.subtitleSubbed = true,
+    this.destructive,
+    this.titleExpanded = false,
+    this.subtitleExpanded = false,
+    this.enabled = true,
+    this.highlighted,
+    this.checked,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding,
+    this.bottomPadding,
+    this.leftPadding = kStandardPaddingX,
+    this.rightPadding = kStandardPaddingX,
+    this.trailingPadding,
+    this.verticalSpacing = 0,
+    this.titleSize = kTileFontSize,
+    this.subtitleSize = kTileFontSize,
+    this.leadingSize,
+    this.accessorySize = kTileRowTrailingSize,
+    this.trailingSize = kTileRowTrailingSize,
+    this.titleMaxLines,
+    this.subtitleMaxLines,
+    this.padding,
+    this.leadingMargin = kTileRowLeadingMargin,
+    this.leadingPadding = kTileRowLeadingPadding,
+    this.titleChildrenPadding = kTileRowChildrenPadding,
+    this.subtitleChildrenPadding = kTileRowChildrenPadding,
+    this.constraints = kTileConstraints,
+    this.alignment = CrossAxisAlignment.center,
+    this.onTapTitle,
+    this.onTapSubtitle,
+    this.onTap,
+    this.onTapHead,
+    this.onTapLeading,
+    Key? key,
+  }) : super(key: key);
+
   final dynamic leading;
   final String? title;
   final String? subtitle;
@@ -2313,6 +2402,60 @@ class GetTileRow extends StatelessWidget {
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileConstraints,
     this.alignment: CrossAxisAlignment.start,
+    this.onTap,
+    this.onTapLeading,
+    Key? key,
+  }) : super(key: key);
+
+  /// Row with simple content and layout as [GetTile.simple]
+  const GetTileRow.itemPad({
+    this.leading,
+    this.trailing,
+    this.trailingText,
+    this.trailingStyle,
+    this.children,
+    this.child,
+    this.text,
+    this.textStyle,
+    this.hint,
+    this.color,
+    this.background,
+    this.trailingColor,
+    this.maxLines = kTileRowMaxLines,
+    this.fontWeight,
+    this.fontSize,
+    this.leadingSize,
+    this.leadingBoxSize = BoxView.kBoxSize,
+    this.trailingSize = kTileRowTrailingSize,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.topPadding = kExtendedPaddingY,
+    this.bottomPadding = kExtendedPaddingY,
+    this.leftPadding,
+    this.rightPadding,
+    this.expanded = true,
+    this.leadingFilled = true,
+    this.leadingSmall = true,
+    this.leadingOval = false,
+    this.themed = true,
+    this.wrap = false,
+    this.enabled = true,
+    this.highlighted,
+    this.checked,
+    this.tintAble = false,
+    this.destructive,
+    this.detail = false,
+    this.allCaps = false,
+    this.header = false,
+    this.topSeparator,
+    this.bottomSeparator,
+    this.padding,
+    this.leadingMargin = kTileRowLeadingMargin,
+    this.leadingPadding = kTileRowLeadingPadding,
+    this.trailingPadding = kTileRowTrailingPadding,
+    this.childrenPadding = kTileRowChildrenPadding,
+    this.constraints = kTileConstraints,
+    this.alignment: CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,

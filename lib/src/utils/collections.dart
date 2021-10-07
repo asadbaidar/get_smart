@@ -66,4 +66,9 @@ extension IterableX<E> on Iterable<E> {
       return null;
     }
   }
+
+  Iterable<E> exclude(bool where(E element)) =>
+      expand((e) => where(e) ? [] : [e]);
+
+  Iterable<E> get notEmpty => exclude((e) => e.toString().isEmpty);
 }
