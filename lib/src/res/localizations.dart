@@ -21,10 +21,17 @@ class GetLocalizations {
       const GetLocalizationsDelegate();
 
   GetLocalizations(this.locale)
-      : symbols = numberFormatSymbols[locale.toString()];
+      : symbols = numberFormatSymbols[locale.toString()] ??
+            numberFormatSymbols[english.toString()],
+        currencyFraction = currencyFractionDigits[
+                (numberFormatSymbols[locale.toString()] ??
+                        numberFormatSymbols[english.toString()])
+                    .DEF_CURRENCY_CODE] ??
+            2;
 
   final Locale locale;
   final NumberSymbols symbols;
+  final int currencyFraction;
 
   static GetLocalizations? get current {
     return Localizations.of<GetLocalizations>(Get.context!, GetLocalizations);

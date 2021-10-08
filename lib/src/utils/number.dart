@@ -61,6 +61,10 @@ extension Num on num {
                   : null,
           between: GetLocalizations.current?.symbols.DECIMAL_SEP);
 
+  String formatCurrency([int? fractionDigits = null]) => formatDecimal(
+        fractionDigits ?? GetLocalizations.current?.currencyFraction,
+      );
+
   String? formatWith({
     String? zero,
     String? zeroReplace,
