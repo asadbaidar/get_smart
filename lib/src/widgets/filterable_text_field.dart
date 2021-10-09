@@ -3,14 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
 import 'package:get_smart/src/widgets/text_field.dart';
 
-typedef Widget GetFilterItemBuilder<T>(
-    BuildContext context, T data, void Function() onTap);
+typedef GetFilterItemBuilder<T> = Widget Function(
+    BuildContext context, T data, VoidCallback onTap);
 
-typedef bool Filter<T>(T data, String query);
+typedef Filter<T> = bool Function(T data, String query);
 
-typedef ItemSubmitted<T>(T data);
+typedef ItemSubmitted<T> = void Function(T data);
 
-typedef StringCallback(String data);
+typedef StringCallback = void Function(String data);
 
 /// A wrapper of [GetTextField] with filterable suggestion features.
 class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
@@ -41,9 +41,6 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
 
   /// Item height for suggestions list
   final double itemHeight;
-
-  /// GlobalKey used to enable addItem etc
-  final GlobalKey<GetFilterableTextFieldState<T>> key;
 
   /// Call textSubmitted on suggestion tap, itemSubmitted will be called no matter what
   final bool submitOnItemTap;
@@ -80,8 +77,8 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   final String? helper;
   final String? error;
 
-  GetFilterableTextField({
-    required this.key,
+  const GetFilterableTextField({
+    required GlobalKey<GetFilterableTextFieldState<T>> key,
     required this.itemSubmitted,
     this.items,
     this.itemBuilder,
@@ -115,37 +112,38 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
     this.nextFocusNode,
   }) : super(key: key);
 
-  @override
-  State<StatefulWidget> createState() => GetFilterableTextFieldState<T>(
-        itemSubmitted: itemSubmitted,
-        itemBuilder: itemBuilder ??
-            ((_, data, onTap) => GetTile.center500(
-                  title: data.toString(),
-                  onTap: onTap,
-                )),
-        itemSorter: itemSorter ?? (a, b) => a.compareTo(b),
-        itemFilter: disableFiltering == true
-            ? (_, __) => true
-            : (itemFilter ??
-                (data, query) => data.toString().containsIgnoreCase(query)),
+  void _itemSubmitted(T? data) => itemSubmitted(data);
+
+  Widget _itemBuilder(BuildContext context, T data, VoidCallback onTap) =>
+      itemBuilder?.call(context, data, onTap) ??
+      GetTile.center500(
+        title: data.toString(),
+        onTap: onTap,
       );
+
+  int _itemSorter(T a, T b) => itemSorter?.call(a, b) ?? a.compareTo(b);
+
+  bool _itemFilter(T data, String query) =>
+      disableFiltering ||
+      (itemFilter?.call(data, query) ??
+          data.toString().containsIgnoreCase(query));
+
+  @override
+  State<StatefulWidget> createState() => GetFilterableTextFieldState<T>();
 }
 
 class GetFilterableTextFieldState<T extends Comparable>
     extends State<GetFilterableTextField> {
   final LayerLink _layerLink = LayerLink();
 
-  ItemSubmitted<T?> itemSubmitted;
-  GetFilterItemBuilder<T> itemBuilder;
-  Comparator<T> itemSorter;
-  Filter<T> itemFilter;
+  void itemSubmitted(T? data) => widget._itemSubmitted(data);
 
-  GetFilterableTextFieldState({
-    required this.itemSubmitted,
-    required this.itemBuilder,
-    required this.itemSorter,
-    required this.itemFilter,
-  });
+  Widget itemBuilder(BuildContext context, T data, VoidCallback onTap) =>
+      widget._itemBuilder(context, data, onTap);
+
+  int itemSorter(T a, T b) => widget._itemSorter(a, b);
+
+  bool itemFilter(T data, String query) => widget._itemFilter(data, query);
 
   List<T>? _items;
 
@@ -212,13 +210,15 @@ class GetFilterableTextFieldState<T extends Comparable>
   List<T> filteredItems = [];
   String currentText = "";
 
+  @override
   void initState() {
     super.initState();
     $debugPrint("init");
     if (widget.focusNode == null) _focusNode = FocusNode();
     if (widget.controller == null) _controller = TextEditingController();
-    if (controller.text.isEmpty && initialValue?.notEmpty != null)
+    if (controller.text.isEmpty && initialValue?.notEmpty != null) {
       controller.text = initialValue!;
+    }
     currentText = controller.text;
   }
 
@@ -240,20 +240,22 @@ class GetFilterableTextFieldState<T extends Comparable>
 
   bool get isTextEmpty => controller.text.trim().isEmpty;
 
-  void removeError({bool focus: false}) {
+  void removeError({bool focus = false}) {
     if (error != null) setError(null, focus: focus);
   }
 
-  void setError(String? errorText, {bool focus: false}) {
+  void setError(String? errorText, {bool focus = false}) {
+    $debugPrint(errorText, "setError");
     setState(() => _error = errorText);
     if (focus) focusNode.requestFocus();
   }
 
   void triggerSubmitted([submittedText]) {
-    if (textSubmitted != null)
+    if (textSubmitted != null) {
       submittedText == null
           ? textSubmitted!(currentText)
           : textSubmitted!(submittedText);
+    }
 
     triggerItemSubmitted();
 
@@ -261,8 +263,9 @@ class GetFilterableTextFieldState<T extends Comparable>
       clear();
     }
 
-    if (textInputAction == TextInputAction.next)
+    if (textInputAction == TextInputAction.next) {
       focusNode.forward(to: nextFocusNode);
+    }
   }
 
   void triggerItemSubmitted() {
@@ -271,10 +274,11 @@ class GetFilterableTextFieldState<T extends Comparable>
         !filteredItems.map((it) => it.toString()).contains(controller.text)) {
       var item = filteredItems.firstOrNull;
       controller.text = item?.toString() ?? "";
-      if (item == null)
+      if (item == null) {
         clear();
-      else
+      } else {
         removeError();
+      }
       itemSubmitted(item);
     }
   }
@@ -300,7 +304,7 @@ class GetFilterableTextFieldState<T extends Comparable>
   }
 
   void updateItems(List<T> items) {
-    this._items = items;
+    _items = items;
     updateOverlay(query: currentText);
   }
 

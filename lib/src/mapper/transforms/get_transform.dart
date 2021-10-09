@@ -10,8 +10,9 @@ class GetTransform<T extends Mappable>
   T? fromJson(value) {
     try {
       if (value == null) return null;
-      if (value is Map<String, dynamic>)
+      if (value is Map<String, dynamic>) {
         return mappable..mapping(Mapper.fromData(value));
+      }
       return null;
     } catch (e) {
       return null;

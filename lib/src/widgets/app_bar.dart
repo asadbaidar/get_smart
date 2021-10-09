@@ -29,8 +29,8 @@ class GetAppBar {
     bool? showProgress,
     double bottomHeight = 0.0,
     double bottomConstant = 48.0,
-    double leadingWidth: 40.0,
-    double titleSpacing: 8.0,
+    double leadingWidth = 40.0,
+    double titleSpacing = 8.0,
   }) {
     final _actions = interactive ? actions : null;
 
@@ -95,8 +95,8 @@ class GetAppBar {
     double bottomHeight = 0.0,
     double bottomConstant = 36.0,
     double largeTitleHeight = 47.0,
-    double leadingWidth: 40.0,
-    double titleSpacing: 8.0,
+    double leadingWidth = 40.0,
+    double titleSpacing = 8.0,
     double topPadding = kStandardPadding,
     double bottomPadding = kStandardPadding,
     double leftPadding = kStandardPaddingX,
@@ -164,9 +164,9 @@ class GetAppBar {
 
     Widget _buildLargeTitle(BuildContext context, {double visibility = 1.0}) {
       Widget? _largeTitle;
-      if (customLargeTitle != null)
+      if (customLargeTitle != null) {
         _largeTitle = customLargeTitle;
-      else if (title != null && largeTitle) {
+      } else if (title != null && largeTitle) {
         final _style = _titleTextStyle(context, large: true);
         final _minFontSize = visibility < 1 ? _style?.fontSize ?? 30.0 : 14.0;
         _largeTitle = AutoSizeText(
@@ -179,7 +179,7 @@ class GetAppBar {
       return Row(
         children: [
           if (_largeTitle != null) _largeTitle,
-          Spacer(),
+          const Spacer(),
           ..._largeActions ?? [],
         ],
       );
@@ -310,7 +310,7 @@ class GetAppBar {
                                 child: Opacity(
                                   opacity: _opacity,
                                   child: Padding(
-                                    padding: EdgeInsets.only(top: 6),
+                                    padding: const EdgeInsets.only(top: 6),
                                     child: _buildLargeTitle(context),
                                   ),
                                 ),

@@ -1,3 +1,7 @@
+## [0.1.3+2]
+
+* Update to flutter_lints
+
 ## [0.1.3+1]
 
 * Bug fixes

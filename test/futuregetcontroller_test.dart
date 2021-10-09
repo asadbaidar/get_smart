@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_smart/get_smart.dart';
 
-const _SingleFutureFailException = HttpException('Future to Run failed');
+const _singleFutureFailException = HttpException('Future to Run failed');
 
 class TestFutureGetController extends FutureGetController<int> {
   final bool fail;
@@ -15,8 +15,8 @@ class TestFutureGetController extends FutureGetController<int> {
 
   @override
   Future<int> futureToRun() async {
-    if (fail) throw _SingleFutureFailException;
-    await Future.delayed(Duration(milliseconds: 20));
+    if (fail) throw _singleFutureFailException;
+    await Future.delayed(20.milliseconds);
     return numberToReturn;
   }
 
@@ -26,9 +26,9 @@ class TestFutureGetController extends FutureGetController<int> {
   }
 }
 
-const String NumberDelayFuture = 'delayedNumber';
-const String StringDelayFuture = 'delayedString';
-const _NumberDelayException = FormatException('getNumberAfterDelay failed');
+const String numberDelayFuture = 'delayedNumber';
+const String stringDelayFuture = 'delayedString';
+const _numberDelayException = FormatException('getNumberAfterDelay failed');
 
 class TestMultipleFutureGetController extends MultipleFutureGetController {
   final bool failOne;
@@ -44,13 +44,13 @@ class TestMultipleFutureGetController extends MultipleFutureGetController {
 
   @override
   Map<Object, Future Function()> get futuresMap => {
-        NumberDelayFuture: getNumberAfterDelay,
-        StringDelayFuture: getStringAfterDelay,
+        numberDelayFuture: getNumberAfterDelay,
+        stringDelayFuture: getStringAfterDelay,
       };
 
   Future<int> getNumberAfterDelay() async {
     if (failOne) {
-      throw _NumberDelayException;
+      throw _numberDelayException;
     }
     await Future.delayed(Duration(milliseconds: futureOneDuration));
     return numberToReturn;
@@ -97,7 +97,7 @@ void main() {
       var futureGetController = TestFutureGetController(fail: true);
       await futureGetController.initialise();
       expect(futureGetController.modelError,
-          _SingleFutureFailException.toString());
+          _singleFutureFailException.toString());
     });
 
     test('When a future fails onData should not be called', () async {
@@ -132,8 +132,8 @@ void main() {
       var futureGetController = TestMultipleFutureGetController();
       await futureGetController.initialise();
 
-      expect(futureGetController.dataMap![NumberDelayFuture], 5);
-      expect(futureGetController.dataMap![StringDelayFuture], 'String data');
+      expect(futureGetController.dataMap![numberDelayFuture], 5);
+      expect(futureGetController.dataMap![stringDelayFuture], 'String data');
     });
 
     test(
@@ -142,8 +142,8 @@ void main() {
       var futureGetController = TestMultipleFutureGetController(failOne: true);
       await futureGetController.initialise();
 
-      expect(futureGetController.hasErrorForKey(NumberDelayFuture), true);
-      expect(futureGetController.hasErrorForKey(StringDelayFuture), false);
+      expect(futureGetController.hasErrorForKey(numberDelayFuture), true);
+      expect(futureGetController.hasErrorForKey(stringDelayFuture), false);
     });
 
     test(
@@ -152,8 +152,8 @@ void main() {
       var futureGetController = TestMultipleFutureGetController(failOne: true);
       await futureGetController.initialise();
 
-      expect(futureGetController.dataMap![NumberDelayFuture], null);
-      expect(futureGetController.dataMap![StringDelayFuture], 'String data');
+      expect(futureGetController.dataMap![numberDelayFuture], null);
+      expect(futureGetController.dataMap![stringDelayFuture], 'String data');
     });
 
     test('When multiple futures run the key should be set to indicate busy',
@@ -161,8 +161,8 @@ void main() {
       var futureGetController = TestMultipleFutureGetController();
       futureGetController.initialise();
 
-      expect(futureGetController.busy(NumberDelayFuture), true);
-      expect(futureGetController.busy(StringDelayFuture), true);
+      expect(futureGetController.busy(numberDelayFuture), true);
+      expect(futureGetController.busy(stringDelayFuture), true);
     });
 
     test(
@@ -171,26 +171,26 @@ void main() {
       var futureGetController = TestMultipleFutureGetController();
       await futureGetController.initialise();
 
-      expect(futureGetController.busy(NumberDelayFuture), false);
-      expect(futureGetController.busy(StringDelayFuture), false);
+      expect(futureGetController.busy(numberDelayFuture), false);
+      expect(futureGetController.busy(stringDelayFuture), false);
     });
 
     test('When a future fails busy should be set to false', () async {
       var futureGetController = TestMultipleFutureGetController(failOne: true);
       await futureGetController.initialise();
 
-      expect(futureGetController.busy(NumberDelayFuture), false);
-      expect(futureGetController.busy(StringDelayFuture), false);
+      expect(futureGetController.busy(numberDelayFuture), false);
+      expect(futureGetController.busy(stringDelayFuture), false);
     });
 
     test('When a future fails should set error for future key', () async {
       var futureGetController = TestMultipleFutureGetController(failOne: true);
       await futureGetController.initialise();
 
-      expect(futureGetController.error(NumberDelayFuture),
-          _NumberDelayException.toString());
+      expect(futureGetController.error(numberDelayFuture),
+          _numberDelayException.toString());
 
-      expect(futureGetController.error(StringDelayFuture), null);
+      expect(futureGetController.error(stringDelayFuture), null);
     });
 
     test(
@@ -199,9 +199,9 @@ void main() {
       var futureGetController = TestMultipleFutureGetController(
           futureOneDuration: 10, futureTwoDuration: 60);
       futureGetController.initialise();
-      await Future.delayed(Duration(milliseconds: 30));
+      await Future.delayed(30.milliseconds);
 
-      expect(futureGetController.busy(NumberDelayFuture), false,
+      expect(futureGetController.busy(numberDelayFuture), false,
           reason: 'String future should be done at this point');
       expect(futureGetController.isAnyBusy, true,
           reason: 'Should be true because second future is still running');
@@ -211,11 +211,11 @@ void main() {
       test('notifySourceChanged - When called should re-run Future', () async {
         var futureGetController = TestMultipleFutureGetController();
         await futureGetController.initialise();
-        expect(futureGetController.dataMap![NumberDelayFuture], 5);
+        expect(futureGetController.dataMap![numberDelayFuture], 5);
         futureGetController.numberToReturn = 10;
         futureGetController.notifySourceChanged();
         await futureGetController.initialise();
-        expect(futureGetController.dataMap![NumberDelayFuture], 10);
+        expect(futureGetController.dataMap![numberDelayFuture], 10);
       });
     });
   });

@@ -100,7 +100,8 @@ class GetTextField extends StatelessWidget {
     this.semanticCounterText,
     this.alignLabelWithHint,
     Key? key,
-  }) : _key = key;
+  })  : _key = key,
+        super(key: null);
 
   /// If provided, it disables any explicit [controller].
   final String? initialText;
@@ -442,7 +443,8 @@ class GetForm extends StatelessWidget {
     this.onChanged,
     this.autovalidateMode,
     Key? key,
-  }) : _key = key;
+  })  : _key = key,
+        super(key: null);
 
   final Key? _key;
 
@@ -488,7 +490,7 @@ class GetForm extends StatelessWidget {
         key: _key,
         child: child,
         onWillPop: onWillPop,
-        onChanged: onChanged ?? (autovalidateMode != null ? () => null : null),
+        onChanged: onChanged ?? (autovalidateMode != null ? () {} : null),
         autovalidateMode: autovalidateMode,
       );
 }

@@ -3,7 +3,7 @@ import "package:get_smart/get_smart.dart";
 
 void main() {
   test("Test StringX: surround", () {
-    final text = "hello";
+    const text = "hello";
     expect(text.surround("*"), "*hello*");
     expect(text.surround("*", doFor: 2), "**hello**");
     expect(text.surround("*", doFor: 3), "***hello***");
@@ -12,7 +12,7 @@ void main() {
     expect(text.surround("*", doIf: false), "hello");
   });
   test("Test StringX: pre", () {
-    final text = "hello";
+    const text = "hello";
     expect(text.pre("*"), "*hello");
     expect(text.pre("*", doFor: 2), "**hello");
     expect(text.pre("*", doFor: 3), "***hello");
@@ -21,7 +21,7 @@ void main() {
     expect(text.pre("*", doIf: false), "hello");
   });
   test("Test StringX: post", () {
-    final text = "hello";
+    const text = "hello";
     expect(text.post("*"), "hello*");
     expect(text.post("*", doFor: 2), "hello**");
     expect(text.post("*", doFor: 3), "hello***");
@@ -30,7 +30,7 @@ void main() {
     expect(text.post("*", doIf: false), "hello");
   });
   test("Test StringX: takeInitials", () {
-    final text1 = "Hello   World  (   Greetings )   -    Program";
+    const text1 = "Hello   World  (   Greetings )   -    Program";
     expect(text1.takeInitials(1), "H");
     expect(text1.takeInitials(2), "HW");
     expect(text1.takeInitialsWithoutGarbage(3), "HWG");
@@ -38,7 +38,7 @@ void main() {
     expect(text1.takeInitialsWithoutGarbage(5), "HWGP");
     expect(text1.takeInitialsWithoutGarbage(5, fill: true), "HELLO");
 
-    final text2 = "Text 2";
+    const text2 = "Text 2";
     expect(text2.takeInitials(5, fill: true), "TEXT");
     expect(text2.takeInitials(5), "T2");
   });

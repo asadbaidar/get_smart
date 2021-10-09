@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:dio/dio.dart' as DIO;
+import 'package:dio/dio.dart' as dio;
 import 'package:get_smart/get_smart.dart';
 
-typedef GetFormData = DIO.FormData;
-typedef GetResponse<T> = DIO.Response<T>;
-typedef GetMultipartFile = DIO.MultipartFile;
+typedef GetFormData = dio.FormData;
+typedef GetResponse<T> = dio.Response<T>;
+typedef GetMultipartFile = dio.MultipartFile;
 
 class GetResult<T> extends GetObject {
   GetResult();
@@ -69,10 +69,11 @@ class GetResult<T> extends GetObject {
     map(["status", "success"], (v) => _isSucceeded ??= v);
     map(["msg", "message"], (v) => _message ??= v);
     map.$<T>(["result"], data, (v) {
-      if (v is List)
+      if (v is List) {
         list = v as List<T>?;
-      else
+      } else {
         value = v;
+      }
     });
   }
 
@@ -250,7 +251,7 @@ abstract class GetWebAPI {
         body: parcel.body,
       );
 
-  static Map<String, CancelToken> _cancelTokens = {};
+  static final Map<String, CancelToken> _cancelTokens = {};
 
   static Future<T> _httpRequest<T>({
     required String id,
@@ -370,7 +371,7 @@ class GetRequestParcel<T, R> {
 class GetIsolateEntry {
   GetIsolateEntry(this.sendPort);
 
-  final sendPort;
+  final dynamic sendPort;
 
   @override
   String toString() => "$typeName: " + {"sendPort": sendPort}.toString();
@@ -390,16 +391,16 @@ class GetIsolate {
     }
   }
 
-  var mIsolate;
-  var sendPort;
-  var receivePort;
+  dynamic mIsolate;
+  dynamic sendPort;
+  dynamic receivePort;
   Map<String?, Completer> completer = {};
 
   Future<R> httpRequest<T, R>(GetRequestParcel<T, R> parcel) async {
     final _completer = completer[parcel.key] = Completer<R>();
     sendPort?.send(parcel);
     return _completer.future.then((result) {
-      $debugPrint("RequestParcel: ${result}");
+      $debugPrint("RequestParcel: $result");
       completer.remove(parcel.key);
       return result;
     }).catchError((e) {

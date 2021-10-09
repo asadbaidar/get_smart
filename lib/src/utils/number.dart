@@ -35,24 +35,26 @@ extension Num on num {
       );
 
   void repeatsFor<T>(Function apply) {
-    if (this > 0)
+    if (this > 0) {
       for (int i = 0; i < this; i++) {
         apply();
       }
+    }
   }
 
   void repeatsForIndexed<T>(Function(int i) apply) {
-    if (this > 0)
+    if (this > 0) {
       for (int i = 0; i < this; i++) {
         apply(i);
       }
+    }
   }
 
   DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(toInt());
 
   String get formatted => Get.localization.formatDecimal(toInt());
 
-  String formatDecimal([int? fractionDigits = null]) =>
+  String formatDecimal([int? fractionDigits]) =>
       Get.localization.formatDecimal(toInt()).post(
           fractionDigits != null
               ? toStringAsFixed(fractionDigits).afterDot
@@ -61,7 +63,7 @@ extension Num on num {
                   : null,
           between: GetLocalizations.current?.symbols.DECIMAL_SEP);
 
-  String formatCurrency([int? fractionDigits = null]) => formatDecimal(
+  String formatCurrency([int? fractionDigits]) => formatDecimal(
         fractionDigits ?? GetLocalizations.current?.currencyFraction,
       );
 

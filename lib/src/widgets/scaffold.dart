@@ -40,7 +40,8 @@ class GetScaffold extends StatelessWidget {
     this.floatingActionButtonLocation,
     this.bottomBarAlignment,
     Key? key,
-  }) : _key = key as GlobalKey<ScaffoldState>?;
+  })  : _key = key,
+        super(key: null);
 
   final Widget? child;
   final List<Widget>? children;
@@ -75,7 +76,7 @@ class GetScaffold extends StatelessWidget {
   final double appBarBottomHeight;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final CrossAxisAlignment? bottomBarAlignment;
-  final GlobalKey<ScaffoldState>? _key;
+  final Key? _key;
 
   @override
   Widget build(BuildContext context) {
@@ -195,7 +196,7 @@ class GetScaffold extends StatelessWidget {
                 : [
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: AutoSizeText(
                           subtitle!,
                           maxLines: 2,

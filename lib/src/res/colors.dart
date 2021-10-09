@@ -44,11 +44,11 @@ extension ColorX on Color {
 }
 
 abstract class GetColors {
-  static const black85 = const Color(0xFF1D1D1D);
-  static const black90 = const Color(0xFF131313);
-  static const black93 = const Color(0xFF0C0C0C);
+  static const black85 = Color(0xFF1D1D1D);
+  static const black90 = Color(0xFF131313);
+  static const black93 = Color(0xFF0C0C0C);
 
-  static const MaterialColor black = const MaterialColor(
+  static const MaterialColor black = MaterialColor(
     0xFF000000,
     <int, Color>{
       50: Color(0xFFDDDDDD),
@@ -64,7 +64,7 @@ abstract class GetColors {
     },
   );
 
-  static const MaterialColor white = const MaterialColor(
+  static const MaterialColor white = MaterialColor(
     0xFFFFFFFF,
     <int, Color>{
       50: Color(0x1FFFFFFF),

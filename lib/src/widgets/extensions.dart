@@ -332,17 +332,17 @@ extension GetGlobalKey<T extends State<StatefulWidget>> on GlobalKey<T> {
 }
 
 extension GetDensity on VisualDensity {
-  static const VisualDensity min = const VisualDensity(
+  static const VisualDensity min = VisualDensity(
     horizontal: -4.0,
     vertical: -4.0,
   );
 
-  static const VisualDensity max = const VisualDensity(
+  static const VisualDensity max = VisualDensity(
     horizontal: 4.0,
     vertical: 4.0,
   );
 
-  static const VisualDensity dense = const VisualDensity(
+  static const VisualDensity dense = VisualDensity(
     horizontal: 3.0,
     vertical: 3.0,
   );
@@ -472,7 +472,7 @@ extension GetShimmer on Shimmer {
           child: Container(
             color: context.canvasColor,
             child: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               child: Shimmer.fromColors(
                 period: 900.milliseconds,
                 baseColor: context.canvasColor,
@@ -540,62 +540,70 @@ extension GetShimmer on Shimmer {
         Expanded(
           child: Container(
             color: context.backgroundColor,
-            padding: EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             child: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               child: Shimmer.fromColors(
                 baseColor: context.highlightColor.withOpacity(0.3),
                 highlightColor: context.highlightColor.withOpacity(0.2),
                 child: Column(children: [
                   Container(
                     color: Colors.grey,
-                    constraints: BoxConstraints.expand(height: 160),
+                    constraints: const BoxConstraints.expand(height: 160),
                   ),
-                  Container(constraints: BoxConstraints.expand(height: 24)),
+                  Container(
+                      constraints: const BoxConstraints.expand(height: 24)),
                   Container(
                     color: Colors.grey,
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    constraints: BoxConstraints.expand(height: 30),
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    constraints: const BoxConstraints.expand(height: 30),
                   ),
-                  Container(constraints: BoxConstraints.expand(height: 24)),
+                  Container(
+                      constraints: const BoxConstraints.expand(height: 24)),
                   Container(
                     color: Colors.grey,
-                    margin: EdgeInsets.symmetric(horizontal: 30),
-                    constraints: BoxConstraints.expand(height: 30),
+                    margin: const EdgeInsets.symmetric(horizontal: 30),
+                    constraints: const BoxConstraints.expand(height: 30),
                   ),
-                  Container(constraints: BoxConstraints.expand(height: 24)),
+                  Container(
+                      constraints: const BoxConstraints.expand(height: 24)),
                   Container(
                     color: Colors.grey,
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    constraints: BoxConstraints.expand(height: 30),
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    constraints: const BoxConstraints.expand(height: 30),
                   ),
-                  Container(constraints: BoxConstraints.expand(height: 24)),
+                  Container(
+                      constraints: const BoxConstraints.expand(height: 24)),
                   Container(
                     color: Colors.grey,
-                    margin: EdgeInsets.symmetric(horizontal: 60),
-                    constraints: BoxConstraints.expand(height: 30),
+                    margin: const EdgeInsets.symmetric(horizontal: 60),
+                    constraints: const BoxConstraints.expand(height: 30),
                   ),
-                  Container(constraints: BoxConstraints.expand(height: 50)),
+                  Container(
+                      constraints: const BoxConstraints.expand(height: 50)),
                   Container(
                     color: Colors.grey,
-                    constraints: BoxConstraints.expand(height: 24),
+                    constraints: const BoxConstraints.expand(height: 24),
                   ),
-                  Container(constraints: BoxConstraints.expand(height: 16)),
+                  Container(
+                      constraints: const BoxConstraints.expand(height: 16)),
                   Container(
                     color: Colors.grey,
-                    margin: EdgeInsets.symmetric(horizontal: 16),
-                    constraints: BoxConstraints.expand(height: 24),
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    constraints: const BoxConstraints.expand(height: 24),
                   ),
-                  Container(constraints: BoxConstraints.expand(height: 50)),
+                  Container(
+                      constraints: const BoxConstraints.expand(height: 50)),
                   Container(
                     color: Colors.grey,
-                    constraints: BoxConstraints.expand(height: 16),
+                    constraints: const BoxConstraints.expand(height: 16),
                   ),
-                  Container(constraints: BoxConstraints.expand(height: 8)),
+                  Container(
+                      constraints: const BoxConstraints.expand(height: 8)),
                   Container(
                     color: Colors.grey,
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                    constraints: BoxConstraints.expand(height: 16),
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    constraints: const BoxConstraints.expand(height: 16),
                   ),
                 ]),
               ),
@@ -608,29 +616,31 @@ extension GetShimmer on Shimmer {
         Expanded(
           child: Container(
             color: GetColors.black93,
-            padding: EdgeInsets.only(top: 4),
+            padding: const EdgeInsets.only(top: 4),
             child: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               child: Shimmer.fromColors(
                 baseColor: Colors.grey.shade800,
                 highlightColor: GetColors.black93,
                 child: Column(children: [
                   Container(
                     color: Colors.grey,
-                    margin: EdgeInsets.symmetric(horizontal: 30),
-                    constraints: BoxConstraints.expand(height: 18),
+                    margin: const EdgeInsets.symmetric(horizontal: 30),
+                    constraints: const BoxConstraints.expand(height: 18),
                   ),
-                  Container(constraints: BoxConstraints.expand(height: 8)),
+                  Container(
+                      constraints: const BoxConstraints.expand(height: 8)),
                   Container(
                     color: Colors.grey,
-                    margin: EdgeInsets.symmetric(horizontal: 36),
-                    constraints: BoxConstraints.expand(height: 10),
+                    margin: const EdgeInsets.symmetric(horizontal: 36),
+                    constraints: const BoxConstraints.expand(height: 10),
                   ),
-                  Container(constraints: BoxConstraints.expand(height: 8)),
+                  Container(
+                      constraints: const BoxConstraints.expand(height: 8)),
                   Container(
                     color: Colors.grey,
-                    margin: EdgeInsets.symmetric(horizontal: 28),
-                    constraints: BoxConstraints.expand(height: 10),
+                    margin: const EdgeInsets.symmetric(horizontal: 28),
+                    constraints: const BoxConstraints.expand(height: 10),
                   ),
                 ]),
               ),

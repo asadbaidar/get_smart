@@ -10,7 +10,7 @@ import 'package:video_player/video_player.dart';
 
 /// Camera page for taking a picture or recording a video
 class CameraPage extends StatelessWidget {
-  const CameraPage();
+  const CameraPage({Key? key}) : super(key: key);
 
   CameraModel get model => Get.$find()!;
 
@@ -36,7 +36,7 @@ class CameraPage extends StatelessWidget {
                   label: model.modeLabel,
                   onPressed: model.switchMode,
                 ),
-              SizedBox(width: 8),
+              8.spaceX,
             ],
             floatingActionButton: model.file != null
                 ? null
@@ -59,22 +59,22 @@ class CameraPage extends StatelessWidget {
                 : Row(children: [
                     FloatingActionButton(
                       backgroundColor: Colors.red,
-                      child: Icon(CupertinoIcons.clear),
+                      child: const Icon(CupertinoIcons.clear),
                       onPressed: model.cancelAction,
                       mini: true,
                       heroTag: null,
                     ).paddingAll(24),
-                    Spacer(),
+                    const Spacer(),
                     if (model.file?.isVideo == true)
                       FloatingActionButton(
                         child: Icon(model.playIcon),
                         onPressed: model.playVideo,
                         heroTag: null,
                       ).paddingAll(16),
-                    Spacer(),
+                    const Spacer(),
                     FloatingActionButton(
                       backgroundColor: Colors.green,
-                      child: Icon(CupertinoIcons.check_mark),
+                      child: const Icon(CupertinoIcons.check_mark),
                       onPressed: model.acceptFile,
                       mini: true,
                       heroTag: null,
@@ -93,7 +93,7 @@ class CameraPage extends StatelessWidget {
                       filled: true,
                       fontSize: 16,
                       padding: 4,
-                      margin: EdgeInsets.all(16),
+                      margin: const EdgeInsets.all(16),
                     );
                   }),
                 ],

@@ -38,8 +38,8 @@ class TestStreamGetController extends StreamGetController<int> {
   }
 }
 
-const String _NumberStream = 'numberStream';
-const String _StringStream = 'stringStream';
+const String _numberStream = 'numberStream';
+const String _stringStream = 'stringStream';
 
 class TestMultipleStreamGetController extends MultipleStreamGetController {
   final bool failOne;
@@ -52,12 +52,12 @@ class TestMultipleStreamGetController extends MultipleStreamGetController {
 
   @override
   Map<String, StreamData> get streamsMap => {
-        _NumberStream: StreamData(numberStream(
+        _numberStream: StreamData(numberStream(
           5,
           fail: failOne,
           delay: delay,
         )),
-        _StringStream: StreamData(textStream(
+        _stringStream: StreamData(textStream(
           "five",
           fail: false,
           delay: delay,
@@ -78,7 +78,7 @@ class TestMultipleStreamGetControllerWithOverrides
 
   @override
   Map<String, StreamData> get streamsMap => {
-        _NumberStream: StreamData(
+        _numberStream: StreamData(
           numberStream(5, fail: false, delay: 0),
           onData: _loadData,
         )
@@ -94,7 +94,7 @@ void main() async {
     test('When stream data is fetched data should be set and ready', () async {
       var streamGetController = TestStreamGetController();
       streamGetController.initialise();
-      await Future.delayed(Duration(milliseconds: 1));
+      await Future.delayed(1.milliseconds);
       expect(streamGetController.data, 1);
       expect(streamGetController.dataReady, true);
     });
@@ -102,7 +102,7 @@ void main() async {
         () async {
       var streamGetController = TestStreamGetController();
       streamGetController.initialise();
-      await Future.delayed(Duration(milliseconds: 1));
+      await Future.delayed(1.milliseconds);
       expect(streamGetController.loadedData, 1);
     });
 
@@ -110,7 +110,7 @@ void main() async {
         () async {
       var streamGetController = TestStreamGetController(fail: true);
       streamGetController.initialise();
-      await Future.delayed(Duration(milliseconds: 1));
+      await Future.delayed(1.milliseconds);
       expect(streamGetController.hasError, true);
       expect(streamGetController.data, null,
           reason: 'No data should be set when there\'s a failure.');
@@ -120,7 +120,7 @@ void main() async {
     test('Before a stream returns it should indicate not ready', () async {
       var streamGetController = TestStreamGetController(delay: 1000);
       streamGetController.initialise();
-      await Future.delayed(Duration(milliseconds: 1));
+      await Future.delayed(1.milliseconds);
       expect(streamGetController.dataReady, false);
     });
 
@@ -178,9 +178,9 @@ void main() async {
         () async {
       var streamGetController = TestMultipleStreamGetController();
       streamGetController.initialise();
-      await Future.delayed(Duration(milliseconds: 4));
-      expect(streamGetController.dataMap![_NumberStream], 5);
-      expect(streamGetController.dataMap![_StringStream], 'five');
+      await Future.delayed(4.milliseconds);
+      expect(streamGetController.dataMap![_numberStream], 5);
+      expect(streamGetController.dataMap![_stringStream], 'five');
     });
 
     test(
@@ -188,8 +188,8 @@ void main() async {
         () async {
       var streamGetController = TestMultipleStreamGetController(failOne: true);
       streamGetController.initialise();
-      await Future.delayed(Duration(milliseconds: 1));
-      expect(streamGetController.hasErrorForKey(_NumberStream), true);
+      await Future.delayed(1.milliseconds);
+      expect(streamGetController.hasErrorForKey(_numberStream), true);
       // Make sure we only have 1 error
       // expect(streamGetController.errorMap.values.where((v) => v == true).length, 1);
     });
@@ -199,17 +199,17 @@ void main() async {
         () async {
       var streamGetController = TestMultipleStreamGetController(failOne: true);
       streamGetController.initialise();
-      await Future.delayed(Duration(milliseconds: 1));
-      expect(streamGetController.dataReady(_NumberStream), false);
+      await Future.delayed(1.milliseconds);
+      expect(streamGetController.dataReady(_numberStream), false);
       // Delay the first lifecycle can complete
-      await Future.delayed(Duration(milliseconds: 1));
-      expect(streamGetController.dataReady(_StringStream), true);
+      await Future.delayed(1.milliseconds);
+      expect(streamGetController.dataReady(_stringStream), true);
     });
 
     test('When one onData is augmented the data will change', () async {
       var streamGetController = TestMultipleStreamGetControllerWithOverrides();
       streamGetController.initialise();
-      await Future.delayed(Duration(milliseconds: 1));
+      await Future.delayed(1.milliseconds);
       expect(streamGetController.loadedData, 5);
     });
 
@@ -230,7 +230,7 @@ void main() async {
       var streamGetController = TestMultipleStreamGetController();
 
       streamGetController.initialise();
-      expect(streamGetController.getSubscriptionForKey(_NumberStream) != null,
+      expect(streamGetController.getSubscriptionForKey(_numberStream) != null,
           true);
     });
 
@@ -263,7 +263,7 @@ void main() async {
       await Future.delayed(const Duration(milliseconds: 20));
       streamGetController.notifySourceChanged();
 
-      expect(streamGetController.dataMap![_NumberStream], 5);
+      expect(streamGetController.dataMap![_numberStream], 5);
     });
 
     test(
@@ -275,7 +275,7 @@ void main() async {
       await Future.delayed(const Duration(milliseconds: 20));
       streamGetController.notifySourceChanged(clearOldData: true);
 
-      expect(streamGetController.dataMap![_NumberStream], null);
+      expect(streamGetController.dataMap![_numberStream], null);
     });
   });
 }

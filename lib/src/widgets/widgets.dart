@@ -172,7 +172,8 @@ class CircularProgress extends StatelessWidget {
     this.strokeWidth = 1.4,
     this.color,
     this.value,
-  });
+    Key? key,
+  }) : super(key: key);
 
   const CircularProgress.small({
     this.visible = true,
@@ -181,7 +182,8 @@ class CircularProgress extends StatelessWidget {
     this.strokeWidth = 1,
     this.color,
     this.value,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final bool visible;
   final double size;
@@ -216,14 +218,16 @@ class LinearProgress extends StatelessWidget {
     this.height = 1,
     this.color,
     this.value,
-  });
+    Key? key,
+  }) : super(key: key);
 
   const LinearProgress.standard({
     this.visible = true,
     this.height = 2.4,
     this.color = Colors.blue,
     this.value,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final bool visible;
   final Color? color;
@@ -256,7 +260,8 @@ class MessageView extends StatelessWidget {
     this.emptyTitle,
     this.emptyMessage,
     this.error,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final Widget? icon;
   final Widget? errorIcon;
@@ -265,22 +270,20 @@ class MessageView extends StatelessWidget {
   final String? message;
   final String? emptyTitle;
   final String? emptyMessage;
-  final error;
+  final dynamic error;
 
   @override
   Widget build(BuildContext context) {
     final _icon = error != null
-        ? (errorIcon ?? Icon(Icons.cloud_off))
+        ? (errorIcon ?? const Icon(Icons.cloud_off))
         : emptyTitle != null || emptyMessage != null
-            ? (icon ?? Icon(CupertinoIcons.square_stack_3d_up_slash))
+            ? (icon ?? const Icon(CupertinoIcons.square_stack_3d_up_slash))
             : icon;
     final _message = error != null
         ? error.toString()
         : emptyTitle != null
             ? "Nothing in $emptyTitle"
-            : emptyMessage != null
-                ? emptyMessage
-                : message;
+            : emptyMessage ?? message;
     final _action = error != null
         ? GetText.retry()
         : emptyTitle != null || emptyMessage != null
@@ -302,7 +305,7 @@ class MessageView extends StatelessWidget {
               data: context.iconTheme.copyWith(size: 72),
               child: _icon,
             ),
-          SizedBox(height: 16),
+          16.spaceY,
           if (_message != null)
             Flexible(
               child: Text(
@@ -311,7 +314,7 @@ class MessageView extends StatelessWidget {
                 style: context.subtitle1?.apply(fontSizeDelta: 1),
               ),
             ),
-          SizedBox(height: 16),
+          16.spaceY,
           if (_action != null)
             GetButton.outlined(
               child: Text(_action),
@@ -340,8 +343,8 @@ class CrossFade extends AnimatedCrossFade {
           crossFadeState: showFirst ?? firstChild != null
               ? CrossFadeState.showFirst
               : CrossFadeState.showSecond,
-          firstChild: firstChild ?? Container(height: 0, width: 0),
-          secondChild: secondChild ?? Container(height: 0, width: 0),
+          firstChild: firstChild ?? 0.space,
+          secondChild: secondChild ?? 0.space,
         );
 }
 
@@ -350,7 +353,9 @@ class Clickable extends MouseRegion {
     bool enabled = true,
     VoidCallback? onTap,
     Widget? child,
+    Key? key,
   }) : super(
+          key: key,
           cursor: enabled && onTap != null
               ? MaterialStateMouseCursor.clickable
               : SystemMouseCursors.basic,
@@ -365,11 +370,13 @@ extension ClickableX on Widget {
   Widget clickable({
     bool enabled = true,
     VoidCallback? onTap,
+    Key? key,
   }) =>
       Clickable(
         enabled: enabled,
         onTap: onTap,
         child: this,
+        key: key,
       );
 }
 
@@ -517,7 +524,7 @@ class TextBox extends StatelessWidget {
         Colors.transparent;
 
     return text == null
-        ? Container(height: 0, width: 0)
+        ? 0.space
         : Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -660,7 +667,7 @@ class GetSearchDelegate extends SearchDelegate {
   }) : super(searchFieldLabel: hint);
 
   @override
-  Widget buildLeading(BuildContext context) => BackButton();
+  Widget buildLeading(BuildContext context) => const BackButton();
 
   @override
   Widget buildSuggestions(BuildContext context) => buildResults(context);
@@ -672,7 +679,7 @@ class GetSearchDelegate extends SearchDelegate {
       ).copyWith(
         appBarTheme: context.appBarTheme,
         scaffoldBackgroundColor: context.scaffoldBackgroundColor,
-        inputDecorationTheme: InputDecorationTheme(
+        inputDecorationTheme: const InputDecorationTheme(
           border: InputBorder.none,
         ),
       );
@@ -681,7 +688,7 @@ class GetSearchDelegate extends SearchDelegate {
   List<Widget> buildActions(BuildContext context) => [
         if (query.trim().isNotEmpty)
           GetButton.icon(
-            child: Icon(CupertinoIcons.clear_circled_solid),
+            child: const Icon(CupertinoIcons.clear_circled_solid),
             onPressed: clear,
           )
       ];
@@ -719,7 +726,7 @@ class ProgressButton extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: status == GetStatus.busy
           ? Row(children: [
-              SizedBox(
+              const SizedBox(
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(strokeWidth: 2),
@@ -749,10 +756,11 @@ class ProgressButton extends StatelessWidget {
                           .uppercase,
                     ),
                     onPressed: () {
-                      if (status == GetStatus.succeeded)
+                      if (status == GetStatus.succeeded) {
                         Get.back(result: true);
-                      else
+                      } else {
                         onPressed!();
+                      }
                     },
                   ),
                 ),
@@ -763,7 +771,7 @@ class ProgressButton extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(
                       error ?? GetText.failed(),
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                   ),
                 ),
@@ -773,7 +781,7 @@ class ProgressButton extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(
                       GetText.succeeded(),
-                      style: TextStyle(color: Colors.green),
+                      style: const TextStyle(color: Colors.green),
                     ),
                   ),
                 ),

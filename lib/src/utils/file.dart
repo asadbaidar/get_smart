@@ -2,7 +2,7 @@ import 'package:get_smart/get_smart.dart';
 import 'package:get_smart/src/utils/get_utils.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
-import 'package:path/path.dart' as PATH;
+import 'package:path/path.dart' as path;
 
 class GetFile {
   GetFile({
@@ -58,7 +58,7 @@ class GetFile {
     return multipartFiles;
   }
 
-  static const List<String> videoTypes = const [
+  static const List<String> videoTypes = [
     "mp4",
     "wmv",
     "mov",
@@ -66,7 +66,7 @@ class GetFile {
     "mpeg",
   ];
 
-  static const List<String> imageTypes = const [
+  static const List<String> imageTypes = [
     "jpg",
     "jpeg",
     "png",
@@ -74,20 +74,20 @@ class GetFile {
     "bmp",
   ];
 
-  static const List<String> audioTypes = const [
+  static const List<String> audioTypes = [
     "mp3",
     "wav",
     "wma",
     "m4a",
   ];
 
-  static const List<String> docTypes = const [
+  static const List<String> docTypes = [
     "pdf",
     "doc",
     "docx",
   ];
 
-  static const List<String> mediaAndDocTypes = const [
+  static const List<String> mediaAndDocTypes = [
     ...videoTypes,
     ...imageTypes,
     ...audioTypes,
@@ -97,10 +97,10 @@ class GetFile {
 
 extension GetFileX on String {
   /// return the file name of file path.
-  String get fileName => PATH.basename(this);
+  String get fileName => path.basename(this);
 
   /// return the file name without type.
-  String get fileNameWithoutType => PATH.basenameWithoutExtension(this);
+  String get fileNameWithoutType => path.basenameWithoutExtension(this);
 
   /// return the file type without dot i.e. pdf.
   String get fileType => afterDot.lowercase;

@@ -30,7 +30,7 @@ class BottomBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         CrossFade(firstChild: top),
-        if (top == null) GetLineSeparator(style: SeparatorStyle.full),
+        if (top == null) const GetLineSeparator.full(),
         if (visible)
           BottomAppBar(
             elevation: top == null ? null : 0,
@@ -43,13 +43,13 @@ class BottomBar extends StatelessWidget {
               top: false,
               bottom: true,
               child: Container(
-                constraints: BoxConstraints(minHeight: 44),
+                constraints: const BoxConstraints(minHeight: 44),
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: alignment,
                   children: [
-                    SizedBox(width: 2),
+                    2.spaceX,
                     ...children ??
                         [
                           ..._left,
@@ -58,7 +58,7 @@ class BottomBar extends StatelessWidget {
                                 i < _right.length - _left.length;
                                 i++)
                               GetButton.icon(),
-                          ...(_center.isEmpty ? [Spacer()] : _center),
+                          ...(_center.isEmpty ? [const Spacer()] : _center),
                           if (_right.length < _left.length)
                             for (int i = 0;
                                 i < _left.length - _right.length;
@@ -66,7 +66,7 @@ class BottomBar extends StatelessWidget {
                               GetButton.icon(),
                           ..._right
                         ],
-                    SizedBox(width: 2),
+                    2.spaceX,
                   ],
                 ),
               ),
@@ -202,14 +202,14 @@ class GetSnackBar extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Stack(children: [
-                    GetLineSeparator(style: SeparatorStyle.full),
+                    const GetLineSeparator.full(),
                     if (showProgress) LinearProgress(value: progress),
                   ]),
                   GetBar(
                     snackPosition: withBottomBar == true
                         ? SnackPosition.TOP
                         : SnackPosition.BOTTOM,
-                    animationDuration: Duration(milliseconds: 200),
+                    animationDuration: 200.milliseconds,
                     messageText: message == null
                         ? null
                         : Text(

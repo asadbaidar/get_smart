@@ -19,7 +19,8 @@ class SwipeRefresh extends StatelessWidget {
     this.strokeWidth = 2.0,
     this.triggerMode = RefreshIndicatorTriggerMode.onEdge,
     Key? key,
-  }) : _key = key;
+  })  : _key = key,
+        super(key: null);
 
   final Widget child;
   final SwipeRefreshCallback onRefresh;
@@ -128,7 +129,8 @@ class CupertinoSliverSwipeRefresh extends StatelessWidget {
                   refreshTriggerPullDistance,
                   refreshIndicatorExtent,
                   enabled ?? onRefresh != null,
-                ));
+                )),
+        super(key: null);
 
   final Key? _key;
 

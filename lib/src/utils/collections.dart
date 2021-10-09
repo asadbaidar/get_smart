@@ -59,7 +59,7 @@ extension ListX<E> on List<E> {
 }
 
 extension IterableX<E> on Iterable<E> {
-  E? reduceOrNull(E combine(E value, E element)) {
+  E? reduceOrNull(E Function(E value, E element) combine) {
     try {
       return isEmpty ? null : reduce(combine);
     } catch (e) {
@@ -67,7 +67,7 @@ extension IterableX<E> on Iterable<E> {
     }
   }
 
-  Iterable<E> exclude(bool where(E element)) =>
+  Iterable<E> exclude(bool Function(E element) where) =>
       expand((e) => where(e) ? [] : [e]);
 
   Iterable<E> get notEmpty => exclude((e) => e.toString().isEmpty);

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage();
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => GetBuilder<HomeModel>(
@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
                 onRefresh: model.refreshData,
                 child: ListView.separated(
                   itemCount: dataSet.length,
-                  separatorBuilder: (_, __) => GetTileSeparator(),
+                  separatorBuilder: (_, __) => const GetTileSeparator(),
                   itemBuilder: (_, index) {
                     final data = dataSet[index];
                     return GetTile.simple(
@@ -40,9 +40,8 @@ class HomePage extends StatelessWidget {
                           items: [data.file!],
                           childBuilder: (onPopup) => GetButton.icon(
                             child: Icon(icon),
-                            onPressed: data.file?.isVideo == true
-                                ? () => null
-                                : onPopup,
+                            onPressed:
+                                data.file?.isVideo == true ? () {} : onPopup,
                           ),
                           itemBuilder: (value, data) => Image(
                             image: $cast(Get.isWeb
@@ -54,7 +53,7 @@ class HomePage extends StatelessWidget {
                             height: 330,
                           ).popupMenuItem(
                             value: value,
-                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                           ),
                         ),
                       ),

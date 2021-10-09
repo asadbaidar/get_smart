@@ -115,7 +115,7 @@ class GetListView extends ScrollView {
   /// may be null.
   const GetListView({
     Key? key,
-    List<Widget> children = const [],
+    List<Widget> this.children = const [],
     this.replaceBuilder,
     this.sliverHeaders,
     this.sliverFooters,
@@ -144,7 +144,6 @@ class GetListView extends ScrollView {
           itemExtent == null || prototypeItem == null,
           'You can only pass itemExtent or prototypeItem, not both.',
         ),
-        children = children,
         itemCount = children.length,
         itemBuilder = null,
         separatorBuilder = null,
@@ -194,7 +193,7 @@ class GetListView extends ScrollView {
   /// null.
   const GetListView.builder({
     Key? key,
-    required IndexedWidgetBuilder itemBuilder,
+    required IndexedWidgetBuilder this.itemBuilder,
     this.separatorBuilder,
     this.replaceBuilder,
     this.sliverHeaders,
@@ -220,7 +219,6 @@ class GetListView extends ScrollView {
     Clip clipBehavior = Clip.hardEdge,
   })  : assert(itemBuilder != null),
         assert(itemCount != null && itemCount >= 0),
-        itemBuilder = itemBuilder,
         children = null,
         itemExtent = null,
         prototypeItem = null,
@@ -360,8 +358,9 @@ class GetListView extends ScrollView {
         );
       }
     }
-    if (effectivePadding != null)
+    if (effectivePadding != null) {
       sliverList = SliverPadding(padding: effectivePadding, sliver: sliverList);
+    }
     return sliverList;
   }
 

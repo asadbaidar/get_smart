@@ -14,11 +14,10 @@ import 'package:intl/number_symbols_data.dart';
 ///   ];
 /// ```
 class GetLocalizations {
-  static const english = const Locale('en', '');
+  static const english = Locale('en', '');
   static const supportedLocales = [GetLocalizations.english];
 
-  static const GetLocalizationsDelegate delegate =
-      const GetLocalizationsDelegate();
+  static const GetLocalizationsDelegate delegate = GetLocalizationsDelegate();
 
   GetLocalizations(this.locale)
       : symbols = numberFormatSymbols[locale.toString()] ??

@@ -6,11 +6,12 @@ import 'package:get_smart/get_smart.dart';
 abstract class GetController extends MultipleFutureGetController {
   final actionName = "action";
 
+  @override
   Map<String, dynamic> get dataMap => _dataMap;
-  Map<String, dynamic> _dataMap = {};
+  final Map<String, dynamic> _dataMap = {};
 
   Map<dynamic, Future Function()> get runnerMap => _runnerMap;
-  Map<dynamic, Future Function()> _runnerMap = {};
+  final Map<dynamic, Future Function()> _runnerMap = {};
 
   late Completer _futuresCompleter;
   int _futuresCompleted = 0;
@@ -40,8 +41,9 @@ abstract class GetController extends MultipleFutureGetController {
       ).then((result) {
         setDataFor(key, result);
         if (key != typeName) setBusyFor(key, false);
-        if (result is GetResult && result.error != null)
+        if (result is GetResult && result.error != null) {
           setErrorFor(typeName, result.error);
+        }
         update();
         onData(key);
         _incrementAndCheckFuturesCompleted();
@@ -76,8 +78,10 @@ abstract class GetController extends MultipleFutureGetController {
 
   void _cancelWebApis() {
     try {
-      webAPIs.forEach((e) => e.cancel());
-    } catch (e) {}
+      for (var e in webAPIs) {
+        e.cancel();
+      }
+    } catch (_) {}
   }
 
   /// Include all web APIs for cleanup when closed
@@ -147,9 +151,9 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Sets or Returns the data of the action
   GetResult<T>? actionData<T>([value]) {
-    if (value == null)
+    if (value == null) {
       return data<T>(actionName);
-    else {
+    } else {
       setDataFor(actionName, value);
       return value;
     }
@@ -212,9 +216,9 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Sets or Returns the data of the ViewModel
   GetResult<T>? modelData<T>([value]) {
-    if (value == null)
+    if (value == null) {
       return data<T>(typeName);
-    else {
+    } else {
       setData(value);
       return value;
     }
@@ -328,7 +332,7 @@ abstract class GetController extends MultipleFutureGetController {
     update();
   }
 
-  StackList<Future> _futureQueue = StackList.from([Future.value()]);
+  final StackList<Future> _futureQueue = StackList.from([Future.value()]);
 
   /// Sets the key for error logs, runs the future in queue which means next
   /// future will not run unless the previous gets completed.
@@ -357,14 +361,15 @@ abstract class GetController extends MultipleFutureGetController {
     bool throwException = false,
   }) {
     var _key = key ?? typeName;
-    final runner = () async {
+    runner() async {
       setDataFor(_key, null);
       return await runBusyFuture(
         busyRunner(),
         key: _key,
         throwException: throwException,
       );
-    };
+    }
+
     setRunnerFor(_key, runner);
     return runner();
   }

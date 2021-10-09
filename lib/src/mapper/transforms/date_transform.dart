@@ -1,11 +1,12 @@
 import 'package:get_smart/get_smart.dart';
 
 class DateUnit extends Enumerable<int> {
-  static const seconds = const DateUnit(rawValue: 1000);
-  static const milliseconds = const DateUnit(rawValue: 1);
+  static const seconds = DateUnit(rawValue: 1000);
+  static const milliseconds = DateUnit(rawValue: 1);
 
   const DateUnit({required this.rawValue});
 
+  @override
   final int rawValue;
 
   double addScale(double interval) {

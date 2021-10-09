@@ -5,8 +5,8 @@ import 'package:get_smart/get_smart.dart';
 
 /// Contains ViewModel functionality for busy state management
 class BaseGetController extends GetxController {
-  Map<int, bool> _busyStates = {};
-  Map<int, dynamic> _errorStates = {};
+  final Map<int, bool> _busyStates = {};
+  final Map<int, dynamic> _errorStates = {};
 
   bool _initialised = false;
 
@@ -188,7 +188,7 @@ class BaseGetController extends GetxController {
 
   void _initialiseSpecialControllers() {
     if (this is Initialisable) {
-      if (!this.initialised) {
+      if (!initialised) {
         var controller = this as Initialisable;
         controller.initialise();
       }
@@ -253,6 +253,7 @@ abstract class FutureGetController<T> extends _SingleDataSourceGetController<T>
 
   Future<T> futureToRun();
 
+  @override
   Future initialise() async {
     setError(null);
     _error = null;
@@ -290,13 +291,12 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
   int _futuresCompleted = 0;
 
   void _initialiseData() {
-    if (_dataMap == null) {
-      _dataMap = {};
-    }
+    _dataMap ??= {};
 
     _futuresCompleted = 0;
   }
 
+  @override
   Future initialise() {
     _futuresCompleter = Completer();
     _initialiseData();
@@ -358,6 +358,7 @@ abstract class MultipleStreamGetController extends _MultiDataSourceGetController
   StreamSubscription? getSubscriptionForKey(String key) =>
       _streamsSubscriptions![key];
 
+  @override
   void initialise() {
     _dataMap = {};
     clearErrors();
@@ -470,6 +471,7 @@ abstract class StreamGetController<T> extends _SingleDataSourceGetController<T>
     update();
   }
 
+  @override
   void initialise() {
     _streamSubscription = stream.listen(
       (incomingData) {
@@ -477,9 +479,7 @@ abstract class StreamGetController<T> extends _SingleDataSourceGetController<T>
         _error = null;
         update();
         // Extra security in case transformData isnt sent
-        var interceptedData = transformData(incomingData) == null
-            ? incomingData
-            : transformData(incomingData);
+        var interceptedData = transformData(incomingData) ?? incomingData;
 
         if (interceptedData != null) {
           _data = interceptedData;
@@ -538,7 +538,7 @@ class StreamData<T> extends _SingleDataSourceGetController<T> {
   Function? onSubscribed;
 
   /// Called when an error is placed on the stream
-  Function? _onError;
+  final Function? _onError;
 
   /// Called when the stream is cancelled
   Function? onCancel;

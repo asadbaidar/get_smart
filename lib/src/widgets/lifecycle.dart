@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_smart/get_smart.dart';
 
 /// States that an application can be in.
 ///
@@ -18,8 +19,11 @@ class GetAppLifecycle extends StatefulWidget {
     this.onPaused,
     this.onInactive,
     this.onDetached,
+    this.child,
     Key? key,
   }) : super(key: key);
+
+  final Widget? child;
 
   /// The application is visible and responding to user input.
   final VoidCallback? onResume;
@@ -77,7 +81,7 @@ class _GetAppLifecycleState extends State<GetAppLifecycle>
   }
 
   @override
-  Widget build(BuildContext context) => Container(height: 0);
+  Widget build(BuildContext context) => widget.child ?? 0.space;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

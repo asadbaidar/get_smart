@@ -200,7 +200,7 @@ class CameraModel extends GetController {
             ));
   }
 
-  GetTimer _timer = GetTimer();
+  final GetTimer _timer = GetTimer();
 
   String? get duration => (isRecordingVideo
           ? _timer.elapsed

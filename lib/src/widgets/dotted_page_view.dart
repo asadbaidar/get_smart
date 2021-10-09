@@ -24,7 +24,8 @@ class DottedPageView extends StatefulWidget {
     this.clipBehavior = Clip.hardEdge,
     Key? key,
   })  : _key = key,
-        this.controller = controller ?? PageController();
+        controller = controller ?? PageController(),
+        super(key: null);
 
   final Color dotColor;
   final Color dotActiveColor;
@@ -78,12 +79,13 @@ class _DottedPageViewState extends State<DottedPageView>
   }
 
   void updatePage() {
-    if (widget.controller.hasClients)
+    if (widget.controller.hasClients) {
       widget.controller.animateToPage(
         _index.value == widget.itemCount - 1 ? 0 : _index.value + 1,
         duration: 1500.milliseconds,
         curve: Curves.easeOut,
       );
+    }
   }
 
   @override
@@ -98,7 +100,7 @@ class _DottedPageViewState extends State<DottedPageView>
             physics: widget.physics,
             pageSnapping: widget.pageSnapping,
             onPageChanged: (index) {
-              this._index.value = index;
+              _index.value = index;
               widget.onPageChanged?.call(index);
             },
             itemBuilder: widget.itemBuilder!,
@@ -116,7 +118,7 @@ class _DottedPageViewState extends State<DottedPageView>
                   activeColor: widget.dotActiveColor,
                   size: const Size.square(8),
                   activeSize: const Size.square(8),
-                  spacing: EdgeInsets.all(4),
+                  spacing: const EdgeInsets.all(4),
                 ),
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,

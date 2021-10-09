@@ -90,7 +90,7 @@ abstract class GetButton {
             key: key,
             onPressed: enabled
                 ? busy
-                    ? () => null
+                    ? () {}
                     : onPressed
                 : null,
             onLongPress: onLongPress,
@@ -170,7 +170,7 @@ abstract class GetButton {
               key: key,
               onPressed: enabled
                   ? busy
-                      ? () => null
+                      ? () {}
                       : onPressed
                   : null,
               onLongPress: onLongPress,
@@ -302,7 +302,7 @@ abstract class GetButton {
               key: key,
               onPressed: enabled
                   ? busy
-                      ? () => null
+                      ? () {}
                       : onPressed
                   : null,
               onLongPress: onLongPress,
@@ -432,7 +432,7 @@ abstract class GetButton {
             key: key,
             onPressed: enabled
                 ? busy
-                    ? () => null
+                    ? () {}
                     : onPressed
                 : null,
             onLongPress: onLongPress,
@@ -816,7 +816,7 @@ abstract class GetButton {
           disabledColor: disabledColor ?? _color?.hinted,
           onPressed: enabled
               ? busy
-                  ? () => null
+                  ? () {}
                   : onPressed
               : null,
           mouseCursor: mouseCursor ?? SystemMouseCursors.click,
@@ -825,7 +825,9 @@ abstract class GetButton {
           tooltip: tooltip,
           enableFeedback: enableFeedback ?? true,
           constraints: constraints ??
-              (labeled ? BoxConstraints.expand(width: 40) : BoxConstraints()),
+              (labeled
+                  ? const BoxConstraints.expand(width: 40)
+                  : const BoxConstraints()),
         );
       });
 
@@ -1046,14 +1048,15 @@ abstract class GetButton {
             alignment: alignment,
             onPressed: enabled
                 ? busy
-                    ? () => null
+                    ? () {}
                     : onPressed
                 : null,
             child: IconTheme(
               data: (primary ? context.primaryIconTheme : context.iconTheme)
                   .copyWith(size: iconSize),
-              child:
-                  busy ? CircularProgress.small() : child ?? const SizedBox(),
+              child: busy
+                  ? const CircularProgress.small()
+                  : child ?? const SizedBox(),
             ),
           ));
 

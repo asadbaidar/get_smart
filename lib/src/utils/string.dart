@@ -56,7 +56,7 @@ extension StringX on String {
             ),
       );
 
-  static const garbage = const ["(", ")", "-", "&", "/", "."];
+  static const garbage = ["(", ")", "-", "&", "/", "."];
 
   String takeInitialsWithoutGarbage(
     int count, {
@@ -78,7 +78,7 @@ extension StringX on String {
   }) {
     var source = replaceAll(RegExp(r"\s+"), " ").trim();
     if (source.isNotEmpty) {
-      if (withoutGarbage)
+      if (withoutGarbage) {
         source = source
             .applyForIndexed<String>(
                 garbage.length,
@@ -88,6 +88,7 @@ extension StringX on String {
                       " ",
                     ))
             .trim();
+      }
       if (!source.contains(" ")) {
         return source.take(fill ? count : 1).trim().uppercase;
       }
@@ -176,7 +177,7 @@ extension StringX on String {
 
   /// Capitalize each word inside string
   /// Example: your name => Your Name
-  String get capitalized => this.isBlank == true
+  String get capitalized => isBlank == true
       ? ""
       : length == 1
           ? uppercase
@@ -184,7 +185,7 @@ extension StringX on String {
 
   /// Uppercase first letter inside string and let the others lowercase
   /// Example: your name => Your name
-  String get capitalizedFirst => this.isBlank == true
+  String get capitalizedFirst => isBlank == true
       ? ""
       : length == 1
           ? uppercase

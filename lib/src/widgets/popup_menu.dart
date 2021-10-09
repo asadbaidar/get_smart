@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 /// Signature for the callback invoked when a menu item is selected. The
-/// argument is the index of the selected item and value of `T` that caused its
-/// menu to be dismissed.
-typedef GetPopupMenuItemSelected<T> = void Function(int value, T data);
+/// first argument is the index of the selected item and second is the data of
+/// type `T` that caused its menu to be dismissed.
+typedef GetPopupMenuItemSelected<T> = void Function(int index, T data);
 
 /// Signature used by [GetPopupMenu] to lazily construct the child widget that can
 /// show the menu if onPopup method is called from the argument.
@@ -15,11 +15,11 @@ typedef GetPopupMenuChildBuilder = Widget Function(VoidCallback? onPopup);
 /// Signature used by [GetPopupMenu] to lazily construct the items shown when
 /// the button is pressed.
 typedef GetPopupMenuItemBuilder<T> = PopupMenuEntry<int> Function(
-  int value,
+  int index,
   T data,
 );
 typedef GetPopupMenuSeparatorBuilder<T> = PopupMenuEntry<int> Function(
-  int value,
+  int index,
   T data,
 );
 
@@ -53,7 +53,8 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
     this.separator = true,
     this.useRootNavigator = false,
     this.semanticLabel,
-  });
+    Key? key,
+  }) : super(key: key);
 
   /// If provided, [childBuilder] is the widget used for this button
   final GetPopupMenuChildBuilder? childBuilder;
@@ -113,16 +114,16 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
   GetPopupMenuChildBuilder get _childBuilder =>
       childBuilder ??
       (onPressed) => GetButton.primaryIcon(
-            child: Icon(Icons.more_vert),
+            child: const Icon(Icons.more_vert),
             onPressed: onPressed,
           );
 
   GetPopupMenuSeparatorBuilder<T> get _separatorBuilder =>
-      separatorBuilder ?? (value, data) => const PopupMenuDivider(height: 1.5);
+      separatorBuilder ?? (_, __) => const PopupMenuDivider(height: 1.5);
 
   GetPopupMenuItemBuilder<T> get _itemBuilder =>
       itemBuilder ??
-      (value, data) =>
+      (index, data) =>
           $cast<GetTileData>(data)?.mapTo((GetTileData data) => GetTile.item(
                 leading: data.leading?.mapIt((it) => Icon(it)),
                 title: data.description,
@@ -154,9 +155,19 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
                 enabled: data.enabled ?? true,
                 height: data.height ?? itemHeight,
                 padding: padding,
-                value: value,
+                value: index,
               )) ??
-          Container(height: 0).popupMenuItem(value: value);
+          GetTile.item(
+            title: data.toString(),
+            color: autoTint ? data.toString().materialPrimary : tintColor,
+            horizontalPadding: itemPadding,
+            titleSize: titleSize,
+            accessorySize: accessorySize,
+          ).popupMenuItem(
+            height: itemHeight,
+            padding: padding,
+            value: index,
+          );
 
   List<PopupMenuEntry<int>> get _items => separator
       ? (items
@@ -173,8 +184,9 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
     if (value != null && data != null) {
       onSelected?.call(value, data);
       $cast<GetTileData>(data)?.mapTo((GetTileData data) => data.onTap?.call());
-    } else
+    } else {
       onCanceled?.call();
+    }
   }
 
   @override

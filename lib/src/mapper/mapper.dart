@@ -4,7 +4,7 @@ import 'package:get_smart/src/mapper/transforms/get_transform.dart';
 import 'mappable.dart';
 import 'transforms/transformable.dart';
 
-typedef MapperSetter(v);
+typedef MapperSetter = dynamic Function(dynamic v);
 enum MapperType { fromJson, toJson }
 enum ValueType { unknown, list, map, numeric, string, bool, dynamic }
 
@@ -45,15 +45,15 @@ class Mapper {
       ...($cast<Mappable>(as)?.builders ?? []),
       ...(builders ?? [])
     ];
-    _builders.forEach((builder) {
+    for (var builder in _builders) {
       Mappable.factories.putIfAbsent(builder().runtimeType, () => builder);
-    });
+    }
     $debugPrint(Mappable.factories);
     final object = toObject<T>(as?.runtimeType);
     $debugPrint(object?.typeName);
-    _builders.forEach((builder) {
+    for (var builder in _builders) {
       Mappable.factories.remove(builder().runtimeType);
-    });
+    }
     return object;
   }
 
@@ -123,7 +123,7 @@ class Mapper {
       // Transform
       if (transform != null) {
         if (transform is GetTransform) {
-          setter(transform.fromJson(v != null ? v : json));
+          setter(transform.fromJson(v ?? json));
         } else if (type == ValueType.list) {
           assert(T.toString() != "dynamic",
               "Missing type at mapping for `$field`");
@@ -145,7 +145,10 @@ class Mapper {
         // List
         case ValueType.list:
           // Return it-self, if T is not set
-          if (T.toString() == "dynamic") return setter(v);
+          if (T.toString() == "dynamic") {
+            setter(v);
+            return;
+          }
           final List<T> list = [];
 
           for (int i = 0; i < v.length; i++) {
@@ -189,10 +192,10 @@ class Mapper {
             final item = transform.toJson(value[i]);
             if (item != null) list.add(item);
           }
-          this.json[field] = list;
+          json[field] = list;
         } else {
           value = transform.toJson(value);
-          this.json[field] = value;
+          json[field] = value;
         }
         return;
       }
@@ -207,20 +210,20 @@ class Mapper {
             if (item != null) list.add(item);
           }
 
-          this.json[field] = list;
+          json[field] = list;
           break;
 
         // Map
         case ValueType.map:
-          this.json[field] = value;
+          json[field] = value;
           break;
 
         default:
           if (value is Mappable) {
-            this.json[field] = value.toJson();
+            json[field] = value.toJson();
             return;
           }
-          this.json[field] = value;
+          json[field] = value;
       }
     } catch (e) {
       $debugPrint(e, "MappingError.toJson");

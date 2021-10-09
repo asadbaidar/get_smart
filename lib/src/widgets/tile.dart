@@ -18,57 +18,57 @@ const kExtendedPadding = 16.0;
 const kExtendedPaddingX = 16.0;
 const kExtendedPaddingY = 14.0;
 
-const kDensePaddingAll = const EdgeInsets.all(kDensePadding);
-const kMediumPaddingAll = const EdgeInsets.all(kMediumPadding);
-const kStandardPaddingAll = const EdgeInsets.all(kStandardPadding);
-const kExtendedPaddingAll = const EdgeInsets.all(kExtendedPadding);
+const kDensePaddingAll = EdgeInsets.all(kDensePadding);
+const kMediumPaddingAll = EdgeInsets.all(kMediumPadding);
+const kStandardPaddingAll = EdgeInsets.all(kStandardPadding);
+const kExtendedPaddingAll = EdgeInsets.all(kExtendedPadding);
 
-const kDensePaddingH = const EdgeInsets.symmetric(
+const kDensePaddingH = EdgeInsets.symmetric(
   horizontal: kDensePaddingX,
 );
-const kMediumPaddingH = const EdgeInsets.symmetric(
+const kMediumPaddingH = EdgeInsets.symmetric(
   horizontal: kMediumPaddingX,
 );
-const kStandardPaddingH = const EdgeInsets.symmetric(
+const kStandardPaddingH = EdgeInsets.symmetric(
   horizontal: kStandardPaddingX,
 );
-const kExtendedPaddingH = const EdgeInsets.symmetric(
+const kExtendedPaddingH = EdgeInsets.symmetric(
   horizontal: kExtendedPaddingX,
 );
 
-const kDensePaddingV = const EdgeInsets.symmetric(
+const kDensePaddingV = EdgeInsets.symmetric(
   horizontal: kDensePaddingY,
 );
-const kMediumPaddingV = const EdgeInsets.symmetric(
+const kMediumPaddingV = EdgeInsets.symmetric(
   horizontal: kMediumPaddingY,
 );
-const kStandardPaddingV = const EdgeInsets.symmetric(
+const kStandardPaddingV = EdgeInsets.symmetric(
   horizontal: kStandardPaddingY,
 );
-const kExtendedPaddingV = const EdgeInsets.symmetric(
+const kExtendedPaddingV = EdgeInsets.symmetric(
   horizontal: kExtendedPaddingY,
 );
 
-const kStandardPaddingForm = const EdgeInsets.symmetric(
+const kStandardPaddingForm = EdgeInsets.symmetric(
   horizontal: kStandardPaddingX,
   vertical: 4,
 );
 
-const kTileConstraints = const BoxConstraints(minHeight: 31);
+const kTileConstraints = BoxConstraints(minHeight: 31);
 const kTileFontSize = 14.0;
 const kTileRowFontSize = 12.0;
 
 const kTileRowLeadingMargin = EdgeInsets.zero;
-const kTileRowLeadingPadding = const EdgeInsets.only(right: kStandardPaddingX);
-const kTileRowLeadingDensePadding = const EdgeInsets.only(
+const kTileRowLeadingPadding = EdgeInsets.only(right: kStandardPaddingX);
+const kTileRowLeadingDensePadding = EdgeInsets.only(
   right: kDensePaddingX,
 );
-const kTileRowLeadingMediumPadding = const EdgeInsets.only(
+const kTileRowLeadingMediumPadding = EdgeInsets.only(
   right: kMediumPaddingX,
 );
-const kTileRowTrailingPadding = const EdgeInsets.only(left: 6);
-const kTileRowChildrenPadding = const EdgeInsets.all(0.5);
-const kTileRowConstraints = const BoxConstraints(minHeight: 26.5);
+const kTileRowTrailingPadding = EdgeInsets.only(left: 6);
+const kTileRowChildrenPadding = EdgeInsets.all(0.5);
+const kTileRowConstraints = BoxConstraints(minHeight: 26.5);
 const kTileRowTrailingSize = 20.0;
 const kTileRowLeadingSmallSize = 20.0;
 const kTileRowMaxLines = 2;
@@ -1810,8 +1810,7 @@ class GetTile extends StatelessWidget {
                                       trailingTop!,
                                       style: trailingStyle ?? context.caption,
                                     ),
-                              if (isTrailingTop && isTrailingBottom)
-                                SizedBox(height: 1.5),
+                              if (isTrailingTop && isTrailingBottom) 1.5.spaceY,
                               if (isTrailingBottom)
                                 trailingBottomChild?.mapIt((it) => IconTheme(
                                           data: IconThemeData(
@@ -1906,7 +1905,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -1960,7 +1959,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2014,7 +2013,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2068,7 +2067,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.start,
+    this.alignment = CrossAxisAlignment.start,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2122,7 +2121,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2176,7 +2175,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2230,7 +2229,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2284,7 +2283,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2338,7 +2337,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2393,7 +2392,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2447,7 +2446,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2501,7 +2500,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileRowConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2555,7 +2554,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileConstraints,
-    this.alignment: CrossAxisAlignment.start,
+    this.alignment = CrossAxisAlignment.start,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2609,7 +2608,7 @@ class GetTileRow extends StatelessWidget {
     this.trailingPadding = kTileRowTrailingPadding,
     this.childrenPadding = kTileRowChildrenPadding,
     this.constraints = kTileConstraints,
-    this.alignment: CrossAxisAlignment.center,
+    this.alignment = CrossAxisAlignment.center,
     this.onTap,
     this.onTapLeading,
     Key? key,
@@ -2696,7 +2695,7 @@ class GetTileRow extends StatelessWidget {
     return _text?.notEmpty == null &&
             child == null &&
             children?.isNotEmpty != true
-        ? Container(height: 0, width: 0)
+        ? 0.space
         : InkWell(
             highlightColor: _tintColor.highlighted,
             splashColor: _tintColor.lighted,
@@ -2831,16 +2830,17 @@ class GetTileSeparator extends StatelessWidget {
   }) : super(key: key);
 
   /// Tile separator with full edge to edge length
-  const GetTileSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
+  const GetTileSeparator.full({Key? key})
+      : this(style: SeparatorStyle.full, key: key);
 
   /// Tile separator with [kStandardPaddingX] padding at start
   const GetTileSeparator.notLeading({Key? key})
-      : this(style: SeparatorStyle.notLeading);
+      : this(style: SeparatorStyle.notLeading, key: key);
 
   /// Tile separator with `[kStandardPaddingX.twice + BoxedView.kBoxSize]`
   /// padding at start
   const GetTileSeparator.leading({Key? key})
-      : this(style: SeparatorStyle.leading);
+      : this(style: SeparatorStyle.leading, key: key);
 
   final double? margin;
   final SeparatorStyle style;
@@ -2863,16 +2863,17 @@ class GetLineSeparator extends StatelessWidget {
   }) : super(key: key);
 
   /// Tile separator with full edge to edge length
-  const GetLineSeparator.full({Key? key}) : this(style: SeparatorStyle.full);
+  const GetLineSeparator.full({Key? key})
+      : this(style: SeparatorStyle.full, key: key);
 
   /// Tile separator with [kStandardPaddingX] padding at start
   const GetLineSeparator.notLeading({Key? key})
-      : this(style: SeparatorStyle.notLeading);
+      : this(style: SeparatorStyle.notLeading, key: key);
 
   /// Tile separator with `[kStandardPaddingX.twice + BoxedView.kBoxSize]`
   /// padding at start
   const GetLineSeparator.leading({Key? key})
-      : this(style: SeparatorStyle.leading);
+      : this(style: SeparatorStyle.leading, key: key);
 
   final double? margin;
   final SeparatorStyle style;

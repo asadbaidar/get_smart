@@ -469,7 +469,7 @@ class GetTheme {
       bottomAppBarTheme: BottomAppBarTheme(
         elevation: 4,
         color: _bottomBackground,
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         elevation: 4,
@@ -489,13 +489,13 @@ class GetTheme {
         backgroundColor: _bottomBackground,
         selectedItemColor: _bottomForeground,
         unselectedItemColor: bottomTheme.hintColor.hinted,
-        selectedIconTheme: IconThemeData(size: 20),
-        unselectedIconTheme: IconThemeData(size: 20),
+        selectedIconTheme: const IconThemeData(size: 20),
+        unselectedIconTheme: const IconThemeData(size: 20),
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: _bottomBackground,
       ),
-      switchTheme: SwitchThemeData(
+      switchTheme: const SwitchThemeData(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         splashRadius: 16,
       ),
@@ -516,8 +516,9 @@ class GetTheme {
   static void resetSystemChrome(BuildContext context) {
     setErrorStyle(backgroundColor: context.backgroundColor);
     final _systemOverlayStyle = context.systemOverlayStyle;
-    if (_systemOverlayStyle != null)
+    if (_systemOverlayStyle != null) {
       SystemChrome.setSystemUIOverlayStyle(_systemOverlayStyle);
+    }
   }
 }
 

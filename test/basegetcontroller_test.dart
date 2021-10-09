@@ -23,7 +23,7 @@ class TestGetController extends BaseGetController {
   }
 
   Future _futureToRun(bool fail) async {
-    await Future.delayed(Duration(milliseconds: 50));
+    await Future.delayed(50.milliseconds);
     if (fail) {
       throw Exception('Broken Future');
     }
@@ -47,7 +47,7 @@ void main() {
       test(
           'When setBusyForObject is called with parameter true busy for that object should be true',
           () {
-        var property;
+        dynamic property;
         var controller = TestGetController();
         controller.setBusyForObject(property, true);
         expect(controller.busy(property), true);
@@ -56,7 +56,7 @@ void main() {
       test(
           'When setBusyForObject is called with true then false, should be false',
           () {
-        var property;
+        dynamic property;
         var controller = TestGetController();
         controller.setBusyForObject(property, true);
         controller.setBusyForObject(property, false);

@@ -4,11 +4,11 @@ import 'package:get_smart/get_smart.dart';
 
 extension TextInputTypeX on TextInputType {
   static TextInputType get numberFirst => Get.isIOS
-      ? TextInputType.numberWithOptions(signed: true)
+      ? const TextInputType.numberWithOptions(signed: true)
       : TextInputType.visiblePassword;
 
   static TextInputType get numberOnly =>
-      TextInputType.numberWithOptions(signed: true);
+      const TextInputType.numberWithOptions(signed: true);
 }
 
 extension TextInputFilter on TextInputFormatter {

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:math';
@@ -59,7 +61,7 @@ extension GetDebugUtils<T> on T {
   ]) {
     $print(value, tag);
     $debugLog(
-      value ?? this.toString(),
+      value ?? toString(),
       tag,
       $name(runtimeType),
     );
@@ -70,7 +72,7 @@ extension GetDebugUtils<T> on T {
     dynamic tag,
   ]) =>
       $log(
-        value ?? this.toString(),
+        value ?? toString(),
         tag,
         $name(runtimeType),
       );

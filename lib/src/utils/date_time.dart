@@ -265,10 +265,11 @@ extension GetDateTimePickerX on GetInterface {
       useRootNavigator: useRootNavigator,
       routeSettings: routeSettings,
     );
-    if (time != null)
+    if (time != null) {
       onPick(withTime?.setting(timeOfDay: time) ?? Date.from(timeOfDay: time));
-    else
+    } else {
       onCancel?.call();
+    }
   }
 
   Future<void> datePicker({
@@ -314,9 +315,10 @@ extension GetDateTimePickerX on GetInterface {
       routeSettings: routeSettings,
       builder: builder,
     );
-    if (date != null)
+    if (date != null) {
       onPick(withDate?.setting(date: date) ?? date);
-    else
+    } else {
       onCancel?.call();
+    }
   }
 }

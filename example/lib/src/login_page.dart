@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage();
+  const LoginPage({Key? key}) : super(key: key);
 
   GlobalKey<FormState> get form => use(GlobalKey<FormState>());
 
@@ -16,7 +16,7 @@ class LoginPage extends StatelessWidget {
         title: "Log In",
         children: [
           Padding(
-            padding: EdgeInsets.all(26),
+            padding: const EdgeInsets.all(26),
             child: GetForm(
               key: form,
               child: Column(children: [
@@ -25,7 +25,7 @@ class LoginPage extends StatelessWidget {
                   inputFormatters: [TextInputFilter.noWhitespace],
                   filled: true,
                 ),
-                SizedBox(height: 8),
+                8.spaceY,
                 GetTextField(
                   label: "Password",
                   inputFormatters: [TextInputFilter.noWhitespace],
@@ -33,11 +33,11 @@ class LoginPage extends StatelessWidget {
                   showCounter: false,
                   filled: true,
                 ),
-                SizedBox(height: 12),
+                12.spaceY,
                 GetButton.roundElevated(
                   horizontalPadding: 48,
                   verticalPadding: 14,
-                  child: Text("Log In"),
+                  child: const Text("Log In"),
                   onPressed: () {
                     if (isValid) Get.to(() => const HomePage());
                   },

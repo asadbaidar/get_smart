@@ -83,8 +83,11 @@ class _GetInteractiveViewerState extends State<GetInteractiveViewer>
       child: widget.child,
       onInteractionUpdate: (details) => scaleDetails.value = details,
       onInteractionStart: (details) {
-        if (!widget.enabled || placeholder != null || details.pointerCount <= 1)
+        if (!widget.enabled ||
+            placeholder != null ||
+            details.pointerCount <= 1) {
           return;
+        }
 
         setState(() {
           final renderViewer =
@@ -150,7 +153,7 @@ class _GetInteractiveViewerState extends State<GetInteractiveViewer>
         snap.value = 0;
         snap.animateTo(
           1,
-          duration: Duration(milliseconds: 250),
+          duration: 250.milliseconds,
           curve: Curves.ease,
         );
       });

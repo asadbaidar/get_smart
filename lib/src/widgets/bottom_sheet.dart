@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 class GetBottomSheet extends StatelessWidget {
-  GetBottomSheet({
+  const GetBottomSheet({
     this.title,
     this.content,
     this.leadingAction,
@@ -38,7 +38,7 @@ class GetBottomSheet extends StatelessWidget {
         children: [
           Clickable(
             child: Container(
-              constraints: BoxConstraints.expand(height: kToolbarHeight),
+              constraints: const BoxConstraints.expand(height: kToolbarHeight),
               color: Colors.transparent,
             ),
             onTap: () => dismissible ? Get.back() : null,
@@ -72,7 +72,7 @@ class GetBottomSheet extends StatelessWidget {
                       centerTitle: centerTitle,
                       //textTheme: context.textTheme,
                       primary: false,
-                      actions: [...(topActions ?? []), SizedBox(width: 6)],
+                      actions: [...(topActions ?? []), 6.spaceX],
                       leading: leadingAction,
                     ),
                   Flexible(
@@ -84,8 +84,7 @@ class GetBottomSheet extends StatelessWidget {
                           children: [
                             if (content != null)
                               Padding(
-                                padding: contentPadding ??
-                                    EdgeInsets.symmetric(horizontal: 16),
+                                padding: contentPadding ?? kStandardPaddingH,
                                 child: content,
                               ),
                             if (bottomActions?.isNotEmpty == true ||
@@ -99,13 +98,12 @@ class GetBottomSheet extends StatelessWidget {
                                     SizedBox(height: minHeight),
                                     if (bottomActions?.isNotEmpty == true)
                                       ...bottomActions!.expand(
-                                        (element) =>
-                                            [SizedBox(width: 6), element],
+                                        (e) => [6.spaceX, e],
                                       )
                                   ],
                                 ),
                               ),
-                            SizedBox(height: 16),
+                            16.spaceY,
                           ],
                         ),
                       ),
@@ -173,11 +171,11 @@ class RoundedHandle extends StatelessWidget {
           Container(
             height: 4,
             width: 36,
-            margin: EdgeInsets.only(top: 9),
+            margin: const EdgeInsets.only(top: 9),
             decoration: visible == true
                 ? ShapeDecoration(
                     color: (color ?? context.hintColor).withAlpha(50),
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(4)),
                     ),
                   )

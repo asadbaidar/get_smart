@@ -40,7 +40,7 @@ extension MediaQueryX on MediaQueryData {
 extension RandomX on Random {
   /// Generates a cryptographically secure random nonce
   String nonce([int length = 32]) {
-    final charset =
+    const charset =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     return List.generate(length, (_) => charset[nextInt(charset.length)])
         .join();
@@ -78,7 +78,8 @@ class GetException implements Exception {
 
   final dynamic message;
 
-  String toString() => message == null ? GetText.failed() : message;
+  @override
+  String toString() => message ?? GetText.failed();
 }
 
 typedef GetTimerCallback = void Function(Duration elapsed);
@@ -134,10 +135,11 @@ class GetTimer {
         if (countDown && _elapsed.value <= Duration.zero ||
             !countDown &&
                 duration != Duration.zero &&
-                _elapsed.value >= duration)
+                _elapsed.value >= duration) {
           _onCancel();
-        else
+        } else {
           _onTick();
+        }
       });
     }
   }
@@ -150,10 +152,11 @@ class GetTimer {
 
   void _onTick() {
     $debugPrint("elapsed $elapsed", tag);
-    if (countDown)
+    if (countDown) {
       _elapsed.value -= period;
-    else
+    } else {
       _elapsed.value += period;
+    }
     onTick?.call(elapsed);
   }
 
