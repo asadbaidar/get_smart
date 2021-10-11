@@ -262,12 +262,6 @@ abstract class GetController extends MultipleFutureGetController {
   /// Sets the runner for the ViewModel
   void setRunner(Future Function() runner) => setRunnerFor(typeName, runner);
 
-  /// Sets the busy status by key and calls notify listeners
-  void setBusyFor(key, bool value) => setBusyForObject(key, value);
-
-  /// Sets the error by key
-  void setErrorFor(key, value) => setErrorForObject(key, value);
-
   /// Sets the data by key
   void setDataFor(Object key, value) => dataMap[key.$hash] = value;
 

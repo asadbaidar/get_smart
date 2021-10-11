@@ -49,7 +49,7 @@ void main() {
           () {
         dynamic property;
         var controller = TestGetController();
-        controller.setBusyForObject(property, true);
+        controller.setBusyFor(property, true);
         expect(controller.busy(property), true);
       });
 
@@ -58,8 +58,8 @@ void main() {
           () {
         dynamic property;
         var controller = TestGetController();
-        controller.setBusyForObject(property, true);
-        controller.setBusyForObject(property, false);
+        controller.setBusyFor(property, true);
+        controller.setBusyFor(property, false);
         expect(controller.busy(property), false);
       });
 

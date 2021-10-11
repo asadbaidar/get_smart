@@ -22,9 +22,9 @@ class BaseGetController extends GetxController {
 
   /// Returns the busy status for an object if it exists.
   /// Returns false if not present
-  bool busy(Object? object) => _busyStates[object.hashCode] ?? false;
+  bool busy(Object? key) => _busyStates[key.hashCode] ?? false;
 
-  String? error(Object object) => _errorStates[object.hashCode]?.toString();
+  String? error(Object key) => _errorStates[key.hashCode]?.toString();
 
   /// Returns the busy status of the ViewModel
   bool get isBusy => busy(this);
@@ -47,12 +47,12 @@ class BaseGetController extends GetxController {
 
   /// Marks the viewmodel as busy and calls notify listeners
   void setBusy(bool value) {
-    setBusyForObject(this, value);
+    setBusyFor(this, value);
   }
 
   /// Sets the error for the ViewModel
   void setError(dynamic error) {
-    setErrorForObject(this, error);
+    setErrorFor(this, error);
   }
 
   /// Returns a boolean that indicates if the viewmodel has an error for the key
@@ -68,17 +68,17 @@ class BaseGetController extends GetxController {
     _busyStates.clear();
   }
 
-  /// Sets the busy state for the object equal to the value passed in and notifies Listeners
+  /// Sets the busy status by key and calls notify listeners
   /// If you're using a primitive type the value SHOULD NOT BE CHANGED, since Hashcode uses == value
-  void setBusyForObject(Object? object, bool value) {
-    _busyStates[object.hashCode] = value;
+  void setBusyFor(Object key, bool value) {
+    _busyStates[key.hashCode] = value;
     update();
   }
 
-  /// Sets the error state for the object equal to the value passed in and notifies Listeners
+  /// Sets the error state for the key equal to the value passed in and notifies Listeners
   /// If you're using a primitive type the value SHOULD NOT BE CHANGED, since Hashcode uses == value
-  void setErrorForObject(Object object, dynamic value) {
-    _errorStates[object.hashCode] = value;
+  void setErrorFor(Object key, dynamic value) {
+    _errorStates[key.hashCode] = value;
     update();
   }
 
@@ -90,14 +90,14 @@ class BaseGetController extends GetxController {
   /// rethrows [Exception] after setting busy to false for object or class
   Future runBusyFuture(Future busyFuture,
       {Object? key, bool throwException = false}) async {
-    _setBusyForModelOrObject(true, busyObject: key);
+    _setBusyForModelOrObject(true, key: key);
     try {
       var value = await runErrorFuture(busyFuture,
           key: key, throwException: throwException);
-      _setBusyForModelOrObject(false, busyObject: key);
+      _setBusyForModelOrObject(false, key: key);
       return value;
     } catch (e) {
-      _setBusyForModelOrObject(false, busyObject: key);
+      _setBusyForModelOrObject(false, key: key);
       if (throwException) rethrow;
     }
   }
@@ -125,19 +125,19 @@ class BaseGetController extends GetxController {
     _onModelReadyCalled = value;
   }
 
-  void _setBusyForModelOrObject(bool value, {Object? busyObject}) {
-    if (busyObject != null) {
-      setBusyForObject(busyObject, value);
+  void _setBusyForModelOrObject(bool value, {Object? key}) {
+    if (key != null) {
+      setBusyFor(key, value);
     } else {
-      setBusyForObject(this, value);
+      setBusyFor(this, value);
     }
   }
 
   void _setErrorForModelOrObject(dynamic value, {Object? key}) {
     if (key != null) {
-      setErrorForObject(key, value);
+      setErrorFor(key, value);
     } else {
-      setErrorForObject(this, value);
+      setErrorFor(this, value);
     }
   }
 
@@ -309,13 +309,13 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
       runBusyFuture(futuresMap[key]!(), key: key, throwException: true)
           .then((futureData) {
         _dataMap![key as String] = futureData;
-        setBusyForObject(key, false);
+        setBusyFor(key, false);
         update();
         onData(key);
         _incrementAndCheckFuturesCompleted();
       }).catchError((error) {
-        setErrorForObject(key, error);
-        setBusyForObject(key, false);
+        setErrorFor(key, error);
+        setBusyFor(key, false);
         onError(key, error);
         update();
         _incrementAndCheckFuturesCompleted();
@@ -372,7 +372,7 @@ abstract class MultipleStreamGetController extends _MultiDataSourceGetController
       // If a lifecycle function isn't supplied, we fallback to default
       _streamsSubscriptions![key] = streamsMap[key]!.stream.listen(
         (incomingData) {
-          setErrorForObject(key, null);
+          setErrorFor(key, null);
           update();
           // Extra security in case transformData isnt sent
           var interceptedData = streamsMap[key]!.transformData == null
@@ -391,7 +391,7 @@ abstract class MultipleStreamGetController extends _MultiDataSourceGetController
               : onData(key, _dataMap![key]);
         },
         onError: (error) {
-          setErrorForObject(key, error);
+          setErrorFor(key, error);
           _dataMap![key] = null;
 
           streamsMap[key]?._onError != null
