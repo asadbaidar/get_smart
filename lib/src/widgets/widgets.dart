@@ -260,6 +260,32 @@ class MessageView extends StatelessWidget {
     this.emptyTitle,
     this.emptyMessage,
     this.error,
+    this.flexible = true,
+    this.topPadding = 16,
+    this.bottomPadding = 80,
+    this.leftPadding = 32,
+    this.rightPadding = 32,
+    this.horizontalPadding,
+    this.verticalPadding,
+    Key? key,
+  }) : super(key: key);
+
+  const MessageView.shrink({
+    this.icon,
+    this.errorIcon,
+    this.action,
+    this.onAction,
+    this.message,
+    this.emptyTitle,
+    this.emptyMessage,
+    this.error,
+    this.flexible = false,
+    this.topPadding = 16,
+    this.bottomPadding = 16,
+    this.leftPadding = 32,
+    this.rightPadding = 32,
+    this.horizontalPadding,
+    this.verticalPadding,
     Key? key,
   }) : super(key: key);
 
@@ -271,6 +297,13 @@ class MessageView extends StatelessWidget {
   final String? emptyTitle;
   final String? emptyMessage;
   final dynamic error;
+  final bool flexible;
+  final double? topPadding;
+  final double? bottomPadding;
+  final double? leftPadding;
+  final double? rightPadding;
+  final double? horizontalPadding;
+  final double? verticalPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -291,11 +324,11 @@ class MessageView extends StatelessWidget {
             : action;
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.only(
-        top: 16,
-        left: 32,
-        right: 32,
-        bottom: 80,
+      padding: EdgeInsets.only(
+        top: verticalPadding ?? topPadding ?? 0,
+        bottom: verticalPadding ?? bottomPadding ?? 0,
+        left: horizontalPadding ?? leftPadding ?? 0,
+        right: horizontalPadding ?? rightPadding ?? 0,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -307,13 +340,11 @@ class MessageView extends StatelessWidget {
             ),
           16.spaceY,
           if (_message != null)
-            Flexible(
-              child: Text(
-                _message.toString().trim(),
-                textAlign: TextAlign.center,
-                style: context.subtitle1?.apply(fontSizeDelta: 1),
-              ),
-            ),
+            Text(
+              _message.toString().trim(),
+              textAlign: TextAlign.center,
+              style: context.subtitle1?.apply(fontSizeDelta: 1),
+            ).flex(enabled: flexible),
           16.spaceY,
           if (_action != null)
             GetButton.outlined(
