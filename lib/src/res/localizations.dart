@@ -20,11 +20,11 @@ class GetLocalizations {
   static const GetLocalizationsDelegate delegate = GetLocalizationsDelegate();
 
   GetLocalizations(this.locale)
-      : symbols = numberFormatSymbols[locale.toString()] ??
-            numberFormatSymbols[english.toString()],
+      : symbols = numberFormatSymbols[locale.code] ??
+            numberFormatSymbols[english.code..$debugPrint()],
         currencyFraction = currencyFractionDigits[
-                (numberFormatSymbols[locale.toString()] ??
-                        numberFormatSymbols[english.toString()])
+                (numberFormatSymbols[locale.code] ??
+                        numberFormatSymbols[english.code])
                     .DEF_CURRENCY_CODE] ??
             2;
 
@@ -33,7 +33,9 @@ class GetLocalizations {
   final int currencyFraction;
 
   static GetLocalizations? get current {
-    return Localizations.of<GetLocalizations>(Get.context!, GetLocalizations);
+    return Get.context != null
+        ? Localizations.of<GetLocalizations>(Get.context!, GetLocalizations)
+        : null;
   }
 }
 
@@ -54,4 +56,9 @@ class GetLocalizationsDelegate extends LocalizationsDelegate<GetLocalizations> {
 
   @override
   bool shouldReload(GetLocalizationsDelegate old) => false;
+}
+
+extension LocaleX on Locale {
+  String get code =>
+      toString().applyIf(countryCode?.notEmpty == null, (s) => languageCode)!;
 }

@@ -10,6 +10,8 @@ extension ColorX on Color {
 
   Brightness get brightness => isDark ? Brightness.light : Brightness.dark;
 
+  ThemeData get theme => isDark ? ThemeData.dark() : ThemeData.light();
+
   Color get darker => withBlue(max(blue - 50, 0))
       .withGreen(max(green - 50, 0))
       .withRed(max(red - 50, 0));

@@ -23,6 +23,7 @@ class GetAppBar {
     Widget? customTitle,
     String? title,
     TextStyle? titleStyle,
+    Color? backgroundColor,
     bool? centerTitle,
     bool interactive = true,
     bool showLeading = true,
@@ -52,6 +53,7 @@ class GetAppBar {
               fontWeight: titleStyle?.fontWeight,
               fontFamily: titleStyle?.fontFamily,
             ),
+            backgroundColor: backgroundColor,
             leading: showLeading ? leading ?? GetButton.back() : null,
             leadingWidth: leadingWidth,
             titleSpacing: titleSpacing,
@@ -85,6 +87,7 @@ class GetAppBar {
     String? title,
     TextStyle? titleStyle,
     TextStyle? largeTitleStyle,
+    Color? backgroundColor,
     bool largeTitle = true,
     bool? centerTitle,
     bool floating = false,
@@ -206,8 +209,8 @@ class GetAppBar {
           leading: showLeading ? leading ?? GetButton.back() : null,
           centerTitle:
               context.appBarCenterTitle(centerTitle, actions: _actions),
-          backgroundColor:
-              context.primaryColor.applyIf(_blur > 0, (it) => it.translucent),
+          backgroundColor: (backgroundColor ?? context.primaryColor)
+              .applyIf(_blur > 0, (it) => it.translucent),
           title: customTitle ??
               title?.mapIt((it) => !_hasLargeTitle
                   ? Text(it)
@@ -270,7 +273,11 @@ class GetAppBar {
               : null,
         );
       }),
-      sliverRefresh ?? CupertinoSliverSwipeRefresh(onRefresh: onRefresh),
+      sliverRefresh ??
+          CupertinoSliverSwipeRefresh(
+            onRefresh: onRefresh,
+            backgroundColor: backgroundColor,
+          ),
       SliverLayoutBuilder(builder: (context, constraints) {
         // $debugPrint(constraints);
         final _offset = constraints.scrollOffset == 0
@@ -285,7 +292,7 @@ class GetAppBar {
             alignment: Alignment.bottomCenter,
             children: [
               Material(
-                color: context.primaryColor,
+                color: backgroundColor ?? context.primaryColor,
                 shadowColor: context.appBarShadowColor,
                 elevation: context.appBarElevation * 0.8,
                 child: floating ||

@@ -111,6 +111,7 @@ class CupertinoSliverSwipeRefresh extends StatelessWidget {
     this.refreshIndicatorExtent = 60.0,
     RefreshControlIndicatorBuilder? builder,
     bool? enabled,
+    Color? backgroundColor,
     this.onRefresh,
     Key? key,
   })  : _key = key,
@@ -129,6 +130,7 @@ class CupertinoSliverSwipeRefresh extends StatelessWidget {
                   refreshTriggerPullDistance,
                   refreshIndicatorExtent,
                   enabled ?? onRefresh != null,
+                  backgroundColor,
                 )),
         super(key: null);
 
@@ -197,6 +199,7 @@ class CupertinoSliverSwipeRefresh extends StatelessWidget {
     double refreshTriggerPullDistance,
     double refreshIndicatorExtent,
     bool enabled,
+    Color? backgroundColor,
   ) {
     final double percentageComplete =
         (pulledExtent / refreshTriggerPullDistance).clamp(0.0, 1.0);
@@ -208,9 +211,10 @@ class CupertinoSliverSwipeRefresh extends StatelessWidget {
     // of the activity indicator, the Positioned widget allows us to be explicit where the
     // widget gets placed. Also note that the indicator should appear over the top of the
     // dragged widget, hence the use of Overflow.visible.
+    Color _backgroundColor = backgroundColor ?? context.primaryColor;
     return Container(
       alignment: Alignment.center,
-      color: context.primaryColor,
+      color: _backgroundColor,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -219,10 +223,13 @@ class CupertinoSliverSwipeRefresh extends StatelessWidget {
               // top: 12.0,
               // left: 0.0,
               // right: 0.0,
-              child: _buildIndicatorForRefreshState(
-                refreshState,
-                14.0,
-                percentageComplete,
+              child: ThemeBuilder.theme(
+                _backgroundColor.theme,
+                builder: (_) => _buildIndicatorForRefreshState(
+                  refreshState,
+                  14.0,
+                  percentageComplete,
+                ),
               ),
             ),
         ],
