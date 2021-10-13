@@ -43,7 +43,7 @@ class TestMultipleFutureGetController extends MultipleFutureGetController {
   int numberToReturn = 5;
 
   @override
-  Map<Object, Future Function()> get futuresMap => {
+  Map<Object, Future Function()> get futuresToRun => {
         numberDelayFuture: getNumberAfterDelay,
         stringDelayFuture: getStringAfterDelay,
       };
@@ -132,8 +132,8 @@ void main() {
       var futureGetController = TestMultipleFutureGetController();
       await futureGetController.initialise();
 
-      expect(futureGetController.dataMap![numberDelayFuture], 5);
-      expect(futureGetController.dataMap![stringDelayFuture], 'String data');
+      expect(futureGetController.dataMap[numberDelayFuture], 5);
+      expect(futureGetController.dataMap[stringDelayFuture], 'String data');
     });
 
     test(
@@ -142,8 +142,8 @@ void main() {
       var futureGetController = TestMultipleFutureGetController(failOne: true);
       await futureGetController.initialise();
 
-      expect(futureGetController.hasErrorForKey(numberDelayFuture), true);
-      expect(futureGetController.hasErrorForKey(stringDelayFuture), false);
+      expect(futureGetController.hasErrorFor(numberDelayFuture), true);
+      expect(futureGetController.hasErrorFor(stringDelayFuture), false);
     });
 
     test(
@@ -152,8 +152,8 @@ void main() {
       var futureGetController = TestMultipleFutureGetController(failOne: true);
       await futureGetController.initialise();
 
-      expect(futureGetController.dataMap![numberDelayFuture], null);
-      expect(futureGetController.dataMap![stringDelayFuture], 'String data');
+      expect(futureGetController.dataMap[numberDelayFuture], null);
+      expect(futureGetController.dataMap[stringDelayFuture], 'String data');
     });
 
     test('When multiple futures run the key should be set to indicate busy',
@@ -161,8 +161,7 @@ void main() {
       var futureGetController = TestMultipleFutureGetController();
       futureGetController.initialise();
 
-      expect(futureGetController.busy(numberDelayFuture), true);
-      expect(futureGetController.busy(stringDelayFuture), true);
+      expect(futureGetController.isBusy, true);
     });
 
     test(
@@ -211,11 +210,11 @@ void main() {
       test('notifySourceChanged - When called should re-run Future', () async {
         var futureGetController = TestMultipleFutureGetController();
         await futureGetController.initialise();
-        expect(futureGetController.dataMap![numberDelayFuture], 5);
+        expect(futureGetController.dataMap[numberDelayFuture], 5);
         futureGetController.numberToReturn = 10;
         futureGetController.notifySourceChanged();
         await futureGetController.initialise();
-        expect(futureGetController.dataMap![numberDelayFuture], 10);
+        expect(futureGetController.dataMap[numberDelayFuture], 10);
       });
     });
   });

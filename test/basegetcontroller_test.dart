@@ -5,7 +5,7 @@ class TestGetController extends BaseGetController {
   bool onErrorCalled = false;
 
   Future runFuture(
-      {String? busyKey, bool fail = false, bool throwException = false}) {
+      {Object? busyKey, bool fail = false, bool throwException = false}) {
     return runBusyFuture(
       _futureToRun(fail),
       key: busyKey,
@@ -14,7 +14,7 @@ class TestGetController extends BaseGetController {
   }
 
   Future runTestErrorFuture(
-      {String? key, bool fail = false, bool throwException = false}) {
+      {Object? key, bool fail = false, bool throwException = false}) {
     return runErrorFuture(
       _futureToRun(fail),
       key: key,
@@ -45,22 +45,21 @@ void main() {
       });
 
       test(
-          'When setBusyForObject is called with parameter true busy for that object should be true',
+          'When setBusyFor is called with parameter true busy for that object should be true',
           () {
-        dynamic property;
+        const key = "key";
         var controller = TestGetController();
-        controller.setBusyFor(property, true);
-        expect(controller.busy(property), true);
+        controller.setBusyFor(key, true);
+        expect(controller.busy(key), true);
       });
 
-      test(
-          'When setBusyForObject is called with true then false, should be false',
+      test('When setBusyFor is called with true then false, should be false',
           () {
-        dynamic property;
+        const key = "key";
         var controller = TestGetController();
-        controller.setBusyFor(property, true);
-        controller.setBusyFor(property, false);
-        expect(controller.busy(property), false);
+        controller.setBusyFor(key, true);
+        controller.setBusyFor(key, false);
+        expect(controller.busy(key), false);
       });
 
       test('When busyFuture is run should report busy for the model', () {

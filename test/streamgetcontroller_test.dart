@@ -51,7 +51,7 @@ class TestMultipleStreamGetController extends MultipleStreamGetController {
   int cancelledCalls = 0;
 
   @override
-  Map<String, StreamData> get streamsMap => {
+  Map<Object, StreamData> get streamsMap => {
         _numberStream: StreamData(numberStream(
           5,
           fail: failOne,
@@ -65,7 +65,7 @@ class TestMultipleStreamGetController extends MultipleStreamGetController {
       };
 
   @override
-  void onCancel(String key) {
+  void onCancel(Object key) {
     cancelledCalls++;
   }
 }
@@ -77,7 +77,7 @@ class TestMultipleStreamGetControllerWithOverrides
   int? loadedData;
 
   @override
-  Map<String, StreamData> get streamsMap => {
+  Map<Object, StreamData> get streamsMap => {
         _numberStream: StreamData(
           numberStream(5, fail: false, delay: 0),
           onData: _loadData,
@@ -179,8 +179,8 @@ void main() async {
       var streamGetController = TestMultipleStreamGetController();
       streamGetController.initialise();
       await Future.delayed(4.milliseconds);
-      expect(streamGetController.dataMap![_numberStream], 5);
-      expect(streamGetController.dataMap![_stringStream], 'five');
+      expect(streamGetController.dataMap[_numberStream], 5);
+      expect(streamGetController.dataMap[_stringStream], 'five');
     });
 
     test(
@@ -189,7 +189,7 @@ void main() async {
       var streamGetController = TestMultipleStreamGetController(failOne: true);
       streamGetController.initialise();
       await Future.delayed(1.milliseconds);
-      expect(streamGetController.hasErrorForKey(_numberStream), true);
+      expect(streamGetController.hasErrorFor(_numberStream), true);
       // Make sure we only have 1 error
       // expect(streamGetController.errorMap.values.where((v) => v == true).length, 1);
     });
@@ -263,7 +263,7 @@ void main() async {
       await Future.delayed(const Duration(milliseconds: 20));
       streamGetController.notifySourceChanged();
 
-      expect(streamGetController.dataMap![_numberStream], 5);
+      expect(streamGetController.dataMap[_numberStream], 5);
     });
 
     test(
@@ -275,7 +275,7 @@ void main() async {
       await Future.delayed(const Duration(milliseconds: 20));
       streamGetController.notifySourceChanged(clearOldData: true);
 
-      expect(streamGetController.dataMap![_numberStream], null);
+      expect(streamGetController.dataMap[_numberStream], null);
     });
   });
 }

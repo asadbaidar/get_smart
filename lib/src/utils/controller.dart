@@ -6,75 +6,15 @@ import 'package:get_smart/get_smart.dart';
 abstract class GetController extends MultipleFutureGetController {
   final actionName = "action";
 
-  @override
-  Map<String, dynamic> get dataMap => _dataMap;
-  final Map<String, dynamic> _dataMap = {};
-
-  Map<dynamic, Future Function()> get runnerMap => _runnerMap;
-  final Map<dynamic, Future Function()> _runnerMap = {};
-
-  late Completer _futuresCompleter;
-  int _futuresCompleted = 0;
-  bool _isModelReady = false;
-
-  void _initialiseData() {
-    _futuresCompleted = 0;
-    _isModelReady = false;
-  }
+  /// To mark, if prefs should be reloaded [beforeInit]. Defaults to true.
+  bool get loadPrefsOnInit => true;
 
   @override
-  Future initialise() async {
-    _futuresCompleter = Completer();
-    _initialiseData();
-    // We set busy manually as well because when notify listeners is called
-    // to clear error messages, ui is rebuilt and busy is not true.
-    clearErrors();
-    setBusy(true);
-    update();
-    if (loadPrefsOnInit) await GetPrefs.instance.reload();
+  Future beforeInit() async =>
+      loadPrefsOnInit ? await GetPrefs.instance.reload() : Future.value();
 
-    for (var key in futuresMap.keys) {
-      runErrorFuture(
-        futuresMap[key]!(),
-        key: key,
-        throwException: true,
-      ).then((result) {
-        setDataFor(key, result);
-        if (key != typeName) setBusyFor(key, false);
-        if (result is GetResult && result.error != null) {
-          setErrorFor(typeName, result.error);
-        }
-        update();
-        onData(key);
-        _incrementAndCheckFuturesCompleted();
-      }).catchError((error) {
-        setErrorFor(key, error);
-        if (key != typeName) setBusyFor(key, false);
-        onError(key, error);
-        update();
-        _incrementAndCheckFuturesCompleted();
-      });
-    }
-    changeSource = false;
-    return _futuresCompleter.future;
-  }
-
-  void _incrementAndCheckFuturesCompleted() {
-    _futuresCompleted++;
-    if (_futuresCompleted == futuresMap.length &&
-        !_futuresCompleter.isCompleted) {
-      _futuresCompleter.complete();
-      setBusy(false);
-      _isModelReady = true;
-      onDataReady();
-    }
-  }
-
-  @override
-  void onClose() {
-    _cancelWebApis();
-    super.onClose();
-  }
+  /// Include all web APIs for cleanup when closed
+  List<GetWebAPI> get webAPIs => [];
 
   void _cancelWebApis() {
     try {
@@ -84,33 +24,18 @@ abstract class GetController extends MultipleFutureGetController {
     } catch (_) {}
   }
 
-  /// Include all web APIs for cleanup when closed
-  List<GetWebAPI> get webAPIs => [];
-
   @override
-  Map<Object, Future Function()> get futuresMap => {
-        typeName: futureToRun,
-        ...futuresToRun,
-      };
-
-  /// Run the futures again and refresh
-  Future refreshData() => initialise();
-
-  /// Multiple futures to run at the startup
-  Map<Object, Future Function()> get futuresToRun => {};
-
-  /// Single future to run at the startup
-  Future futureToRun() => Future.value();
-
-  /// To mark, if prefs should be reloaded [onInit]. Defaults to true.
-  bool get loadPrefsOnInit => true;
+  void onClose() {
+    _cancelWebApis();
+    super.onClose();
+  }
 
   /// Returns true if all objects have succeeded.
   bool get isAllSucceeded => dataMap.keys.every((k) => succeeded(k));
 
-  /// Returns data for any object which did not succeed.
+  /// Returns result for any object which did not succeed.
   GetResult get anyNotSucceeded =>
-      data(dataMap.keys.firstWhereOrNull((k) => !succeeded(k)) ?? "") ??
+      result(dataMap.keys.firstWhereOrNull((k) => !succeeded(k)) ?? "") ??
       GetResult.success();
 
   /// Returns the data ready status of the action if no error occurred
@@ -152,7 +77,7 @@ abstract class GetController extends MultipleFutureGetController {
   /// Sets or Returns the data of the action
   GetResult<T>? actionData<T>([value]) {
     if (value == null) {
-      return data<T>(actionName);
+      return result<T>(actionName);
     } else {
       setDataFor(actionName, value);
       return value;
@@ -185,50 +110,15 @@ abstract class GetController extends MultipleFutureGetController {
         throwException: throwException,
       );
 
-  /// Returns the data ready status of the ViewModel if no error occurred
-  bool get isDataReady => dataReady(typeName);
-
-  /// Returns the ready status of the ViewModel when all futures are completed
-  bool get isModelReady => _isModelReady;
-
-  /// Returns the data ready status of the ViewModel even if error occurred
-  bool get isReady => ready(typeName);
-
-  /// Returns the busy status of the ViewModel
-  @override
-  bool get isBusy => busy(typeName);
-
-  /// Returns the error status of the ViewModel and checks if condition valid
-  bool hasErrorOr([bool? condition]) =>
-      !isBusy &&
-      (hasError || ((condition ?? true) && (isReady || isModelReady)));
-
-  /// Returns the error status of the ViewModel
-  @override
-  bool get hasError => hasErrorFor(typeName);
-
-  /// Returns the error status of the ViewModel
-  @override
-  String? get modelError => error(typeName);
-
-  /// Sets the error for the ViewModel
-  set modelError(value) => setError(value);
-
   /// Sets or Returns the data of the ViewModel
-  GetResult<T>? modelData<T>([value]) {
+  GetResult<T>? modelResult<T>([value]) {
     if (value == null) {
-      return data<T>(typeName);
+      return result<T>(typeName);
     } else {
       setData(value);
       return value;
     }
   }
-
-  /// Returns the runner of the ViewModel
-  Future Function() get modelRunner => runner(typeName);
-
-  /// Sets the runner for the ViewModel
-  set modelRunner(value) => setRunner(value);
 
   /// Returns the status of the ViewModel if started or not
   bool get isStarted => started(typeName);
@@ -248,46 +138,18 @@ abstract class GetController extends MultipleFutureGetController {
   /// Returns the success message of the ViewModel
   String? get modelSuccess => success(typeName);
 
-  /// Sets the busy status for the ViewModel and calls notify listeners
-  @override
-  void setBusy(bool value) => setBusyFor(typeName, value);
-
-  /// Sets the error for the ViewModel
-  @override
-  void setError(error) => setErrorFor(typeName, error);
-
-  /// Sets the data for the ViewModel
-  void setData(data) => setDataFor(typeName, data);
-
-  /// Sets the runner for the ViewModel
-  void setRunner(Future Function() runner) => setRunnerFor(typeName, runner);
-
-  /// Sets the data by key
-  void setDataFor(Object key, value) => dataMap[key.$hash] = value;
-
-  /// Sets the runner by key
-  void setRunnerFor(Object key, Future Function() value) =>
-      runnerMap[key.$hash] = value;
-
-  /// Returns the runner by key
-  Future Function() runner(Object key) =>
-      runnerMap[key.$hash] ?? () => Future.value();
-
-  /// Returns the data by key
-  GetResult<T>? data<T>(Object key) => $cast<GetResult<T>>(dataMap[key.$hash]);
+  /// Returns the result data by key
+  GetResult<T>? result<T>(Object key) => data<GetResult<T>>(key);
 
   /// Returns the success message by key
-  String? success(Object key) => data(key)?.success;
+  String? success(Object key) => result(key)?.success;
 
   /// Returns the data ready status by key even if error occurred
-  bool ready(key) => data(key) != null;
-
-  /// Returns the data ready status by key even if no error occurred
   @override
-  bool dataReady(key) => ready(key) && !hasErrorFor(key);
+  bool ready(Object key) => result(key) != null;
 
   /// Returns the [GetStatus] by key
-  GetStatus? status(key) => busy(key) ? GetStatus.busy : data(key)?.status;
+  GetStatus? status(key) => busy(key) ? GetStatus.busy : result(key)?.status;
 
   /// Returns the status by key if started or not
   bool started(key) => status(key) != null && status(key) != GetStatus.canceled;
@@ -301,71 +163,10 @@ abstract class GetController extends MultipleFutureGetController {
   /// Returns the status by key if failed or not
   bool failed(key) => status(key) == GetStatus.failed;
 
-  /// Returns the error status by key
-  bool hasErrorFor(key) => error(key) != null;
-
   /// Cancels the future by key and clear the associated data
   void cancelFuture([key]) {
     _cancelWebApis();
     clearData(key ?? typeName);
-  }
-
-  /// Clears the data by key
-  void clearData([key]) {
-    setDataFor(key ?? typeName, null);
-    clearErrors();
-    clearBusy();
-    update();
-  }
-
-  /// Clears all data and errors
-  void clearAllData() {
-    dataMap.clear();
-    clearErrors();
-    clearBusy();
-    update();
-  }
-
-  final StackList<Future> _futureQueue = StackList.from([Future.value()]);
-
-  /// Sets the key for error logs, runs the future in queue which means next
-  /// future will not run unless the previous gets completed.
-  ///
-  /// key: by default `typeName`, if null, status will be update in default key
-  Future runFutureQueue(
-    Future Function() future, {
-    Object? key,
-    bool throwException = false,
-  }) =>
-      (_futureQueue.pop() ?? Future.value()).whenComplete(() => runErrorFuture(
-            _futureQueue.push(future()),
-            key: key,
-            throwException: throwException,
-          ));
-
-  /// Sets the key to busy, runs the runner and then sets it to not busy
-  /// when completed.
-  ///
-  /// key: by default `typeName`, if null, status will be update in default key
-  ///
-  /// rethrows [Exception] after setting busy to false by key
-  Future runBusyRunner(
-    Future Function() busyRunner, {
-    Object? key,
-    bool throwException = false,
-  }) {
-    var _key = key ?? typeName;
-    runner() async {
-      setDataFor(_key, null);
-      return await runBusyFuture(
-        busyRunner(),
-        key: _key,
-        throwException: throwException,
-      );
-    }
-
-    setRunnerFor(_key, runner);
-    return runner();
   }
 
   /// Sets the ViewModel to busy, runs the future and then sets it to not busy when complete.
