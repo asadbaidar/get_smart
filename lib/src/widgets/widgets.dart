@@ -119,7 +119,13 @@ class BoxView extends StatelessWidget {
 
   double? get _size => filled ? boxSize : null;
 
-  Widget? _text() => $cast<Text>(child)?.mapTo(
+  Widget? _text() => $cast<Text>(child is! Widget &&
+                  child is! ImageProvider &&
+                  child is! IconData &&
+                  child?.toString().isNotEmpty == true
+              ? Text(child.toString())
+              : child)
+          ?.mapTo(
         (Text it) => Text(
           it.data?.take(boxSize > kBoxSize ? 3 : 2).uppercase ?? "",
           textAlign: TextAlign.center,
@@ -136,21 +142,21 @@ class BoxView extends StatelessWidget {
         ),
       );
 
-  Widget? _icon() => $cast<Icon>(child)?.mapTo(
-        (Icon it) => IconTheme(
-          child: it,
-          data: IconThemeData(
-            size: it.size ??
-                iconSize ??
-                (filled
-                    ? 18
-                    : small == true
-                        ? 24
-                        : 30),
-            color: it.color ?? (filled ? color?.contrast : color),
-          ),
-        ),
-      );
+  Widget? _icon() => $cast<Icon>(
+          $cast<IconData>(child)?.mapTo((IconData it) => Icon(it)) ?? child)
+      ?.mapTo((Icon it) => IconTheme(
+            child: it,
+            data: IconThemeData(
+              size: it.size ??
+                  iconSize ??
+                  (filled
+                      ? 18
+                      : small == true
+                          ? 24
+                          : 30),
+              color: it.color ?? (filled ? color?.contrast : color),
+            ),
+          ));
 
   Widget? _image() => $cast<ImageProvider>(child)?.mapTo(
         (ImageProvider it) => Image(

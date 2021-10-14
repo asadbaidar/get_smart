@@ -133,10 +133,10 @@ extension ObjectX on Object {
   FutureOr<T> future<T>() => Future.value(this as T);
 
   /// Returns [hashCode] as [String]
-  String get $hash => hashCode.toString();
+  String get hashString => hashCode.toString();
 
   /// Returns random integer seeded with [hashCode] and less than [max]
-  int randomTill(int max) => Random(hashCode).nextInt(max);
+  int randomIn(int max) => Random(hashCode).nextInt(max);
 
   /// Returns only name of the enum value with capitalized form
   String get keyName => toString().split('.').last;
