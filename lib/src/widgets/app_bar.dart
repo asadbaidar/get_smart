@@ -31,7 +31,7 @@ class GetAppBar {
     double bottomHeight = 0.0,
     double bottomConstant = 48.0,
     double leadingWidth = 40.0,
-    double titleSpacing = 8.0,
+    double? titleSpacing,
   }) {
     final _actions = interactive ? actions : null;
 
@@ -56,7 +56,8 @@ class GetAppBar {
             backgroundColor: backgroundColor,
             leading: showLeading ? leading ?? GetButton.back() : null,
             leadingWidth: leadingWidth,
-            titleSpacing: titleSpacing,
+            titleSpacing: titleSpacing ??
+                (showLeading ? kDensePaddingX : kStandardPaddingX),
             toolbarHeight: _toolbarHeight,
             title: customTitle ??
                 (title != null ? Text(title) : Container(height: 0)),
@@ -99,7 +100,7 @@ class GetAppBar {
     double bottomConstant = 36.0,
     double largeTitleHeight = 47.0,
     double leadingWidth = 40.0,
-    double titleSpacing = 8.0,
+    double? titleSpacing,
     double topPadding = kStandardPadding,
     double bottomPadding = kStandardPadding,
     double leftPadding = kStandardPaddingX,
@@ -204,7 +205,8 @@ class GetAppBar {
         // $debugPrint(elevation);
         return SliverAppBar(
           leadingWidth: leadingWidth,
-          titleSpacing: titleSpacing,
+          titleSpacing: titleSpacing ??
+              (showLeading ? kDensePaddingX : kStandardPaddingX),
           automaticallyImplyLeading: false,
           leading: showLeading ? leading ?? GetButton.back() : null,
           centerTitle:

@@ -18,7 +18,6 @@ class HomePage extends StatelessWidget {
             (context) => GetScaffold(
               title: "Get Smart Home",
               progress: LinearProgress.standard(
-                color: Colors.blue,
                 visible: model.isBusy,
               ),
               child: SwipeRefresh(

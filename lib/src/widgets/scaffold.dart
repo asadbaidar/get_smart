@@ -33,8 +33,9 @@ class GetScaffold extends StatelessWidget {
     this.showAppBarLeading = true,
     this.showProgress = false,
     this.showScrollbar = true,
-    this.hideToolbars = false,
-    this.hideAbleAppBar = false,
+    this.toolbarsHidden = false,
+    this.appBarHidden = false,
+    this.bottomBarHidden = false,
     this.interactive = true,
     this.appBarBottomHeight = 0.0,
     this.floatingActionButtonLocation,
@@ -70,8 +71,9 @@ class GetScaffold extends StatelessWidget {
   final bool showAppBarLeading;
   final bool showProgress;
   final bool showScrollbar;
-  final bool hideToolbars;
-  final bool hideAbleAppBar;
+  final bool toolbarsHidden;
+  final bool appBarHidden;
+  final bool bottomBarHidden;
   final bool interactive;
   final double appBarBottomHeight;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
@@ -98,7 +100,7 @@ class GetScaffold extends StatelessWidget {
     );
   }
 
-  Widget _body(BuildContext context) => hideAbleAppBar && sliver == null
+  Widget _body(BuildContext context) => appBarHidden && sliver == null
       ? Column(
           children: [
             _hideAbleAppBar(context),
@@ -124,10 +126,14 @@ class GetScaffold extends StatelessWidget {
         children: [Responsive(children: children ?? [])],
       );
 
+  bool get _appBarHidden => appBarHidden && toolbarsHidden;
+
+  bool get _bottomBarHidden => bottomBarHidden && toolbarsHidden;
+
   Widget _hideAbleAppBar(BuildContext context) {
     final appBar = _buildAppBar(context);
     return CrossFade(
-      showFirst: hideToolbars,
+      showFirst: _appBarHidden,
       secondChild: SizedBox(
         height: appBar.preferredSize.height,
         child: appBar,
@@ -137,8 +143,8 @@ class GetScaffold extends StatelessWidget {
 
   GetSimpleAppBar? _appBar(BuildContext context) => sliver != null
       ? null
-      : hideAbleAppBar
-          ? GetAppBar.status(context, hidden: hideToolbars)
+      : appBarHidden
+          ? GetAppBar.status(context, hidden: _appBarHidden)
           : _buildAppBar(context);
 
   GetSimpleAppBar _buildAppBar(BuildContext context) =>
@@ -164,7 +170,7 @@ class GetScaffold extends StatelessWidget {
         child: withBottomBar != null
             ? _bottomAppBar
             : CrossFade(
-                firstChild: hideToolbars ? Container(height: 0) : bottomBar,
+                firstChild: _bottomBarHidden ? Container(height: 0) : bottomBar,
                 secondChild: _bottomAppBar,
               ),
       );
@@ -182,7 +188,7 @@ class GetScaffold extends StatelessWidget {
             _bottomBarChildren == null
         ? Container(height: 0)
         : BottomBar(
-            visible: !hideToolbars,
+            visible: !_bottomBarHidden,
             alignment: bottomBarAlignment ??
                 (subtitle?.notBlank == null
                     ? CrossAxisAlignment.end

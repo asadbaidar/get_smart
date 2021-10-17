@@ -14,14 +14,14 @@ import 'package:intl/number_symbols_data.dart';
 ///   ];
 /// ```
 class GetLocalizations {
-  static const english = Locale('en', '');
+  static const english = Locale("en", "");
   static const supportedLocales = [GetLocalizations.english];
 
   static const GetLocalizationsDelegate delegate = GetLocalizationsDelegate();
 
   GetLocalizations(this.locale)
       : symbols = numberFormatSymbols[locale.code] ??
-            numberFormatSymbols[english.code..$debugPrint()],
+            numberFormatSymbols[english.code],
         currencyFraction = currencyFractionDigits[
                 (numberFormatSymbols[locale.code] ??
                         numberFormatSymbols[english.code])
