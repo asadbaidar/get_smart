@@ -70,6 +70,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   final dynamic initialValue;
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
+  final Widget? suffix;
 
   /// Suggestions that will be displayed
   final List<T>? items;
@@ -110,6 +111,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
     this.initialValue,
     this.focusNode,
     this.nextFocusNode,
+    this.suffix,
   }) : super(key: key);
 
   void _itemSubmitted(T? data) => itemSubmitted(data);
@@ -453,6 +455,7 @@ class GetFilterableTextFieldState<T extends Comparable>
           withoutFilter: showAllOnFocus,
         ),
         onSubmitted: triggerSubmitted,
+        suffix: widget.suffix,
       ),
     );
   }
