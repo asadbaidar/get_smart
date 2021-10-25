@@ -110,6 +110,16 @@ abstract class GetController extends MultipleFutureGetController {
         throwException: throwException,
       );
 
+  Future runModelAction(
+    Future Function() busyAction, {
+    bool throwException = false,
+  }) =>
+      runModelRunner(
+        busyAction,
+        key: actionName,
+        throwException: throwException,
+      );
+
   /// Sets or Returns the data of the ViewModel
   GetResult<T>? modelResult<T>([value]) {
     if (value == null) {

@@ -165,11 +165,37 @@ abstract class BaseGetController extends GetxController {
             throwException: throwException,
           ));
 
-  /// Sets the ViewModel to busy, runs the future and then sets it to not busy when complete.
+  Future runModelRunner(
+    Future Function() busyRunner, {
+    Object? key,
+    bool throwException = false,
+  }) =>
+      runBusyFuture(runBusyRunner(
+        busyRunner,
+        key: key,
+        throwException: throwException,
+      ));
+
+  Future runModelFuture(
+    Future busyFuture, {
+    Object? key,
+    bool throwException = false,
+  }) =>
+      runBusyFuture(runBusyFuture(
+        busyFuture,
+        key: key,
+        throwException: throwException,
+      ));
+
+  /// Sets the ViewModel to busy, runs the future and then sets it
+  /// to not busy when complete.
   ///
   /// rethrows [Exception] after setting busy to false for object or class
-  Future runBusyFuture(Future busyFuture,
-      {Object? key, bool throwException = false}) async {
+  Future runBusyFuture(
+    Future busyFuture, {
+    Object? key,
+    bool throwException = false,
+  }) async {
     _setBusyForModelOrObject(true, key: key);
     try {
       var value = await runErrorFuture(busyFuture,
@@ -182,8 +208,11 @@ abstract class BaseGetController extends GetxController {
     }
   }
 
-  Future runErrorFuture(Future future,
-      {Object? key, bool throwException = false}) async {
+  Future runErrorFuture(
+    Future future, {
+    Object? key,
+    bool throwException = false,
+  }) async {
     try {
       return await future;
     } catch (e) {
