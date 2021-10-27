@@ -1,10 +1,6 @@
-// ignore_for_file: avoid_print
-
 import 'dart:async';
-import 'dart:developer' as developer;
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_smart/get_smart.dart';
@@ -27,57 +23,6 @@ String $name(Type type) => type.toString();
 /// i.e. "/typeName"
 String $route(Type type) => "/" + $name(type);
 
-void $debugLog([
-  dynamic value,
-  dynamic tag,
-  Object? name = "",
-]) {
-  if (kDebugMode) {
-    final _tag = tag == null ? "" : "$tag: ";
-    developer.log(
-      "$_tag${value ?? ""}".trim(),
-      time: Date.now,
-      name: name?.toString() ?? "",
-    );
-  }
-}
-
-void $log([
-  dynamic value,
-  dynamic tag,
-  Object? name,
-]) {
-  if (kDebugMode) {
-    final _name = name == null ? "" : "[$name] ";
-    final _tag = tag == null ? "" : "$tag: ";
-    print("$_name$_tag${value ?? ""}".trim());
-  }
-}
-
-extension GetDebugUtils<T> on T {
-  void $debugPrint([
-    dynamic value,
-    dynamic tag,
-  ]) {
-    $print(value, tag);
-    $debugLog(
-      value ?? toString(),
-      tag,
-      $name(runtimeType),
-    );
-  }
-
-  void $print([
-    dynamic value,
-    dynamic tag,
-  ]) =>
-      $log(
-        value ?? toString(),
-        tag,
-        $name(runtimeType),
-      );
-}
-
 /// Schedules the given `task` with the [Priority.animation] and returns a
 /// [Future] that completes to the `task`'s eventual return value.
 Future<T> scheduleTask<T>(FutureOr<T> Function() task) async {
@@ -87,9 +32,9 @@ Future<T> scheduleTask<T>(FutureOr<T> Function() task) async {
 
 Future<T> profileTask<T>(Future<T> Function() task) async {
   var time = Date.now.inMilliseconds;
-  $debugLog("Started task", "profile", T.typeName);
+  $logDebug("Started task", "profile", T.typeName);
   var result = await task();
-  $debugLog("Finished task in ${Date.now.inMilliseconds - time}ms.", "profile",
+  $logDebug("Finished task in ${Date.now.inMilliseconds - time}ms.", "profile",
       T.typeName);
   return result;
 }

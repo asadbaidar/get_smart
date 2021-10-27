@@ -282,7 +282,7 @@ abstract class GetWebAPI {
       final cancelToken = _cancelTokens[id] = CancelToken();
       query = query.replaceNullWithEmpty;
       body = body.replaceNullWithEmpty;
-      $debugLog(id, "Request ID", GetWebAPI);
+      $logDebug(id, "Request ID", GetWebAPI);
       GetResponse response = await dio.request(
         path,
         queryParameters: query,
@@ -431,7 +431,7 @@ class GetIsolate {
 
   static Future<void> onIsolate(data, sendPort) async {
     try {
-      $debugLog("$sendPort: $data", "IsolatePort", GetIsolate);
+      $logDebug("$sendPort: $data", "IsolatePort", GetIsolate);
       if (data is GetRequestParcel) {
         sendPort?.send(
           data..result = await GetWebAPI._parcelRequest(data),
@@ -440,7 +440,7 @@ class GetIsolate {
         GetWebAPI._cancelTokens.remove(data.id)?.cancel();
       }
     } catch (e) {
-      $debugLog("Error: $e", "IsolatePort", GetIsolate);
+      $logDebug("Error: $e", "IsolatePort", GetIsolate);
     }
   }
 
