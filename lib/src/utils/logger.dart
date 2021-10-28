@@ -22,7 +22,6 @@ abstract class GetLogger {
 
 void $logDebug([info, tag, Object? name = ""]) {
   if (kDebugMode) {
-    _logEvent(info, tag, name);
     _logDebug(info, tag, name);
   } else {
     GetLogger.instance?._logEvent(info, tag, name, debug: true);
