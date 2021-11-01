@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:get_smart/get_smart.dart';
 
-/// Multi purpose ViewModel implementation of [GetxController]
+/// Multi purpose Controller implementation of [GetxController]
 abstract class GetController extends MultipleFutureGetController {
   final actionName = "action";
 
@@ -35,7 +35,7 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Returns result for any object which did not succeed.
   GetResult get anyNotSucceeded =>
-      result(dataMap.keys.firstWhereOrNull((k) => !succeeded(k)) ?? "") ??
+      resultFor(dataMap.keys.firstWhereOrNull((k) => !succeeded(k)) ?? "") ??
       GetResult.success();
 
   /// Returns the data ready status of the action if no error occurred
@@ -51,7 +51,7 @@ abstract class GetController extends MultipleFutureGetController {
   bool get isActionSucceeded => succeeded(actionName);
 
   /// Returns the status of action if busy or not
-  bool get isActionBusy => busy(actionName);
+  bool get isActionBusy => busyFor(actionName);
 
   /// Returns the status of action if busy/succeeded or not
   bool get isActionBusyOrSucceeded => busyOrSucceeded(actionName);
@@ -63,21 +63,21 @@ abstract class GetController extends MultipleFutureGetController {
   bool get hasActionError => hasErrorFor(actionName);
 
   /// Returns the [GetStatus] of action
-  GetStatus? get actionStatus => status(actionName);
+  GetStatus? get actionStatus => statusFor(actionName);
 
   /// Returns the success status of an action
-  String? get actionSuccess => success(actionName);
+  String? get actionSuccess => successFor(actionName);
 
   /// Returns the error status of an action
-  String? get actionError => error(actionName);
+  String? get actionError => errorFor(actionName);
 
   /// sets the error status of an action
   set actionError(value) => setErrorFor(actionName, value);
 
   /// Sets or Returns the data of the action
-  GetResult<T>? actionData<T>([value]) {
+  GetResult<T>? actionResult<T>([value]) {
     if (value == null) {
-      return result<T>(actionName);
+      return resultFor<T>(actionName);
     } else {
       setDataFor(actionName, value);
       return value;
@@ -85,7 +85,7 @@ abstract class GetController extends MultipleFutureGetController {
   }
 
   /// Returns the runner of the action
-  Future Function() get actionRunner => runner(actionName);
+  Future Function() get actionRunner => runnerFor(actionName);
 
   /// Sets the runner of the action
   set actionRunner(value) => setRunnerFor(actionName, value);
@@ -110,68 +110,70 @@ abstract class GetController extends MultipleFutureGetController {
         throwException: throwException,
       );
 
-  Future runModelAction(
+  Future runAction(
     Future Function() busyAction, {
     bool throwException = false,
   }) =>
-      runModelRunner(
+      runRunner(
         busyAction,
         key: actionName,
         throwException: throwException,
       );
 
-  /// Sets or Returns the data of the ViewModel
-  GetResult<T>? modelResult<T>([value]) {
+  /// Sets or Returns the data of the Controller
+  GetResult<T>? result<T>([value]) {
     if (value == null) {
-      return result<T>(typeName);
+      return resultFor<T>(typeName);
     } else {
       setData(value);
       return value;
     }
   }
 
-  /// Returns the status of the ViewModel if started or not
+  /// Returns the status of the Controller if started or not
   bool get isStarted => started(typeName);
 
-  /// Returns the status of ViewModel if succeeded or not
+  /// Returns the status of Controller if succeeded or not
   bool get isSucceeded => succeeded(typeName);
 
-  /// Returns the status of ViewModel if busy/succeeded or not
+  /// Returns the status of Controller if busy/succeeded or not
   bool get isBusyOrSucceeded => busyOrSucceeded(typeName);
 
-  /// Returns the status of ViewModel if failed or not
+  /// Returns the status of Controller if failed or not
   bool get isFailed => failed(typeName);
 
-  /// Returns the [GetStatus] of the ViewModel
-  GetStatus? get modelStatus => status(typeName);
+  /// Returns the [GetStatus] of the Controller
+  GetStatus? get status => statusFor(typeName);
 
-  /// Returns the success message of the ViewModel
-  String? get modelSuccess => success(typeName);
+  /// Returns the success message of the Controller
+  String? get success => successFor(typeName);
 
   /// Returns the result data by key
-  GetResult<T>? result<T>(Object key) => data<GetResult<T>>(key);
+  GetResult<T>? resultFor<T>(Object key) => dataFor<GetResult<T>>(key);
 
   /// Returns the success message by key
-  String? success(Object key) => result(key)?.success;
+  String? successFor(Object key) => resultFor(key)?.success;
 
   /// Returns the data ready status by key even if error occurred
   @override
-  bool ready(Object key) => result(key) != null;
+  bool ready(Object key) => resultFor(key) != null;
 
   /// Returns the [GetStatus] by key
-  GetStatus? status(key) => busy(key) ? GetStatus.busy : result(key)?.status;
+  GetStatus? statusFor(key) =>
+      busyFor(key) ? GetStatus.busy : resultFor(key)?.status;
 
   /// Returns the status by key if started or not
-  bool started(key) => status(key) != null && status(key) != GetStatus.canceled;
+  bool started(key) =>
+      statusFor(key) != null && statusFor(key) != GetStatus.canceled;
 
   /// Returns the status by key if succeeded or not
-  bool succeeded(key) => status(key) == GetStatus.succeeded;
+  bool succeeded(key) => statusFor(key) == GetStatus.succeeded;
 
   /// Returns the status by key if busy/succeeded or not
-  bool busyOrSucceeded(key) => busy(key) || succeeded(key);
+  bool busyOrSucceeded(key) => busyFor(key) || succeeded(key);
 
   /// Returns the status by key if failed or not
-  bool failed(key) => status(key) == GetStatus.failed;
+  bool failed(key) => statusFor(key) == GetStatus.failed;
 
   /// Cancels the future by key and clear the associated data
   void cancelFuture([key]) {
@@ -179,7 +181,7 @@ abstract class GetController extends MultipleFutureGetController {
     clearData(key ?? typeName);
   }
 
-  /// Sets the ViewModel to busy, runs the future and then sets it to not busy when complete.
+  /// Sets the Controller to busy, runs the future and then sets it to not busy when complete.
   ///
   /// rethrows [Exception] after setting busy to false for object or class
   @override

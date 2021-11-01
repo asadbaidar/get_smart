@@ -119,7 +119,7 @@ class CameraModel extends GetController {
         }
       });
 
-  GetFile? get file => actionData()?.value;
+  GetFile? get file => actionResult()?.value;
 
   @override
   void cancelAction() {

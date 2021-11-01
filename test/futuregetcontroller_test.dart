@@ -96,8 +96,7 @@ void main() {
     test('When a future fails it should set error to exception', () async {
       var futureGetController = TestFutureGetController(fail: true);
       await futureGetController.initialise();
-      expect(futureGetController.modelError,
-          _singleFutureFailException.toString());
+      expect(futureGetController.error, _singleFutureFailException.toString());
     });
 
     test('When a future fails onData should not be called', () async {
@@ -170,26 +169,26 @@ void main() {
       var futureGetController = TestMultipleFutureGetController();
       await futureGetController.initialise();
 
-      expect(futureGetController.busy(numberDelayFuture), false);
-      expect(futureGetController.busy(stringDelayFuture), false);
+      expect(futureGetController.busyFor(numberDelayFuture), false);
+      expect(futureGetController.busyFor(stringDelayFuture), false);
     });
 
     test('When a future fails busy should be set to false', () async {
       var futureGetController = TestMultipleFutureGetController(failOne: true);
       await futureGetController.initialise();
 
-      expect(futureGetController.busy(numberDelayFuture), false);
-      expect(futureGetController.busy(stringDelayFuture), false);
+      expect(futureGetController.busyFor(numberDelayFuture), false);
+      expect(futureGetController.busyFor(stringDelayFuture), false);
     });
 
     test('When a future fails should set error for future key', () async {
       var futureGetController = TestMultipleFutureGetController(failOne: true);
       await futureGetController.initialise();
 
-      expect(futureGetController.error(numberDelayFuture),
+      expect(futureGetController.errorFor(numberDelayFuture),
           _numberDelayException.toString());
 
-      expect(futureGetController.error(stringDelayFuture), null);
+      expect(futureGetController.errorFor(stringDelayFuture), null);
     });
 
     test(
@@ -200,7 +199,7 @@ void main() {
       futureGetController.initialise();
       await Future.delayed(30.milliseconds);
 
-      expect(futureGetController.busy(numberDelayFuture), false,
+      expect(futureGetController.busyFor(numberDelayFuture), false,
           reason: 'String future should be done at this point');
       expect(futureGetController.isAnyBusy, true,
           reason: 'Should be true because second future is still running');

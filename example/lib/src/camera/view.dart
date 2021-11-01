@@ -101,7 +101,7 @@ class CameraPage extends StatelessWidget {
             ],
             child: model.hasError
                 ? MessageView(
-                    error: model.modelError,
+                    error: model.error,
                     onAction: () => model.futureToRun(),
                   )
                 : model.isDataReady
