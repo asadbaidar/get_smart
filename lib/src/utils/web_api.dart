@@ -349,7 +349,7 @@ class GetRequestParcel<T, R> {
   final Map<String, dynamic> query;
   final Map<String, dynamic> body;
 
-  String get key => authToken;
+  String get key => id + path + authToken;
 
   @override
   String toString() =>
