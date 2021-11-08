@@ -732,6 +732,7 @@ abstract class GetButton {
     double? iconSize,
     VisualDensity? visualDensity,
     EdgeInsetsGeometry? padding,
+    EdgeInsetsGeometry? margin,
     AlignmentGeometry? alignment,
     double? splashRadius,
     Widget? child,
@@ -768,66 +769,69 @@ abstract class GetButton {
                     ? context.primaryIconTheme.size
                     : context.iconTheme.size) ??
             24.0;
-        return IconButton(
-          key: key,
-          iconSize: _iconSize,
-          visualDensity: visualDensity,
-          padding: padding ??
-              (labeled
-                  ? EdgeInsets.symmetric(vertical: mini ? 4 : 8)
-                  : const EdgeInsets.symmetric(horizontal: 8)),
-          alignment: alignment ?? Alignment.center,
-          splashRadius: splashRadius ?? (labeled ? 24 : 18),
-          icon: labeled
-              ? Column(
-                  children: [
-                    SizedBox(
-                      height: iconSize == null
-                          ? (mini ? 2 : 4)
-                          : ((mini ? 22 : 24) - iconSize).abs(),
-                    ),
-                    busy
-                        ? CircularProgress.small(color: _color)
-                            .sizedCenter(_iconSize)
-                        : child!,
-                    SizedBox(height: mini ? 2 : 2.5),
-                    Expanded(
-                      child: Text(
-                        label!,
-                        style: labelStyle ??
-                            TextStyle(
-                              fontSize: 9,
-                              color: enabled
-                                  ? (tintLabel == true ? _color : null)
-                                  : _color?.subbed,
-                            ),
+        return Container(
+          padding: margin,
+          child: IconButton(
+            key: key,
+            iconSize: _iconSize,
+            visualDensity: visualDensity,
+            padding: padding ??
+                (labeled
+                    ? EdgeInsets.symmetric(vertical: mini ? 4 : 8)
+                    : const EdgeInsets.symmetric(horizontal: 8)),
+            alignment: alignment ?? Alignment.center,
+            splashRadius: splashRadius ?? (labeled ? 24 : 18),
+            icon: labeled
+                ? Column(
+                    children: [
+                      SizedBox(
+                        height: iconSize == null
+                            ? (mini ? 2 : 4)
+                            : ((mini ? 22 : 24) - iconSize).abs(),
                       ),
-                    ),
-                  ],
-                )
-              : busy
-                  ? CircularProgress.small(color: _color)
-                  : (child ?? const SizedBox()),
-          color: color,
-          focusColor: focusColor,
-          hoverColor: hoverColor,
-          highlightColor: highlightColor,
-          splashColor: splashColor,
-          disabledColor: disabledColor ?? _color?.hinted,
-          onPressed: enabled
-              ? busy
-                  ? () {}
-                  : onPressed
-              : null,
-          mouseCursor: mouseCursor ?? SystemMouseCursors.click,
-          focusNode: focusNode,
-          autofocus: autofocus ?? false,
-          tooltip: tooltip,
-          enableFeedback: enableFeedback ?? true,
-          constraints: constraints ??
-              (labeled
-                  ? const BoxConstraints.expand(width: 40)
-                  : const BoxConstraints()),
+                      busy
+                          ? CircularProgress.small(color: _color)
+                              .sizedCenter(_iconSize)
+                          : child!,
+                      SizedBox(height: mini ? 2 : 2.5),
+                      Expanded(
+                        child: Text(
+                          label!,
+                          style: labelStyle ??
+                              TextStyle(
+                                fontSize: 9,
+                                color: enabled
+                                    ? (tintLabel == true ? _color : null)
+                                    : _color?.subbed,
+                              ),
+                        ),
+                      ),
+                    ],
+                  )
+                : busy
+                    ? CircularProgress.small(color: _color)
+                    : (child ?? const SizedBox()),
+            color: color,
+            focusColor: focusColor,
+            hoverColor: hoverColor,
+            highlightColor: highlightColor,
+            splashColor: splashColor,
+            disabledColor: disabledColor ?? _color?.hinted,
+            onPressed: enabled
+                ? busy
+                    ? () {}
+                    : onPressed
+                : null,
+            mouseCursor: mouseCursor ?? SystemMouseCursors.click,
+            focusNode: focusNode,
+            autofocus: autofocus ?? false,
+            tooltip: tooltip,
+            enableFeedback: enableFeedback ?? true,
+            constraints: constraints ??
+                (labeled
+                    ? const BoxConstraints.expand(width: 40)
+                    : const BoxConstraints()),
+          ),
         );
       });
 
@@ -837,6 +841,7 @@ abstract class GetButton {
     double? iconSize,
     VisualDensity? visualDensity,
     EdgeInsetsGeometry? padding,
+    EdgeInsetsGeometry? margin,
     AlignmentGeometry? alignment,
     double? splashRadius,
     Widget? child,
@@ -865,6 +870,7 @@ abstract class GetButton {
         iconSize: iconSize,
         visualDensity: visualDensity,
         padding: padding,
+        margin: margin,
         alignment: alignment,
         splashRadius: splashRadius,
         child: child,
@@ -896,6 +902,7 @@ abstract class GetButton {
     double? iconSize,
     VisualDensity? visualDensity,
     EdgeInsetsGeometry? padding,
+    EdgeInsetsGeometry? margin,
     AlignmentGeometry? alignment,
     double? splashRadius,
     Widget? child,
@@ -924,6 +931,7 @@ abstract class GetButton {
         iconSize: iconSize,
         visualDensity: visualDensity,
         padding: padding,
+        margin: margin,
         alignment: alignment,
         splashRadius: splashRadius,
         child: child,
@@ -955,6 +963,7 @@ abstract class GetButton {
     double? iconSize,
     VisualDensity? visualDensity,
     EdgeInsetsGeometry? padding,
+    EdgeInsetsGeometry? margin,
     AlignmentGeometry? alignment,
     double? splashRadius,
     Widget? child,
@@ -984,6 +993,7 @@ abstract class GetButton {
         iconSize: iconSize,
         visualDensity: visualDensity,
         padding: padding ?? const EdgeInsets.all(8),
+        margin: margin,
         alignment: alignment,
         splashRadius: splashRadius,
         child: child,

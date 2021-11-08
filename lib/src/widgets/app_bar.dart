@@ -30,7 +30,7 @@ class GetAppBar {
     bool? showProgress,
     double bottomHeight = 0.0,
     double bottomConstant = 48.0,
-    double leadingWidth = 40.0,
+    double? leadingWidth,
     double? titleSpacing,
   }) {
     final _actions = interactive ? actions : null;
@@ -55,7 +55,7 @@ class GetAppBar {
             ),
             backgroundColor: backgroundColor,
             leading: showLeading ? leading ?? GetButton.back() : null,
-            leadingWidth: leadingWidth,
+            leadingWidth: leadingWidth ?? (leading == null ? 40.0 : null),
             titleSpacing: titleSpacing ??
                 (showLeading ? kDensePaddingX : kStandardPaddingX),
             toolbarHeight: _toolbarHeight,
@@ -99,7 +99,7 @@ class GetAppBar {
     double bottomHeight = 0.0,
     double bottomConstant = 36.0,
     double largeTitleHeight = 47.0,
-    double leadingWidth = 40.0,
+    double? leadingWidth,
     double? titleSpacing,
     double topPadding = kStandardPadding,
     double bottomPadding = kStandardPadding,
@@ -204,11 +204,11 @@ class GetAppBar {
         final _overlapping = _offset >= _largeTitleHeight;
         // $debugPrint(elevation);
         return SliverAppBar(
-          leadingWidth: leadingWidth,
+          leadingWidth: leadingWidth ?? (leading == null ? 40.0 : null),
           titleSpacing: titleSpacing ??
               (showLeading ? kDensePaddingX : kStandardPaddingX),
           automaticallyImplyLeading: false,
-          leading: showLeading ? leading ?? GetButton.back() : null,
+          leading: showLeading ? leading?.row() ?? GetButton.back() : null,
           centerTitle:
               context.appBarCenterTitle(centerTitle, actions: _actions),
           backgroundColor: (backgroundColor ?? context.primaryColor)

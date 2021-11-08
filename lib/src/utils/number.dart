@@ -16,8 +16,8 @@ extension Num on num {
 
   BoxDecoration roundBox({Color? color}) => BoxDecoration(
         borderRadius: roundRadius,
-        border: color?.isDark != true
-            ? Border.all(color: color!.darker, width: 0.2)
+        border: color != null && !color.isDark
+            ? Border.all(color: color.darker, width: 0.2)
             : null,
         color: color,
       );
@@ -28,8 +28,8 @@ extension Num on num {
 
   BoxDecoration circularBox({Color? color}) => BoxDecoration(
         borderRadius: circularRadius,
-        border: color?.isDark != true
-            ? Border.all(color: color!.darker, width: 0.2)
+        border: color != null && !color.isDark
+            ? Border.all(color: color.darker, width: 0.2)
             : null,
         color: color,
       );
