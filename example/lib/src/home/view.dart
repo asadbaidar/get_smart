@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
                 onRefresh: model.refreshData,
                 child: ListView.separated(
                   itemCount: dataSet.length,
-                  separatorBuilder: (_, __) => const GetTileSeparator(),
+                  separatorBuilder: (_, __) => const GetTileDivider(),
                   itemBuilder: (_, index) {
                     final data = dataSet[index];
                     return GetTile.simple(

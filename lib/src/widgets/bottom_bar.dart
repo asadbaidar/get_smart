@@ -30,7 +30,7 @@ class BottomBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         CrossFade(firstChild: top),
-        if (top == null) const GetLineSeparator.full(),
+        if (top == null) const GetDivider.full(),
         if (visible)
           BottomAppBar(
             elevation: top == null ? null : 0,
@@ -202,7 +202,7 @@ class GetSnackBar extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Stack(children: [
-                    const GetLineSeparator.full(),
+                    const GetDivider.full(),
                     if (showProgress) LinearProgress(value: progress),
                   ]),
                   GetBar(

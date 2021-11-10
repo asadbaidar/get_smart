@@ -1976,8 +1976,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = false,
     this.header = false,
-    this.topSeparator,
-    this.bottomSeparator,
+    this.topDivider,
+    this.bottomDivider,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
@@ -2030,8 +2030,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = false,
     this.header = false,
-    this.topSeparator,
-    this.bottomSeparator,
+    this.topDivider,
+    this.bottomDivider,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingDensePadding,
@@ -2084,8 +2084,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = false,
     this.header = false,
-    this.topSeparator,
-    this.bottomSeparator,
+    this.topDivider,
+    this.bottomDivider,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingMediumPadding,
@@ -2138,8 +2138,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = false,
     this.header = false,
-    this.topSeparator,
-    this.bottomSeparator,
+    this.topDivider,
+    this.bottomDivider,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
@@ -2192,8 +2192,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = true,
     this.header = true,
-    this.topSeparator = SeparatorStyle.full,
-    this.bottomSeparator = SeparatorStyle.full,
+    this.topDivider = DividerStyle.full,
+    this.bottomDivider = DividerStyle.full,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
@@ -2246,8 +2246,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = true,
     this.header = true,
-    this.topSeparator,
-    this.bottomSeparator,
+    this.topDivider,
+    this.bottomDivider,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
@@ -2300,8 +2300,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = true,
     this.header = true,
-    this.topSeparator = SeparatorStyle.full,
-    this.bottomSeparator = SeparatorStyle.full,
+    this.topDivider = DividerStyle.full,
+    this.bottomDivider = DividerStyle.full,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
@@ -2354,8 +2354,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = true,
     this.header = true,
-    this.topSeparator,
-    this.bottomSeparator = SeparatorStyle.full,
+    this.topDivider,
+    this.bottomDivider = DividerStyle.full,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
@@ -2408,8 +2408,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = true,
     this.header = true,
-    this.topSeparator,
-    this.bottomSeparator,
+    this.topDivider,
+    this.bottomDivider,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
@@ -2463,8 +2463,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = true,
     this.header = true,
-    this.topSeparator,
-    this.bottomSeparator = SeparatorStyle.full,
+    this.topDivider,
+    this.bottomDivider = DividerStyle.full,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
@@ -2517,8 +2517,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = false,
     this.header = false,
-    this.topSeparator,
-    this.bottomSeparator,
+    this.topDivider,
+    this.bottomDivider,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingDensePadding,
@@ -2571,8 +2571,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = false,
     this.header = false,
-    this.topSeparator,
-    this.bottomSeparator,
+    this.topDivider,
+    this.bottomDivider,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
@@ -2625,8 +2625,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = false,
     this.header = false,
-    this.topSeparator,
-    this.bottomSeparator,
+    this.topDivider,
+    this.bottomDivider,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
@@ -2679,8 +2679,8 @@ class GetTileRow extends StatelessWidget {
     this.detail = false,
     this.allCaps = false,
     this.header = false,
-    this.topSeparator,
-    this.bottomSeparator,
+    this.topDivider,
+    this.bottomDivider,
     this.padding,
     this.leadingMargin = kTileRowLeadingMargin,
     this.leadingPadding = kTileRowLeadingPadding,
@@ -2731,8 +2731,8 @@ class GetTileRow extends StatelessWidget {
   final bool detail;
   final bool allCaps;
   final bool header;
-  final SeparatorStyle? topSeparator;
-  final SeparatorStyle? bottomSeparator;
+  final DividerStyle? topDivider;
+  final DividerStyle? bottomDivider;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry leadingMargin;
   final EdgeInsetsGeometry leadingPadding;
@@ -2889,85 +2889,88 @@ class GetTileRow extends StatelessWidget {
             crossAxisAlignment:
                 header ? CrossAxisAlignment.stretch : CrossAxisAlignment.start,
             before: [
-              if (topSeparator != null) GetTileSeparator(style: topSeparator!),
+              if (topDivider != null) GetTileDivider(style: topDivider!),
             ],
             after: [
-              if (bottomSeparator != null)
-                GetTileSeparator(style: bottomSeparator!),
+              if (bottomDivider != null) GetTileDivider(style: bottomDivider!),
             ],
           );
   }
 }
 
-enum SeparatorStyle { full, leading, notLeading }
+enum DividerStyle { full, leading, notLeading }
 
-class GetTileSeparator extends StatelessWidget {
-  const GetTileSeparator({
-    this.margin,
-    this.style = SeparatorStyle.leading,
+class GetTileDivider extends StatelessWidget {
+  const GetTileDivider({
+    this.indent,
+    this.thickness = 0.5,
+    this.style = DividerStyle.leading,
     Key? key,
   }) : super(key: key);
 
-  /// Tile separator with full edge to edge length
-  const GetTileSeparator.full({Key? key})
-      : this(style: SeparatorStyle.full, key: key);
+  /// Tile divider with full edge to edge length
+  const GetTileDivider.full({Key? key})
+      : this(style: DividerStyle.full, key: key);
 
-  /// Tile separator with [kStandardPaddingX] padding at start
-  const GetTileSeparator.notLeading({Key? key})
-      : this(style: SeparatorStyle.notLeading, key: key);
+  /// Tile divider with [kStandardPaddingX] padding at start
+  const GetTileDivider.notLeading({Key? key})
+      : this(style: DividerStyle.notLeading, key: key);
 
-  /// Tile separator with `[kStandardPaddingX.twice + BoxedView.kBoxSize]`
+  /// Tile divider with `[kStandardPaddingX.twice + BoxedView.kBoxSize]`
   /// padding at start
-  const GetTileSeparator.leading({Key? key})
-      : this(style: SeparatorStyle.leading, key: key);
+  const GetTileDivider.leading({Key? key})
+      : this(style: DividerStyle.leading, key: key);
 
-  final double? margin;
-  final SeparatorStyle style;
+  final double? indent;
+  final double thickness;
+  final DividerStyle style;
 
   @override
   Widget build(BuildContext context) => Ink(
         color: context.backgroundColor,
-        child: GetLineSeparator(
-          margin: margin,
+        child: GetDivider(
+          indent: indent,
+          thickness: thickness,
           style: style,
         ),
       );
 }
 
-class GetLineSeparator extends StatelessWidget {
-  const GetLineSeparator({
-    this.margin,
-    this.style = SeparatorStyle.leading,
+class GetDivider extends StatelessWidget {
+  const GetDivider({
+    this.indent,
+    this.thickness = 0.5,
+    this.style = DividerStyle.leading,
     Key? key,
   }) : super(key: key);
 
-  /// Tile separator with full edge to edge length
-  const GetLineSeparator.full({Key? key})
-      : this(style: SeparatorStyle.full, key: key);
+  /// Divider with full edge to edge length
+  const GetDivider.full({Key? key}) : this(style: DividerStyle.full, key: key);
 
-  /// Tile separator with [kStandardPaddingX] padding at start
-  const GetLineSeparator.notLeading({Key? key})
-      : this(style: SeparatorStyle.notLeading, key: key);
+  /// Divider with [kStandardPaddingX] padding at start
+  const GetDivider.notLeading({Key? key})
+      : this(style: DividerStyle.notLeading, key: key);
 
-  /// Tile separator with `[kStandardPaddingX.twice + BoxedView.kBoxSize]`
+  /// Divider with `[kStandardPaddingX.twice + BoxedView.kBoxSize]`
   /// padding at start
-  const GetLineSeparator.leading({Key? key})
-      : this(style: SeparatorStyle.leading, key: key);
+  const GetDivider.leading({Key? key})
+      : this(style: DividerStyle.leading, key: key);
 
-  final double? margin;
-  final SeparatorStyle style;
+  final double? indent;
+  final double thickness;
+  final DividerStyle style;
 
   @override
   Widget build(BuildContext context) => Container(
         margin: EdgeInsets.only(
-          left: margin ??
-              (style == SeparatorStyle.full
+          left: indent ??
+              (style == DividerStyle.full
                   ? 0
-                  : style == SeparatorStyle.notLeading
+                  : style == DividerStyle.notLeading
                       ? kStandardPaddingX
                       : kStandardPaddingX.twice + BoxView.kBoxSize),
         ),
         color: context.hintColor.lighted,
-        height: 0.5,
+        height: thickness,
       );
 }

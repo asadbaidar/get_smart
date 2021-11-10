@@ -16,6 +16,8 @@ class AlwaysBouncingScrollPhysics extends BouncingScrollPhysics {
       : super(parent: const AlwaysScrollableScrollPhysics());
 }
 
+typedef GetSliverBuilder = List<Widget> Function(BuildContext context);
+
 /// A scrollable list of widgets arranged linearly.
 ///
 /// The [GetListView.builder] constructor takes an [IndexedWidgetBuilder], which
@@ -92,6 +94,193 @@ class AlwaysBouncingScrollPhysics extends BouncingScrollPhysics {
 /// [CustomScrollView.slivers] property instead of the list itself, and having
 /// the [SliverList] instead be a child of the [SliverPadding].
 class GetListView extends ScrollView {
+  const GetListView({
+    required this.sliverBuilder,
+    this.topSliverBuilder,
+    this.bottomSliverBuilder,
+    this.replacementBuilder,
+    this.replace = false,
+    Axis scrollDirection = Axis.vertical,
+    bool reverse = false,
+    ScrollController? controller,
+    bool? primary,
+    ScrollPhysics? physics = const AlwaysBouncingScrollPhysics(),
+    bool shrinkWrap = false,
+    double? cacheExtent,
+    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
+    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
+        ScrollViewKeyboardDismissBehavior.manual,
+    String? restorationId,
+    Clip clipBehavior = Clip.hardEdge,
+    Key? key,
+  })  : assert(sliverBuilder != null),
+        super(
+          key: key,
+          scrollDirection: scrollDirection,
+          reverse: reverse,
+          controller: controller,
+          primary: primary,
+          physics: physics,
+          shrinkWrap: shrinkWrap,
+          cacheExtent: cacheExtent,
+          dragStartBehavior: dragStartBehavior,
+          keyboardDismissBehavior: keyboardDismissBehavior,
+          restorationId: restorationId,
+          clipBehavior: clipBehavior,
+        );
+
+  GetListView.builder({
+    this.topSliverBuilder,
+    this.bottomSliverBuilder,
+    this.replacementBuilder,
+    this.replace = false,
+    required IndexedWidgetBuilder itemBuilder,
+    IndexedWidgetBuilder? separatorBuilder,
+    int itemCount = 0,
+    DividerStyle? bottomDivider = DividerStyle.full,
+    bool addAutomaticKeepAlives = true,
+    bool addRepaintBoundaries = true,
+    bool addSemanticIndexes = true,
+    EdgeInsetsGeometry? padding,
+    Axis scrollDirection = Axis.vertical,
+    bool reverse = false,
+    ScrollController? controller,
+    bool? primary,
+    ScrollPhysics? physics = const AlwaysBouncingScrollPhysics(),
+    bool shrinkWrap = false,
+    double? cacheExtent,
+    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
+    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
+        ScrollViewKeyboardDismissBehavior.manual,
+    String? restorationId,
+    Clip clipBehavior = Clip.hardEdge,
+    Key? key,
+  })  : assert(itemBuilder != null),
+        sliverBuilder = ((_) => [
+              GetSliverList.builder(
+                itemBuilder: itemBuilder,
+                separatorBuilder: separatorBuilder,
+                itemCount: itemCount,
+                bottomDivider: bottomDivider,
+                addAutomaticKeepAlives: addAutomaticKeepAlives,
+                addRepaintBoundaries: addRepaintBoundaries,
+                addSemanticIndexes: addSemanticIndexes,
+                scrollDirection: scrollDirection,
+                padding: padding,
+              )
+            ]),
+        super(
+          key: key,
+          scrollDirection: scrollDirection,
+          reverse: reverse,
+          controller: controller,
+          primary: primary,
+          physics: physics,
+          shrinkWrap: shrinkWrap,
+          cacheExtent: cacheExtent,
+          semanticChildCount: itemCount,
+          dragStartBehavior: dragStartBehavior,
+          keyboardDismissBehavior: keyboardDismissBehavior,
+          restorationId: restorationId,
+          clipBehavior: clipBehavior,
+        );
+
+  final GetSliverBuilder sliverBuilder;
+  final GetSliverBuilder? topSliverBuilder;
+  final GetSliverBuilder? bottomSliverBuilder;
+  final WidgetBuilder? replacementBuilder;
+  final bool replace;
+
+  @override
+  List<Widget> buildSlivers(BuildContext context) => [
+        if (topSliverBuilder != null) ...topSliverBuilder!(context),
+        ..._sliverBuilder(context),
+        if (bottomSliverBuilder != null) ...bottomSliverBuilder!(context),
+      ];
+
+  bool get _replace => replace && replacementBuilder != null;
+
+  List<Widget> _sliverBuilder(BuildContext context) => _replace
+      ? [replacementBuilder!(context).sliverFill]
+      : sliverBuilder(context);
+}
+
+/// A scrollable list of widgets arranged linearly.
+///
+/// The [GetListView.builder] constructor takes an [IndexedWidgetBuilder], which
+/// builds the children on demand. This constructor is appropriate for list views
+/// with a large (or infinite) number of children because the builder is called
+/// only for those children that are actually visible.
+///
+/// To control the initial scroll offset of the scroll view, provide a
+/// [controller] with its [ScrollController.initialScrollOffset] property set.
+///
+/// By default, [GetListView] will automatically pad the list's scrollable
+/// extremities to avoid partial obstructions indicated by [MediaQuery]'s
+/// padding. To avoid this behavior, override with a zero [padding] property.
+///
+/// ### Construction
+///
+/// While laying out the list, visible children's elements, states and render
+/// objects will be created lazily based on existing widgets
+///
+/// ### Destruction
+///
+/// When a child is scrolled out of view, the associated element subtree,
+/// states and render objects are destroyed. A new child at the same position
+/// in the list will be lazily recreated along with new elements, states and
+/// render objects when it is scrolled back.
+///
+/// ### Destruction mitigation
+///
+/// In order to preserve state as child elements are scrolled in and out of
+/// view, the following options are possible:
+///
+///  * Moving the ownership of non-trivial UI-state-driving business logic
+///    out of the list child subtree. For instance, if a list contains posts
+///    with their number of upvotes coming from a cached network response, store
+///    the list of posts and upvote number in a data model outside the list. Let
+///    the list child UI subtree be easily recreate-able from the
+///    source-of-truth model object. Use [StatefulWidget]s in the child
+///    widget subtree to store instantaneous UI state only.
+///
+///  * Letting [KeepAlive] be the root widget of the list child widget subtree
+///    that needs to be preserved. The [KeepAlive] widget marks the child
+///    subtree's top render object child for keepalive. When the associated top
+///    render object is scrolled out of view, the list keeps the child's render
+///    object (and by extension, its associated elements and states) in a cache
+///    list instead of destroying them. When scrolled back into view, the render
+///    object is repainted as-is (if it wasn't marked dirty in the interim).
+///
+///    This only works if `addAutomaticKeepAlives` and `addRepaintBoundaries`
+///    are false since those parameters cause the [GetListView] to wrap each child
+///    widget subtree with other widgets.
+///
+///  * Using [AutomaticKeepAlive] widgets (inserted by default when
+///    `addAutomaticKeepAlives` is true). [AutomaticKeepAlive] allows descendant
+///    widgets to control whether the subtree is actually kept alive or not.
+///    This behavior is in contrast with [KeepAlive], which will unconditionally keep
+///    the subtree alive.
+///
+///    As an example, the [EditableText] widget signals its list child element
+///    subtree to stay alive while its text field has input focus. If it doesn't
+///    have focus and no other descendants signaled for keepalive via a
+///    [KeepAliveNotification], the list child element subtree will be destroyed
+///    when scrolled away.
+///
+///    [AutomaticKeepAlive] descendants typically signal it to be kept alive
+///    by using the [AutomaticKeepAliveClientMixin], then implementing the
+///    [AutomaticKeepAliveClientMixin.wantKeepAlive] getter and calling
+///    [AutomaticKeepAliveClientMixin.updateKeepAlive].
+///
+/// The [key], [scrollDirection], [reverse], [controller], [primary], [physics],
+/// and [shrinkWrap] properties on [GetListView] map directly to the identically
+/// named properties on [CustomScrollView].
+///
+/// The [padding] property corresponds to having a [SliverPadding] in the
+/// [CustomScrollView.slivers] property instead of the list itself, and having
+/// the [SliverList] instead be a child of the [SliverPadding].
+class GetSliverList extends StatelessWidget {
   /// Creates a scrollable, linear array of widgets from an explicit [List].
   ///
   /// This constructor is appropriate for list views with a small number of
@@ -113,32 +302,17 @@ class GetListView extends ScrollView {
   /// `addSemanticIndexes` argument corresponds to the
   /// [SliverChildListDelegate.addSemanticIndexes] property. None
   /// may be null.
-  const GetListView({
-    Key? key,
+  const GetSliverList({
     List<Widget> this.children = const [],
-    this.replaceBuilder,
-    this.sliverHeaders,
-    this.sliverFooters,
-    this.footerSeparator = SeparatorStyle.full,
-    this.replace = false,
+    this.bottomDivider = DividerStyle.full,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
     this.addSemanticIndexes = true,
+    this.scrollDirection = Axis.vertical,
     this.padding,
     this.itemExtent,
     this.prototypeItem,
-    Axis scrollDirection = Axis.vertical,
-    bool reverse = false,
-    ScrollController? controller,
-    bool? primary,
-    ScrollPhysics? physics = const AlwaysBouncingScrollPhysics(),
-    bool shrinkWrap = false,
-    double? cacheExtent,
-    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
-    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
-        ScrollViewKeyboardDismissBehavior.manual,
-    String? restorationId,
-    Clip clipBehavior = Clip.hardEdge,
+    Key? key,
   })  : assert(children != null),
         assert(
           itemExtent == null || prototypeItem == null,
@@ -147,21 +321,7 @@ class GetListView extends ScrollView {
         itemCount = children.length,
         itemBuilder = null,
         separatorBuilder = null,
-        super(
-          key: key,
-          scrollDirection: scrollDirection,
-          reverse: reverse,
-          controller: controller,
-          primary: primary,
-          physics: physics,
-          shrinkWrap: shrinkWrap,
-          cacheExtent: cacheExtent,
-          semanticChildCount: children.length,
-          dragStartBehavior: dragStartBehavior,
-          keyboardDismissBehavior: keyboardDismissBehavior,
-          restorationId: restorationId,
-          clipBehavior: clipBehavior,
-        );
+        super(key: key);
 
   /// Creates a fixed-length scrollable linear array of list "items" separated
   /// by list item "separators".
@@ -191,65 +351,33 @@ class GetListView extends ScrollView {
   /// `addSemanticIndexes` argument corresponds to the
   /// [SliverChildBuilderDelegate.addSemanticIndexes] property. None may be
   /// null.
-  const GetListView.builder({
-    Key? key,
+  const GetSliverList.builder({
     required IndexedWidgetBuilder this.itemBuilder,
     this.separatorBuilder,
-    this.replaceBuilder,
-    this.sliverHeaders,
-    this.sliverFooters,
     this.itemCount = 0,
-    this.footerSeparator = SeparatorStyle.full,
-    this.replace = false,
+    this.bottomDivider = DividerStyle.full,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
     this.addSemanticIndexes = true,
+    this.scrollDirection = Axis.vertical,
     this.padding,
-    Axis scrollDirection = Axis.vertical,
-    bool reverse = false,
-    ScrollController? controller,
-    bool? primary,
-    ScrollPhysics? physics = const AlwaysBouncingScrollPhysics(),
-    bool shrinkWrap = false,
-    double? cacheExtent,
-    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
-    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
-        ScrollViewKeyboardDismissBehavior.manual,
-    String? restorationId,
-    Clip clipBehavior = Clip.hardEdge,
+    Key? key,
   })  : assert(itemBuilder != null),
         assert(itemCount != null && itemCount >= 0),
         children = null,
         itemExtent = null,
         prototypeItem = null,
-        super(
-          key: key,
-          scrollDirection: scrollDirection,
-          reverse: reverse,
-          controller: controller,
-          primary: primary,
-          physics: physics,
-          shrinkWrap: shrinkWrap,
-          cacheExtent: cacheExtent,
-          semanticChildCount: itemCount,
-          dragStartBehavior: dragStartBehavior,
-          keyboardDismissBehavior: keyboardDismissBehavior,
-          restorationId: restorationId,
-          clipBehavior: clipBehavior,
-        );
+        super(key: key);
 
   final List<Widget>? children;
   final IndexedWidgetBuilder? itemBuilder;
   final IndexedWidgetBuilder? separatorBuilder;
-  final WidgetBuilder? replaceBuilder;
-  final List<Widget>? sliverHeaders;
-  final List<Widget>? sliverFooters;
   final int itemCount;
-  final SeparatorStyle? footerSeparator;
-  final bool replace;
+  final DividerStyle? bottomDivider;
   final bool addAutomaticKeepAlives;
   final bool addRepaintBoundaries;
   final bool addSemanticIndexes;
+  final Axis scrollDirection;
 
   /// The amount of space by which to inset the children.
   final EdgeInsetsGeometry? padding;
@@ -273,21 +401,12 @@ class GetListView extends ScrollView {
   final Widget? prototypeItem;
 
   /// computing the actual child count.
-  int get _itemCount => max(0,
-      _hasSeparator ? itemCount * 2 + (_footerSeparator ? 0 : -1) : itemCount);
+  int get _itemCount => max(
+      0, _hasSeparator ? itemCount * 2 + (_bottomDivider ? 0 : -1) : itemCount);
 
   bool get _hasSeparator => separatorBuilder != null;
 
-  bool get _replace => replace && replaceBuilder != null;
-
-  bool get _footerSeparator => footerSeparator != null && itemCount > 0;
-
-  @override
-  List<Widget> buildSlivers(BuildContext context) => [
-        if (sliverHeaders != null) ...sliverHeaders!,
-        _buildSliverList(context),
-        if (sliverFooters != null) ...sliverFooters!,
-      ];
+  bool get _bottomDivider => bottomDivider != null && itemCount > 0;
 
   SliverChildDelegate get _childrenDelegate => children != null
       ? SliverChildListDelegate(
@@ -300,9 +419,9 @@ class GetListView extends ScrollView {
           (context, index) {
             if (_hasSeparator) {
               final itemIndex = index ~/ 2;
-              final isLast = _footerSeparator && index == itemCount * 2 - 1;
+              final isLast = _bottomDivider && index == itemCount * 2 - 1;
               return isLast
-                  ? GetTileSeparator(style: footerSeparator!)
+                  ? GetTileDivider(style: bottomDivider!)
                   : index.isEven
                       ? itemBuilder!(context, itemIndex)
                       : separatorBuilder!(context, itemIndex);
@@ -318,21 +437,20 @@ class GetListView extends ScrollView {
               _hasSeparator && index.isEven ? index ~/ 2 : null,
         );
 
-  Widget _sliverList(BuildContext context) => _replace
-      ? replaceBuilder!(context).sliverFill
-      : itemExtent != null
-          ? SliverFixedExtentList(
+  Widget _sliverList(BuildContext context) => itemExtent != null
+      ? SliverFixedExtentList(
+          delegate: _childrenDelegate,
+          itemExtent: itemExtent!,
+        )
+      : prototypeItem != null
+          ? SliverPrototypeExtentList(
               delegate: _childrenDelegate,
-              itemExtent: itemExtent!,
+              prototypeItem: prototypeItem!,
             )
-          : prototypeItem != null
-              ? SliverPrototypeExtentList(
-                  delegate: _childrenDelegate,
-                  prototypeItem: prototypeItem!,
-                )
-              : SliverList(delegate: _childrenDelegate);
+          : SliverList(delegate: _childrenDelegate);
 
-  Widget _buildSliverList(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     Widget sliverList = _sliverList(context);
     EdgeInsetsGeometry? effectivePadding = padding;
     if (padding == null) {
@@ -362,12 +480,5 @@ class GetListView extends ScrollView {
       sliverList = SliverPadding(padding: effectivePadding, sliver: sliverList);
     }
     return sliverList;
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding,
-        defaultValue: null));
   }
 }
