@@ -17,6 +17,12 @@ class AlwaysBouncingScrollPhysics extends BouncingScrollPhysics {
 }
 
 typedef GetSliverBuilder = List<Widget> Function(BuildContext context);
+typedef GetSectionBuilder = Widget Function(
+  BuildContext context,
+  int index,
+  dynamic section,
+);
+typedef GetSection = dynamic Function(int index);
 
 /// A scrollable list of widgets arranged linearly.
 ///
@@ -135,9 +141,15 @@ class GetListView extends ScrollView {
     this.replacementBuilder,
     this.replace = false,
     required IndexedWidgetBuilder itemBuilder,
-    IndexedWidgetBuilder? separatorBuilder,
+    IndexedWidgetBuilder? dividerBuilder,
+    WidgetBuilder? edgeDividerBuilder,
+    WidgetBuilder? headerBuilder,
+    WidgetBuilder? footerBuilder,
+    GetSectionBuilder? sectionBuilder,
+    GetSection? section,
     int itemCount = 0,
-    DividerStyle? bottomDivider = DividerStyle.full,
+    DividerStyle? divider,
+    DividerStyle edgeDivider = DividerStyle.full,
     bool addAutomaticKeepAlives = true,
     bool addRepaintBoundaries = true,
     bool addSemanticIndexes = true,
@@ -159,9 +171,15 @@ class GetListView extends ScrollView {
         sliverBuilder = ((_) => [
               GetSliverList.builder(
                 itemBuilder: itemBuilder,
-                separatorBuilder: separatorBuilder,
+                dividerBuilder: dividerBuilder,
+                edgeDividerBuilder: edgeDividerBuilder,
+                headerBuilder: headerBuilder,
+                footerBuilder: footerBuilder,
+                sectionBuilder: sectionBuilder,
+                section: section,
                 itemCount: itemCount,
-                bottomDivider: bottomDivider,
+                divider: divider,
+                edgeDivider: edgeDivider,
                 addAutomaticKeepAlives: addAutomaticKeepAlives,
                 addRepaintBoundaries: addRepaintBoundaries,
                 addSemanticIndexes: addSemanticIndexes,
@@ -304,7 +322,6 @@ class GetSliverList extends StatelessWidget {
   /// may be null.
   const GetSliverList({
     List<Widget> this.children = const [],
-    this.bottomDivider = DividerStyle.full,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
     this.addSemanticIndexes = true,
@@ -320,7 +337,14 @@ class GetSliverList extends StatelessWidget {
         ),
         itemCount = children.length,
         itemBuilder = null,
-        separatorBuilder = null,
+        dividerBuilder = null,
+        edgeDividerBuilder = null,
+        headerBuilder = null,
+        footerBuilder = null,
+        sectionBuilder = null,
+        section = null,
+        divider = null,
+        edgeDivider = DividerStyle.none,
         super(key: key);
 
   /// Creates a fixed-length scrollable linear array of list "items" separated
@@ -353,9 +377,15 @@ class GetSliverList extends StatelessWidget {
   /// null.
   const GetSliverList.builder({
     required IndexedWidgetBuilder this.itemBuilder,
-    this.separatorBuilder,
+    this.dividerBuilder,
+    this.edgeDividerBuilder,
+    this.headerBuilder,
+    this.footerBuilder,
+    this.sectionBuilder,
+    this.section,
     this.itemCount = 0,
-    this.bottomDivider = DividerStyle.full,
+    this.divider,
+    this.edgeDivider = DividerStyle.full,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
     this.addSemanticIndexes = true,
@@ -371,9 +401,15 @@ class GetSliverList extends StatelessWidget {
 
   final List<Widget>? children;
   final IndexedWidgetBuilder? itemBuilder;
-  final IndexedWidgetBuilder? separatorBuilder;
+  final IndexedWidgetBuilder? dividerBuilder;
+  final WidgetBuilder? edgeDividerBuilder;
+  final WidgetBuilder? headerBuilder;
+  final WidgetBuilder? footerBuilder;
+  final GetSectionBuilder? sectionBuilder;
+  final GetSection? section;
   final int itemCount;
-  final DividerStyle? bottomDivider;
+  final DividerStyle? divider;
+  final DividerStyle edgeDivider;
   final bool addAutomaticKeepAlives;
   final bool addRepaintBoundaries;
   final bool addSemanticIndexes;
@@ -402,11 +438,23 @@ class GetSliverList extends StatelessWidget {
 
   /// computing the actual child count.
   int get _itemCount => max(
-      0, _hasSeparator ? itemCount * 2 + (_bottomDivider ? 0 : -1) : itemCount);
+      0,
+      (_hasDivider ? itemCount * 2 - 1 : itemCount) +
+          (_bottomDivider ? 1 : 0) +
+          (_hasHeader ? 1 : 0) +
+          (_hasFooter ? 1 : 0));
 
-  bool get _hasSeparator => separatorBuilder != null;
+  bool get _hasDivider => divider != null || dividerBuilder != null;
 
-  bool get _bottomDivider => bottomDivider != null && itemCount > 0;
+  bool get _hasHeader => headerBuilder != null;
+
+  bool get _hasFooter => footerBuilder != null;
+
+  bool get _hasSection => section != null && sectionBuilder != null;
+
+  bool get _bottomDivider =>
+      (edgeDivider != DividerStyle.none || edgeDividerBuilder != null) &&
+      itemCount > 0;
 
   SliverChildDelegate get _childrenDelegate => children != null
       ? SliverChildListDelegate(
@@ -417,25 +465,61 @@ class GetSliverList extends StatelessWidget {
         )
       : SliverChildBuilderDelegate(
           (context, index) {
-            if (_hasSeparator) {
-              final itemIndex = index ~/ 2;
-              final isLast = _bottomDivider && index == itemCount * 2 - 1;
-              return isLast
-                  ? GetTileDivider(style: bottomDivider!)
-                  : index.isEven
-                      ? itemBuilder!(context, itemIndex)
-                      : separatorBuilder!(context, itemIndex);
-            } else {
-              return itemBuilder!(context, index);
-            }
+            final isHeader = _hasHeader && index == 0;
+            final isFooter = _hasFooter && index == _itemCount - 1;
+            final isBottomDivider =
+                _bottomDivider && index == _itemCount - (_hasFooter ? 2 : 1);
+            final _index = _hasHeader ? index - 1 : index;
+            final itemIndex = _hasDivider ? _index ~/ 2 : _index;
+            return isHeader
+                ? headerBuilder!(context)
+                : isFooter
+                    ? footerBuilder!(context)
+                    : isBottomDivider
+                        ? _edgeDivider(context)
+                        : _hasDivider
+                            ? _index.isEven
+                                ? _itemBuilder(context, itemIndex)
+                                : _section(itemIndex + 1) == null
+                                    ? _divider(context, itemIndex)
+                                    : 0.space
+                            : _itemBuilder(context, itemIndex);
           },
           childCount: _itemCount,
           addAutomaticKeepAlives: addAutomaticKeepAlives,
           addRepaintBoundaries: addRepaintBoundaries,
           addSemanticIndexes: addSemanticIndexes,
           semanticIndexCallback: (_, index) =>
-              _hasSeparator && index.isEven ? index ~/ 2 : null,
+              _hasDivider && index.isEven ? index ~/ 2 : null,
         );
+
+  dynamic _itemBuilder(BuildContext context, int index) {
+    final section = _section(index);
+    return itemBuilder!(context, index).column(
+      enabled: section != null,
+      before: [
+        if (index != 0) _edgeDivider(context),
+        if (section != null) sectionBuilder!(context, index, section),
+        _edgeDivider(context),
+      ],
+    );
+  }
+
+  dynamic _section(int index) {
+    if (!_hasSection) return null;
+    final _section1 = section!(index);
+    final _section2 = index > 0 ? section!(index - 1) : _section1;
+    return (index == 0 || _section1 != _section2) &&
+            _section1?.toString().notEmpty != null
+        ? _section1
+        : null;
+  }
+
+  Widget _divider(BuildContext context, int index) =>
+      dividerBuilder?.call(context, index) ?? GetTileDivider(style: divider!);
+
+  Widget _edgeDivider(BuildContext context) =>
+      edgeDividerBuilder?.call(context) ?? GetTileDivider(style: edgeDivider);
 
   Widget _sliverList(BuildContext context) => itemExtent != null
       ? SliverFixedExtentList(
