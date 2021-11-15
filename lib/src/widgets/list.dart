@@ -450,7 +450,7 @@ class GetSliverList extends StatelessWidget {
 
   bool get _hasFooter => footerBuilder != null;
 
-  bool get _hasSection => section != null && sectionBuilder != null;
+  bool get _hasSection => section != null;
 
   bool get _bottomDivider =>
       (edgeDivider != DividerStyle.none || edgeDividerBuilder != null) &&
@@ -499,7 +499,7 @@ class GetSliverList extends StatelessWidget {
       enabled: section != null,
       before: [
         if (index != 0) _edgeDivider(context),
-        if (section != null) sectionBuilder!(context, index, section),
+        if (section != null) _sectionBuilder(context, index, section),
         _edgeDivider(context),
       ],
     );
@@ -514,6 +514,10 @@ class GetSliverList extends StatelessWidget {
         ? _section1
         : null;
   }
+
+  Widget _sectionBuilder(BuildContext context, int index, section) =>
+      sectionBuilder?.call(context, index, section) ??
+      GetTileRow.section(text: section);
 
   Widget _divider(BuildContext context, int index) =>
       dividerBuilder?.call(context, index) ?? GetTileDivider(style: divider!);
