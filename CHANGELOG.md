@@ -2,6 +2,14 @@
 
 * Breaking Changes
 
+## [0.1.3+11]
+
+* GetX update
+
+## [0.1.3+10]
+
+* Bug fixes
+
 ## [0.1.3+9]
 
 * Bug fixes
