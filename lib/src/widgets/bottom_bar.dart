@@ -118,7 +118,7 @@ class ProgressSnackBar extends StatelessWidget {
   GetStatus get _status => status ?? GetStatus.canceled;
 
   @override
-  Widget build(BuildContext context) => GetSnackBar(
+  Widget build(BuildContext context) => SimpleSnackBar(
         message: _status.isBusy
             ? GetText.busy()
             : _status.isFailed
@@ -149,8 +149,8 @@ class ProgressSnackBar extends StatelessWidget {
       );
 }
 
-class GetSnackBar extends StatelessWidget {
-  const GetSnackBar({
+class SimpleSnackBar extends StatelessWidget {
+  const SimpleSnackBar({
     this.message,
     this.action,
     this.onAction,
@@ -205,7 +205,7 @@ class GetSnackBar extends StatelessWidget {
                     const GetLineSeparator.full(),
                     if (showProgress) LinearProgress(value: progress),
                   ]),
-                  GetBar(
+                  GetSnackBar(
                     snackPosition: withBottomBar == true
                         ? SnackPosition.TOP
                         : SnackPosition.BOTTOM,
