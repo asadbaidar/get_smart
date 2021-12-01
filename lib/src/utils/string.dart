@@ -203,7 +203,7 @@ extension StringX on String {
 
   Uint8List? get base64Decoded {
     try {
-      return base64Decode(this);
+      return isEmpty ? null : base64Decode(this);
     } catch (e) {
       return null;
     }

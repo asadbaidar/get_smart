@@ -26,6 +26,7 @@ enum GetText {
   location_disabled,
   location_mocked,
   location_error,
+  switch_user,
 }
 
 /// Get text data
@@ -55,6 +56,7 @@ Map<Locale, Map<GetText, String>> _getTextMap = {
     GetText.location_mocked:
         "Mock location detected. Please turn it off to continue.",
     GetText.location_error: "Unable to get location.",
+    GetText.switch_user: "Switch User",
   },
 };
 
