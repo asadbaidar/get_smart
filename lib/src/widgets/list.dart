@@ -439,7 +439,7 @@ class GetSliverList extends StatelessWidget {
   /// computing the actual child count.
   int get _itemCount => max(
       0,
-      (_hasDivider ? itemCount * 2 - 1 : itemCount) +
+      (_hasDivider ? max(0, itemCount * 2 - 1) : itemCount) +
           (_bottomDivider ? 1 : 0) +
           (_hasHeader ? 1 : 0) +
           (_hasFooter ? 1 : 0));

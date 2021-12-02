@@ -12,6 +12,7 @@ class BoxView extends StatelessWidget {
     required this.child,
     this.color,
     this.filled = true,
+    this.tinted = false,
     this.oval = false,
     this.small,
     this.wrap = false,
@@ -27,6 +28,7 @@ class BoxView extends StatelessWidget {
     required this.child,
     this.color,
     this.filled = true,
+    this.tinted = false,
     this.oval = false,
     this.small,
     this.wrap = false,
@@ -42,6 +44,7 @@ class BoxView extends StatelessWidget {
     required this.child,
     this.color,
     this.filled = false,
+    this.tinted = false,
     this.oval = false,
     this.small = true,
     this.wrap = true,
@@ -57,6 +60,7 @@ class BoxView extends StatelessWidget {
     required this.child,
     this.color,
     this.filled = true,
+    this.tinted = false,
     this.oval = true,
     this.small,
     this.wrap = false,
@@ -71,6 +75,7 @@ class BoxView extends StatelessWidget {
   final dynamic child;
   final Color? color;
   final bool filled;
+  final bool tinted;
   final bool oval;
   final bool? small;
   final bool wrap;
@@ -163,6 +168,7 @@ class BoxView extends StatelessWidget {
           image: it,
           height: boxSize,
           width: boxSize,
+          color: tinted ? color : null,
           fit: BoxFit.cover,
         ),
       );

@@ -92,9 +92,10 @@ class GetTileData extends GetObject {
     Color? color,
     this.background,
     this.value,
-    this.header,
-    this.isHeader = false,
+    this.section,
+    this.isSection = false,
     this.leadingFilled,
+    this.leadingTinted,
     this.detail = false,
     this.padAccessory,
     this.showAccessory,
@@ -126,9 +127,10 @@ class GetTileData extends GetObject {
   Color? tintColor;
   Color? background;
   dynamic value;
-  dynamic header;
-  bool isHeader;
+  dynamic section;
+  bool isSection;
   bool? leadingFilled;
+  bool? leadingTinted;
   bool detail;
   bool? padAccessory;
   bool? showAccessory;
@@ -194,6 +196,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = false,
     this.detail = true,
@@ -271,6 +274,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = false,
     this.detail = true,
@@ -348,6 +352,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = false,
     this.detail = true,
@@ -425,6 +430,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = false,
     this.detail = false,
@@ -502,6 +508,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = false,
     this.detail = false,
@@ -579,6 +586,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = false,
     this.detail = false,
@@ -656,6 +664,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = false,
     this.detail = false,
@@ -733,6 +742,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = false,
     this.detail = false,
@@ -810,6 +820,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = false,
     this.detail = false,
@@ -887,6 +898,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = false,
     this.detail = false,
@@ -964,6 +976,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = false,
     this.detail = false,
@@ -1041,6 +1054,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = true,
     this.detail = false,
@@ -1118,6 +1132,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.detail = false,
@@ -1195,6 +1210,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = true,
     this.detail = false,
@@ -1272,6 +1288,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.detail = false,
@@ -1349,6 +1366,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = true,
     this.detail = false,
@@ -1428,6 +1446,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = false,
     this.leadingOval = true,
     this.detail = false,
@@ -1506,6 +1525,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.detail = false,
@@ -1584,6 +1604,7 @@ class GetTile extends StatelessWidget {
     this.headColor,
     this.trailingColor,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.detail = false,
@@ -1659,6 +1680,7 @@ class GetTile extends StatelessWidget {
   final Color? headColor;
   final Color? trailingColor;
   final bool leadingFilled;
+  final bool leadingTinted;
   final bool leadingSmall;
   final bool leadingOval;
   final bool detail;
@@ -1964,6 +1986,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding,
     this.expanded = false,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = false,
@@ -2018,6 +2041,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding = kDensePaddingX,
     this.expanded = false,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = false,
@@ -2072,6 +2096,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding = kMediumPaddingX,
     this.expanded = false,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = false,
@@ -2126,6 +2151,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding,
     this.expanded = true,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = false,
@@ -2180,6 +2206,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding = kStandardPaddingX,
     this.expanded = false,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = false,
@@ -2234,6 +2261,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding = kStandardPaddingX,
     this.expanded = false,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = false,
@@ -2289,6 +2317,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding = kStandardPaddingX,
     this.expanded = false,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = false,
@@ -2343,6 +2372,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding = kStandardPaddingX,
     this.expanded = false,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = false,
@@ -2397,6 +2427,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding = kStandardPaddingX,
     this.expanded = false,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = false,
@@ -2451,6 +2482,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding = kStandardPaddingX,
     this.expanded = false,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = false,
@@ -2505,6 +2537,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding = kStandardPaddingX,
     this.expanded = false,
     this.leadingFilled = false,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = false,
@@ -2559,6 +2592,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding = kStandardPaddingX,
     this.expanded = false,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = true,
     this.themed = false,
@@ -2613,6 +2647,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding,
     this.expanded = true,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = true,
@@ -2667,6 +2702,7 @@ class GetTileRow extends StatelessWidget {
     this.rightPadding,
     this.expanded = true,
     this.leadingFilled = true,
+    this.leadingTinted = false,
     this.leadingSmall = true,
     this.leadingOval = false,
     this.themed = true,
@@ -2719,6 +2755,7 @@ class GetTileRow extends StatelessWidget {
   final double? rightPadding;
   final bool expanded;
   final bool leadingFilled;
+  final bool leadingTinted;
   final bool leadingSmall;
   final bool leadingOval;
   final bool themed;
@@ -2805,6 +2842,7 @@ class GetTileRow extends StatelessWidget {
                               child: _boxedView?.child ?? leading!,
                               color: _boxedView?.color ?? _tintColor,
                               filled: _boxedView?.filled ?? leadingFilled,
+                              tinted: _boxedView?.tinted ?? leadingTinted,
                               margin: _boxedView?.margin ?? leadingPadding,
                               small: _boxedView?.small ?? leadingSmall,
                               wrap: _boxedView?.wrap ?? false,
