@@ -115,6 +115,87 @@ class GetBottomSheet extends StatelessWidget {
           ),
         ],
       );
+
+  Widget _build(BuildContext context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        builder: (context, scrollController) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Clickable(
+              child: Container(
+                constraints:
+                    const BoxConstraints.expand(height: kToolbarHeight),
+                color: Colors.transparent,
+              ),
+              onTap: () => dismissible ? Get.back() : null,
+            ),
+            Expanded(
+              child: Container(
+                decoration: ShapeDecoration(
+                  color: context.backgroundColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular((rounded) ? 12 : 0),
+                    ),
+                  ),
+                ),
+                child: GetListView.builder(
+                  controller: scrollController,
+                  physics: const ClampingScrollPhysics(),
+                  edgeDivider: DividerStyle.none,
+                  headerBuilder: (context) => Column(children: [
+                    RoundedHandle(visible: showHandle),
+                    if (title != null ||
+                        topActions?.isNotEmpty == true ||
+                        leadingAction != null)
+                      AppBar(
+                        automaticallyImplyLeading: false,
+                        title: title,
+                        backgroundColor: Colors.transparent,
+                        actionsIconTheme: context.iconTheme,
+                        //brightness: context.brightness,
+                        iconTheme: context.iconTheme,
+                        toolbarHeight: 44,
+                        elevation: 0,
+                        centerTitle: centerTitle,
+                        //textTheme: context.textTheme,
+                        primary: false,
+                        actions: [...(topActions ?? []), 6.spaceX],
+                        leading: leadingAction,
+                      ),
+                  ]),
+                  itemCount: 1,
+                  itemBuilder: (context, index) => Padding(
+                    padding: contentPadding ?? kStandardPaddingH,
+                    child: content,
+                  ),
+                  footerBuilder: (context) => Column(
+                    children: [
+                      if (bottomActions?.isNotEmpty == true ||
+                          minHeight != null)
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 8, top: 20, right: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(height: minHeight),
+                              if (bottomActions?.isNotEmpty == true)
+                                ...bottomActions!.expand(
+                                  (e) => [6.spaceX, e],
+                                )
+                            ],
+                          ),
+                        ),
+                      16.spaceY,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 }
 
 extension GetBottomSheetX on GetInterface {

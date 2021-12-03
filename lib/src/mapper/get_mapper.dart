@@ -5,6 +5,7 @@ export 'mapper.dart';
 export 'object.dart';
 export 'raw_representable.dart';
 export 'transforms/bool_transform.dart';
+export 'transforms/color_transform.dart';
 export 'transforms/date_transform.dart';
 export 'transforms/double_transform.dart';
 export 'transforms/enum_transform.dart';
