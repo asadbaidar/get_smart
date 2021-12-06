@@ -37,16 +37,16 @@ const kExtendedPaddingH = EdgeInsets.symmetric(
 );
 
 const kDensePaddingV = EdgeInsets.symmetric(
-  horizontal: kDensePaddingY,
+  vertical: kDensePaddingY,
 );
 const kMediumPaddingV = EdgeInsets.symmetric(
-  horizontal: kMediumPaddingY,
+  vertical: kMediumPaddingY,
 );
 const kStandardPaddingV = EdgeInsets.symmetric(
-  horizontal: kStandardPaddingY,
+  vertical: kStandardPaddingY,
 );
 const kExtendedPaddingV = EdgeInsets.symmetric(
-  horizontal: kExtendedPaddingY,
+  vertical: kExtendedPaddingY,
 );
 
 const kStandardPaddingForm = EdgeInsets.only(
@@ -166,6 +166,21 @@ class GetTileData extends GetObject {
 }
 
 class GetTile extends StatelessWidget {
+  /// Tile to initialize from [GetTileData]
+  GetTile.from(
+    GetTileData data, {
+    Color? background = Colors.transparent,
+    VoidCallback? onTap,
+    Key? key,
+  }) : this.simple(
+          title: data.description,
+          subtitle: data.subtitle,
+          detail: data.detail,
+          background: background,
+          onTap: onTap,
+          key: key,
+        );
+
   /// Tile with detail accessory
   const GetTile.detail({
     this.leading,

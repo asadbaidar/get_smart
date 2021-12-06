@@ -5,14 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 class GetBottomSheet extends StatelessWidget {
+  static const kEdgePadding = 6.0;
+
   const GetBottomSheet({
     this.title,
     this.content,
+    this.itemBuilder,
+    this.items,
+    this.headerBuilder,
+    this.footerBuilder,
+    this.sectionBuilder,
+    this.section,
     this.leadingAction,
     this.topActions,
     this.bottomActions,
+    this.physics = const AlwaysBouncingScrollPhysics(),
+    this.divider,
     this.contentPadding,
     this.minHeight,
+    this.itemCount,
     this.showHandle = true,
     this.centerTitle,
     this.rounded = true,
@@ -22,191 +33,114 @@ class GetBottomSheet extends StatelessWidget {
 
   final Widget? title;
   final Widget? content;
+  final GetItemBuilder? itemBuilder;
+  final List? items;
+  final WidgetBuilder? headerBuilder;
+  final WidgetBuilder? footerBuilder;
+  final GetSectionBuilder? sectionBuilder;
+  final GetSection? section;
   final Widget? leadingAction;
   final List<Widget>? topActions;
   final List<Widget>? bottomActions;
+  final ScrollPhysics? physics;
+  final DividerStyle? divider;
   final EdgeInsetsGeometry? contentPadding;
+  final int? itemCount;
   final double? minHeight;
   final bool showHandle;
   final bool? centerTitle;
   final bool rounded;
   final bool dismissible;
 
-  @override
-  Widget build(BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Clickable(
-            child: Container(
-              constraints: const BoxConstraints.expand(height: kToolbarHeight),
-              color: Colors.transparent,
-            ),
-            onTap: () => dismissible ? Get.back() : null,
-          ),
-          Flexible(
-            child: Container(
-              decoration: ShapeDecoration(
-                color: context.backgroundColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular((rounded) ? 12 : 0),
-                  ),
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  RoundedHandle(visible: showHandle),
-                  if (title != null ||
-                      topActions?.isNotEmpty == true ||
-                      leadingAction != null)
-                    AppBar(
-                      automaticallyImplyLeading: false,
-                      title: title,
-                      backgroundColor: Colors.transparent,
-                      actionsIconTheme: context.iconTheme,
-                      //brightness: context.brightness,
-                      iconTheme: context.iconTheme,
-                      toolbarHeight: 44,
-                      elevation: 0,
-                      centerTitle: centerTitle,
-                      //textTheme: context.textTheme,
-                      primary: false,
-                      actions: [...(topActions ?? []), 6.spaceX],
-                      leading: leadingAction,
-                    ),
-                  Flexible(
-                    child: SingleChildScrollView(
-                      child: SafeArea(
-                        top: false,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (content != null)
-                              Padding(
-                                padding: contentPadding ?? kStandardPaddingH,
-                                child: content,
-                              ),
-                            if (bottomActions?.isNotEmpty == true ||
-                                minHeight != null)
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8, top: 20, right: 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(height: minHeight),
-                                    if (bottomActions?.isNotEmpty == true)
-                                      ...bottomActions!.expand(
-                                        (e) => [6.spaceX, e],
-                                      )
-                                  ],
-                                ),
-                              ),
-                            16.spaceY,
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+  int? get _itemCount => itemCount ?? (content != null ? 1 : null);
+
+  GetItemBuilder get _itemBuilder => itemBuilder ?? (_, __) => content!;
+
+  bool get showLeading => leadingAction != null;
+
+  bool get showToolbar =>
+      title != null || topActions?.isNotEmpty == true || leadingAction != null;
+
+  ShapeBorder get shape => RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular((rounded) ? 12 : 0),
+        ),
       );
 
-  Widget _build(BuildContext context) => DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        builder: (context, scrollController) => Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Clickable(
-              child: Container(
-                constraints:
-                    const BoxConstraints.expand(height: kToolbarHeight),
-                color: Colors.transparent,
-              ),
-              onTap: () => dismissible ? Get.back() : null,
-            ),
-            Expanded(
-              child: Container(
-                decoration: ShapeDecoration(
-                  color: context.backgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular((rounded) ? 12 : 0),
-                    ),
-                  ),
-                ),
+  @override
+  Widget build(BuildContext context) => DraggableScrollableSheet(
+        builder: (context, scrollController) => Material(
+          color: context.backgroundColor,
+          shape: shape,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RoundedHandle(visible: showHandle),
+              Expanded(
                 child: GetListView.builder(
                   controller: scrollController,
-                  physics: const ClampingScrollPhysics(),
+                  physics: physics,
+                  padding: contentPadding ??
+                      (itemBuilder != null ? null : kStandardPaddingH),
                   edgeDivider: DividerStyle.none,
-                  headerBuilder: (context) => Column(children: [
-                    RoundedHandle(visible: showHandle),
-                    if (title != null ||
-                        topActions?.isNotEmpty == true ||
-                        leadingAction != null)
-                      AppBar(
-                        automaticallyImplyLeading: false,
-                        title: title,
-                        backgroundColor: Colors.transparent,
-                        actionsIconTheme: context.iconTheme,
-                        //brightness: context.brightness,
-                        iconTheme: context.iconTheme,
-                        toolbarHeight: 44,
-                        elevation: 0,
-                        centerTitle: centerTitle,
-                        //textTheme: context.textTheme,
-                        primary: false,
-                        actions: [...(topActions ?? []), 6.spaceX],
-                        leading: leadingAction,
-                      ),
-                  ]),
-                  itemCount: 1,
-                  itemBuilder: (context, index) => Padding(
-                    padding: contentPadding ?? kStandardPaddingH,
-                    child: content,
-                  ),
-                  footerBuilder: (context) => Column(
-                    children: [
-                      if (bottomActions?.isNotEmpty == true ||
-                          minHeight != null)
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(left: 8, top: 20, right: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              SizedBox(height: minHeight),
-                              if (bottomActions?.isNotEmpty == true)
-                                ...bottomActions!.expand(
-                                  (e) => [6.spaceX, e],
-                                )
+                  divider: divider,
+                  topSliverBuilder: showToolbar
+                      ? (context) => GetAppBar.sliver(
+                            customTitle: title,
+                            actions: [
+                              ...(topActions ?? []),
+                              kEdgePadding.spaceX
                             ],
-                          ),
-                        ),
-                      16.spaceY,
+                            toolbarHeight: kMinInteractiveDimension,
+                            elevation: 0.5,
+                            elevateAlways: false,
+                            translucent: false,
+                            largeTitle: false,
+                            backgroundColor: context.backgroundColor,
+                            centerTitle: showLeading ? true : centerTitle,
+                            showLeading: showLeading,
+                            leading:
+                                leadingAction?.paddingOnly(left: kEdgePadding),
+                          )
+                      : null,
+                  items: items,
+                  itemCount: _itemCount,
+                  itemBuilder: _itemBuilder,
+                  headerBuilder: headerBuilder,
+                  footerBuilder: footerBuilder,
+                  sectionBuilder: sectionBuilder,
+                  section: section,
+                ),
+              ),
+              if (bottomActions?.isNotEmpty == true || minHeight != null)
+                Padding(
+                  padding: kDensePaddingAll,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(height: minHeight),
+                      if (bottomActions?.isNotEmpty == true)
+                        ...bottomActions!.expand(
+                          (e) => [kEdgePadding.spaceX, e],
+                        )
                     ],
                   ),
                 ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
 }
 
 extension GetBottomSheetX on GetInterface {
-  void modalBottomSheet(
+  void bottomSheetHalf(
     WidgetBuilder builder, {
     Color? backgroundColor,
     double? elevation,
     Clip? clipBehavior,
     Color? barrierColor,
     bool? ignoreSafeArea,
-    bool fullscreen = true,
+    bool fullscreen = false,
     bool useRootNavigator = false,
     bool dismissible = true,
     bool enableDrag = true,
@@ -233,6 +167,42 @@ extension GetBottomSheetX on GetInterface {
       exitBottomSheetDuration: exitDuration,
     ).then((value) => onDismiss?.call(value));
   }
+
+  void bottomSheetFull(
+    WidgetBuilder builder, {
+    Color? backgroundColor,
+    double? elevation,
+    Clip? clipBehavior,
+    Color? barrierColor,
+    bool? ignoreSafeArea,
+    bool fullscreen = true,
+    bool useRootNavigator = false,
+    bool dismissible = true,
+    bool enableDrag = true,
+    RouteSettings? settings,
+    Duration? enterDuration,
+    Duration? exitDuration,
+    void Function(dynamic v)? onDismiss,
+    FutureOr Function()? onShow,
+  }) {
+    bottomSheetHalf(
+      builder,
+      backgroundColor: backgroundColor,
+      elevation: elevation,
+      clipBehavior: clipBehavior,
+      barrierColor: barrierColor,
+      ignoreSafeArea: ignoreSafeArea,
+      fullscreen: fullscreen,
+      useRootNavigator: useRootNavigator,
+      dismissible: dismissible,
+      enableDrag: enableDrag,
+      settings: settings,
+      enterDuration: enterDuration,
+      exitDuration: exitDuration,
+      onDismiss: onDismiss,
+      onShow: onShow,
+    );
+  }
 }
 
 class RoundedHandle extends StatelessWidget {
@@ -252,7 +222,7 @@ class RoundedHandle extends StatelessWidget {
           Container(
             height: 4,
             width: 36,
-            margin: const EdgeInsets.only(top: 9),
+            margin: const EdgeInsets.only(top: 9, bottom: 11),
             decoration: visible == true
                 ? ShapeDecoration(
                     color: (color ?? context.hintColor).withAlpha(50),
