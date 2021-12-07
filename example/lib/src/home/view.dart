@@ -4,7 +4,9 @@ import 'package:example/src/camera/view.dart';
 import 'package:example/src/home/view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_smart/get_smart.dart';
+import 'package:rive/rive.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,6 +19,20 @@ class HomePage extends StatelessWidget {
           return ThemeBuilder(
             (context) => GetScaffold(
               title: "Get Smart Home",
+              appBarActions: [
+                GetButton.icon(
+                  child: const RiveAnimation.asset("assets/rive/cancer.riv"),
+                  onPressed: () {},
+                ),
+                GetButton.icon(
+                  child: SvgPicture.asset(
+                    GetIconAsset.apple_filled.$svg,
+                    package: GetAsset.package,
+                    color: context.secondaryColor,
+                  ),
+                  onPressed: () {},
+                ),
+              ],
               progress: LinearProgress.standard(
                 visible: model.isBusy,
               ),

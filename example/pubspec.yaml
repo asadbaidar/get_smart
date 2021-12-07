@@ -17,6 +17,8 @@ dependencies:
 
   camera: ^0.9.4+5
   video_player: ^2.2.7
+  rive: ^0.7.33
+  flutter_svg: ^1.0.0
 
 dev_dependencies:
   flutter_lints: ^1.0.4
@@ -25,3 +27,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/icon/
+    - assets/rive/
