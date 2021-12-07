@@ -27,12 +27,14 @@ abstract class GetObject extends Mappable {
 
   bool get capitalized => false;
 
+  bool get removeSpace => false;
+
   @override
   void mapping(Mapper map) {
     map(["CURRENT_TIME"], (v) => currentTime ??= v, DateTransform());
     map(idKeys, (v) => _id ??= v?.toString());
     map(descriptionKeys, (v) => _description ??= v,
-        StringTransform(capitalize: capitalized));
+        StringTransform(capitalize: capitalized, removeSpace: removeSpace));
   }
 
   Future get decrypted async {

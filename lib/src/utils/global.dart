@@ -102,6 +102,13 @@ extension ObjectX on Object {
   T? getObject<T>({T? as, List<Function>? builders}) =>
       Mapper.fromData(this).toMappable<T>(as: as, builders: builders);
 
+  /// Create and return a Mappable result for [T] from String or Map
+  GetResult<T>? getResult<T>({T? as, List<Function>? builders}) =>
+      Mapper.fromData(this).toMappable<GetResult<T>>(
+        as: GetResult<T>(),
+        builders: (builders ?? []) + ($cast<Mappable>(as)?.builders ?? []),
+      );
+
   /// Return the text from a text map with arguments based on current locale
   String $localized(
     Map<Locale, Map<dynamic, String>> textMap, [
