@@ -1,6 +1,7 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
-import 'dart:ui' as ui;
 
 extension Date on DateTime {
   static DateTime from({
@@ -153,6 +154,7 @@ extension Date on DateTime {
 
   String get formatMdHma => GetDateFormat.inMdHma.format(this);
 
+  /// dd-MMM-yyyy
   String get formatDMMMy => GetDateFormat.inDMMMy.format(this);
 
   String get formatDMMMyHm => GetDateFormat.inDMMMyHm.format(this);
@@ -213,6 +215,7 @@ extension GetDateFormat on DateFormat {
 
   static DateFormat get inMdHma => inMd.add(inHma, ", ");
 
+  /// dd-MMM-yyyy
   static DateFormat get inDMMMy => DateFormat("dd-MMM-yyyy");
 
   static DateFormat get inDMMMyHm => inDMMMy.add_Hm();

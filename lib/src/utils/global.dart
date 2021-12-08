@@ -74,8 +74,8 @@ extension ObjectX on Object {
     return value;
   }
 
-  /// Wrap the value of [T] into [Future.value]
-  FutureOr<T> future<T>() => Future.value(this as T);
+  /// Wrap the current object into [Future.value]
+  dynamic get future => Future.value(this);
 
   /// Returns [hashCode] as [String]
   String get hashString => hashCode.toString();
@@ -88,6 +88,12 @@ extension ObjectX on Object {
 
   /// Returns only name of the enum value with uppercase form
   String get keyNAME => keyName.uppercase;
+
+  /// Returns only first letter of name of the enum value
+  String get keyFirst => keyName.take();
+
+  /// Returns only first letter of name of the enum value with uppercase form
+  String get keyFIRST => keyNAME.take();
 
   /// Returns full path name of the enum value
   String get rawName => toString();

@@ -35,6 +35,8 @@ class GetResult<T> extends GetObject {
 
   T? get firstValue => list?.firstOrNull;
 
+  DateTime get time => currentTime!;
+
   String get tag => _tag ?? typeName;
 
   set tag(v) => _tag = v;
@@ -66,6 +68,7 @@ class GetResult<T> extends GetObject {
   @override
   void mapping(Mapper map) {
     map(["tag"], (v) => _tag ??= v);
+    map(["time"], (v) => currentTime ??= v, DateTransform(fallback: Date.now));
     map(["status", "success"], (v) => _isSucceeded ??= v);
     map(["msg", "message"], (v) => _message ??= v);
     map.$<T>(["result"], data, (v) {

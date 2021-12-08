@@ -22,29 +22,30 @@ class DateTransform implements Transformable<DateTime?, double?> {
   DateTransform({
     this.unit = DateUnit.seconds,
     this.format,
+    this.fallback,
   });
 
   final DateUnit unit;
   final DateFormat? format;
+  final DateTime? fallback;
 
   @override
   DateTime? fromJson(value) {
     try {
-      if (value == null) return null;
+      if (value == null) return fallback;
       if (value is String) return format?.parse(value) ?? DateTime.parse(value);
       if (value is int) value = value.toDouble();
-      if (value < 0) return null;
+      if (value < 0) return fallback;
 
       return DateTime.fromMillisecondsSinceEpoch(unit.addScale(value).toInt());
     } catch (e) {
-      return null;
+      return fallback;
     }
   }
 
   @override
   double? toJson(DateTime? value) {
     if (value == null) return null;
-
     return unit.removeScale(value.millisecondsSinceEpoch.toDouble());
   }
 }
