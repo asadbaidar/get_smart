@@ -18,10 +18,14 @@ Object? $object(value) => value;
 /// Returns the name of type
 String $name(Type type) => type.toString();
 
-/// Returns the name of type preceded with backslash `/`
+/// Returns the name of type
+/// - preceded with backslash `/`
+/// - lowercase first letter
+/// - removed `Page` word
 ///
-/// i.e. "/typeName"
-String $route(Type type) => "/" + $name(type);
+/// i.e. TypeNamePage -> "/typeName"
+String $route(Type type) =>
+    "/" + $name(type).lowercaseFirst.replaceAll("Page", "");
 
 /// Schedules the given `task` with the [Priority.animation] and returns a
 /// [Future] that completes to the `task`'s eventual return value.

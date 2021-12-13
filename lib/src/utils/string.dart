@@ -175,6 +175,14 @@ extension StringX on String {
   /// Example: Your Name => your name
   String get lowercase => toLowerCase();
 
+  /// Lowercase first letter of string
+  /// Example: Your Name => your Name
+  String get lowercaseFirst => isBlank == true
+      ? ""
+      : length == 1
+          ? lowercase
+          : this[0].lowercase + substring(1);
+
   /// Capitalize each word inside string
   /// Example: your name => Your Name
   String get capitalized => isBlank == true
