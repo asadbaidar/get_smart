@@ -119,7 +119,7 @@ enum GetImageAsset {
 /// <p>
 /// ### How it works
 /// If you want to add new file type extension for assets, then just make a
-/// copy of [$png] or any defined type in [AssetX] and add it in the
+/// copy of [png] or any defined type in [AssetX] and add it in the
 /// desired extension for Object class.
 ///
 /// To use it, make an enum named Asset at the end and put the same asset
@@ -137,27 +137,27 @@ enum GetImageAsset {
 /// with specific name and maps its directory name in [AssetX].
 ///
 /// - Also map that directory in `pubspec.yaml` under the assets property.
-extension GetAsset on Object {
+extension GetAsset on Enum {
   static const package = "get_smart";
 
-  String get $svg => "$_name.svg";
+  String get svg => _name.svg;
 
-  String get $png => "$_name.png";
+  String get png => _name.png;
 
-  String get $gif => "$_name.gif";
+  String get gif => _name.gif;
 
-  String get $jpg => "$_name.jpg";
+  String get jpg => _name.jpg;
 
-  String get $jpeg => "$_name.jpeg";
+  String get jpeg => _name.jpeg;
 
-  String get $pdf => "$_name.pdf";
+  String get pdf => _name.pdf;
 
   String _asset([String? name]) =>
       "assets/" +
       typeName.replaceAll("Asset", "").replaceAll("Get", "").lowercase +
-      "/${name ?? keyName}";
+      "/${name ?? this.name}";
 
-  String get _name => this is String ? this as String : _asset();
+  String get _name => _asset();
 
   String $asset(String name) => _asset(name);
 }

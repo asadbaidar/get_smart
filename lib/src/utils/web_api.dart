@@ -296,7 +296,7 @@ abstract class GetWebAPI {
               })
             : body,
         options: Options(
-          method: method.keyNAME,
+          method: method.nameCAP,
           contentType: isMultipart ? "multipart/form-data" : null,
           headers: {auth: authToken},
         ),

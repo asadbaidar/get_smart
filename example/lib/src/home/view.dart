@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:example/src/camera/view.dart';
 import 'package:example/src/home/view_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_smart/get_smart.dart';
@@ -26,7 +25,7 @@ class HomePage extends StatelessWidget {
                 ),
                 GetButton.icon(
                   child: SvgPicture.asset(
-                    GetIconAsset.apple_filled.$svg,
+                    GetIconAsset.apple_filled.svg,
                     package: GetAsset.package,
                     color: context.secondaryColor,
                   ),

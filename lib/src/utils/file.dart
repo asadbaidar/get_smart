@@ -1,7 +1,4 @@
 import 'package:get_smart/get_smart.dart';
-import 'package:get_smart/src/utils/get_utils.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart' as path;
 
 class GetFile {
@@ -96,6 +93,18 @@ class GetFile {
 }
 
 extension GetFileX on String {
+  String get svg => this + ".svg";
+
+  String get png => this + ".png";
+
+  String get gif => this + ".gif";
+
+  String get jpg => this + ".jpg";
+
+  String get jpeg => this + ".jpeg";
+
+  String get pdf => this + ".pdf";
+
   /// return the file name of file path.
   String get fileName => path.basename(this);
 

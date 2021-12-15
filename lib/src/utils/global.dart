@@ -87,24 +87,6 @@ extension ObjectX on Object {
   /// Returns random integer seeded with [hashCode] and less than [max]
   int randomIn(int max) => Random(hashCode).nextInt(max);
 
-  /// Returns only name of the enum value with capitalized form
-  String get keyName => toString().split('.').last;
-
-  /// Returns only name of the enum value with uppercase form
-  String get keyNAME => keyName.uppercase;
-
-  /// Returns only first letter of name of the enum value
-  String get keyFirst => keyName.take();
-
-  /// Returns only first letter of name of the enum value with uppercase form
-  String get keyFIRST => keyNAME.take();
-
-  /// Returns full path name of the enum value
-  String get rawName => toString();
-
-  /// Returns full path name of the enum value with uppercase form
-  String get rawNAME => rawName.uppercase;
-
   /// Returns the name of [runtimeType]
   String get typeName => $name(runtimeType);
 
@@ -131,4 +113,21 @@ extension ObjectX on Object {
             (s) => sprintf(s, arguments!.map((e) => e ?? "").toList()),
           ) ??
       "";
+}
+
+extension EnumX on Enum {
+  /// Returns only name of the enum value with uppercase form
+  String get nameCAP => name.uppercase;
+
+  /// Returns only first letter of name of the enum value
+  String get nameFirst => name.take();
+
+  /// Returns only first letter of name of the enum value with uppercase form
+  String get nameFIRST => nameFirst.uppercase;
+
+  /// Returns full path name of the enum value
+  String get rawName => toString();
+
+  /// Returns full path name of the enum value with uppercase form
+  String get rawNAME => rawName.uppercase;
 }
