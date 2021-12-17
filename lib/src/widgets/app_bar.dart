@@ -141,9 +141,6 @@ class GetAppBar {
     final _progress = progress ??
         (showProgress != null ? LinearProgress(visible: showProgress) : null);
 
-    final _toolbarHeight = toolbarHeight ??
-        (Get.isIOS ? kMinInteractiveDimensionCupertino : kToolbarHeight);
-
     final _hasLargeTitle = customLargeTitle != null ||
         (title != null && largeTitle) ||
         _largeActions?.isNotEmpty == true;
@@ -236,7 +233,7 @@ class GetAppBar {
           titleTextStyle: _titleTextStyle(context),
           actions: _actions,
           elevation: elevation ?? _elevation,
-          toolbarHeight: _toolbarHeight,
+          toolbarHeight: toolbarHeight ?? context.appBarHeight,
           shape: shape,
           flexibleSpace: flexibleSpace,
           //Blur(blur: _blur)

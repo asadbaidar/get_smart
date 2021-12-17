@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +27,9 @@ class GetTheme {
   static bool isDark(BuildContext? context) =>
       ThemeMode.system == ThemeMode.dark ||
       MediaQuery.platformBrightnessOf(context!) == Brightness.dark;
+
+  static double get appBarHeight =>
+      Get.isIOS ? kMinInteractiveDimensionCupertino : kToolbarHeight;
 
   static bool get isDarkMode => isDark(Get.context);
 
@@ -441,6 +445,7 @@ class GetTheme {
       ),
       appBarTheme: AppBarTheme(
         elevation: 1.0,
+        toolbarHeight: appBarHeight,
         shadowColor: Colors.black,
         color: _primaryBackground,
         titleTextStyle: TextStyle(
@@ -558,6 +563,11 @@ extension GetContextTheme on BuildContext {
 
   /// [AppBar.elevation] in all descendant [AppBar] widgets. Defaults to 4.0.
   double get appBarElevation => appBarTheme.elevation ?? 4.0;
+
+  /// [AppBar.toolbarHeight] in all descendant [AppBar] widgets.
+  /// Depending on platform,
+  /// Defaults to [kMinInteractiveDimensionCupertino] and [kToolbarHeight].
+  double get appBarHeight => appBarTheme.toolbarHeight ?? GetTheme.appBarHeight;
 
   /// [AppBar.shadowColor] in all descendant widgets. Defaults to [Colors.black].
   Color get appBarShadowColor => appBarTheme.shadowColor ?? Colors.black;
