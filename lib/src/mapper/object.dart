@@ -58,7 +58,7 @@ abstract class GetObject extends Mappable {
   @override
   String? get containable => id + description;
 
-  Color get color => colorAccent;
+  Color get color => colorMix;
 
   Color get colorPrimary => description.colorPrimary;
 
