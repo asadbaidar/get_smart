@@ -162,7 +162,7 @@ class GetTileData extends GetObject {
   String get description => super.description.notEmpty ?? title ?? "";
 
   @override
-  Color get color => tintColor ?? title?.materialAccent ?? super.color;
+  Color get color => tintColor ?? super.color;
 }
 
 class GetTile extends StatelessWidget {
