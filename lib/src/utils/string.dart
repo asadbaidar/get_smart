@@ -144,15 +144,13 @@ extension StringX on String {
   bool containsIgnoreCase(String? s) =>
       s == null ? false : lowercase.contains(s.lowercase);
 
-  Color get color => colorPrimary;
+  Color get color => colorMaterial;
 
   Color get colorPrimary => GetColors.primary(this);
 
   Color get colorAccent => GetColors.accent(this);
 
   Color get colorMaterial => GetColors.material(this);
-
-  Color get colorMix => GetColors.mix(this);
 
   bool isPasswordStrong({int min = 8}) {
     if (isBlank!) return false;
