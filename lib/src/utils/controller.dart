@@ -56,6 +56,9 @@ abstract class GetController extends MultipleFutureGetController {
   /// Returns the status of action if busy/succeeded or not
   bool get isActionBusyOrSucceeded => busyOrSucceeded(actionName);
 
+  /// Returns the status of action if busy/failed or not
+  bool get isActionBusyOrFailed => busyOrFailed(actionName);
+
   /// Returns the status of action if failed or not
   bool get isActionFailed => failed(actionName);
 
@@ -85,7 +88,7 @@ abstract class GetController extends MultipleFutureGetController {
   }
 
   /// Returns the runner of the action
-  Future Function() get actionRunner => runnerFor(actionName);
+  Future Function()? get actionRunner => runnerFor(actionName);
 
   /// Sets the runner of the action
   set actionRunner(value) => setRunnerFor(actionName, value);
@@ -171,6 +174,9 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Returns the status by key if busy/succeeded or not
   bool busyOrSucceeded(key) => busyFor(key) || succeeded(key);
+
+  /// Returns the status by key if busy/failed or not
+  bool busyOrFailed(key) => busyFor(key) || failed(key);
 
   /// Returns the status by key if failed or not
   bool failed(key) => statusFor(key) == GetStatus.failed;

@@ -104,7 +104,7 @@ abstract class BaseGetController extends GetxController {
   final Map<Object, Future Function()> _runnerMap = {};
 
   /// Returns the runner of the Controller
-  Future Function() get runner => runnerFor(typeName);
+  Future Function()? get runner => runnerFor(typeName);
 
   /// Sets the runner for the Controller
   set runner(value) => setRunner(value);
@@ -117,8 +117,7 @@ abstract class BaseGetController extends GetxController {
       runnerMap[key] = value;
 
   /// Returns the runner by key
-  Future Function() runnerFor(Object key) =>
-      runnerMap[key] ?? () => Future.value();
+  Future Function()? runnerFor(Object key) => runnerMap[key];
 
   /// Sets the key to busy, runs the runner and then sets it to not busy
   /// when completed.

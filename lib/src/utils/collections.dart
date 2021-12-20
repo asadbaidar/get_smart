@@ -72,3 +72,17 @@ extension IterableX<E> on Iterable<E> {
 
   Iterable<E> get notEmpty => exclude((e) => e.toString().isEmpty);
 }
+
+extension EnumIterableX<T extends Enum> on Iterable<T> {
+  /// Finds the enum value in this list with name [name].
+  ///
+  /// Goes through this collection looking for an enum with
+  /// name [name], as reported by [EnumName.name].
+  /// Returns the first value with the given name or null if none found.
+  T? byNameOrNull(String name) {
+    for (var value in this) {
+      if (value.name == name) return value;
+    }
+    return null;
+  }
+}

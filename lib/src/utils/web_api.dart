@@ -31,6 +31,12 @@ class GetResult<T> extends GetObject {
 
   // ?? (T.toString() == "dynamic" ? isSucceeded : null);
 
+  @override
+  bool get isEmpty =>
+      (list?.isEmpty ?? true) &&
+      value == null &&
+      ($cast<GetObject>(value)?.isEmpty ?? true);
+
   get data => list ?? value;
 
   T? get firstValue => list?.firstOrNull;
