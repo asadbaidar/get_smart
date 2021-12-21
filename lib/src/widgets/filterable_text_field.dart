@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
-import 'package:get_smart/src/widgets/text_field.dart';
 
 typedef GetFilterItemBuilder<T> = Widget Function(
     BuildContext context, T data, VoidCallback onTap);
 
 typedef Filter<T> = bool Function(T data, String query);
 
-typedef ItemSubmitted<T> = void Function(T data);
+typedef OnData<T> = void Function(T data);
 
-typedef StringCallback = void Function(String data);
+typedef OnData2<D1, D2> = void Function(D1 d1, D2 d2);
+
+typedef OnString = OnData<String>;
+
+typedef DataCallback<T> = T Function();
+
+typedef StringCallback = DataCallback<String>;
+
+typedef OnDataCallback<R, T> = R Function(T data);
+
+typedef OnDataReturn<T> = T Function(T data);
 
 /// A wrapper of [GetTextField] with filterable suggestion features.
 class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
@@ -21,14 +30,14 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   final Comparator<T>? itemSorter;
 
   /// Callback on input text changed, this is a string
-  final StringCallback? textChanged;
+  final OnString? textChanged;
 
   /// Callback on input text submitted, this is also a string
-  final StringCallback? textSubmitted;
+  final OnString? textSubmitted;
   final ValueSetter<bool>? onFocusChanged;
 
   /// Callback on item selected, this is the item selected of type <T>
-  final ItemSubmitted<T?> itemSubmitted;
+  final OnData<T?> itemSubmitted;
 
   /// Callback to build each item, return a Widget
   final GetFilterItemBuilder<T>? itemBuilder;
@@ -159,9 +168,9 @@ class GetFilterableTextFieldState<T extends Comparable>
 
   String? get label => widget.label;
 
-  StringCallback? get textChanged => widget.textChanged;
+  OnString? get textChanged => widget.textChanged;
 
-  StringCallback? get textSubmitted => widget.textSubmitted;
+  OnString? get textSubmitted => widget.textSubmitted;
 
   ValueSetter<bool>? get onFocusChanged => widget.onFocusChanged;
 

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -702,6 +703,29 @@ class ThemeBuilder extends StatelessWidget {
           child: Builder(builder: builder),
         )
       : builder(context);
+}
+
+typedef TextValueWidgetBuilder = Widget Function(
+  BuildContext context,
+  TextEditingValue value,
+);
+
+class TextValueBuilder extends StatelessWidget {
+  const TextValueBuilder({
+    required this.value,
+    required this.builder,
+    Key? key,
+  }) : super(key: key);
+
+  final ValueListenable<TextEditingValue> value;
+  final TextValueWidgetBuilder builder;
+
+  @override
+  Widget build(BuildContext context) =>
+      ValueListenableBuilder<TextEditingValue>(
+        valueListenable: value,
+        builder: (context, value, __) => builder(context, value),
+      );
 }
 
 class GetSearchDelegate extends SearchDelegate {

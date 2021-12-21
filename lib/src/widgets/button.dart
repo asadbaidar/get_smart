@@ -1161,13 +1161,14 @@ abstract class GetButton {
       );
 
   static Widget back({
+    IconData? icon,
     Color? color,
     VoidCallback? onPressed,
   }) =>
       ThemeBuilder(
         (context) => CupertinoButton(
           child: Icon(
-            Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+            icon ?? (Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
             color: color ?? context.primaryIconColor,
           ),
           padding: EdgeInsets.only(left: Get.isIOS ? 9 : 2),

@@ -22,10 +22,64 @@ class GetBottomSheet extends StatelessWidget {
     this.physics = const AlwaysBouncingScrollPhysics(),
     this.divider,
     this.contentPadding,
-    this.minHeight,
+    this.initialSize = 0.6,
+    this.maxSize = 1.0,
     this.itemCount,
     this.showHandle = true,
     this.centerTitle,
+    this.autoImplyLeading = true,
+    this.rounded = true,
+    this.dismissible = true,
+    Key? key,
+  }) : super(key: key);
+
+  const GetBottomSheet.mid({
+    this.title,
+    this.content,
+    this.itemBuilder,
+    this.items,
+    this.headerBuilder,
+    this.footerBuilder,
+    this.sectionBuilder,
+    this.section,
+    this.leadingAction,
+    this.topActions,
+    this.bottomActions,
+    this.physics = const AlwaysBouncingScrollPhysics(),
+    this.divider,
+    this.contentPadding,
+    this.initialSize = 0.5,
+    this.maxSize = 1.0,
+    this.itemCount,
+    this.showHandle = true,
+    this.centerTitle,
+    this.autoImplyLeading = true,
+    this.rounded = true,
+    this.dismissible = true,
+    Key? key,
+  }) : super(key: key);
+
+  const GetBottomSheet.max({
+    this.title,
+    this.content,
+    this.itemBuilder,
+    this.items,
+    this.headerBuilder,
+    this.footerBuilder,
+    this.sectionBuilder,
+    this.section,
+    this.leadingAction,
+    this.topActions,
+    this.bottomActions,
+    this.physics = const AlwaysBouncingScrollPhysics(),
+    this.divider,
+    this.contentPadding,
+    this.initialSize = 1.0,
+    this.maxSize = 1.0,
+    this.itemCount,
+    this.showHandle = true,
+    this.centerTitle,
+    this.autoImplyLeading = true,
     this.rounded = true,
     this.dismissible = true,
     Key? key,
@@ -46,9 +100,11 @@ class GetBottomSheet extends StatelessWidget {
   final DividerStyle? divider;
   final EdgeInsetsGeometry? contentPadding;
   final int? itemCount;
-  final double? minHeight;
+  final double initialSize;
+  final double maxSize;
   final bool showHandle;
   final bool? centerTitle;
+  final bool autoImplyLeading;
   final bool rounded;
   final bool dismissible;
 
@@ -56,7 +112,11 @@ class GetBottomSheet extends StatelessWidget {
 
   GetItemBuilder get _itemBuilder => itemBuilder ?? (_, __) => content!;
 
-  bool get showLeading => leadingAction != null;
+  bool get customLeading => leadingAction != null;
+
+  Widget? get _leadingAction =>
+      leadingAction?.paddingOnly(left: kEdgePadding) ??
+      (autoImplyLeading ? GetButton.back(icon: CupertinoIcons.xmark) : null);
 
   bool get showToolbar =>
       title != null || topActions?.isNotEmpty == true || leadingAction != null;
@@ -69,6 +129,8 @@ class GetBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DraggableScrollableSheet(
+        initialChildSize: initialSize,
+        maxChildSize: maxSize,
         builder: (context, scrollController) => Material(
           color: context.backgroundColor,
           shape: shape,
@@ -97,10 +159,10 @@ class GetBottomSheet extends StatelessWidget {
                             translucent: false,
                             largeTitle: false,
                             backgroundColor: context.backgroundColor,
-                            centerTitle: showLeading ? true : centerTitle,
-                            showLeading: showLeading,
-                            leading:
-                                leadingAction?.paddingOnly(left: kEdgePadding),
+                            centerTitle: customLeading ? true : centerTitle,
+                            showLeading: customLeading || autoImplyLeading,
+                            leadingWidth: autoImplyLeading ? 44 : null,
+                            leading: _leadingAction,
                           )
                       : null,
                   items: items,
@@ -112,18 +174,14 @@ class GetBottomSheet extends StatelessWidget {
                   section: section,
                 ),
               ),
-              if (bottomActions?.isNotEmpty == true || minHeight != null)
+              if (bottomActions?.isNotEmpty == true)
                 Padding(
                   padding: kDensePaddingAll,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(height: minHeight),
-                      if (bottomActions?.isNotEmpty == true)
-                        ...bottomActions!.expand(
-                          (e) => [kEdgePadding.spaceX, e],
-                        )
-                    ],
+                    children: bottomActions!
+                        .expand((e) => [kEdgePadding.spaceX, e])
+                        .toList(),
                   ),
                 ),
             ],

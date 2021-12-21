@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
 
 extension UrlX on String {
@@ -51,6 +50,13 @@ extension Uint8ListX on Uint8List {
   /// Convert bytes to memory image
   MemoryImage? image({double scale = 1.0}) =>
       isEmpty ? null : MemoryImage(this, scale: scale);
+}
+
+extension CompleterX<T> on Completer<T> {
+  /// Completes [future] with the supplied values if not already completed.
+  void completeIfCan([FutureOr<T>? value]) {
+    if (!isCompleted) complete();
+  }
 }
 
 extension MaterialStatePropertyX<T> on MaterialStateProperty<T> {
