@@ -120,9 +120,9 @@ class GetTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final VoidCallback? onTap;
   final void Function(String v)? onSubmitted;
-  final void Function(String? v)? onSaved;
+  final void Function(String v)? onSaved;
   final void Function(String v)? onChanged;
-  final String? Function(String? v)? validator;
+  final String? Function(String v)? validator;
   final bool autoControlled;
   final bool? readOnly;
   final bool tapOnly;
@@ -208,7 +208,7 @@ class GetTextField extends StatelessWidget {
 
   String get _hint => hint ?? label?.lowercase ?? GetText.value().lowercase;
 
-  String? Function(String? v) get _validator =>
+  String? Function(String v) get _validator =>
       validator != null ? validator! : (v) => null;
 
   bool get _readOnly => readOnly == true || (tapOnly && onTap != null);
@@ -217,7 +217,7 @@ class GetTextField extends StatelessWidget {
 
   String? _tryValidator(String? v) {
     try {
-      return _validator(v);
+      return _validator(v ?? "");
     } catch (_) {
       return null;
     }
@@ -297,7 +297,7 @@ class GetTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           minLines: minLines,
           maxLines: maxLines,
-          onSaved: onSaved,
+          onSaved: (v) => onSaved?.call(v ?? ""),
           validator: _validate,
           onTap: readOnly == true ? null : onTap,
           onChanged: onChanged,
