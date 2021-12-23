@@ -115,7 +115,7 @@ class GetTileData extends GetObject {
     this.onTapLeading,
   }) : tintColor = color;
 
-  IconData? leading;
+  dynamic leading;
   String? title;
   String? titleHint;
   String? subtitle;
@@ -169,15 +169,19 @@ class GetTile extends StatelessWidget {
   /// Tile to initialize from [GetTileData]
   GetTile.from(
     GetTileData data, {
+    dynamic leading,
+    bool? checked,
     Color? background = Colors.transparent,
     VoidCallback? onTap,
     Key? key,
-  }) : this.simple(
+  }) : this.itemPad(
+          leading: leading ?? data.leading,
           title: data.description,
           subtitle: data.subtitle,
           detail: data.detail,
-          background: background,
-          onTap: onTap,
+          checked: checked ?? data.isChecked,
+          background: background ?? data.background,
+          onTap: onTap ?? data.onTap,
           key: key,
         );
 

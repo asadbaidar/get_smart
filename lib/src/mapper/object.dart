@@ -16,9 +16,11 @@ abstract class GetObject extends Mappable {
 
   set description(description) => _description = description;
 
-  String? get idFallback => null;
+  String? get idFallback => fallback?.id;
 
-  String? get descriptionFallback => null;
+  String? get descriptionFallback => fallback?.description;
+
+  GetObject? get fallback => null;
 
   List<String> get idKeys => ["ID", "id"];
 

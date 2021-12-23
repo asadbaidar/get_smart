@@ -152,10 +152,10 @@ class GetListView extends ScrollView {
     int? itemCount,
     DividerStyle? divider,
     DividerStyle edgeDivider = DividerStyle.full,
+    EdgeInsetsGeometry? padding,
     bool addAutomaticKeepAlives = true,
     bool addRepaintBoundaries = true,
     bool addSemanticIndexes = true,
-    EdgeInsetsGeometry? padding,
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     ScrollController? controller,
@@ -183,11 +183,11 @@ class GetListView extends ScrollView {
                 itemCount: itemCount,
                 divider: divider,
                 edgeDivider: edgeDivider,
+                padding: padding,
                 addAutomaticKeepAlives: addAutomaticKeepAlives,
                 addRepaintBoundaries: addRepaintBoundaries,
                 addSemanticIndexes: addSemanticIndexes,
                 scrollDirection: scrollDirection,
-                padding: padding,
               )
             ]),
         super(
@@ -325,13 +325,13 @@ class GetSliverList extends StatelessWidget {
   /// may be null.
   const GetSliverList({
     List<Widget> this.children = const [],
+    this.padding,
+    this.itemExtent,
+    this.prototypeItem,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
     this.addSemanticIndexes = true,
     this.scrollDirection = Axis.vertical,
-    this.padding,
-    this.itemExtent,
-    this.prototypeItem,
     Key? key,
   })  : assert(children != null),
         assert(
@@ -391,11 +391,11 @@ class GetSliverList extends StatelessWidget {
     int? itemCount,
     this.divider,
     this.edgeDivider = DividerStyle.full,
+    this.padding,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
     this.addSemanticIndexes = true,
     this.scrollDirection = Axis.vertical,
-    this.padding,
     Key? key,
   })  : assert(itemBuilder != null),
         itemCount = itemCount ?? items?.length ?? 0,
@@ -416,13 +416,13 @@ class GetSliverList extends StatelessWidget {
   final int itemCount;
   final DividerStyle? divider;
   final DividerStyle edgeDivider;
+
+  /// The amount of space by which to inset the children.
+  final EdgeInsetsGeometry? padding;
   final bool addAutomaticKeepAlives;
   final bool addRepaintBoundaries;
   final bool addSemanticIndexes;
   final Axis scrollDirection;
-
-  /// The amount of space by which to inset the children.
-  final EdgeInsetsGeometry? padding;
 
   /// If non-null, forces the children to have the given extent in the scroll
   /// direction.

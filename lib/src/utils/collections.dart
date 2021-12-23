@@ -79,9 +79,9 @@ extension EnumIterableX<T extends Enum> on Iterable<T> {
   /// Goes through this collection looking for an enum with
   /// name [name], as reported by [EnumName.name].
   /// Returns the first value with the given name or null if none found.
-  T? byNameOrNull(String name) {
+  T? byNameOrNull(String name, [String? extra]) {
     for (var value in this) {
-      if (value.name == name) return value;
+      if (value.name == name || value.name == extra) return value;
     }
     return null;
   }
