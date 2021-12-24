@@ -119,10 +119,10 @@ class GetTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final FocusNode? focusNode;
   final VoidCallback? onTap;
-  final void Function(String v)? onSubmitted;
-  final void Function(String v)? onSaved;
-  final void Function(String v)? onChanged;
-  final String? Function(String v)? validator;
+  final OnString? onSubmitted;
+  final OnString? onSaved;
+  final OnString? onChanged;
+  final OnStringCallback<String?>? validator;
   final bool autoControlled;
   final bool? readOnly;
   final bool tapOnly;

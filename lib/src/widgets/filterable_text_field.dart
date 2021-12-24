@@ -3,23 +3,27 @@ import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
 
 typedef GetFilterItemBuilder<T> = Widget Function(
-    BuildContext context, T data, VoidCallback onTap);
+    BuildContext context, T value, VoidCallback onTap);
 
-typedef Filter<T> = bool Function(T data, String query);
+typedef Filter<T> = bool Function(T value, String query);
 
-typedef OnData<T> = void Function(T data);
+typedef OnValue<T> = void Function(T value);
 
-typedef OnData2<D1, D2> = void Function(D1 d1, D2 d2);
+typedef OnValue2<V1, V2> = void Function(V1 v1, V2 v2);
 
-typedef OnString = OnData<String>;
+typedef OnString = OnValue<String>;
 
-typedef DataCallback<T> = T Function();
+typedef ValueCallback<T> = T Function();
 
-typedef StringCallback = DataCallback<String>;
+typedef StringCallback = ValueCallback<String>;
 
-typedef OnDataCallback<R, T> = R Function(T data);
+typedef OnValueCallback<R, T> = R Function(T value);
 
-typedef OnDataReturn<T> = T Function(T data);
+typedef OnStringCallback<R> = OnValueCallback<R, String>;
+
+typedef OnValueReturn<T> = T Function(T value);
+
+typedef OnStringReturn = OnValueReturn<String>;
 
 /// A wrapper of [GetTextField] with filterable suggestion features.
 class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
@@ -37,7 +41,7 @@ class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   final ValueSetter<bool>? onFocusChanged;
 
   /// Callback on item selected, this is the item selected of type <T>
-  final OnData<T?> itemSubmitted;
+  final OnValue<T?> itemSubmitted;
 
   /// Callback to build each item, return a Widget
   final GetFilterItemBuilder<T>? itemBuilder;

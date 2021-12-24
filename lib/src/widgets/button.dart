@@ -70,6 +70,7 @@ abstract class GetButton {
     double? elevation,
     TextStyle? textStyle,
     FocusNode? focusNode,
+    bool back = false,
     bool? autofocus = false,
     bool round = false,
     bool enabled = true,
@@ -91,7 +92,10 @@ abstract class GetButton {
             onPressed: enabled
                 ? busy
                     ? () {}
-                    : onPressed
+                    : () {
+                        onPressed?.call();
+                        if (back) Get.back();
+                      }
                 : null,
             onLongPress: onLongPress,
             style: ElevatedButton.styleFrom(
@@ -148,6 +152,7 @@ abstract class GetButton {
     double? elevation,
     TextStyle? textStyle,
     FocusNode? focusNode,
+    bool back = false,
     bool? autofocus = false,
     bool round = false,
     bool enabled = true,
@@ -171,7 +176,10 @@ abstract class GetButton {
               onPressed: enabled
                   ? busy
                       ? () {}
-                      : onPressed
+                      : () {
+                          onPressed?.call();
+                          if (back) Get.back();
+                        }
                   : null,
               onLongPress: onLongPress,
               style: ElevatedButton.styleFrom(
@@ -229,6 +237,7 @@ abstract class GetButton {
     double? elevation,
     TextStyle? textStyle,
     FocusNode? focusNode,
+    bool back = false,
     bool autofocus = false,
     bool enabled = true,
     bool busy = false,
@@ -253,6 +262,7 @@ abstract class GetButton {
         elevation: elevation,
         textStyle: textStyle,
         focusNode: focusNode,
+        back: back,
         autofocus: autofocus,
         round: true,
         enabled: enabled,
@@ -281,7 +291,8 @@ abstract class GetButton {
     double? elevation,
     TextStyle? textStyle,
     FocusNode? focusNode,
-    bool? autofocus = false,
+    bool back = false,
+    bool autofocus = false,
     bool round = false,
     bool enabled = true,
     bool busy = false,
@@ -303,7 +314,10 @@ abstract class GetButton {
               onPressed: enabled
                   ? busy
                       ? () {}
-                      : onPressed
+                      : () {
+                          onPressed?.call();
+                          if (back) Get.back();
+                        }
                   : null,
               onLongPress: onLongPress,
               style: OutlinedButton.styleFrom(
@@ -329,7 +343,7 @@ abstract class GetButton {
                 textStyle: textStyle,
               ),
               focusNode: focusNode,
-              autofocus: autofocus ?? false,
+              autofocus: autofocus,
               clipBehavior: clipBehavior ?? Clip.none,
               child: busy
                   ? CircularProgress.small(
@@ -360,6 +374,7 @@ abstract class GetButton {
     double? elevation,
     TextStyle? textStyle,
     FocusNode? focusNode,
+    bool back = false,
     bool autofocus = false,
     bool enabled = true,
     bool busy = false,
@@ -383,11 +398,12 @@ abstract class GetButton {
         onSurface: onSurface,
         elevation: elevation,
         textStyle: textStyle,
+        focusNode: focusNode,
+        back: back,
+        autofocus: autofocus,
         round: true,
         enabled: enabled,
         busy: busy,
-        focusNode: focusNode,
-        autofocus: autofocus,
         clipBehavior: clipBehavior,
         child: child,
       );
@@ -412,6 +428,7 @@ abstract class GetButton {
     double? elevation,
     TextStyle? textStyle,
     FocusNode? focusNode,
+    bool back = false,
     bool autofocus = false,
     bool round = false,
     bool enabled = true,
@@ -433,7 +450,10 @@ abstract class GetButton {
             onPressed: enabled
                 ? busy
                     ? () {}
-                    : onPressed
+                    : () {
+                        onPressed?.call();
+                        if (back) Get.back();
+                      }
                 : null,
             onLongPress: onLongPress,
             style: TextButton.styleFrom(
@@ -489,6 +509,7 @@ abstract class GetButton {
     double? elevation,
     TextStyle? textStyle,
     FocusNode? focusNode,
+    bool back = false,
     bool autofocus = false,
     bool enabled = true,
     bool busy = false,
@@ -512,11 +533,12 @@ abstract class GetButton {
         onSurface: onSurface,
         elevation: elevation,
         textStyle: textStyle,
+        focusNode: focusNode,
+        back: back,
+        autofocus: autofocus,
         round: true,
         enabled: enabled,
         busy: busy,
-        focusNode: focusNode,
-        autofocus: autofocus,
         clipBehavior: clipBehavior,
         child: child,
       );
@@ -540,6 +562,7 @@ abstract class GetButton {
     double? elevation,
     TextStyle? textStyle,
     FocusNode? focusNode,
+    bool back = true,
     bool autofocus = false,
     bool enabled = true,
     bool busy = false,
@@ -548,10 +571,7 @@ abstract class GetButton {
   }) =>
       text(
         key: key,
-        onPressed: () {
-          onPressed?.call();
-          Get.back();
-        },
+        onPressed: onPressed,
         onLongPress: onLongPress,
         minimumSize: minimumSize,
         padding: padding,
@@ -567,6 +587,7 @@ abstract class GetButton {
         elevation: elevation,
         textStyle: textStyle,
         focusNode: focusNode,
+        back: back,
         autofocus: autofocus,
         enabled: enabled,
         busy: busy,
@@ -594,6 +615,7 @@ abstract class GetButton {
     double? elevation,
     TextStyle? textStyle,
     FocusNode? focusNode,
+    bool back = true,
     bool autofocus = false,
     bool enabled = true,
     bool busy = false,
@@ -617,6 +639,7 @@ abstract class GetButton {
         elevation: elevation,
         textStyle: textStyle,
         focusNode: focusNode,
+        back: back,
         autofocus: autofocus,
         enabled: enabled,
         busy: busy,
@@ -643,6 +666,7 @@ abstract class GetButton {
     double? elevation,
     TextStyle? textStyle,
     FocusNode? focusNode,
+    bool back = true,
     bool autofocus = false,
     bool enabled = true,
     bool busy = false,
@@ -650,10 +674,7 @@ abstract class GetButton {
     Widget? child,
   }) =>
       elevated(
-        onPressed: () {
-          onPressed?.call();
-          Get.back();
-        },
+        onPressed: onPressed,
         onLongPress: onLongPress,
         minimumSize: minimumSize,
         padding: padding,
@@ -669,6 +690,7 @@ abstract class GetButton {
         elevation: elevation,
         textStyle: textStyle,
         focusNode: focusNode,
+        back: back,
         autofocus: autofocus,
         enabled: enabled,
         busy: busy,
@@ -696,6 +718,7 @@ abstract class GetButton {
     double? elevation,
     TextStyle? textStyle,
     FocusNode? focusNode,
+    bool back = true,
     bool autofocus = false,
     bool enabled = true,
     bool busy = false,
@@ -719,6 +742,7 @@ abstract class GetButton {
         elevation: elevation,
         textStyle: textStyle,
         focusNode: focusNode,
+        back: back,
         autofocus: autofocus,
         enabled: enabled,
         busy: busy,
@@ -745,7 +769,8 @@ abstract class GetButton {
     VoidCallback? onPressed,
     MouseCursor? mouseCursor,
     FocusNode? focusNode,
-    bool? autofocus = false,
+    bool back = false,
+    bool autofocus = false,
     bool primary = false,
     bool enabled = true,
     bool busy = false,
@@ -820,11 +845,14 @@ abstract class GetButton {
             onPressed: enabled
                 ? busy
                     ? () {}
-                    : onPressed
+                    : () {
+                        onPressed?.call();
+                        if (back) Get.back();
+                      }
                 : null,
             mouseCursor: mouseCursor ?? SystemMouseCursors.click,
             focusNode: focusNode,
-            autofocus: autofocus ?? false,
+            autofocus: autofocus,
             tooltip: tooltip,
             enableFeedback: enableFeedback ?? true,
             constraints: constraints ??
@@ -854,6 +882,7 @@ abstract class GetButton {
     VoidCallback? onPressed,
     MouseCursor? mouseCursor,
     FocusNode? focusNode,
+    bool back = false,
     bool autofocus = false,
     bool enabled = true,
     bool mini = false,
@@ -883,6 +912,7 @@ abstract class GetButton {
         onPressed: onPressed,
         mouseCursor: mouseCursor,
         focusNode: focusNode,
+        back: back,
         autofocus: autofocus,
         primary: true,
         enabled: enabled,
@@ -915,6 +945,7 @@ abstract class GetButton {
     VoidCallback? onPressed,
     MouseCursor? mouseCursor,
     FocusNode? focusNode,
+    bool back = false,
     bool autofocus = false,
     bool primary = false,
     bool enabled = true,
@@ -944,6 +975,7 @@ abstract class GetButton {
         onPressed: onPressed,
         mouseCursor: mouseCursor,
         focusNode: focusNode,
+        back: back,
         autofocus: autofocus,
         primary: primary,
         enabled: enabled,
@@ -976,6 +1008,7 @@ abstract class GetButton {
     VoidCallback? onPressed,
     MouseCursor? mouseCursor,
     FocusNode? focusNode,
+    bool back = false,
     bool autofocus = false,
     bool primary = false,
     bool enabled = true,
@@ -1006,6 +1039,7 @@ abstract class GetButton {
         onPressed: onPressed,
         mouseCursor: mouseCursor,
         focusNode: focusNode,
+        back: back,
         autofocus: autofocus,
         primary: primary,
         enabled: enabled,
@@ -1021,6 +1055,7 @@ abstract class GetButton {
 
   static Widget plain({
     Key? key,
+    bool back = false,
     bool enabled = true,
     bool primary = false,
     bool busy = false,
@@ -1059,7 +1094,10 @@ abstract class GetButton {
             onPressed: enabled
                 ? busy
                     ? () {}
-                    : onPressed
+                    : () {
+                        onPressed?.call();
+                        if (back) Get.back();
+                      }
                 : null,
             child: IconTheme(
               data: (primary ? context.primaryIconTheme : context.iconTheme)
@@ -1072,6 +1110,7 @@ abstract class GetButton {
 
   static Widget plainZero({
     Key? key,
+    bool back = false,
     bool enabled = true,
     bool primary = false,
     bool busy = false,
@@ -1094,6 +1133,7 @@ abstract class GetButton {
   }) =>
       plain(
         key: key,
+        back: back,
         enabled: enabled,
         primary: primary,
         busy: busy,
@@ -1117,6 +1157,7 @@ abstract class GetButton {
 
   static Widget plainMini({
     Key? key,
+    bool back = false,
     bool enabled = true,
     bool primary = false,
     bool busy = false,
@@ -1139,6 +1180,7 @@ abstract class GetButton {
   }) =>
       plain(
         key: key,
+        back: back,
         enabled: enabled,
         primary: primary,
         busy: busy,

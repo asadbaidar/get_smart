@@ -2,14 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
 
 class GetBottomSheet extends StatelessWidget {
   static const kEdgePadding = 6.0;
 
   const GetBottomSheet({
+    this.customTitle,
     this.title,
+    this.message,
     this.content,
+    this.action,
+    this.onAction,
     this.itemBuilder,
     this.items,
     this.headerBuilder,
@@ -17,7 +22,7 @@ class GetBottomSheet extends StatelessWidget {
     this.sectionBuilder,
     this.section,
     this.leadingAction,
-    this.topActions,
+    this.actions,
     this.bottomActions,
     this.physics = const AlwaysBouncingScrollPhysics(),
     this.divider,
@@ -29,13 +34,28 @@ class GetBottomSheet extends StatelessWidget {
     this.centerTitle,
     this.autoImplyLeading = true,
     this.rounded = true,
-    this.dismissible = true,
+    this.dismissOnDone = false,
+    this.busy = false,
+    this.textController,
+    this.textLabel,
+    this.autofocus = false,
+    this.maxInput,
+    this.inputFormatters,
+    this.keyboardType,
+    this.textInputAction = TextInputAction.done,
+    this.textValidator,
+    this.onTextChanged,
+    this.onTextSubmitted,
     Key? key,
   }) : super(key: key);
 
   const GetBottomSheet.mid({
+    this.customTitle,
     this.title,
+    this.message,
     this.content,
+    this.action,
+    this.onAction,
     this.itemBuilder,
     this.items,
     this.headerBuilder,
@@ -43,7 +63,7 @@ class GetBottomSheet extends StatelessWidget {
     this.sectionBuilder,
     this.section,
     this.leadingAction,
-    this.topActions,
+    this.actions,
     this.bottomActions,
     this.physics = const AlwaysBouncingScrollPhysics(),
     this.divider,
@@ -55,13 +75,28 @@ class GetBottomSheet extends StatelessWidget {
     this.centerTitle,
     this.autoImplyLeading = true,
     this.rounded = true,
-    this.dismissible = true,
+    this.dismissOnDone = false,
+    this.busy = false,
+    this.textController,
+    this.textLabel,
+    this.autofocus = false,
+    this.maxInput,
+    this.inputFormatters,
+    this.keyboardType,
+    this.textInputAction = TextInputAction.done,
+    this.textValidator,
+    this.onTextChanged,
+    this.onTextSubmitted,
     Key? key,
   }) : super(key: key);
 
   const GetBottomSheet.max({
+    this.customTitle,
     this.title,
+    this.message,
     this.content,
+    this.action,
+    this.onAction,
     this.itemBuilder,
     this.items,
     this.headerBuilder,
@@ -69,7 +104,7 @@ class GetBottomSheet extends StatelessWidget {
     this.sectionBuilder,
     this.section,
     this.leadingAction,
-    this.topActions,
+    this.actions,
     this.bottomActions,
     this.physics = const AlwaysBouncingScrollPhysics(),
     this.divider,
@@ -81,12 +116,68 @@ class GetBottomSheet extends StatelessWidget {
     this.centerTitle,
     this.autoImplyLeading = true,
     this.rounded = true,
-    this.dismissible = true,
+    this.dismissOnDone = false,
+    this.busy = false,
+    this.textController,
+    this.textLabel,
+    this.autofocus = false,
+    this.maxInput,
+    this.inputFormatters,
+    this.keyboardType,
+    this.textInputAction = TextInputAction.done,
+    this.textValidator,
+    this.onTextChanged,
+    this.onTextSubmitted,
     Key? key,
   }) : super(key: key);
 
-  final Widget? title;
+  const GetBottomSheet.text({
+    this.customTitle,
+    this.title,
+    this.message,
+    this.content,
+    this.action,
+    this.onAction,
+    this.itemBuilder,
+    this.items,
+    this.headerBuilder,
+    this.footerBuilder,
+    this.sectionBuilder,
+    this.section,
+    this.leadingAction,
+    this.actions,
+    this.bottomActions,
+    this.physics = const AlwaysBouncingScrollPhysics(),
+    this.divider,
+    this.contentPadding,
+    this.initialSize = 0.6,
+    this.maxSize = 1.0,
+    this.itemCount,
+    this.showHandle = true,
+    this.centerTitle,
+    this.autoImplyLeading = true,
+    this.rounded = true,
+    this.dismissOnDone = false,
+    this.busy = false,
+    required TextEditingController this.textController,
+    this.textLabel,
+    this.autofocus = true,
+    this.maxInput,
+    this.inputFormatters,
+    this.keyboardType,
+    this.textInputAction = TextInputAction.done,
+    this.textValidator,
+    this.onTextChanged,
+    this.onTextSubmitted,
+    Key? key,
+  }) : super(key: key);
+
+  final Widget? customTitle;
+  final String? title;
+  final String? message;
   final Widget? content;
+  final String? action;
+  final VoidCallback? onAction;
   final GetItemBuilder? itemBuilder;
   final List? items;
   final WidgetBuilder? headerBuilder;
@@ -94,7 +185,7 @@ class GetBottomSheet extends StatelessWidget {
   final GetSectionBuilder? sectionBuilder;
   final GetSection? section;
   final Widget? leadingAction;
-  final List<Widget>? topActions;
+  final List<Widget>? actions;
   final List<Widget>? bottomActions;
   final ScrollPhysics? physics;
   final DividerStyle? divider;
@@ -106,11 +197,87 @@ class GetBottomSheet extends StatelessWidget {
   final bool? centerTitle;
   final bool autoImplyLeading;
   final bool rounded;
-  final bool dismissible;
+  final bool dismissOnDone;
+  final bool busy;
 
-  int? get _itemCount => itemCount ?? (content != null ? 1 : null);
+  // TextField options
+  final TextEditingController? textController;
+  final String? textLabel;
+  final OnStringCallback<String?>? textValidator;
+  final bool autofocus;
+  final int? maxInput;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final OnString? onTextChanged;
+  final OnString? onTextSubmitted;
 
-  GetItemBuilder get _itemBuilder => itemBuilder ?? (_, __) => content!;
+  void _onTextSubmitted([String? v]) async {
+    onTextChanged?.call(v ?? "");
+    if (v == null || v.isNotEmpty && textValidator?.call(v) == null) {
+      onTextSubmitted?.call(v ?? "");
+      if (dismissOnDone) Get.back();
+    }
+  }
+
+  Widget _action({bool enabled = true}) => textController != null
+      ? GetButton.text(
+          enabled: enabled,
+          busy: busy,
+          child: Text(action!),
+          onPressed: () => _onTextSubmitted(textController?.text),
+        )
+      : GetButton.text(
+          busy: busy,
+          back: dismissOnDone,
+          child: Text(action!),
+          onPressed: onAction,
+        );
+
+  List<Widget> get _actions => [
+        ...?actions,
+        if (action != null)
+          if (textController != null)
+            TextValueBuilder(
+              value: textController!,
+              builder: (_, v) => _action(enabled: v.text.isNotEmpty),
+            )
+          else
+            _action(),
+        kEdgePadding.spaceX
+      ];
+
+  Widget _contentBuilder(BuildContext context, data) =>
+      message?.mapIt((it) => Padding(
+            padding: kStandardPaddingV,
+            child: Text(
+              message!,
+              style: context.subtitle1,
+            ),
+          )) ??
+      textController?.mapIt((it) => GetTextField(
+            readOnly: busy,
+            controller: it,
+            label: textLabel,
+            validator: textValidator,
+            onChanged: onTextChanged,
+            onSubmitted: _onTextSubmitted,
+            inputFormatters: inputFormatters,
+            keyboardType: keyboardType,
+            textInputAction: textInputAction,
+            autofocus: autofocus,
+            enableSuggestions: false,
+            validateEmpty: true,
+            maxLength: maxInput,
+          )) ??
+      content!;
+
+  bool get _hasContent =>
+      message != null || textController != null || content != null;
+
+  int? get _itemCount => itemCount ?? (_hasContent ? 1 : null);
+
+  GetItemBuilder get _itemBuilder => itemBuilder ?? _contentBuilder;
 
   bool get customLeading => leadingAction != null;
 
@@ -119,7 +286,11 @@ class GetBottomSheet extends StatelessWidget {
       (autoImplyLeading ? GetButton.back(icon: CupertinoIcons.xmark) : null);
 
   bool get showToolbar =>
-      title != null || topActions?.isNotEmpty == true || leadingAction != null;
+      title?.isNotEmpty == true ||
+      customTitle != null ||
+      action?.isNotEmpty == true ||
+      actions?.isNotEmpty == true ||
+      leadingAction != null;
 
   ShapeBorder get shape => RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -148,16 +319,15 @@ class GetBottomSheet extends StatelessWidget {
                   divider: divider,
                   topSliverBuilder: showToolbar
                       ? (context) => GetAppBar.sliver(
-                            customTitle: title,
-                            actions: [
-                              ...(topActions ?? []),
-                              kEdgePadding.spaceX
-                            ],
+                            customTitle: customTitle,
+                            title: title,
+                            actions: _actions,
                             toolbarHeight: kMinInteractiveDimension,
                             elevation: 0.5,
                             elevateAlways: false,
                             translucent: false,
                             largeTitle: false,
+                            showProgress: busy,
                             backgroundColor: context.backgroundColor,
                             centerTitle: customLeading ? true : centerTitle,
                             showLeading: customLeading || autoImplyLeading,

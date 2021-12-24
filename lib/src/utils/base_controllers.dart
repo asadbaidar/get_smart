@@ -6,6 +6,8 @@ import 'package:get_smart/get_smart.dart';
 /// Basic Controller functionality for busy state management
 abstract class BaseGetController extends GetxController {
   Map<Object, bool> get busyStates => _busyStates;
+
+  Map<Object, dynamic> get errorStates => _errorStates;
   final Map<Object, bool> _busyStates = {};
   final Map<Object, dynamic> _errorStates = {};
 
@@ -69,17 +71,26 @@ abstract class BaseGetController extends GetxController {
   }
 
   /// Clears the data by key
-  void clearData([Object? key]) {
-    _errorStates.remove(key);
-    _busyStates.remove(key);
-    update();
+  bool clearData([Object? key]) {
+    final _key = key ?? typeName;
+    if (errorStates.containsKey(_key) || busyStates.containsKey(_key)) {
+      _errorStates.remove(_key);
+      _busyStates.remove(_key);
+      update();
+      return true;
+    }
+    return false;
   }
 
   /// Clears all data and errors
-  void clearAllData() {
-    clearErrors();
-    clearBusy();
-    update();
+  bool clearAllData() {
+    if (errorStates.isNotEmpty || busyStates.isNotEmpty) {
+      clearErrors();
+      clearBusy();
+      update();
+      return true;
+    }
+    return false;
   }
 
   /// Sets the busy status by key and calls notify listeners
@@ -334,16 +345,25 @@ class _MultiDataSourceGetController extends DynamicSourceGetController {
 
   /// Clears the data by key
   @override
-  void clearData([Object? key]) {
-    setDataFor(key ?? typeName, null);
-    super.clearAllData();
+  bool clearData([Object? key]) {
+    final _key = key ?? typeName;
+    if (dataMap.containsKey(_key)) {
+      dataMap.remove(_key);
+      super.clearAllData();
+      return true;
+    }
+    return super.clearAllData();
   }
 
   /// Clears all data and errors
   @override
-  void clearAllData() {
-    dataMap.clear();
-    super.clearAllData();
+  bool clearAllData() {
+    if (dataMap.isNotEmpty) {
+      dataMap.clear();
+      super.clearAllData();
+      return true;
+    }
+    return super.clearAllData();
   }
 }
 
