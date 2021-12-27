@@ -1,8 +1,4 @@
 import 'package:get_smart/get_smart.dart';
-import 'package:get_smart/src/mapper/transforms/get_transform.dart';
-
-import 'mappable.dart';
-import 'transforms/transformable.dart';
 
 typedef MapperSetter = dynamic Function(dynamic v);
 enum MapperType { fromJson, toJson }

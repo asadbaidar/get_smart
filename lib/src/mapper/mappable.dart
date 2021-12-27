@@ -4,8 +4,6 @@ import 'dart:convert';
 
 import 'package:get_smart/get_smart.dart';
 
-import 'mapper.dart';
-
 abstract class Mappable with Comparable<Mappable> {
   static Map<Type, Function> factories = {};
 

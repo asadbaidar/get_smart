@@ -4,7 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:example/src/camera/view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get_smart/get_smart.dart';
 import 'package:video_player/video_player.dart';
 
