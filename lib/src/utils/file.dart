@@ -105,6 +105,10 @@ extension GetFileX on String {
 
   String get pdf => this + ".pdf";
 
+  bool get isSVG => lowercase.endsWith("svg");
+
+  bool get isPNG => lowercase.endsWith("png");
+
   /// return the file name of file path.
   String get fileName => path.basename(this);
 

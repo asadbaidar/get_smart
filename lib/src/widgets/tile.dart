@@ -1889,6 +1889,7 @@ class GetTile extends StatelessWidget {
               leadingSize: leadingSize,
               leadingSmall: leadingSmall,
               leadingFilled: leadingFilled,
+              leadingTinted: leadingTinted,
               leadingOval: leadingOval,
               leadingMargin: leadingMargin,
               leadingPadding: leadingPadding,

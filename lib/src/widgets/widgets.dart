@@ -111,7 +111,7 @@ class BoxView extends StatelessWidget {
               alignment: Alignment.center,
               child: _text() ??
                   _icon() ??
-                  (_image() ?? _child())?.clipOval(clip: oval),
+                  (_image() ?? _svg() ?? _child())?.clipOval(clip: oval),
             ),
           ),
         ),
@@ -127,6 +127,7 @@ class BoxView extends StatelessWidget {
 
   Widget? _text() => $cast<Text>(child is! Widget &&
                   child is! ImageProvider &&
+                  child is! SvgProvider &&
                   child is! IconData &&
                   child?.toString().isNotEmpty == true
               ? Text(child.toString())
@@ -164,17 +165,149 @@ class BoxView extends StatelessWidget {
             ),
           ));
 
-  Widget? _image() => $cast<ImageProvider>(child)?.mapTo(
-        (ImageProvider it) => Image(
-          image: it,
-          height: boxSize,
-          width: boxSize,
-          color: tinted ? color : null,
-          fit: BoxFit.cover,
-        ),
-      );
+  double get _iconSize =>
+      iconSize ??
+      (filled && tinted
+          ? 18
+          : small == true
+              ? 24
+              : boxSize);
+
+  Widget? _image() => $cast<ImageProvider>(child)?.mapIt((it) => Image(
+        image: it,
+        height: _iconSize,
+        width: _iconSize,
+        color: tinted
+            ? filled
+                ? color?.contrast
+                : color
+            : null,
+        fit: BoxFit.cover,
+      ));
+
+  Widget? _svg() => $cast<SvgAsset>(child)?.mapIt((it) => SvgImage(
+        it,
+        height: _iconSize,
+        width: _iconSize,
+        color: tinted
+            ? filled
+                ? color?.contrast
+                : color
+            : null,
+        fit: BoxFit.cover,
+      ));
 
   Widget? _child() => $cast<Widget>(child);
+}
+
+abstract class SvgProvider {
+  SvgProvider({
+    this.assetName,
+    this.bundle,
+    this.package,
+  });
+
+  final String? assetName;
+  final AssetBundle? bundle;
+  final String? package;
+}
+
+class SvgAsset extends SvgProvider {
+  SvgAsset(
+    String assetName, {
+    AssetBundle? bundle,
+    String? package,
+  }) : super(
+          assetName: assetName,
+          bundle: bundle,
+          package: package,
+        );
+}
+
+class SvgImage extends StatelessWidget {
+  const SvgImage(
+    this.svgProvider, {
+    this.matchTextDirection = false,
+    this.width,
+    this.height,
+    this.fit = BoxFit.contain,
+    this.alignment = Alignment.center,
+    this.allowDrawingOutsideViewBox = false,
+    this.placeholderBuilder,
+    this.color,
+    this.colorBlendMode = BlendMode.srcIn,
+    this.semanticsLabel,
+    this.excludeFromSemantics = false,
+    this.clipBehavior = Clip.hardEdge,
+    this.cacheColorFilter = false,
+    this.theme,
+    Key? key,
+  }) : super(key: key);
+
+  SvgImage.asset(
+    String assetName, {
+    AssetBundle? bundle,
+    String? package,
+    this.matchTextDirection = false,
+    this.width,
+    this.height,
+    this.fit = BoxFit.contain,
+    this.alignment = Alignment.center,
+    this.allowDrawingOutsideViewBox = false,
+    this.placeholderBuilder,
+    this.color,
+    this.colorBlendMode = BlendMode.srcIn,
+    this.semanticsLabel,
+    this.excludeFromSemantics = false,
+    this.clipBehavior = Clip.hardEdge,
+    this.cacheColorFilter = false,
+    this.theme,
+    Key? key,
+  })  : svgProvider = SvgAsset(
+          assetName,
+          bundle: bundle,
+          package: package,
+        ),
+        super(key: key);
+
+  final SvgProvider svgProvider;
+  final bool matchTextDirection;
+  final double? width;
+  final double? height;
+  final BoxFit fit;
+  final AlignmentGeometry alignment;
+  final bool allowDrawingOutsideViewBox;
+  final WidgetBuilder? placeholderBuilder;
+  final Color? color;
+  final BlendMode colorBlendMode;
+  final String? semanticsLabel;
+  final bool excludeFromSemantics;
+  final Clip clipBehavior;
+  final bool cacheColorFilter;
+  final SvgTheme? theme;
+
+  @override
+  Widget build(BuildContext context) => svgProvider is SvgAsset
+      ? SvgPicture.asset(
+          svgProvider.assetName!,
+          bundle: svgProvider.bundle,
+          package: svgProvider.package,
+          matchTextDirection: matchTextDirection,
+          width: width,
+          height: height,
+          fit: fit,
+          alignment: alignment,
+          allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+          placeholderBuilder: placeholderBuilder,
+          color: color,
+          colorBlendMode: colorBlendMode,
+          semanticsLabel: semanticsLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          clipBehavior: clipBehavior,
+          cacheColorFilter: cacheColorFilter,
+          theme: theme,
+        )
+      : Container();
 }
 
 class CircularProgress extends StatelessWidget {

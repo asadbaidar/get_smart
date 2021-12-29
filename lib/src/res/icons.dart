@@ -159,5 +159,5 @@ extension GetAsset on Enum {
 
   String get _name => _asset();
 
-  String $asset(String name) => _asset(name);
+  String $asset(String? name) => _asset(name);
 }
