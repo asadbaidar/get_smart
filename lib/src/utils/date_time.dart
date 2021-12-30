@@ -56,6 +56,13 @@ extension Date on DateTime {
 
   static DateTime get now => DateTime.now();
 
+  DateTimeRange range(Duration duration) {
+    final date = add(duration);
+    return date > this
+        ? DateTimeRange(start: this, end: date)
+        : DateTimeRange(start: date, end: this);
+  }
+
   int get inMilliseconds => millisecondsSinceEpoch;
 
   bool get isCurrentYear => year == now.year;

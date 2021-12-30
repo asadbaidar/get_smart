@@ -79,7 +79,7 @@ extension ObjectX on Object {
   }
 
   /// Wrap the current object into [Future.value]
-  dynamic get future => Future.value(this);
+  dynamic get future => Future<dynamic>.value(this);
 
   /// Returns [hashCode] as [String]
   String get hashString => hashCode.toString();
