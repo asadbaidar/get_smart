@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get_smart/get_smart.dart';
 
 typedef MapperSetter = dynamic Function(dynamic v);
@@ -46,7 +47,7 @@ class Mapper {
     }
     $debugPrint(Mappable.factories);
     final object = toObject<T>(as?.runtimeType);
-    $debugPrint(object?.typeName);
+    if (kDebugMode) $debugPrint(object?.toString());
     for (var builder in _builders) {
       Mappable.factories.remove(builder().runtimeType);
     }
