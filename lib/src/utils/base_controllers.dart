@@ -437,6 +437,7 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
       setBusy(false);
       _initialised = true;
       onDataReady();
+      setBusy(false);
     }
   }
 

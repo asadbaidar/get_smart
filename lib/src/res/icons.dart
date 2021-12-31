@@ -140,24 +140,30 @@ enum GetImageAsset {
 extension GetAsset on Enum {
   static const package = "get_smart";
 
-  String get svg => _name.svg;
+  String get svg => asset().svg;
 
-  String get png => _name.png;
+  String get png => asset().png;
 
-  String get gif => _name.gif;
+  String get gif => asset().gif;
 
-  String get jpg => _name.jpg;
+  String get jpg => asset().jpg;
 
-  String get jpeg => _name.jpeg;
+  String get jpeg => asset().jpeg;
 
-  String get pdf => _name.pdf;
+  String get pdf => asset().pdf;
 
-  String _asset([String? name]) =>
+  String asset([String? name]) =>
       "assets/" +
       typeName.replaceAll("Asset", "").replaceAll("Get", "").lowercase +
       "/${name ?? this.name}";
 
-  String get _name => _asset();
+  imageAsset(String name) => asset(name).imageAsset ?? asset(name).svgAsset;
+}
 
-  String $asset(String? name) => _asset(name);
+extension StringAsset on String {
+  AssetImage? get imageAsset => isImage ? AssetImage(this) : null;
+
+  SvgAsset? get svgAsset => isSVG ? SvgAsset(this) : null;
+
+  dynamic get asset => imageAsset ?? svgAsset;
 }
