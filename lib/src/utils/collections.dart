@@ -56,6 +56,15 @@ extension ListX<E> on List<E> {
     }
     return null;
   }
+
+  E inserted(int index, E element) {
+    if (index < length) {
+      insert(index, element);
+    } else {
+      add(element);
+    }
+    return element;
+  }
 }
 
 extension IterableX<E> on Iterable<E> {
