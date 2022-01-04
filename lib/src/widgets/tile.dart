@@ -1831,7 +1831,7 @@ class GetTile extends StatelessWidget {
                   textStyle: _titleStyle?.copyWith(
                     color: _titleColor?.applyIf(
                       titleSubbed,
-                      (it) => it.subbed,
+                      (it) => it?.subbed,
                     ),
                   ),
                   fontWeight: titleWeight,
@@ -1862,7 +1862,7 @@ class GetTile extends StatelessWidget {
                   textStyle: _subtitleStyle?.copyWith(
                     color: _subtitleColor?.applyIf(
                       subtitleSubbed,
-                      (it) => it.subbed,
+                      (it) => it?.subbed,
                     ),
                   ),
                   fontWeight: subtitleWeight,
@@ -2802,7 +2802,8 @@ class GetTileRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _text = (text ?? hint)?.applyIf(allCaps, (String it) => it.uppercase);
+    final String? _text =
+        (text ?? hint)?.applyIf(allCaps, (it) => it?.uppercase);
     final _color = context.primaryIconColor ?? context.secondaryColor;
     final _tintColor = destructive == true ? Colors.red : color ?? _color;
     final _tintAble = destructive == true || tintAble;

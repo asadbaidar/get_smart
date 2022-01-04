@@ -463,11 +463,11 @@ class MessageView extends StatelessWidget {
         : emptyTitle != null
             ? "Nothing in $emptyTitle"
             : emptyMessage ?? message;
-    final _action = error != null
+    final _action = (error != null
         ? GetText.retry()
         : emptyTitle != null || emptyMessage != null
-            ? GetText.refresh()
-            : action;
+            ? action ?? GetText.refresh()
+            : action);
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.only(
@@ -690,14 +690,14 @@ class TextBox extends StatelessWidget {
                 ? context.primaryBodyText1?.color ??
                     context.primaryColor.contrast
                 : context.secondaryColor))
-        .applyIf(subbed, (it) => it.subbed)!;
+        .applyIf(subbed, (it) => it?.subbed)!;
 
     Color _fillColor = (fillColor ?? (filled ? _color : null))
-            ?.applyIf(subbed, (it) => it.subbed) ??
+            ?.applyIf(subbed, (it) => it?.subbed) ??
         Colors.transparent;
 
     Color _borderColor = (borderColor ?? (_filled ? null : fillColor ?? _color))
-            ?.applyIf(subbed, (it) => it.subbed) ??
+            ?.applyIf(subbed, (it) => it?.subbed) ??
         Colors.transparent;
 
     return text == null

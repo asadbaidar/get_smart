@@ -60,5 +60,5 @@ class GetLocalizationsDelegate extends LocalizationsDelegate<GetLocalizations> {
 
 extension LocaleX on Locale {
   String get code =>
-      toString().applyIf(countryCode?.notEmpty == null, (s) => languageCode)!;
+      toString().applyIf(countryCode?.notEmpty == null, (s) => languageCode);
 }

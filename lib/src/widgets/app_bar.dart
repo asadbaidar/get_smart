@@ -219,7 +219,7 @@ class GetAppBar {
           centerTitle:
               context.appBarCenterTitle(centerTitle, actions: _actions),
           backgroundColor: (backgroundColor ?? context.primaryColor)
-              .applyIf(translucent && _blur > 0, (it) => it.translucent),
+              .applyIf(translucent && _blur > 0, (it) => it?.translucent),
           title: customTitle ??
               title?.mapIt((it) => !_hasLargeTitle
                   ? Text(it)

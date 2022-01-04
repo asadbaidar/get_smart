@@ -102,6 +102,9 @@ extension Num on num {
 
   bool inRange(int start, int end) => this >= start && this < end;
 
+  List<int> toRange(int end) =>
+      this < end ? [for (int i = toInt(); i < end; i++) i] : [];
+
   String padLeft(
     int width, {
     String withPadding = "0",

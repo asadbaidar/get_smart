@@ -60,7 +60,7 @@ extension ObjectX on Object {
   void lets(void Function() apply) => apply();
 
   /// Apply the [operation] with [T] as parameter if [condition] is `true`
-  T? applyIf<T>(bool? condition, T Function(T) operation) {
+  T applyIf<T>(bool? condition, T Function(T) operation) {
     return (condition == true) ? operation(this as T) : this as T;
   }
 
@@ -110,7 +110,7 @@ extension ObjectX on Object {
           ?.mapTo((Map<dynamic, String> it) => it[this])
           ?.applyIf(
             arguments?.isNotEmpty,
-            (s) => sprintf(s, arguments!.map((e) => e ?? "").toList()),
+            (s) => sprintf(s ?? "", arguments!.map((e) => e ?? "").toList()),
           ) ??
       "";
 }
