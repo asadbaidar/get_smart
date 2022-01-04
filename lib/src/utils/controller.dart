@@ -97,7 +97,7 @@ abstract class GetController extends MultipleFutureGetController {
   void cancelAction() => cancelFuture(actionName);
 
   /// Clears the action data
-  void clearAction() => clearData(actionName);
+  void clearAction() => clearAllSateData(actionName);
 
   /// Sets the action to busy, runs the action and then sets it to not busy
   /// when completed.
@@ -184,7 +184,7 @@ abstract class GetController extends MultipleFutureGetController {
   /// Cancels the future by key and clear the associated data
   void cancelFuture([key]) {
     _cancelWebApis();
-    clearData(key ?? typeName);
+    clearAllSateData(key);
   }
 
   /// Sets the Controller to busy, runs the future and then sets it to not busy when complete.

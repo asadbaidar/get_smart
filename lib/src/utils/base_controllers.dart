@@ -70,8 +70,19 @@ abstract class BaseGetController extends GetxController {
     _busyStates.clear();
   }
 
-  /// Clears the data by key
-  bool clearData([Object? key]) {
+  /// Clears all states and data by key
+  bool clearAllSateData([Object? key]) {
+    if (errorStates.isNotEmpty || busyStates.isNotEmpty) {
+      clearErrors();
+      clearBusy();
+      update();
+      return true;
+    }
+    return false;
+  }
+
+  /// Clears states and data by key
+  bool clearSateData([Object? key]) {
     final _key = key ?? typeName;
     if (errorStates.containsKey(_key) || busyStates.containsKey(_key)) {
       _errorStates.remove(_key);
@@ -82,7 +93,12 @@ abstract class BaseGetController extends GetxController {
     return false;
   }
 
-  /// Clears all data and errors
+  /// Clears the data by key
+  bool clearData([Object? key]) {
+    return false;
+  }
+
+  /// Clears all data and states
   bool clearAllData() {
     if (errorStates.isNotEmpty || busyStates.isNotEmpty) {
       clearErrors();
@@ -343,19 +359,43 @@ class _MultiDataSourceGetController extends DynamicSourceGetController {
   /// Returns the data ready status by key if no error occurred
   bool dataReady(Object key) => ready(key) && !hasErrorFor(key);
 
+  /// Clears all states but data by key
+  @override
+  bool clearAllSateData([Object? key]) {
+    final _key = key ?? typeName;
+    if (dataMap.containsKey(_key)) {
+      dataMap.remove(_key);
+      super.clearAllSateData(_key);
+      return true;
+    }
+    return super.clearAllSateData(_key);
+  }
+
+  /// Clears states and data by key
+  @override
+  bool clearSateData([Object? key]) {
+    final _key = key ?? typeName;
+    if (dataMap.containsKey(_key)) {
+      dataMap.remove(_key);
+      super.clearSateData(_key);
+      return true;
+    }
+    return super.clearSateData(_key);
+  }
+
   /// Clears the data by key
   @override
   bool clearData([Object? key]) {
     final _key = key ?? typeName;
     if (dataMap.containsKey(_key)) {
       dataMap.remove(_key);
-      super.clearAllData();
+      super.clearData(_key);
       return true;
     }
-    return super.clearAllData();
+    return super.clearData(_key);
   }
 
-  /// Clears all data and errors
+  /// Clears all data and states
   @override
   bool clearAllData() {
     if (dataMap.isNotEmpty) {
