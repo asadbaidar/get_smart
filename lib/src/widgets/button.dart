@@ -782,15 +782,18 @@ abstract class GetButton {
     BoxConstraints? constraints,
   }) =>
       ThemeBuilder((context) {
+        final _tooltip = tooltip ?? label;
         final labeled = label != null;
         final labeledOrMini = labeled || mini == true;
-        final _color =
-            primary == true ? context.primaryIconColor : context.iconColor;
+        final _color = color ??
+            (primary == true
+                ? context.primaryActionIconColor
+                : context.iconColor);
         final _iconSize = iconSize ??
             (labeledOrMini
                 ? 20.0
                 : primary == true
-                    ? context.primaryIconTheme.size
+                    ? context.primaryActionIconTheme.size
                     : context.iconTheme.size) ??
             24.0;
         return Container(
@@ -835,7 +838,7 @@ abstract class GetButton {
                 : busy
                     ? CircularProgress.small(color: _color)
                     : (child ?? const SizedBox()),
-            color: color,
+            color: _color,
             focusColor: focusColor,
             hoverColor: hoverColor,
             highlightColor: highlightColor,
@@ -852,7 +855,7 @@ abstract class GetButton {
             mouseCursor: mouseCursor ?? SystemMouseCursors.click,
             focusNode: focusNode,
             autofocus: autofocus,
-            tooltip: tooltip,
+            tooltip: _tooltip,
             enableFeedback: enableFeedback ?? true,
             constraints: constraints ??
                 (labeled
@@ -1066,6 +1069,7 @@ abstract class GetButton {
     double? leftPadding,
     double? rightPadding,
     Color? color,
+    Color? backgroundColor,
     Color disabledColor = CupertinoColors.quaternarySystemFill,
     double? minSize = kMinInteractiveDimensionCupertino,
     double? iconSize,
@@ -1075,37 +1079,45 @@ abstract class GetButton {
     VoidCallback? onPressed,
     Widget? child,
   }) =>
-      ThemeBuilder((context) => CupertinoButton(
-            key: key,
-            padding: padding ??
-                EdgeInsets.only(
-                  top: verticalPadding ?? topPadding ?? 0,
-                  bottom: verticalPadding ?? bottomPadding ?? 0,
-                  left: horizontalPadding ?? leftPadding ?? 0,
-                  right: horizontalPadding ?? rightPadding ?? 0,
-                ),
-            color: color,
-            disabledColor: disabledColor,
-            minSize: minSize,
-            pressedOpacity: busy ? null : pressedOpacity,
-            borderRadius: borderRadius,
-            alignment: alignment,
-            onPressed: enabled
-                ? busy
-                    ? () {}
-                    : () {
-                        onPressed?.call();
-                        if (back) Get.back();
-                      }
-                : null,
+      ThemeBuilder((context) {
+        final iconTheme =
+            (primary ? context.primaryActionIconTheme : context.iconTheme)
+                .copyWith(color: color, size: iconSize);
+        final _color = iconTheme.color;
+        return CupertinoButton(
+          key: key,
+          padding: padding ??
+              EdgeInsets.only(
+                top: verticalPadding ?? topPadding ?? 0,
+                bottom: verticalPadding ?? bottomPadding ?? 0,
+                left: horizontalPadding ?? leftPadding ?? 0,
+                right: horizontalPadding ?? rightPadding ?? 0,
+              ),
+          color: backgroundColor,
+          disabledColor: disabledColor,
+          minSize: minSize,
+          pressedOpacity: busy ? null : pressedOpacity,
+          borderRadius: borderRadius,
+          alignment: alignment,
+          onPressed: enabled
+              ? busy
+                  ? () {}
+                  : () {
+                      onPressed?.call();
+                      if (back) Get.back();
+                    }
+              : null,
+          child: DefaultTextStyle(
+            style: TextStyle(color: _color),
             child: IconTheme(
-              data: (primary ? context.primaryIconTheme : context.iconTheme)
-                  .copyWith(size: iconSize),
+              data: iconTheme,
               child: busy
                   ? const CircularProgress.small()
                   : child ?? const SizedBox(),
             ),
-          ));
+          ),
+        );
+      });
 
   static Widget plainZero({
     Key? key,
@@ -1121,6 +1133,7 @@ abstract class GetButton {
     double? leftPadding,
     double? rightPadding,
     Color? color,
+    Color? backgroundColor,
     Color disabledColor = CupertinoColors.quaternarySystemFill,
     double? minSize = 0,
     double? iconSize,
@@ -1144,6 +1157,7 @@ abstract class GetButton {
         leftPadding: leftPadding,
         rightPadding: rightPadding,
         color: color,
+        backgroundColor: backgroundColor,
         disabledColor: disabledColor,
         minSize: minSize,
         iconSize: iconSize,
@@ -1168,6 +1182,7 @@ abstract class GetButton {
     double? leftPadding = 12,
     double? rightPadding = 12,
     Color? color,
+    Color? backgroundColor,
     Color disabledColor = CupertinoColors.quaternarySystemFill,
     double? minSize = 0,
     double? iconSize = 20,
@@ -1191,6 +1206,7 @@ abstract class GetButton {
         leftPadding: leftPadding,
         rightPadding: rightPadding,
         color: color,
+        backgroundColor: backgroundColor,
         disabledColor: disabledColor,
         minSize: minSize,
         iconSize: iconSize,
@@ -1263,8 +1279,7 @@ abstract class GetButton {
     ),
   }) =>
       ThemeBuilder((context) {
-        final _color =
-            color ?? context.primaryIconColor ?? context.secondaryColor;
+        final _color = color ?? context.iconColor ?? context.secondaryColor;
         return Container(
           width: size,
           height: size,

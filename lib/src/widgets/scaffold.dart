@@ -37,6 +37,8 @@ class GetScaffold extends StatelessWidget {
     this.bottomBarHidden = false,
     this.interactive = true,
     this.appBarBottomHeight = 0.0,
+    this.toolbarHeight,
+    this.appBarElevation,
     this.floatingActionButtonLocation,
     this.bottomBarAlignment,
     Key? key,
@@ -75,6 +77,8 @@ class GetScaffold extends StatelessWidget {
   final bool bottomBarHidden;
   final bool interactive;
   final double appBarBottomHeight;
+  final double? toolbarHeight;
+  final double? appBarElevation;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final CrossAxisAlignment? bottomBarAlignment;
   final Key? _key;
@@ -162,6 +166,8 @@ class GetScaffold extends StatelessWidget {
               showLeading: showAppBarLeading,
               showProgress: showProgress,
               bottomHeight: appBarBottomHeight,
+              toolbarHeight: toolbarHeight,
+              elevation: appBarElevation,
             );
 
   Widget _bottomBar(BuildContext context) => Blur(

@@ -1748,11 +1748,17 @@ class GetTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _tintAble = destructive == true ? true : (tintAble ?? false);
-    final tintColor =
-        destructive == true ? Colors.red : color ?? context.secondaryColor;
+    final tintColor = destructive == true
+        ? Colors.red
+        : color ?? context.tileIconColor ?? context.secondaryColor;
     final _trailingColor = _tintAble
         ? tintColor
         : trailingColor ?? context.iconColor ?? context.secondaryColor;
+    final _accessoryColor = tintAccessory == true
+        ? tintColor
+        : detail
+            ? context.hintColor
+            : _trailingColor;
     final isTrailingTop =
         trailingTop?.notEmpty != null || trailingTopChild != null;
     final isTrailingBottom =
@@ -1903,8 +1909,7 @@ class GetTile extends StatelessWidget {
               onTap: onTapHead,
               onTapLeading: onTapLeading,
               trailingSize: accessorySize,
-              trailingColor:
-                  tintAccessory == true ? tintColor : context.hintColor,
+              trailingColor: _accessoryColor,
               trailingStyle: trailingStyle,
               trailingPadding: _trailingPadding,
               trailing: _showAccessory || isTrailingTop || isTrailingBottom
@@ -1955,9 +1960,7 @@ class GetTile extends StatelessWidget {
                                 : EdgeInsets.zero,
                             child: IconTheme(
                               data: IconThemeData(
-                                color: tintAccessory == true
-                                    ? tintColor
-                                    : context.hintColor,
+                                color: _accessoryColor,
                                 size: detail ? 14 : accessorySize,
                               ),
                               child: _accessory!,
@@ -2804,7 +2807,7 @@ class GetTileRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final String? _text =
         (text ?? hint)?.applyIf(allCaps, (it) => it?.uppercase);
-    final _color = context.primaryIconColor ?? context.secondaryColor;
+    final _color = context.tileIconColor ?? context.secondaryColor;
     final _tintColor = destructive == true ? Colors.red : color ?? _color;
     final _tintAble = destructive == true || tintAble;
     final _trailingColor = trailingColor ??
@@ -2812,7 +2815,7 @@ class GetTileRow extends StatelessWidget {
             ? context.hintColor
             : _tintAble
                 ? _tintColor
-                : _color);
+                : context.iconColor ?? context.secondaryColor);
     final _textStyle =
         (textStyle ?? context.caption)?.copyWith(fontWeight: fontWeight);
     final _constrained = alignment == CrossAxisAlignment.start ||

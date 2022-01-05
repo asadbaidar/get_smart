@@ -28,7 +28,7 @@ class GetTheme {
       ThemeMode.system == ThemeMode.dark ||
       MediaQuery.platformBrightnessOf(context!) == Brightness.dark;
 
-  static double get appBarHeight =>
+  static double get toolbarHeight =>
       Get.isIOS ? kMinInteractiveDimensionCupertino : kToolbarHeight;
 
   static bool get isDarkMode => isDark(Get.context);
@@ -49,18 +49,18 @@ class GetTheme {
         ),
       );
 
-  static ThemeData blackWhite(
+  static ThemeData blackOffWhite(
     BuildContext context, {
     Brightness? brightness,
     Brightness primaryBrightness = Brightness.dark,
     Brightness? bottomBrightness,
     String? fontFamily,
     TextTheme? textTheme,
-    IconThemeData? primaryIconTheme,
+    IconThemeData? iconTheme,
+    AppBarTheme? appBarTheme,
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
-    TextStyle? titleTextStyle,
     // light theme attributes
     Color secondaryColorLight = Colors.black,
     Color primarySwatchLight = GetColors.black,
@@ -85,11 +85,11 @@ class GetTheme {
         bottomBrightness: bottomBrightness,
         fontFamily: fontFamily,
         textTheme: textTheme,
-        primaryIconTheme: primaryIconTheme,
+        iconTheme: iconTheme,
+        appBarTheme: appBarTheme,
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
         textButtonStyle: textButtonStyle,
-        titleTextStyle: titleTextStyle,
         // light theme attributes
         secondaryColorLight: secondaryColorLight,
         primarySwatchLight: primarySwatchLight,
@@ -108,18 +108,18 @@ class GetTheme {
         bottomForegroundDark: bottomForegroundDark,
       );
 
-  static ThemeData blackWhiteFlat(
+  static ThemeData blackWhite(
     BuildContext context, {
     Brightness? brightness,
     Brightness primaryBrightness = Brightness.dark,
     Brightness? bottomBrightness,
     String? fontFamily,
     TextTheme? textTheme,
-    IconThemeData? primaryIconTheme,
+    IconThemeData? iconTheme,
+    AppBarTheme? appBarTheme,
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
-    TextStyle? titleTextStyle,
     // light theme attributes
     Color secondaryColorLight = Colors.black,
     Color primarySwatchLight = GetColors.black,
@@ -144,11 +144,70 @@ class GetTheme {
         bottomBrightness: bottomBrightness,
         fontFamily: fontFamily,
         textTheme: textTheme,
-        primaryIconTheme: primaryIconTheme,
+        iconTheme: iconTheme,
+        appBarTheme: appBarTheme,
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
         textButtonStyle: textButtonStyle,
-        titleTextStyle: titleTextStyle,
+        // light theme attributes
+        secondaryColorLight: secondaryColorLight,
+        primarySwatchLight: primarySwatchLight,
+        backgroundLight: backgroundLight,
+        canvasColorLight: canvasColorLight,
+        primaryBackgroundLight: primaryBackgroundLight,
+        bottomBackgroundLight: bottomBackgroundLight,
+        bottomForegroundLight: bottomForegroundLight,
+        // dark theme attributes
+        secondaryColorDark: secondaryColorDark,
+        primarySwatchDark: primarySwatchDark,
+        backgroundDark: backgroundDark,
+        canvasColorDark: canvasColorDark,
+        primaryBackgroundDark: primaryBackgroundDark,
+        bottomBackgroundDark: bottomBackgroundDark,
+        bottomForegroundDark: bottomForegroundDark,
+      );
+
+  static ThemeData blackWhiteFlat(
+    BuildContext context, {
+    Brightness? brightness,
+    Brightness? primaryBrightness,
+    Brightness? bottomBrightness,
+    String? fontFamily,
+    TextTheme? textTheme,
+    IconThemeData? iconTheme,
+    AppBarTheme? appBarTheme,
+    ButtonStyle? elevatedButtonStyle,
+    ButtonStyle? outlinedButtonStyle,
+    ButtonStyle? textButtonStyle,
+    // light theme attributes
+    Color secondaryColorLight = Colors.black,
+    Color primarySwatchLight = GetColors.black,
+    Color backgroundLight = Colors.white,
+    Color canvasColorLight = Colors.white,
+    Color primaryBackgroundLight = Colors.white,
+    Color bottomBackgroundLight = Colors.white,
+    Color bottomForegroundLight = Colors.black,
+    // dark theme attributes
+    Color secondaryColorDark = Colors.white,
+    Color primarySwatchDark = GetColors.white,
+    Color backgroundDark = GetColors.black93,
+    Color canvasColorDark = GetColors.black93,
+    Color primaryBackgroundDark = GetColors.black90,
+    Color bottomBackgroundDark = GetColors.black90,
+    Color bottomForegroundDark = Colors.white,
+  }) =>
+      builder(
+        context,
+        brightness: brightness,
+        primaryBrightness: primaryBrightness,
+        bottomBrightness: bottomBrightness,
+        fontFamily: fontFamily,
+        textTheme: textTheme,
+        iconTheme: iconTheme,
+        appBarTheme: appBarTheme,
+        elevatedButtonStyle: elevatedButtonStyle,
+        outlinedButtonStyle: outlinedButtonStyle,
+        textButtonStyle: textButtonStyle,
         // light theme attributes
         secondaryColorLight: secondaryColorLight,
         primarySwatchLight: primarySwatchLight,
@@ -173,11 +232,11 @@ class GetTheme {
     Brightness? primaryBrightness,
     String? fontFamily,
     TextTheme? textTheme,
-    IconThemeData? primaryIconTheme,
+    IconThemeData? iconTheme,
+    AppBarTheme? appBarTheme,
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
-    TextStyle? titleTextStyle,
     // light theme attributes
     Color secondaryColorLight = kSecondaryColor,
     Color primarySwatchLight = kPrimarySwatch,
@@ -197,11 +256,11 @@ class GetTheme {
         primaryBrightness: primaryBrightness,
         fontFamily: fontFamily,
         textTheme: textTheme,
-        primaryIconTheme: primaryIconTheme,
+        iconTheme: iconTheme,
+        appBarTheme: appBarTheme,
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
         textButtonStyle: textButtonStyle,
-        titleTextStyle: titleTextStyle,
         // light theme attributes
         secondaryColorLight: secondaryColorLight,
         primarySwatchLight: primarySwatchLight,
@@ -222,11 +281,11 @@ class GetTheme {
     Brightness? primaryBrightness,
     String? fontFamily,
     TextTheme? textTheme,
-    IconThemeData? primaryIconTheme,
+    IconThemeData? iconTheme,
+    AppBarTheme? appBarTheme,
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
-    TextStyle? titleTextStyle,
     // light theme attributes
     Color secondaryColorLight = Colors.black,
     Color primarySwatchLight = GetColors.black,
@@ -246,11 +305,11 @@ class GetTheme {
         primaryBrightness: primaryBrightness,
         fontFamily: fontFamily,
         textTheme: textTheme,
-        primaryIconTheme: primaryIconTheme,
+        iconTheme: iconTheme,
+        appBarTheme: appBarTheme,
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
         textButtonStyle: textButtonStyle,
-        titleTextStyle: titleTextStyle,
         // light theme attributes
         secondaryColorLight: secondaryColorLight,
         primarySwatchLight: primarySwatchLight,
@@ -271,11 +330,11 @@ class GetTheme {
     Brightness? primaryBrightness,
     String? fontFamily,
     TextTheme? textTheme,
-    IconThemeData? primaryIconTheme,
+    IconThemeData? iconTheme,
+    AppBarTheme? appBarTheme,
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
-    TextStyle? titleTextStyle,
     // light theme attributes
     Color secondaryColorLight = kSecondaryColor,
     Color primarySwatchLight = kPrimarySwatch,
@@ -296,11 +355,11 @@ class GetTheme {
         bottomBrightness: primaryBrightness,
         fontFamily: fontFamily,
         textTheme: textTheme,
-        primaryIconTheme: primaryIconTheme,
+        iconTheme: iconTheme,
+        appBarTheme: appBarTheme,
         elevatedButtonStyle: elevatedButtonStyle,
         outlinedButtonStyle: outlinedButtonStyle,
         textButtonStyle: textButtonStyle,
-        titleTextStyle: titleTextStyle,
         // light theme attributes
         secondaryColorLight: secondaryColorLight,
         primarySwatchLight: primarySwatchLight,
@@ -326,11 +385,11 @@ class GetTheme {
     Brightness? bottomBrightness,
     String? fontFamily,
     TextTheme? textTheme,
-    IconThemeData? primaryIconTheme,
+    IconThemeData? iconTheme,
+    AppBarTheme? appBarTheme,
     ButtonStyle? elevatedButtonStyle,
     ButtonStyle? outlinedButtonStyle,
     ButtonStyle? textButtonStyle,
-    TextStyle? titleTextStyle,
     // light theme attributes
     Color secondaryColorLight = kSecondaryColor,
     Color primarySwatchLight = kPrimarySwatch,
@@ -366,10 +425,15 @@ class GetTheme {
         isDark ? primaryBackgroundDark : primaryBackgroundLight;
     final _bottomBackground =
         isDarkBottom ? bottomBackgroundDark : bottomBackgroundLight;
-    var _primaryIconTheme = IconThemeData(
-      color: primaryIconTheme?.color ?? _primaryForeground,
-      opacity: primaryIconTheme?.opacity,
-      size: primaryIconTheme?.size ?? 24.0,
+    final _iconTheme = IconThemeData(
+      color: iconTheme?.color ?? _secondaryColor,
+      opacity: iconTheme?.opacity,
+      size: iconTheme?.size ?? 24.0,
+    );
+    final _primaryIconTheme = IconThemeData(
+      color: appBarTheme?.iconTheme?.color ?? _primaryForeground,
+      opacity: appBarTheme?.iconTheme?.opacity,
+      size: appBarTheme?.iconTheme?.size ?? 24.0,
     );
     return ThemeData(
       colorScheme: ColorScheme.fromSwatch(
@@ -387,12 +451,10 @@ class GetTheme {
       hintColor: theme.hintColor.hinted,
       primaryColorBrightness: _primaryBrightness,
       primaryIconTheme: _primaryIconTheme,
-      iconTheme: IconThemeData(
-        color: _secondaryColor,
-        size: 24.0,
-      ),
+      iconTheme: _iconTheme,
       fontFamily: fontFamily,
       textTheme: textTheme,
+      listTileTheme: ListTileThemeData(iconColor: _secondaryColor),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           elevation:
@@ -444,31 +506,50 @@ class GetTheme {
         ),
       ),
       appBarTheme: AppBarTheme(
-        elevation: 1.0,
-        toolbarHeight: appBarHeight,
-        shadowColor: Colors.black,
-        color: _primaryBackground,
+        elevation: appBarTheme?.elevation ?? 1.0,
+        toolbarHeight: appBarTheme?.toolbarHeight ?? toolbarHeight,
+        shadowColor: appBarTheme?.shadowColor ?? Colors.black,
+        backgroundColor: appBarTheme?.backgroundColor ?? _primaryBackground,
         titleTextStyle: TextStyle(
-          fontSize: titleTextStyle?.fontSize ?? 18,
-          color: titleTextStyle?.color ?? _primaryBackground.contrast,
-          fontWeight: titleTextStyle?.fontWeight ?? FontWeight.w600,
-          fontFamily: titleTextStyle?.fontFamily ?? fontFamily,
+          fontSize: appBarTheme?.titleTextStyle?.fontSize ?? 18,
+          color:
+              appBarTheme?.titleTextStyle?.color ?? _primaryBackground.contrast,
+          fontWeight:
+              appBarTheme?.titleTextStyle?.fontWeight ?? FontWeight.w600,
+          fontFamily: appBarTheme?.titleTextStyle?.fontFamily ?? fontFamily,
         ),
         toolbarTextStyle: TextStyle(
-          fontSize: 14,
-          color: _primaryBackground.contrast.activated,
-          fontFamily: fontFamily,
+          fontSize: appBarTheme?.toolbarTextStyle?.fontSize ?? 14,
+          color: appBarTheme?.toolbarTextStyle?.color ??
+              _primaryBackground.contrast.activated,
+          fontFamily: appBarTheme?.toolbarTextStyle?.fontFamily ?? fontFamily,
         ),
-        foregroundColor: _primaryBackground.contrast,
+        foregroundColor:
+            appBarTheme?.foregroundColor ?? _primaryBackground.contrast,
         iconTheme: _primaryIconTheme,
-        actionsIconTheme: _primaryIconTheme,
+        actionsIconTheme: appBarTheme?.actionsIconTheme ?? _primaryIconTheme,
         systemOverlayStyle: SystemUiOverlayStyle(
           // systemNavigationBarDividerColor: _bottomBackground,
           // systemNavigationBarIconBrightness: _bottomBrightness.inverse,
           // systemNavigationBarColor: _bottomBackground,
-          statusBarBrightness: _primaryBrightness,
-          statusBarIconBrightness: _primaryBrightness.inverse,
-          statusBarColor: Colors.transparent,
+          systemNavigationBarDividerColor:
+              appBarTheme?.systemOverlayStyle?.systemNavigationBarDividerColor,
+          systemNavigationBarIconBrightness: appBarTheme
+              ?.systemOverlayStyle?.systemNavigationBarIconBrightness,
+          systemNavigationBarColor:
+              appBarTheme?.systemOverlayStyle?.systemNavigationBarColor,
+          systemNavigationBarContrastEnforced: appBarTheme
+              ?.systemOverlayStyle?.systemNavigationBarContrastEnforced,
+          systemStatusBarContrastEnforced:
+              appBarTheme?.systemOverlayStyle?.systemStatusBarContrastEnforced,
+          statusBarBrightness:
+              appBarTheme?.systemOverlayStyle?.statusBarBrightness ??
+                  _primaryBrightness,
+          statusBarIconBrightness:
+              appBarTheme?.systemOverlayStyle?.statusBarIconBrightness ??
+                  _primaryBrightness.inverse,
+          statusBarColor: appBarTheme?.systemOverlayStyle?.statusBarColor ??
+              Colors.transparent,
         ),
       ),
       bottomAppBarTheme: BottomAppBarTheme(
@@ -567,7 +648,8 @@ extension GetContextTheme on BuildContext {
   /// [AppBar.toolbarHeight] in all descendant [AppBar] widgets.
   /// Depending on platform,
   /// Defaults to [kMinInteractiveDimensionCupertino] and [kToolbarHeight].
-  double get appBarHeight => appBarTheme.toolbarHeight ?? GetTheme.appBarHeight;
+  double get toolbarHeight =>
+      appBarTheme.toolbarHeight ?? GetTheme.toolbarHeight;
 
   /// [AppBar.shadowColor] in all descendant widgets. Defaults to [Colors.black].
   Color get appBarShadowColor => appBarTheme.shadowColor ?? Colors.black;
@@ -601,10 +683,17 @@ extension GetContextTheme on BuildContext {
   Color get secondaryColor => colors.secondary;
 
   /// The default color for primary icons.
-  Color? get primaryIconColor => theme.primaryIconTheme.color;
+  Color? get primaryIconColor => primaryIconTheme.color;
 
   /// An icon theme that contrasts with the primary color.
   IconThemeData get primaryIconTheme => theme.primaryIconTheme;
+
+  /// The default color for primary action icons.
+  Color? get primaryActionIconColor => primaryActionIconTheme.color;
+
+  /// An action icon theme that contrasts with the primary color.
+  IconThemeData get primaryActionIconTheme =>
+      appBarTheme.actionsIconTheme ?? primaryIconTheme;
 
   /// An icon theme that contrasts with the card and canvas colors.
   IconThemeData get iconTheme => theme.iconTheme;
@@ -638,6 +727,15 @@ extension GetContextTheme on BuildContext {
   /// The default color of the [Material] that underlies the [Scaffold]. The
   /// background color for a typical material app or a page within the app.
   Color get scaffoldBackgroundColor => theme.scaffoldBackgroundColor;
+
+  /// Overrides the default value of [ListTile.iconColor].
+  Color? get tileIconColor => tileTheme.iconColor;
+
+  /// Overrides the default value of [ListTile.tileColor].
+  Color? get tileColor => tileTheme.tileColor;
+
+  /// A theme for customizing the appearance of ListTile widgets
+  ListTileThemeData get tileTheme => theme.listTileTheme;
 
   /// Elevated Button Theme Style
   ButtonStyle? get elevatedButton => theme.elevatedButtonTheme.style;

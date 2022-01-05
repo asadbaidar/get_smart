@@ -873,7 +873,7 @@ class GetSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) => buildResults(context);
 
   @override
-  ThemeData appBarTheme(BuildContext context) => GetTheme.blackWhite(
+  ThemeData appBarTheme(BuildContext context) => GetTheme.blackOffWhite(
         context,
         brightness: Brightness.dark,
       ).copyWith(
