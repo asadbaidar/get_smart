@@ -26,6 +26,7 @@ class GetScaffold extends StatelessWidget {
     this.appBarActions,
     this.floatingActionButton,
     this.backgroundColor,
+    this.appBarColor,
     this.titleStyle,
     this.centerTitle,
     this.extendBody = true,
@@ -66,6 +67,7 @@ class GetScaffold extends StatelessWidget {
   final List<Widget>? appBarActions;
   final FloatingActionButton? floatingActionButton;
   final Color? backgroundColor;
+  final Color? appBarColor;
   final TextStyle? titleStyle;
   final bool? centerTitle;
   final bool extendBody;
@@ -168,6 +170,7 @@ class GetScaffold extends StatelessWidget {
               bottomHeight: appBarBottomHeight,
               toolbarHeight: toolbarHeight,
               elevation: appBarElevation,
+              backgroundColor: appBarColor,
             );
 
   Widget _bottomBar(BuildContext context) => Blur(
