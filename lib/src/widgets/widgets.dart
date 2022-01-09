@@ -401,6 +401,7 @@ class MessageView extends StatelessWidget {
     this.icon,
     this.errorIcon,
     this.action,
+    this.actionTooltip,
     this.onAction,
     this.message,
     this.emptyTitle,
@@ -420,6 +421,7 @@ class MessageView extends StatelessWidget {
     this.icon,
     this.errorIcon,
     this.action,
+    this.actionTooltip,
     this.onAction,
     this.message,
     this.emptyTitle,
@@ -438,6 +440,7 @@ class MessageView extends StatelessWidget {
   final Widget? icon;
   final Widget? errorIcon;
   final String? action;
+  final String? actionTooltip;
   final VoidCallback? onAction;
   final String? message;
   final String? emptyTitle;
@@ -496,7 +499,7 @@ class MessageView extends StatelessWidget {
             GetButton.outlined(
               child: Text(_action),
               onPressed: onAction,
-            ),
+            ).tooltip(actionTooltip),
         ],
       ),
     );
