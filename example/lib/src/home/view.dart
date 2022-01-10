@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:example/src/camera/view.dart';
 import 'package:example/src/home/view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_smart/get_smart.dart';
 import 'package:rive/rive.dart';
 
@@ -13,8 +12,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetBuilder<HomeModel>(
         init: HomeModel(),
-        builder: (model) {
-          final dataSet = model.alphabets;
+        builder: (controller) {
+          final dataSet = controller.alphabets;
           return ThemeBuilder(
             (context) => GetScaffold(
               title: "Get Smart Home",
@@ -33,10 +32,10 @@ class HomePage extends StatelessWidget {
                 ),
               ],
               progress: LinearProgress.standard(
-                visible: model.isBusy,
+                visible: controller.isBusy,
               ),
               child: SwipeRefresh(
-                onRefresh: model.refreshData,
+                onRefresh: controller.refreshData,
                 child: ListView.separated(
                   itemCount: dataSet.length,
                   separatorBuilder: (_, __) => const GetTileDivider(),
@@ -77,7 +76,7 @@ class HomePage extends StatelessWidget {
                         () => const CameraPage(),
                       )?.then((file) {
                         data.file = file;
-                        model.update();
+                        controller.update();
                       }),
                     );
                   },

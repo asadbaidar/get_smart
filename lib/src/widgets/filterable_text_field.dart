@@ -482,7 +482,7 @@ class GetFilterableTextFieldState<T extends Comparable>
                       dataSet.where((option) =>
                           option.containsIgnoreCase(textEditingValue.text)),
                   onSelected: (selection) =>
-                      model.autocompleteSelection = selection,
+                      controller.autocompleteSelection = selection,
                   fieldViewBuilder:
                       (context, controller, focusNode, onFieldSubmitted) {
                     return TextFormField(

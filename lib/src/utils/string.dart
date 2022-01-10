@@ -170,6 +170,8 @@ extension StringX on String {
         hasMinLength;
   }
 
+  String get asterik => notEmpty?.post(" *") ?? "";
+
   /// Uppercase each word inside string
   /// Example: your name => YOUR NAME
   String get uppercase => toUpperCase();
