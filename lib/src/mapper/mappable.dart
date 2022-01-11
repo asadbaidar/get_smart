@@ -39,12 +39,18 @@ abstract class Mappable with Comparable<Mappable> {
       ? 0
       : comparable?.compareTo(other.comparable) ?? 0;
 
-  int operator >(Mappable other) => compareTo(other);
+  int operator >(Mappable other) => greaterThan(other);
 
-  int operator <(Mappable other) => other.compareTo(this);
+  int greaterThan(Mappable other) => compareTo(other);
+
+  int operator <(Mappable other) => lessThan(other);
+
+  int lessThan(Mappable other) => other.compareTo(this);
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(Object other) => equals(other);
+
+  bool equals(Object other) {
     if (other.runtimeType != runtimeType) return false;
     return other is Mappable &&
         (identical(other, this) ||
