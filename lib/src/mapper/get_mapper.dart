@@ -4,6 +4,7 @@ export 'mappable.dart';
 export 'mapper.dart';
 export 'object.dart';
 export 'raw_representable.dart';
+export 'transforms/base64_transform.dart';
 export 'transforms/bool_transform.dart';
 export 'transforms/color_transform.dart';
 export 'transforms/date_transform.dart';

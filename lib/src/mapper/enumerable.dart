@@ -1,4 +1,4 @@
-import 'raw_representable.dart';
+import 'package:get_smart/get_smart.dart';
 
 abstract class Enumerable<T> implements RawRepresentable<T> {
   const Enumerable();

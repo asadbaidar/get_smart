@@ -218,6 +218,7 @@ extension StringX on String {
     try {
       return isEmpty ? null : base64Decode(this);
     } catch (e) {
+      $debugPrint(e, "base64Decoded");
       return null;
     }
   }
@@ -227,6 +228,7 @@ extension StringX on String {
       final bytes = toBytes();
       return bytes == null ? this : base64Encode(bytes);
     } catch (e) {
+      $debugPrint(e, "base64Encoded");
       return this;
     }
   }
@@ -235,6 +237,7 @@ extension StringX on String {
     try {
       return utf8.encoder.convert(this);
     } catch (e) {
+      $debugPrint(e, "toBytes");
       return null;
     }
   }
@@ -243,6 +246,18 @@ extension StringX on String {
     try {
       return utf8.encode(this);
     } catch (e) {
+      $debugPrint(e, "toUTF8");
+      return null;
+    }
+  }
+}
+
+extension BytesToBase64 on Uint8List {
+  String? get base64Encoded {
+    try {
+      return isEmpty ? null : base64Encode(this);
+    } catch (e) {
+      $debugPrint(e, "base64Encoded");
       return null;
     }
   }

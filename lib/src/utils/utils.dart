@@ -48,7 +48,7 @@ extension RandomX on Random {
 
 extension Uint8ListX on Uint8List {
   /// Convert bytes to memory image
-  MemoryImage? image({double scale = 1.0}) =>
+  MemoryImage? memoryImage({double scale = 1.0}) =>
       isEmpty ? null : MemoryImage(this, scale: scale);
 }
 

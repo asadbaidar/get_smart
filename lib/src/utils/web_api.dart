@@ -41,6 +41,12 @@ class GetResult<T> extends GetObject {
 
   T? get firstValue => list?.firstOrNull;
 
+  T? get successValue => isSucceeded ? value : null;
+
+  get successData => isSucceeded ? data : null;
+
+  T? get successFirstValue => isSucceeded ? firstValue : null;
+
   DateTime get time => currentTime!;
 
   String get tag => _tag ?? typeName;
@@ -87,7 +93,7 @@ class GetResult<T> extends GetObject {
   }
 
   @override
-  String toString() => toJsonString();
+  String toString() => jsonString;
 }
 
 enum GetMethod {

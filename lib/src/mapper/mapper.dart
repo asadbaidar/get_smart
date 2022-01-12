@@ -1,9 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 import 'package:get_smart/get_smart.dart';
 
 typedef MapperSetter = dynamic Function(dynamic v);
 enum MapperType { fromJson, toJson }
-enum ValueType { unknown, list, map, numeric, string, bool, dynamic }
+enum ValueType { unknown, typedList, list, map, numeric, string, bool }
 
 class Mapper {
   MapperType _mappingType = MapperType.fromJson;
@@ -54,7 +56,7 @@ class Mapper {
     return object;
   }
 
-  Map<String, dynamic>? toJson(Mappable object) {
+  Map<String, dynamic> toJson(Mappable object) {
     json = {};
     _mappingType = MapperType.toJson;
 
@@ -217,13 +219,15 @@ class Mapper {
 
         default:
           if (value is Mappable) {
-            json[field] = value.toJson();
+            json[field] = value.json;
             return;
           }
           json[field] = value;
       }
     } catch (e) {
-      $debugPrint(e, "MappingError.toJson");
+      final _value = value ?? setter?.call(null);
+      final _type = _getValueType(_value);
+      $debugPrint(e, "MappingError.toJson: $_type: $_value}");
     }
   }
 
@@ -232,32 +236,26 @@ class Mapper {
     if (object is Map) {
       return ValueType.map;
     }
-
+    // TypedData List
+    else if (object is TypedData) {
+      return ValueType.typedList;
+    }
     // List
     else if (object is List) {
       return ValueType.list;
     }
-
     // String
     else if (object is String) {
       return ValueType.string;
     }
-
     // Bool
     else if (object is bool) {
       return ValueType.bool;
     }
-
     // Numeric
     else if (object is int || object is double) {
       return ValueType.numeric;
     }
-
-    // Dynamic
-//		else if (object is dynamic) {
-//			return ValueType.dynamic;
-//		}
-
     return ValueType.unknown;
   }
 

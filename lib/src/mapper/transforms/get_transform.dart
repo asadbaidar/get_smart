@@ -22,6 +22,6 @@ class GetTransform<T extends Mappable>
   @override
   Map<String, dynamic>? toJson(T? value) {
     if (value == null) return null;
-    return value.toJson();
+    return value.json;
   }
 }
