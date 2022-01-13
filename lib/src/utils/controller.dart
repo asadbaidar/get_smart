@@ -21,7 +21,9 @@ abstract class GetController extends MultipleFutureGetController {
       for (var e in webAPIs) {
         e.cancel();
       }
-    } catch (_) {}
+    } catch (e) {
+      $debugPrint(e, "cancelWebApis");
+    }
   }
 
   @override
@@ -77,18 +79,14 @@ abstract class GetController extends MultipleFutureGetController {
   /// sets the error status of an action
   set actionError(value) => setErrorFor(actionName, value);
 
-  /// Sets or Returns the data of the action
-  GetResult<T>? actionResult<T>([value]) {
-    if (value == null) {
-      return resultFor<T>(actionName);
-    } else {
-      setDataFor(actionName, value);
-      return value;
-    }
-  }
+  /// Returns the data of the action
+  GetResult<T>? actionResult<T>() => resultFor<T>(actionName);
+
+  /// Sets the data of the action
+  void setActionResult(value) => setDataFor(actionName, value);
 
   /// Returns the runner of the action
-  Future Function()? get actionRunner => runnerFor(actionName);
+  FutureCallback? get actionRunner => runnerFor(actionName);
 
   /// Sets the runner of the action
   set actionRunner(value) => setRunnerFor(actionName, value);
@@ -97,41 +95,37 @@ abstract class GetController extends MultipleFutureGetController {
   void cancelAction() => cancelFuture(actionName);
 
   /// Clears the action data
-  void clearAction() => clearAllSateData(actionName);
+  void clearAction() => clearAllStateData(actionName);
 
   /// Sets the action to busy, runs the action and then sets it to not busy
   /// when completed.
   ///
   /// rethrows [Exception] after setting action busy to false
-  Future runBusyAction(
-    Future Function() busyAction, {
+  Future<T?> runBusyAction<T>(
+    Callback<Future<T?>> action, {
     bool throwException = false,
   }) =>
-      runBusyRunner(
-        busyAction,
+      runBusyRunner<T>(
+        action,
         key: actionName,
         throwException: throwException,
       );
 
-  Future runAction(
-    Future Function() busyAction, {
+  Future<T?> runAction<T>(
+    Callback<Future<T?>> action, {
     bool throwException = false,
   }) =>
-      runRunner(
-        busyAction,
+      runRunner<T>(
+        action,
         key: actionName,
         throwException: throwException,
       );
 
-  /// Sets or Returns the data of the Controller
-  GetResult<T>? result<T>([value]) {
-    if (value == null) {
-      return resultFor<T>(typeName);
-    } else {
-      setData(value);
-      return value;
-    }
-  }
+  /// Returns the data of the Controller
+  GetResult<T>? result<T>() => resultFor<T>(typeName);
+
+  /// Sets the data of the Controller
+  void setResult(value) => setData(value);
 
   /// Returns the status of the Controller if started or not
   bool get isStarted => started(typeName);
@@ -159,11 +153,12 @@ abstract class GetController extends MultipleFutureGetController {
 
   /// Returns the data ready status by key even if error occurred
   @override
-  bool ready(Object key) => resultFor(key) != null;
+  bool ready(Object key) => resultFor(key) != null || errorFor(key) != null;
 
   /// Returns the [GetStatus] by key
-  GetStatus? statusFor(key) =>
-      busyFor(key) ? GetStatus.busy : resultFor(key)?.status;
+  GetStatus? statusFor(key) => busyFor(key)
+      ? GetStatus.busy
+      : resultFor(key)?.status ?? (hasErrorFor(key) ? GetStatus.failed : null);
 
   /// Returns the status by key if started or not
   bool started(key) =>
@@ -184,15 +179,15 @@ abstract class GetController extends MultipleFutureGetController {
   /// Cancels the future by key and clear the associated data
   void cancelFuture([key]) {
     _cancelWebApis();
-    clearAllSateData(key);
+    clearAllStateData(key);
   }
 
   /// Sets the Controller to busy, runs the future and then sets it to not busy when complete.
   ///
   /// rethrows [Exception] after setting busy to false for object or class
   @override
-  Future runBusyFuture(
-    Future busyFuture, {
+  Future<T?> runBusyFuture<T>(
+    Future<T?> future, {
     Object? key,
     bool throwException = false,
   }) async {
@@ -201,7 +196,7 @@ abstract class GetController extends MultipleFutureGetController {
     setBusyFor(_key, true);
     try {
       var value = await runErrorFuture(
-        busyFuture,
+        future,
         key: key,
         throwException: throwException,
       );
@@ -211,13 +206,13 @@ abstract class GetController extends MultipleFutureGetController {
     } catch (e) {
       setBusyFor(_key, false);
       if (throwException) rethrow;
-      return GetResult.error(e.toString());
+      return Future.value();
     }
   }
 
   @override
-  Future runErrorFuture(
-    Future future, {
+  Future<T?> runErrorFuture<T>(
+    Future<T?> future, {
     Object? key,
     bool throwException = false,
   }) async {
@@ -233,7 +228,7 @@ abstract class GetController extends MultipleFutureGetController {
       setErrorFor(_key, e);
       onError(e, _key);
       if (throwException) rethrow;
-      return GetResult.error(e.toString());
+      return Future.value();
     }
   }
 }

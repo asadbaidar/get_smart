@@ -101,7 +101,7 @@ class CameraPage extends StatelessWidget {
             child: controller.hasError
                 ? MessageView(
                     error: controller.error,
-                    onAction: () => controller.futureToRun(),
+                    onAction: controller.refreshData,
                   )
                 : controller.isDataReady
                     ? SizedBox.expand(

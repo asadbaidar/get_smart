@@ -5,6 +5,28 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
+typedef OnValue<T> = void Function(T value);
+
+typedef OnValue2<V1, V2> = void Function(V1 v1, V2 v2);
+
+typedef OnString = OnValue<String>;
+
+typedef Callback<T> = T Function();
+
+typedef StringCallback = Callback<String>;
+
+typedef BoolCallback = Callback<bool>;
+
+typedef FutureCallback = Callback<Future>;
+
+typedef OnValueCallback<R, T> = R Function(T value);
+
+typedef OnStringCallback<R> = OnValueCallback<R, String>;
+
+typedef OnValueReturn<T> = T Function(T value);
+
+typedef OnStringReturn = OnValueReturn<String>;
+
 extension UrlX on String {
   void launchUrl({bool? inApp, bool httpOnly = false}) async {
     var url = !httpOnly || startsWith(RegExp("^(http|https)://"))

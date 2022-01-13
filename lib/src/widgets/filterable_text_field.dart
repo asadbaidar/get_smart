@@ -7,24 +7,6 @@ typedef GetFilterItemBuilder<T> = Widget Function(
 
 typedef Filter<T> = bool Function(T value, String query);
 
-typedef OnValue<T> = void Function(T value);
-
-typedef OnValue2<V1, V2> = void Function(V1 v1, V2 v2);
-
-typedef OnString = OnValue<String>;
-
-typedef ValueCallback<T> = T Function();
-
-typedef StringCallback = ValueCallback<String>;
-
-typedef OnValueCallback<R, T> = R Function(T value);
-
-typedef OnStringCallback<R> = OnValueCallback<R, String>;
-
-typedef OnValueReturn<T> = T Function(T value);
-
-typedef OnStringReturn = OnValueReturn<String>;
-
 /// A wrapper of [GetTextField] with filterable suggestion features.
 class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   /// Callback to filter item: return true or false depending on input text
