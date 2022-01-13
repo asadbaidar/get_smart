@@ -14,23 +14,25 @@ import 'package:intl/number_symbols_data.dart';
 ///   ];
 /// ```
 class GetLocalizations {
-  static const english = Locale("en", "");
-  static const supportedLocales = [GetLocalizations.english];
+  static const english = "en";
+  static final supportedLocales = [english.locale];
 
   static const GetLocalizationsDelegate delegate = GetLocalizationsDelegate();
 
   GetLocalizations(this.locale)
-      : symbols = numberFormatSymbols[locale.code] ??
-            numberFormatSymbols[english.code],
+      : symbols =
+            numberFormatSymbols[locale.code] ?? numberFormatSymbols[english],
         currencyFraction = currencyFractionDigits[
                 (numberFormatSymbols[locale.code] ??
-                        numberFormatSymbols[english.code])
+                        numberFormatSymbols[english])
                     .DEF_CURRENCY_CODE] ??
             2;
 
   final Locale locale;
   final NumberSymbols symbols;
   final int currencyFraction;
+
+  static String? get currentLocale => current?.locale.code;
 
   static GetLocalizations? get current {
     return Get.context != null
@@ -61,4 +63,15 @@ class GetLocalizationsDelegate extends LocalizationsDelegate<GetLocalizations> {
 extension LocaleX on Locale {
   String get code =>
       toString().applyIf(countryCode?.notEmpty == null, (s) => languageCode);
+}
+
+extension ParseLocale on String {
+  Locale get locale {
+    final codes = split("_");
+    final lang = codes.get(0);
+    final country = codes.get(1);
+    return lang?.isNotEmpty == true
+        ? Locale(lang!, country)
+        : const Locale("en");
+  }
 }

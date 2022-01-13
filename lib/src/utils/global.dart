@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -103,10 +102,10 @@ extension ObjectX on Object {
 
   /// Return the text from a text map with arguments based on current locale
   String $localized(
-    Map<Locale, Map<dynamic, String>> textMap, [
+    Map<String, Map<dynamic, String>> textMap, [
     List<dynamic>? arguments,
   ]) =>
-      textMap[GetLocalizations.current?.locale ?? GetLocalizations.english]
+      textMap[GetLocalizations.currentLocale ?? GetLocalizations.english]
           ?.mapTo((Map<dynamic, String> it) => it[this])
           ?.applyIf(
             arguments?.isNotEmpty,
