@@ -8,7 +8,11 @@ extension GetInterfaceX on GetInterface {
 
   bool get isIOS => platform == TargetPlatform.iOS;
 
+  bool get isWebIOS => isWeb && isIOS;
+
   bool get isAndroid => platform == TargetPlatform.android;
+
+  bool get isWebAndroid => isWeb && isAndroid;
 
   bool get isLinux => platform == TargetPlatform.linux;
 
