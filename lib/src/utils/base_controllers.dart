@@ -228,6 +228,28 @@ abstract class BaseGetController extends GetxController {
     }
   }
 
+  /// Sets the Controller to busy, runs the futures and then sets it
+  /// to not busy when complete.
+  ///
+  /// return false if error occurred, otherwise true.
+  Future<bool> runBusyFutures(
+    List<Future> futures, {
+    Object? key,
+  }) async {
+    final _key = key ?? typeName;
+    setBusyFor(_key, true);
+    final value = await Future.forEach<Future>(
+      futures,
+      (future) => runErrorFuture(
+        future,
+        key: key,
+        throwException: true,
+      ),
+    );
+    setBusyFor(_key, false);
+    return value == null;
+  }
+
   Future<T?> runErrorFuture<T>(
     Future<T?> future, {
     Object? key,

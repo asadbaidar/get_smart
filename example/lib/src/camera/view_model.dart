@@ -67,7 +67,7 @@ class CameraModel extends GetController {
   int flashMode = 1;
   String flashLabel = "Auto";
 
-  void switchFlash() => runBusyAction(() async {
+  void switchFlash() => runActionRunner(() async {
         try {
           flashMode = flashMode < flashModes.length - 1 ? flashMode + 1 : 0;
           return camera
@@ -132,7 +132,7 @@ class CameraModel extends GetController {
     Get.back(result: file);
   }
 
-  Future takePhoto() => runBusyAction(() async {
+  Future takePhoto() => runActionRunner(() async {
         try {
           return camera
               .takePicture()
@@ -150,7 +150,7 @@ class CameraModel extends GetController {
         }
       });
 
-  Future startVideoRecording() => runBusyAction(() async {
+  Future startVideoRecording() => runActionRunner(() async {
         try {
           if (Get.isIOS) await camera.prepareForVideoRecording();
           return camera.startVideoRecording().then((_) {
@@ -165,7 +165,7 @@ class CameraModel extends GetController {
         }
       });
 
-  Future stopVideoRecording() => runBusyAction(() async {
+  Future stopVideoRecording() => runActionRunner(() async {
         try {
           return camera.stopVideoRecording().then((video) {
             _timer.cancel();

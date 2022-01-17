@@ -101,14 +101,40 @@ abstract class GetController extends MultipleFutureGetController {
   /// when completed.
   ///
   /// rethrows [Exception] after setting action busy to false
-  Future<T?> runBusyAction<T>(
-    Callback<Future<T?>> action, {
+  Future<T?> runActionRunner<T>(
+    Callback<Future<T?>> runner, {
     bool throwException = false,
   }) =>
       runBusyRunner<T>(
-        action,
+        runner,
         key: actionName,
         throwException: throwException,
+      );
+
+  /// Sets the action to busy, runs the action and then sets it to not busy
+  /// when completed.
+  ///
+  /// rethrows [Exception] after setting action busy to false
+  Future<T?> runActionFuture<T>(
+    Future<T?> future, {
+    bool throwException = false,
+  }) =>
+      runBusyFuture<T>(
+        future,
+        key: actionName,
+        throwException: throwException,
+      );
+
+  /// Sets the action to busy, runs all the actions and then sets it to not busy
+  /// when completed.
+  ///
+  /// return false if error occurred, otherwise true.
+  Future<bool> runActionFutures<T>(
+    List<Future> futures,
+  ) =>
+      runBusyFutures(
+        futures,
+        key: actionName,
       );
 
   Future<T?> runAction<T>(
@@ -146,7 +172,7 @@ abstract class GetController extends MultipleFutureGetController {
   String? get success => successFor(typeName);
 
   /// Returns the result data by key
-  GetResult<T>? resultFor<T>(Object key) => dataFor<GetResult<T>>(key);
+  GetResult<T>? resultFor<T>([Object? key]) => dataFor<GetResult<T>>(key ?? T);
 
   /// Returns the success message by key
   String? successFor(Object key) => resultFor(key)?.success;
@@ -222,6 +248,7 @@ abstract class GetController extends MultipleFutureGetController {
       if (result is GetResult && result.error != null) {
         setErrorFor(_key, result.error);
         onError(_key, result.error);
+        if (throwException) throw result.error!;
       }
       return result;
     } catch (e) {
