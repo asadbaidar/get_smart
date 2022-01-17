@@ -1,6 +1,7 @@
 //packages
 export 'package:collection/collection.dart';
 export "package:dots_indicator/dots_indicator.dart";
+export "package:flutter_svg/flutter_svg.dart";
 export "package:get/get.dart";
 export "package:google_fonts/google_fonts.dart";
 export "package:http_parser/http_parser.dart";

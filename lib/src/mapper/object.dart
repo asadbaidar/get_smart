@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 abstract class GetObject extends Mappable {
@@ -17,9 +16,11 @@ abstract class GetObject extends Mappable {
 
   set description(description) => _description = description;
 
-  String? get idFallback => null;
+  String? get idFallback => fallback?.id;
 
-  String? get descriptionFallback => null;
+  String? get descriptionFallback => fallback?.description;
+
+  GetObject? get fallback => null;
 
   List<String> get idKeys => ["ID", "id"];
 
@@ -27,12 +28,14 @@ abstract class GetObject extends Mappable {
 
   bool get capitalized => false;
 
+  bool get removeSpace => false;
+
   @override
   void mapping(Mapper map) {
     map(["CURRENT_TIME"], (v) => currentTime ??= v, DateTransform());
     map(idKeys, (v) => _id ??= v?.toString());
     map(descriptionKeys, (v) => _description ??= v,
-        StringTransform(capitalize: capitalized));
+        StringTransform(capitalize: capitalized, removeSpace: removeSpace));
   }
 
   Future get decrypted async {
@@ -56,11 +59,13 @@ abstract class GetObject extends Mappable {
   @override
   String? get containable => id + description;
 
-  Color get color => materialAccent;
+  Color get color => colorMaterial;
 
-  Color get materialAccent => description.materialAccent;
+  Color get colorPrimary => description.colorPrimary;
 
-  Color get materialPrimary => description.materialPrimary;
+  Color get colorAccent => description.colorAccent;
+
+  Color get colorMaterial => description.colorMaterial;
 
   late final String initial = description.takeInitials(1);
 

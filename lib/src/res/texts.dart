@@ -1,6 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
 /// Get text keys
@@ -26,10 +25,11 @@ enum GetText {
   location_disabled,
   location_mocked,
   location_error,
+  switch_user,
 }
 
 /// Get text data
-Map<Locale, Map<GetText, String>> _getTextMap = {
+const Map<String, Map<GetText, String>> _getTextMap = {
   GetLocalizations.english: {
     GetText.done: "Done",
     GetText.cancel: "Cancel",
@@ -55,6 +55,7 @@ Map<Locale, Map<GetText, String>> _getTextMap = {
     GetText.location_mocked:
         "Mock location detected. Please turn it off to continue.",
     GetText.location_error: "Unable to get location.",
+    GetText.switch_user: "Switch User",
   },
 };
 

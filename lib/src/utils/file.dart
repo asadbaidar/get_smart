@@ -1,7 +1,4 @@
 import 'package:get_smart/get_smart.dart';
-import 'package:get_smart/src/utils/get_utils.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart' as path;
 
 class GetFile {
@@ -72,6 +69,7 @@ class GetFile {
     "png",
     "gif",
     "bmp",
+    "tif"
   ];
 
   static const List<String> audioTypes = [
@@ -96,6 +94,28 @@ class GetFile {
 }
 
 extension GetFileX on String {
+  String get svg => this + ".svg";
+
+  String get png => this + ".png";
+
+  String get gif => this + ".gif";
+
+  String get jpg => this + ".jpg";
+
+  String get jpeg => this + ".jpeg";
+
+  String get pdf => this + ".pdf";
+
+  bool get isSVG => lowercase.endsWith("svg");
+
+  bool get isPNG => lowercase.endsWith("png");
+
+  bool get isGIF => lowercase.endsWith("gif");
+
+  bool get isJPG => lowercase.endsWith("jpg") || lowercase.endsWith("jpeg");
+
+  bool get isPDF => lowercase.endsWith("pdf");
+
   /// return the file name of file path.
   String get fileName => path.basename(this);
 
@@ -122,32 +142,17 @@ extension GetFileX on String {
   bool get isWMVFile => lowercase.endsWith("wmv");
 
   /// Checks if string is a video file name.
-  bool get isVideo {
-    final file = lowercase;
-    return GetFile.videoTypes.any(file.endsWith);
-  }
+  bool get isVideo => GetFile.videoTypes.any(lowercase.endsWith);
 
   /// Checks if string is an image file name.
-  bool get isImage {
-    final file = lowercase;
-    return GetFile.imageTypes.any(file.endsWith);
-  }
+  bool get isImage => GetFile.imageTypes.any(lowercase.endsWith);
 
   /// Checks if string is an audio file name.
-  bool get isAudio {
-    final file = lowercase;
-    return GetFile.audioTypes.any(file.endsWith);
-  }
+  bool get isAudio => GetFile.audioTypes.any(lowercase.endsWith);
 
   /// Checks if string is a document file name.
-  bool get isDocument {
-    final file = lowercase;
-    return GetFile.docTypes.any(file.endsWith);
-  }
+  bool get isDocument => GetFile.docTypes.any(lowercase.endsWith);
 
   /// Checks if string is an image, video, audio or document file name.
-  bool get isMediaOrDocs {
-    final file = lowercase;
-    return GetFile.mediaAndDocTypes.any(file.endsWith);
-  }
+  bool get isMediaOrDocs => GetFile.mediaAndDocTypes.any(lowercase.endsWith);
 }

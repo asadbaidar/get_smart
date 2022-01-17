@@ -3,8 +3,29 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get_smart/get_smart.dart';
+
+typedef OnValue<T> = void Function(T value);
+
+typedef OnValue2<V1, V2> = void Function(V1 v1, V2 v2);
+
+typedef OnString = OnValue<String>;
+
+typedef Callback<T> = T Function();
+
+typedef StringCallback = Callback<String>;
+
+typedef BoolCallback = Callback<bool>;
+
+typedef FutureCallback = Callback<Future>;
+
+typedef OnValueCallback<R, T> = R Function(T value);
+
+typedef OnStringCallback<R> = OnValueCallback<R, String>;
+
+typedef OnValueReturn<T> = T Function(T value);
+
+typedef OnStringReturn = OnValueReturn<String>;
 
 extension UrlX on String {
   void launchUrl({bool? inApp, bool httpOnly = false}) async {
@@ -49,8 +70,15 @@ extension RandomX on Random {
 
 extension Uint8ListX on Uint8List {
   /// Convert bytes to memory image
-  MemoryImage? image({double scale = 1.0}) =>
+  MemoryImage? memoryImage({double scale = 1.0}) =>
       isEmpty ? null : MemoryImage(this, scale: scale);
+}
+
+extension CompleterX<T> on Completer<T> {
+  /// Completes [future] with the supplied values if not already completed.
+  void completeIfCan([FutureOr<T>? value]) {
+    if (!isCompleted) complete();
+  }
 }
 
 extension MaterialStatePropertyX<T> on MaterialStateProperty<T> {

@@ -144,10 +144,13 @@ extension StringX on String {
   bool containsIgnoreCase(String? s) =>
       s == null ? false : lowercase.contains(s.lowercase);
 
-  Color get materialPrimary =>
-      Colors.primaries[randomIn(Colors.primaries.length)];
+  Color get color => colorMaterial;
 
-  Color get materialAccent => Colors.accents[randomIn(Colors.accents.length)];
+  Color get colorPrimary => GetColors.primary(this);
+
+  Color get colorAccent => GetColors.accent(this);
+
+  Color get colorMaterial => GetColors.material(this);
 
   bool isPasswordStrong({int min = 8}) {
     if (isBlank!) return false;
@@ -167,6 +170,8 @@ extension StringX on String {
         hasMinLength;
   }
 
+  String get asterik => notEmpty?.post(" *") ?? "";
+
   /// Uppercase each word inside string
   /// Example: your name => YOUR NAME
   String get uppercase => toUpperCase();
@@ -174,6 +179,14 @@ extension StringX on String {
   /// Lowercase each word inside string
   /// Example: Your Name => your name
   String get lowercase => toLowerCase();
+
+  /// Lowercase first letter of string
+  /// Example: Your Name => your Name
+  String get lowercaseFirst => isBlank == true
+      ? ""
+      : length == 1
+          ? lowercase
+          : this[0].lowercase + substring(1);
 
   /// Capitalize each word inside string
   /// Example: your name => Your Name
@@ -203,8 +216,9 @@ extension StringX on String {
 
   Uint8List? get base64Decoded {
     try {
-      return base64Decode(this);
+      return isEmpty ? null : base64Decode(this);
     } catch (e) {
+      $debugPrint(e, "base64Decoded");
       return null;
     }
   }
@@ -214,6 +228,7 @@ extension StringX on String {
       final bytes = toBytes();
       return bytes == null ? this : base64Encode(bytes);
     } catch (e) {
+      $debugPrint(e, "base64Encoded");
       return this;
     }
   }
@@ -222,6 +237,7 @@ extension StringX on String {
     try {
       return utf8.encoder.convert(this);
     } catch (e) {
+      $debugPrint(e, "toBytes");
       return null;
     }
   }
@@ -230,6 +246,18 @@ extension StringX on String {
     try {
       return utf8.encode(this);
     } catch (e) {
+      $debugPrint(e, "toUTF8");
+      return null;
+    }
+  }
+}
+
+extension BytesToBase64 on Uint8List {
+  String? get base64Encoded {
+    try {
+      return isEmpty ? null : base64Encode(this);
+    } catch (e) {
+      $debugPrint(e, "base64Encoded");
       return null;
     }
   }

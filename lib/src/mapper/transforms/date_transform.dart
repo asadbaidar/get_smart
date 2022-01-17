@@ -9,42 +9,37 @@ class DateUnit extends Enumerable<int> {
   @override
   final int rawValue;
 
-  double addScale(double interval) {
-    return interval * rawValue;
-  }
+  int addScale(int interval) => interval * rawValue;
 
-  double removeScale(double interval) {
-    return interval / rawValue;
-  }
+  int removeScale(int interval) => interval ~/ rawValue;
 }
 
-class DateTransform implements Transformable<DateTime?, double?> {
+class DateTransform implements Transformable<DateTime?, int?> {
   DateTransform({
-    this.unit = DateUnit.seconds,
+    this.unit = DateUnit.milliseconds,
     this.format,
+    this.fallback,
   });
 
   final DateUnit unit;
   final DateFormat? format;
+  final DateTime? fallback;
 
   @override
   DateTime? fromJson(value) {
     try {
-      if (value == null) return null;
+      if (value == null) return fallback;
       if (value is String) return format?.parse(value) ?? DateTime.parse(value);
-      if (value is int) value = value.toDouble();
-      if (value < 0) return null;
-
-      return DateTime.fromMillisecondsSinceEpoch(unit.addScale(value).toInt());
+      if (value < 0) return fallback;
+      return DateTime.fromMillisecondsSinceEpoch(unit.addScale(value));
     } catch (e) {
-      return null;
+      return fallback;
     }
   }
 
   @override
-  double? toJson(DateTime? value) {
+  int? toJson(DateTime? value) {
     if (value == null) return null;
-
-    return unit.removeScale(value.millisecondsSinceEpoch.toDouble());
+    return unit.removeScale(value.inMilliseconds);
   }
 }

@@ -4,7 +4,7 @@ import 'package:get_smart/get_smart.dart';
 class TestGetController extends BaseGetController {
   bool onErrorCalled = false;
 
-  Future runFuture(
+  Future _runFuture(
       {Object? busyKey, bool fail = false, bool throwException = false}) {
     return runBusyFuture(
       _futureToRun(fail),
@@ -13,7 +13,7 @@ class TestGetController extends BaseGetController {
     );
   }
 
-  Future runTestErrorFuture(
+  Future _runTestErrorFuture(
       {Object? key, bool fail = false, bool throwException = false}) {
     return runErrorFuture(
       _futureToRun(fail),
@@ -50,7 +50,7 @@ void main() {
         const key = "key";
         var controller = TestGetController();
         controller.setBusyFor(key, true);
-        expect(controller.busy(key), true);
+        expect(controller.busyFor(key), true);
       });
 
       test('When setBusyFor is called with true then false, should be false',
@@ -59,12 +59,12 @@ void main() {
         var controller = TestGetController();
         controller.setBusyFor(key, true);
         controller.setBusyFor(key, false);
-        expect(controller.busy(key), false);
+        expect(controller.busyFor(key), false);
       });
 
       test('When busyFuture is run should report busy for the model', () {
         var controller = TestGetController();
-        controller.runFuture();
+        controller._runFuture();
         expect(controller.isBusy, true);
       });
 
@@ -73,8 +73,8 @@ void main() {
           () {
         var busyObjectKey = 'busyObjectKey';
         var controller = TestGetController();
-        controller.runFuture(busyKey: busyObjectKey);
-        expect(controller.busy(busyObjectKey), true);
+        controller._runFuture(busyKey: busyObjectKey);
+        expect(controller.busyFor(busyObjectKey), true);
       });
 
       test(
@@ -82,8 +82,8 @@ void main() {
           () async {
         var busyObjectKey = 'busyObjectKey';
         var controller = TestGetController();
-        await controller.runFuture(busyKey: busyObjectKey, fail: true);
-        expect(controller.busy(busyObjectKey), false);
+        await controller._runFuture(busyKey: busyObjectKey, fail: true);
+        expect(controller.busyFor(busyObjectKey), false);
       });
 
       test(
@@ -93,7 +93,7 @@ void main() {
         var controller = TestGetController();
 
         expect(
-            () async => await controller.runFuture(
+            () async => await controller._runFuture(
                 busyKey: busyObjectKey, fail: true, throwException: true),
             throwsException);
       });
@@ -113,7 +113,7 @@ void main() {
       test('When update is called before onClose, should not throw exception',
           () async {
         var controller = TestGetController();
-        await controller.runFuture();
+        await controller._runFuture();
         controller.update();
         controller.onClose();
         expect(() => controller.update(), returnsNormally);
@@ -122,7 +122,7 @@ void main() {
       test('When update is called after onClose, should not throw exception',
           () async {
         var controller = TestGetController();
-        await controller.runFuture();
+        await controller._runFuture();
         controller.onClose();
         controller.update();
         expect(() => controller.update(), returnsNormally);
@@ -132,14 +132,14 @@ void main() {
     group('runErrorFuture -', () {
       test('When called and error is thrown should set error', () async {
         var controller = TestGetController();
-        await controller.runTestErrorFuture(fail: true);
+        await controller._runTestErrorFuture(fail: true);
         expect(controller.hasError, true);
       });
       test(
           'When called and error is thrown should call onErrorForFuture override',
           () async {
         var controller = TestGetController();
-        await controller.runTestErrorFuture(fail: true, throwException: false);
+        await controller._runTestErrorFuture(fail: true, throwException: false);
         expect(controller.onErrorCalled, true);
       });
     });

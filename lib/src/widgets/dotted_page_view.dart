@@ -22,6 +22,7 @@ class DottedPageView extends StatefulWidget {
     this.allowImplicitScrolling = false,
     this.restorationId,
     this.clipBehavior = Clip.hardEdge,
+    this.size,
     Key? key,
   })  : _key = key,
         controller = controller ?? PageController(),
@@ -42,6 +43,7 @@ class DottedPageView extends StatefulWidget {
   final bool allowImplicitScrolling;
   final String? restorationId;
   final Clip clipBehavior;
+  final Size? size;
   final Key? _key;
 
   @override
@@ -89,43 +91,46 @@ class _DottedPageViewState extends State<DottedPageView>
   }
 
   @override
-  Widget build(BuildContext context) => Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          PageView.builder(
-            key: widget._key,
-            scrollDirection: widget.scrollDirection,
-            reverse: widget.reverse,
-            controller: widget.controller,
-            physics: widget.physics,
-            pageSnapping: widget.pageSnapping,
-            onPageChanged: (index) {
-              _index.value = index;
-              widget.onPageChanged?.call(index);
-            },
-            itemBuilder: widget.itemBuilder!,
-            itemCount: widget.itemCount,
-            dragStartBehavior: widget.dragStartBehavior,
-            allowImplicitScrolling: widget.allowImplicitScrolling,
-            restorationId: widget.restorationId,
-            clipBehavior: widget.clipBehavior,
-          ),
-          if (widget.itemCount > 1)
-            Obx(
-              () => DotsIndicator(
-                decorator: DotsDecorator(
-                  color: widget.dotColor,
-                  activeColor: widget.dotActiveColor,
-                  size: const Size.square(8),
-                  activeSize: const Size.square(8),
-                  spacing: const EdgeInsets.all(4),
-                ),
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                dotsCount: widget.itemCount,
-                position: min(_index.value, widget.itemCount - 1).toDouble(),
-              ),
+  Widget build(BuildContext context) => SizedBox.fromSize(
+        size: widget.size,
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            PageView.builder(
+              key: widget._key,
+              scrollDirection: widget.scrollDirection,
+              reverse: widget.reverse,
+              controller: widget.controller,
+              physics: widget.physics,
+              pageSnapping: widget.pageSnapping,
+              onPageChanged: (index) {
+                _index.value = index;
+                widget.onPageChanged?.call(index);
+              },
+              itemBuilder: widget.itemBuilder!,
+              itemCount: widget.itemCount,
+              dragStartBehavior: widget.dragStartBehavior,
+              allowImplicitScrolling: widget.allowImplicitScrolling,
+              restorationId: widget.restorationId,
+              clipBehavior: widget.clipBehavior,
             ),
-        ],
+            if (widget.itemCount > 1)
+              Obx(
+                () => DotsIndicator(
+                  decorator: DotsDecorator(
+                    color: widget.dotColor,
+                    activeColor: widget.dotActiveColor,
+                    size: const Size.square(8),
+                    activeSize: const Size.square(8),
+                    spacing: const EdgeInsets.all(4),
+                  ),
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  dotsCount: widget.itemCount,
+                  position: min(_index.value, widget.itemCount - 1).toDouble(),
+                ),
+              ),
+          ],
+        ),
       );
 }

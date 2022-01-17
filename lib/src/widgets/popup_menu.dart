@@ -132,7 +132,7 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
                 trailingBottom: data.trailingBottom,
                 accessory: data.accessory?.mapIt((it) => Icon(it)),
                 color: autoTint
-                    ? data.materialPrimary
+                    ? data.colorMaterial
                     : (data.tintColor ?? tintColor),
                 background: data.background ?? Colors.transparent,
                 leadingFilled: data.leadingFilled ?? false,
@@ -159,7 +159,7 @@ class GetPopupMenu<T extends Object> extends StatelessWidget {
               )) ??
           GetTile.item(
             title: data.toString(),
-            color: autoTint ? data.toString().materialPrimary : tintColor,
+            color: autoTint ? data.toString().color : tintColor,
             horizontalPadding: itemPadding,
             titleSize: titleSize,
             accessorySize: accessorySize,

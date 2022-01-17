@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -27,6 +26,7 @@ class GetScaffold extends StatelessWidget {
     this.appBarActions,
     this.floatingActionButton,
     this.backgroundColor,
+    this.appBarColor,
     this.titleStyle,
     this.centerTitle,
     this.extendBody = true,
@@ -38,6 +38,8 @@ class GetScaffold extends StatelessWidget {
     this.bottomBarHidden = false,
     this.interactive = true,
     this.appBarBottomHeight = 0.0,
+    this.toolbarHeight,
+    this.appBarElevation,
     this.floatingActionButtonLocation,
     this.bottomBarAlignment,
     Key? key,
@@ -65,6 +67,7 @@ class GetScaffold extends StatelessWidget {
   final List<Widget>? appBarActions;
   final FloatingActionButton? floatingActionButton;
   final Color? backgroundColor;
+  final Color? appBarColor;
   final TextStyle? titleStyle;
   final bool? centerTitle;
   final bool extendBody;
@@ -76,6 +79,8 @@ class GetScaffold extends StatelessWidget {
   final bool bottomBarHidden;
   final bool interactive;
   final double appBarBottomHeight;
+  final double? toolbarHeight;
+  final double? appBarElevation;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final CrossAxisAlignment? bottomBarAlignment;
   final Key? _key;
@@ -163,6 +168,9 @@ class GetScaffold extends StatelessWidget {
               showLeading: showAppBarLeading,
               showProgress: showProgress,
               bottomHeight: appBarBottomHeight,
+              toolbarHeight: toolbarHeight,
+              elevation: appBarElevation,
+              backgroundColor: appBarColor,
             );
 
   Widget _bottomBar(BuildContext context) => Blur(

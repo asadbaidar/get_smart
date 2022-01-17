@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:example/src/camera/view.dart';
 import 'package:example/src/home/view_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
+import 'package:rive/rive.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,19 +12,33 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetBuilder<HomeModel>(
         init: HomeModel(),
-        builder: (model) {
-          final dataSet = model.alphabets;
+        builder: (controller) {
+          final dataSet = controller.alphabets;
           return ThemeBuilder(
             (context) => GetScaffold(
               title: "Get Smart Home",
+              appBarActions: [
+                GetButton.icon(
+                  child: const RiveAnimation.asset("assets/rive/cancer.riv"),
+                  onPressed: () {},
+                ),
+                GetButton.icon(
+                  child: SvgPicture.asset(
+                    GetIconAsset.apple_filled.svg,
+                    package: GetAsset.package,
+                    color: context.secondaryColor,
+                  ),
+                  onPressed: () {},
+                ),
+              ],
               progress: LinearProgress.standard(
-                visible: model.isBusy,
+                visible: controller.isBusy,
               ),
               child: SwipeRefresh(
-                onRefresh: model.refreshData,
+                onRefresh: controller.refreshData,
                 child: ListView.separated(
                   itemCount: dataSet.length,
-                  separatorBuilder: (_, __) => const GetTileSeparator(),
+                  separatorBuilder: (_, __) => const GetTileDivider(),
                   itemBuilder: (_, index) {
                     final data = dataSet[index];
                     return GetTile.simple(
@@ -62,7 +76,7 @@ class HomePage extends StatelessWidget {
                         () => const CameraPage(),
                       )?.then((file) {
                         data.file = file;
-                        model.update();
+                        controller.update();
                       }),
                     );
                   },
