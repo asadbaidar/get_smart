@@ -5,12 +5,14 @@ class StringTransform implements Transformable<String, String> {
     this.capitalize = false,
     this.capitalizeFirst = false,
     this.withoutGarbage = false,
+    this.removeSpace = false,
     this.fallback = "",
   });
 
   final bool capitalize;
   final bool capitalizeFirst;
   final bool withoutGarbage;
+  final bool removeSpace;
   final String fallback;
 
   @override
@@ -19,6 +21,7 @@ class StringTransform implements Transformable<String, String> {
         capitalize,
         capitalizeFirst,
         withoutGarbage,
+        removeSpace,
         fallback,
       );
 
@@ -31,12 +34,14 @@ class RxStringTransform implements Transformable<RxString, String?> {
     this.capitalize = false,
     this.capitalizeFirst = false,
     this.withoutGarbage = false,
+    this.removeSpace = false,
     this.fallback = "",
   });
 
   final bool capitalize;
   final bool capitalizeFirst;
   final bool withoutGarbage;
+  final bool removeSpace;
   final String fallback;
 
   @override
@@ -45,6 +50,7 @@ class RxStringTransform implements Transformable<RxString, String?> {
         capitalize,
         capitalizeFirst,
         withoutGarbage,
+        removeSpace,
         fallback,
       ).obs;
 
@@ -57,11 +63,13 @@ String _stringFromJson(
   bool capitalize,
   bool capitalizeFirst,
   bool withoutGarbage,
+  bool removeSpace,
   fallback,
 ) {
   var string = _$stringFromJson(value, fallback);
   string =
       withoutGarbage && StringX.garbage.any((g) => g == string) ? "" : string;
+  string = removeSpace ? string.replaceAll(RegExp(r"\s+"), " ") : string;
   return capitalize
       ? string.capitalized
       : capitalizeFirst

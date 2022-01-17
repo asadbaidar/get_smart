@@ -56,6 +56,15 @@ extension ListX<E> on List<E> {
     }
     return null;
   }
+
+  E inserted(int index, E element) {
+    if (index < length) {
+      insert(index, element);
+    } else {
+      add(element);
+    }
+    return element;
+  }
 }
 
 extension IterableX<E> on Iterable<E> {
@@ -71,4 +80,18 @@ extension IterableX<E> on Iterable<E> {
       expand((e) => where(e) ? [] : [e]);
 
   Iterable<E> get notEmpty => exclude((e) => e.toString().isEmpty);
+}
+
+extension EnumIterableX<T extends Enum> on Iterable<T> {
+  /// Finds the enum value in this list with name [name].
+  ///
+  /// Goes through this collection looking for an enum with
+  /// name [name], as reported by [EnumName.name].
+  /// Returns the first value with the given name or null if none found.
+  T? byNameOrNull(String name, [String? extra]) {
+    for (var value in this) {
+      if (value.name == name || value.name == extra) return value;
+    }
+    return null;
+  }
 }

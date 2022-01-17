@@ -3,45 +3,44 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
-/// Contains ViewModel functionality for busy state management
+/// Basic Controller functionality for busy state management
 abstract class BaseGetController extends GetxController {
   Map<Object, bool> get busyStates => _busyStates;
   final Map<Object, bool> _busyStates = {};
+
+  Map<Object, dynamic> get errorStates => _errorStates;
   final Map<Object, dynamic> _errorStates = {};
 
+  /// Returns the initialisation status of the Controller when all futures are completed
+  bool get isInitialised => _initialised;
   bool _initialised = false;
 
-  bool get initialised => _initialised;
-
-  bool _onModelReadyCalled = false;
-
-  bool get onModelReadyCalled => _onModelReadyCalled;
-
-  bool _disposed = false;
+  bool onReadyCalled = false;
 
   bool get disposed => _disposed;
+  bool _disposed = false;
 
-  /// Returns the busy status for an object if it exists.
+  /// Returns the busy status for a key if it exists.
   /// Returns false if not present
-  bool busy(Object key) => _busyStates[key] ?? false;
+  bool busyFor(Object key) => _busyStates[key] ?? false;
 
   /// Returns the error by key
-  String? error(Object key) => _errorStates[key]?.toString();
+  String? errorFor(Object key) => _errorStates[key]?.toString();
 
   /// Returns the error status by key
-  bool hasErrorFor(Object key) => error(key) != null;
+  bool hasErrorFor(Object key) => errorFor(key) != null;
 
-  /// Returns the busy status of the ViewModel
-  bool get isBusy => busy(typeName);
+  /// Returns the busy status of the Controller
+  bool get isBusy => busyFor(typeName);
 
-  /// Returns the error status of the ViewModel
+  /// Returns the error status of the Controller
   bool get hasError => hasErrorFor(typeName);
 
-  /// Returns the error status of the ViewModel
-  String? get modelError => error(typeName);
+  /// Returns the error status of the Controller
+  String? get error => errorFor(typeName);
 
-  /// Sets the error for the ViewModel
-  set modelError(value) => setError(value);
+  /// Sets the error for the Controller
+  set error(value) => setError(value);
 
   /// Returns true if any objects still have a busy status that is true.
   bool get isAnyBusy => _busyStates.values.any((busy) => busy);
@@ -53,46 +52,63 @@ abstract class BaseGetController extends GetxController {
   dynamic get anyError =>
       _errorStates.values.firstWhereOrNull((error) => error != null);
 
-  /// Sets the busy status for the ViewModel and calls notify listeners
+  /// Sets the busy status for the Controller and calls notify listeners
   void setBusy(bool value) => setBusyFor(typeName, value);
 
-  /// Sets the error for the ViewModel
+  /// Sets the error for the Controller
   void setError(error) => setErrorFor(typeName, error);
 
   /// Clears all the errors
-  void clearErrors() {
-    _errorStates.clear();
-  }
+  void clearErrors() => _errorStates.clear();
 
   /// Clears all the busy states
-  void clearBusy() {
-    _busyStates.clear();
+  void clearBusy() => _busyStates.clear();
+
+  /// Clears all states and data by key
+  bool clearAllStateData([Object? key]) {
+    if (errorStates.isNotEmpty || busyStates.isNotEmpty) {
+      clearErrors();
+      clearBusy();
+      update();
+      return true;
+    }
+    return false;
+  }
+
+  /// Clears states and data by key
+  bool clearStateData([Object? key]) {
+    final _key = key ?? typeName;
+    if (errorStates.containsKey(_key) || busyStates.containsKey(_key)) {
+      _errorStates.remove(_key);
+      _busyStates.remove(_key);
+      update();
+      return true;
+    }
+    return false;
   }
 
   /// Clears the data by key
-  void clearData([Object? key]) {
-    _errorStates.remove(key);
-    _busyStates.remove(key);
-    update();
-  }
+  bool clearData([Object? key]) => false;
 
-  /// Clears all data and errors
-  void clearAllData() {
-    clearErrors();
-    clearBusy();
-    update();
+  /// Clears all data and states
+  bool clearAllData() {
+    if (errorStates.isNotEmpty || busyStates.isNotEmpty) {
+      clearErrors();
+      clearBusy();
+      update();
+      return true;
+    }
+    return false;
   }
 
   /// Sets the busy status by key and calls notify listeners
-  /// If you're using a primitive type the value SHOULD NOT BE CHANGED, since Hashcode uses == value
   void setBusyFor(Object key, bool value) {
     _busyStates[key] = value;
     update();
   }
 
   /// Sets the error state for the key equal to the value passed in and notifies Listeners
-  /// If you're using a primitive type the value SHOULD NOT BE CHANGED, since Hashcode uses == value
-  void setErrorFor(Object key, dynamic value) {
+  void setErrorFor(Object key, value) {
     _errorStates[key] = value;
     update();
   }
@@ -103,25 +119,63 @@ abstract class BaseGetController extends GetxController {
   /// Function that is called when a future throws an error
   void onError(Object? key, error) {}
 
-  Map<Object, Future Function()> get runnerMap => _runnerMap;
-  final Map<Object, Future Function()> _runnerMap = {};
+  Map<Object, FutureCallback> get runnerMap => _runnerMap;
+  final Map<Object, FutureCallback> _runnerMap = {};
 
-  /// Returns the runner of the ViewModel
-  Future Function() get modelRunner => runner(typeName);
+  /// Returns the runner of the Controller
+  FutureCallback? get runner => runnerFor(typeName);
 
-  /// Sets the runner for the ViewModel
-  set modelRunner(value) => setRunner(value);
+  /// Sets the runner for the Controller
+  set runner(value) => setRunner(value);
 
-  /// Sets the runner for the ViewModel
-  void setRunner(Future Function() runner) => setRunnerFor(typeName, runner);
+  /// Sets the runner for the Controller
+  void setRunner(FutureCallback runner) => setRunnerFor(typeName, runner);
 
   /// Sets the runner by key
-  void setRunnerFor(Object key, Future Function() value) =>
-      runnerMap[key] = value;
+  void setRunnerFor(Object key, FutureCallback value) => runnerMap[key] = value;
 
   /// Returns the runner by key
-  Future Function() runner(Object key) =>
-      runnerMap[key] ?? () => Future.value();
+  FutureCallback? runnerFor(Object key) => runnerMap[key];
+
+  final StackList _futureQueue = StackList.from([Future.value()]);
+
+  /// Sets the key for error logs, runs the future in queue which means next
+  /// future will not run unless the previous gets completed.
+  ///
+  /// key: by default `typeName`, if null, status will be update in default key
+  Future<T?> runFutureQueue<T>(
+    Callback<Future<T?>> callback, {
+    Object? key,
+    bool throwException = false,
+  }) =>
+      (_futureQueue.pop() ?? Future.value())
+          .whenComplete(() => runErrorFuture<T>(
+                _futureQueue.push(callback()),
+                key: key,
+                throwException: throwException,
+              ));
+
+  Future<T?> runRunner<T>(
+    Callback<Future<T?>> runner, {
+    Object? key,
+    bool throwException = false,
+  }) =>
+      runBusyFuture<T>(runBusyRunner<T>(
+        runner,
+        key: key,
+        throwException: throwException,
+      ));
+
+  Future<T?> runFuture<T>(
+    Future<T?> future, {
+    Object? key,
+    bool throwException = false,
+  }) =>
+      runBusyFuture<T>(runBusyFuture<T>(
+        future,
+        key: key,
+        throwException: throwException,
+      ));
 
   /// Sets the key to busy, runs the runner and then sets it to not busy
   /// when completed.
@@ -129,124 +183,86 @@ abstract class BaseGetController extends GetxController {
   /// key: by default `typeName`, if null, status will be update in default key
   ///
   /// rethrows [Exception] after setting busy to false by key
-  Future runBusyRunner(
-    Future Function() busyRunner, {
+  Future<T?> runBusyRunner<T>(
+    Callback<Future<T?>> runner, {
     Object? key,
     bool throwException = false,
   }) {
     var _key = key ?? typeName;
-    runner() async {
+    _runner() async {
       setDataFor(_key, null);
-      return await runBusyFuture(
-        busyRunner(),
+      return runBusyFuture<T>(
+        runner(),
         key: _key,
         throwException: throwException,
       );
     }
 
-    setRunnerFor(_key, runner);
-    return runner();
+    setRunnerFor(_key, _runner);
+    return _runner();
   }
 
-  final StackList<Future> _futureQueue = StackList.from([Future.value()]);
-
-  /// Sets the key for error logs, runs the future in queue which means next
-  /// future will not run unless the previous gets completed.
-  ///
-  /// key: by default `typeName`, if null, status will be update in default key
-  Future runFutureQueue(
-    Future Function() future, {
-    Object? key,
-    bool throwException = false,
-  }) =>
-      (_futureQueue.pop() ?? Future.value()).whenComplete(() => runErrorFuture(
-            _futureQueue.push(future()),
-            key: key,
-            throwException: throwException,
-          ));
-
-  Future runModelRunner(
-    Future Function() busyRunner, {
-    Object? key,
-    bool throwException = false,
-  }) =>
-      runBusyFuture(runBusyRunner(
-        busyRunner,
-        key: key,
-        throwException: throwException,
-      ));
-
-  Future runModelFuture(
-    Future busyFuture, {
-    Object? key,
-    bool throwException = false,
-  }) =>
-      runBusyFuture(runBusyFuture(
-        busyFuture,
-        key: key,
-        throwException: throwException,
-      ));
-
-  /// Sets the ViewModel to busy, runs the future and then sets it
+  /// Sets the Controller to busy, runs the future and then sets it
   /// to not busy when complete.
   ///
   /// rethrows [Exception] after setting busy to false for object or class
-  Future runBusyFuture(
-    Future busyFuture, {
+  Future<T?> runBusyFuture<T>(
+    Future<T?> future, {
     Object? key,
     bool throwException = false,
   }) async {
-    _setBusyForModelOrObject(true, key: key);
+    final _key = key ?? typeName;
+    setBusyFor(_key, true);
     try {
-      var value = await runErrorFuture(busyFuture,
-          key: key, throwException: throwException);
-      _setBusyForModelOrObject(false, key: key);
+      final value = await runErrorFuture<T>(
+        future,
+        key: key,
+        throwException: throwException,
+      );
+      setBusyFor(_key, false);
       return value;
     } catch (e) {
-      _setBusyForModelOrObject(false, key: key);
+      setBusyFor(_key, false);
       if (throwException) rethrow;
+      return Future.value();
     }
   }
 
-  Future runErrorFuture(
-    Future future, {
+  /// Sets the Controller to busy, runs the futures and then sets it
+  /// to not busy when complete.
+  ///
+  /// return false if error occurred, otherwise true.
+  Future<bool> runBusyFutures(
+    List<Future> futures, {
+    Object? key,
+  }) async {
+    final _key = key ?? typeName;
+    setBusyFor(_key, true);
+    final value = await Future.forEach<Future>(
+      futures,
+      (future) => runErrorFuture(
+        future,
+        key: key,
+        throwException: true,
+      ),
+    );
+    setBusyFor(_key, false);
+    return value == null;
+  }
+
+  Future<T?> runErrorFuture<T>(
+    Future<T?> future, {
     Object? key,
     bool throwException = false,
   }) async {
     try {
       return await future;
     } catch (e) {
-      _setErrorForModelOrObject(e, key: key);
-      onError(key, e);
+      var _key = key ?? typeName;
+      setErrorFor(_key, e);
+      onError(_key, e);
       if (throwException) rethrow;
       return Future.value();
-    }
-  }
-
-  /// Sets the initialised value for the model to true. This is called after
-  /// the first initialise special viewModel call
-  void setInitialised(bool value) {
-    _initialised = value;
-  }
-
-  /// Sets the onModelReadyCalled value to true. This is called after this first onModelReady call
-  void setOnModelReadyCalled(bool value) {
-    _onModelReadyCalled = value;
-  }
-
-  void _setBusyForModelOrObject(bool value, {Object? key}) {
-    if (key != null) {
-      setBusyFor(key, value);
-    } else {
-      setBusyFor(typeName, value);
-    }
-  }
-
-  void _setErrorForModelOrObject(dynamic value, {Object? key}) {
-    if (key != null) {
-      setErrorFor(key, value);
-    } else {
-      setErrorFor(typeName, value);
     }
   }
 
@@ -289,15 +305,15 @@ abstract class BaseGetController extends GetxController {
   }
 
   void _handleStartupTasks() {
-    if (!onModelReadyCalled) {
-      setOnModelReadyCalled(true);
+    if (!onReadyCalled) {
+      onReadyCalled = true;
     }
     _initialiseSpecialControllers();
   }
 
   void _initialiseSpecialControllers() {
     if (this is Initializer) {
-      if (!initialised) {
+      if (!isInitialised) {
         var controller = this as Initializer;
         controller.initialise();
       }
@@ -339,7 +355,7 @@ class _SingleDataSourceGetController<T> extends DynamicSourceGetController {
   dynamic _error;
 
   @override
-  String? error([Object? object]) => _error?.toString();
+  String? errorFor([Object? object]) => _error?.toString();
 
   bool get dataReady => _data != null && !hasError;
 }
@@ -353,91 +369,82 @@ class _MultiDataSourceGetController extends DynamicSourceGetController {
   void setDataFor(Object key, value) => dataMap[key] = value;
 
   /// Returns the data by key
-  T? data<T>(Object key) => $cast<T>(dataMap[key]);
+  T? dataFor<T>(Object key) => $cast<T>(dataMap[key]);
 
   /// Returns the data ready status by key even if error occurred
-  bool ready(Object key) => data(key) != null;
+  bool ready(Object key) => dataFor(key) != null || errorFor(key) != null;
 
   /// Returns the data ready status by key if no error occurred
   bool dataReady(Object key) => ready(key) && !hasErrorFor(key);
 
+  /// Clears all states but data by key
+  @override
+  bool clearAllStateData([Object? key]) {
+    final _key = key ?? typeName;
+    if (dataMap.containsKey(_key)) {
+      dataMap.remove(_key);
+      super.clearAllStateData(_key);
+      return true;
+    }
+    return super.clearAllStateData(_key);
+  }
+
+  /// Clears states and data by key
+  @override
+  bool clearStateData([Object? key]) {
+    final _key = key ?? typeName;
+    if (dataMap.containsKey(_key)) {
+      dataMap.remove(_key);
+      super.clearStateData(_key);
+      return true;
+    }
+    return super.clearStateData(_key);
+  }
+
   /// Clears the data by key
   @override
-  void clearData([Object? key]) {
-    setDataFor(key ?? typeName, null);
-    super.clearAllData();
-  }
-
-  /// Clears all data and errors
-  @override
-  void clearAllData() {
-    dataMap.clear();
-    super.clearAllData();
-  }
-}
-
-/// Provides functionality for a ViewModel that's sole purpose it is to fetch data using a [Future]
-abstract class FutureGetController<T> extends _SingleDataSourceGetController<T>
-    implements Initializer {
-  /// The future that fetches the data and sets the view to busy
-  @Deprecated('Use the futureToRun function')
-  Future<T>? get future => null;
-
-  Future<T> futureToRun();
-
-  @override
-  Future beforeInit() => Future.value();
-
-  @override
-  Future initialise() async {
-    setError(null);
-    _error = null;
-    // We set busy manually as well because when notify listeners is called to clear error messages the
-    // ui is rebuilt and if you expect busy to be true it's not.
-    setBusy(true);
-    update();
-
-    _data = await runBusyFuture(futureToRun(), throwException: true)
-        .catchError((error) {
-      setError(error);
-      _error = error;
-      setBusy(false);
-      onError(null, error);
-      update();
-    });
-
-    if (_data != null) {
-      onData(_data);
+  bool clearData([Object? key]) {
+    final _key = key ?? typeName;
+    if (dataMap.containsKey(_key)) {
+      dataMap.remove(_key);
+      super.clearData(_key);
+      return true;
     }
-
-    changeSource = false;
+    return super.clearData(_key);
   }
 
-  /// Called after the data has been set
-  void onData(T? data) {}
+  /// Clears all data and states
+  @override
+  bool clearAllData() {
+    if (dataMap.isNotEmpty) {
+      dataMap.clear();
+      super.clearAllData();
+      return true;
+    }
+    return super.clearAllData();
+  }
 }
 
-/// Provides functionality for a ViewModel to run and fetch data using multiple future
+/// Provides functionality for a Controller to run and fetch data using multiple future
 abstract class MultipleFutureGetController extends _MultiDataSourceGetController
     implements Initializer {
-  Map<Object, Future Function()> get futuresMap => {
+  Map<Object, FutureCallback> get futuresMap => {
         typeName: futureToRun,
         ...futuresToRun,
       };
 
   /// Multiple futures to run at the startup
-  Map<Object, Future Function()> get futuresToRun => {};
+  Map<Object, FutureCallback> get futuresToRun => {};
 
   /// Single future to run at the startup
   Future futureToRun() => Future.value();
 
   late Completer _futuresCompleter;
   int _futuresCompleted = 0;
-  bool _isModelReady = false;
 
   void _initialiseData() {
     _futuresCompleted = 0;
-    _isModelReady = false;
+    _initialised = false;
   }
 
   @override
@@ -453,41 +460,37 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
     setBusy(true);
     update();
     await beforeInit();
-
-    for (final key in futuresMap.keys) {
+    final _futuresMap = futuresMap;
+    for (final key in _futuresMap.keys) {
       runErrorFuture(
-        futuresMap[key]!(),
+        _futuresMap[key]!(),
         key: key,
         throwException: true,
       ).then((result) {
         setDataFor(key, result);
         if (key != typeName) setBusyFor(key, false);
-        if (result is GetResult && result.error != null) {
-          setErrorFor(typeName, result.error);
-        }
         update();
         onData(key);
-        _incrementAndCheckFuturesCompleted();
+        _incrementAndCheckFuturesCompleted(_futuresMap);
       }).catchError((error) {
-        setErrorFor(key, error);
         if (key != typeName) setBusyFor(key, false);
-        onError(key, error);
         update();
-        _incrementAndCheckFuturesCompleted();
+        _incrementAndCheckFuturesCompleted(_futuresMap);
       });
     }
     changeSource = false;
     return _futuresCompleter.future;
   }
 
-  void _incrementAndCheckFuturesCompleted() {
+  void _incrementAndCheckFuturesCompleted(Map futuresMap) {
     _futuresCompleted++;
     if (_futuresCompleted == futuresMap.length &&
         !_futuresCompleter.isCompleted) {
       _futuresCompleter.complete();
       setBusy(false);
-      _isModelReady = true;
+      _initialised = true;
       onDataReady();
+      setBusy(false);
     }
   }
 
@@ -500,40 +503,30 @@ abstract class MultipleFutureGetController extends _MultiDataSourceGetController
   /// Run the futures again and refresh
   Future refreshData() => initialise();
 
-  /// Returns the ready status of the ViewModel when all futures are completed
-  bool get isModelReady => _isModelReady;
+  /// Returns the data of the Controller
+  T? data<T>() => dataFor<T>(typeName);
 
-  /// Sets or Returns the data of the ViewModel
-  T? modelData<T>([value]) {
-    if (value == null) {
-      return data<T>(typeName);
-    } else {
-      setData(value);
-      return value;
-    }
-  }
-
-  /// Sets the data for the ViewModel
+  /// Sets the data for the Controller
   void setData(data) => setDataFor(typeName, data);
 
-  /// Returns the data ready status of the ViewModel if no error occurred
+  /// Returns the data ready status of the Controller if no error occurred
   bool get isDataReady => dataReady(typeName);
 
-  /// Returns the data ready status of the ViewModel even if error occurred
+  /// Returns the ready status of the Controller even if error occurred
   bool get isReady => ready(typeName);
 
-  /// Returns the error status of the ViewModel and checks if condition valid
+  /// Returns the error status of the Controller and checks if condition valid
   bool hasErrorOr([bool? condition]) =>
       !isBusy &&
-      (hasError || ((condition ?? true) && (isReady || isModelReady)));
+      (hasError || ((condition ?? true) && (isReady || isInitialised)));
 }
 
-/// Provides functionality for a ViewModel to run and fetch data using multiple streams
+/// Provides functionality for a Controller to run and fetch data using multiple streams
 abstract class MultipleStreamGetController extends _MultiDataSourceGetController
     implements Initializer {
-  // Every MultipleStreamViewModel must override streamDataMap
+  // Every MultipleStreamController must override streamDataMap
   // StreamData requires a stream, but lifecycle events are optional
-  // if a lifecyle event isn't defined we use the default ones here
+  // if a lifecycle event isn't defined we use the default ones here
   Map<Object, StreamData> get streamsMap;
 
   Map<Object, StreamSubscription>? _streamsSubscriptions;
@@ -704,7 +697,7 @@ abstract class StreamGetController<T> extends _SingleDataSourceGetController<T>
 
   void onCancel() {}
 
-  /// Called before the data is set for the viewmodel
+  /// Called before the data is set for the Controller
   T transformData(T data) {
     return data;
   }
@@ -792,7 +785,7 @@ class StreamData<T> extends _SingleDataSourceGetController<T> {
   }
 }
 
-/// Interface: Additional actions that should be implemented by spcialised ViewModels
+/// Interface: Additional actions that should be implemented by specialised Controllers
 abstract class Initializer {
   Future initialise();
 

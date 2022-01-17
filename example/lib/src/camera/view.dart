@@ -4,7 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:example/src/camera/view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get_smart/get_smart.dart';
 import 'package:video_player/video_player.dart';
 
@@ -12,47 +11,47 @@ import 'package:video_player/video_player.dart';
 class CameraPage extends StatelessWidget {
   const CameraPage({Key? key}) : super(key: key);
 
-  CameraModel get model => Get.$find()!;
+  CameraModel get controller => Get.$find()!;
 
   @override
   Widget build(BuildContext context) => GetBuilder<CameraModel>(
         init: CameraModel(),
-        builder: (model) => ThemeBuilder(
+        builder: (controller) => ThemeBuilder(
           (context) => GetScaffold(
             title: "Capture Media",
             backgroundColor: Colors.black,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
             appBarActions: [
-              if (model.file == null)
+              if (controller.file == null)
                 GetButton.primaryIcon(
-                  child: Icon(model.flashIcon),
-                  label: model.flashLabel,
-                  onPressed: model.switchFlash,
+                  child: Icon(controller.flashIcon),
+                  label: controller.flashLabel,
+                  onPressed: controller.switchFlash,
                 ),
-              if (model.file == null && !model.isRecordingVideo)
+              if (controller.file == null && !controller.isRecordingVideo)
                 GetButton.primaryIcon(
-                  child: Icon(model.modeIcon),
-                  label: model.modeLabel,
-                  onPressed: model.switchMode,
+                  child: Icon(controller.modeIcon),
+                  label: controller.modeLabel,
+                  onPressed: controller.switchMode,
                 ),
               8.spaceX,
             ],
-            floatingActionButton: model.file != null
+            floatingActionButton: controller.file != null
                 ? null
                 : FloatingActionButton(
                     backgroundColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     child: captureShape(),
-                    onPressed: model.capture,
+                    onPressed: controller.capture,
                   ),
-            bottomBar: model.file == null
-                ? (!model.hasActionError
+            bottomBar: controller.file == null
+                ? (!controller.hasActionError
                     ? null
                     : ProgressSnackBar(
-                        status: model.actionStatus,
-                        error: model.actionError,
-                        onCancel: model.cancelAction,
+                        status: controller.actionStatus,
+                        error: controller.actionError,
+                        onCancel: controller.cancelAction,
                         action: GetText.ok(),
                         dismissible: true,
                       ))
@@ -60,35 +59,35 @@ class CameraPage extends StatelessWidget {
                     FloatingActionButton(
                       backgroundColor: Colors.red,
                       child: const Icon(CupertinoIcons.clear),
-                      onPressed: model.cancelAction,
+                      onPressed: controller.cancelAction,
                       mini: true,
                       heroTag: null,
                     ).paddingAll(24),
                     const Spacer(),
-                    if (model.file?.isVideo == true)
+                    if (controller.file?.isVideo == true)
                       FloatingActionButton(
-                        child: Icon(model.playIcon),
-                        onPressed: model.playVideo,
+                        child: Icon(controller.playIcon),
+                        onPressed: controller.playVideo,
                         heroTag: null,
                       ).paddingAll(16),
                     const Spacer(),
                     FloatingActionButton(
                       backgroundColor: Colors.green,
                       child: const Icon(CupertinoIcons.check_mark),
-                      onPressed: model.acceptFile,
+                      onPressed: controller.acceptFile,
                       mini: true,
                       heroTag: null,
                     ).paddingAll(24),
                   ]),
-            showProgress: model.isAnyBusy,
+            showProgress: controller.isAnyBusy,
             childrenAtFront: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Obx(() {
-                    model.observer.value;
+                    controller.observer.value;
                     return TextBox(
-                      model.duration,
+                      controller.duration,
                       color: Colors.red,
                       filled: true,
                       fontSize: 16,
@@ -99,29 +98,32 @@ class CameraPage extends StatelessWidget {
                 ],
               ),
             ],
-            child: model.hasError
+            child: controller.hasError
                 ? MessageView(
-                    error: model.modelError,
-                    onAction: () => model.futureToRun(),
+                    error: controller.error,
+                    onAction: controller.refreshData,
                   )
-                : model.isDataReady
+                : controller.isDataReady
                     ? SizedBox.expand(
                         child: FittedBox(
                           fit: BoxFit.cover,
                           child: SizedBox(
-                            width: model.cameraState?.previewSize?.height ?? 0,
-                            height: model.cameraState?.previewSize?.width ?? 0,
+                            width:
+                                controller.cameraState?.previewSize?.height ??
+                                    0,
+                            height:
+                                controller.cameraState?.previewSize?.width ?? 0,
                             child: AspectRatio(
                               aspectRatio:
-                                  model.videoPlayer?.value.aspectRatio ??
-                                      1 / model.cameraState!.aspectRatio,
-                              child: model.file != null
-                                  ? (model.file!.isImage
-                                      ? Image.file(File(model.file!.path))
-                                      : model.videoPlayer != null
-                                          ? VideoPlayer(model.videoPlayer!)
+                                  controller.videoPlayer?.value.aspectRatio ??
+                                      1 / controller.cameraState!.aspectRatio,
+                              child: controller.file != null
+                                  ? (controller.file!.isImage
+                                      ? Image.file(File(controller.file!.path))
+                                      : controller.videoPlayer != null
+                                          ? VideoPlayer(controller.videoPlayer!)
                                           : Container(height: 0))
-                                  : CameraPreview(model.camera),
+                                  : CameraPreview(controller.camera),
                             ),
                           ),
                         ),
@@ -148,10 +150,10 @@ class CameraPage extends StatelessWidget {
             height: 42.6,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: model.captureColor,
+              color: controller.captureColor,
             ),
           ),
-          if (model.isRecordingVideo)
+          if (controller.isRecordingVideo)
             Ink(
               width: 24,
               height: 24,

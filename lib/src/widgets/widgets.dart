@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -12,6 +13,7 @@ class BoxView extends StatelessWidget {
     required this.child,
     this.color,
     this.filled = true,
+    this.tinted = false,
     this.oval = false,
     this.small,
     this.wrap = false,
@@ -27,6 +29,7 @@ class BoxView extends StatelessWidget {
     required this.child,
     this.color,
     this.filled = true,
+    this.tinted = false,
     this.oval = false,
     this.small,
     this.wrap = false,
@@ -42,6 +45,7 @@ class BoxView extends StatelessWidget {
     required this.child,
     this.color,
     this.filled = false,
+    this.tinted = false,
     this.oval = false,
     this.small = true,
     this.wrap = true,
@@ -57,6 +61,7 @@ class BoxView extends StatelessWidget {
     required this.child,
     this.color,
     this.filled = true,
+    this.tinted = false,
     this.oval = true,
     this.small,
     this.wrap = false,
@@ -71,6 +76,7 @@ class BoxView extends StatelessWidget {
   final dynamic child;
   final Color? color;
   final bool filled;
+  final bool tinted;
   final bool oval;
   final bool? small;
   final bool wrap;
@@ -105,7 +111,7 @@ class BoxView extends StatelessWidget {
               alignment: Alignment.center,
               child: _text() ??
                   _icon() ??
-                  (_image() ?? _child())?.clipOval(clip: oval),
+                  (_image() ?? _svg() ?? _child())?.clipOval(clip: oval),
             ),
           ),
         ),
@@ -121,6 +127,7 @@ class BoxView extends StatelessWidget {
 
   Widget? _text() => $cast<Text>(child is! Widget &&
                   child is! ImageProvider &&
+                  child is! SvgProvider &&
                   child is! IconData &&
                   child?.toString().isNotEmpty == true
               ? Text(child.toString())
@@ -158,16 +165,149 @@ class BoxView extends StatelessWidget {
             ),
           ));
 
-  Widget? _image() => $cast<ImageProvider>(child)?.mapTo(
-        (ImageProvider it) => Image(
-          image: it,
-          height: boxSize,
-          width: boxSize,
-          fit: BoxFit.cover,
-        ),
-      );
+  double get _iconSize =>
+      iconSize ??
+      (filled && tinted
+          ? 18
+          : small == true
+              ? 24
+              : boxSize);
+
+  Widget? _image() => $cast<ImageProvider>(child)?.mapIt((it) => Image(
+        image: it,
+        height: _iconSize,
+        width: _iconSize,
+        color: tinted
+            ? filled
+                ? color?.contrast
+                : color
+            : null,
+        fit: BoxFit.cover,
+      ));
+
+  Widget? _svg() => $cast<SvgAsset>(child)?.mapIt((it) => SvgImage(
+        it,
+        height: _iconSize,
+        width: _iconSize,
+        color: tinted
+            ? filled
+                ? color?.contrast
+                : color
+            : null,
+        fit: BoxFit.cover,
+      ));
 
   Widget? _child() => $cast<Widget>(child);
+}
+
+abstract class SvgProvider {
+  SvgProvider({
+    this.assetName,
+    this.bundle,
+    this.package,
+  });
+
+  final String? assetName;
+  final AssetBundle? bundle;
+  final String? package;
+}
+
+class SvgAsset extends SvgProvider {
+  SvgAsset(
+    String assetName, {
+    AssetBundle? bundle,
+    String? package,
+  }) : super(
+          assetName: assetName,
+          bundle: bundle,
+          package: package,
+        );
+}
+
+class SvgImage extends StatelessWidget {
+  const SvgImage(
+    this.svgProvider, {
+    this.matchTextDirection = false,
+    this.width,
+    this.height,
+    this.fit = BoxFit.contain,
+    this.alignment = Alignment.center,
+    this.allowDrawingOutsideViewBox = false,
+    this.placeholderBuilder,
+    this.color,
+    this.colorBlendMode = BlendMode.srcIn,
+    this.semanticsLabel,
+    this.excludeFromSemantics = false,
+    this.clipBehavior = Clip.hardEdge,
+    this.cacheColorFilter = false,
+    this.theme,
+    Key? key,
+  }) : super(key: key);
+
+  SvgImage.asset(
+    String assetName, {
+    AssetBundle? bundle,
+    String? package,
+    this.matchTextDirection = false,
+    this.width,
+    this.height,
+    this.fit = BoxFit.contain,
+    this.alignment = Alignment.center,
+    this.allowDrawingOutsideViewBox = false,
+    this.placeholderBuilder,
+    this.color,
+    this.colorBlendMode = BlendMode.srcIn,
+    this.semanticsLabel,
+    this.excludeFromSemantics = false,
+    this.clipBehavior = Clip.hardEdge,
+    this.cacheColorFilter = false,
+    this.theme,
+    Key? key,
+  })  : svgProvider = SvgAsset(
+          assetName,
+          bundle: bundle,
+          package: package,
+        ),
+        super(key: key);
+
+  final SvgProvider svgProvider;
+  final bool matchTextDirection;
+  final double? width;
+  final double? height;
+  final BoxFit fit;
+  final AlignmentGeometry alignment;
+  final bool allowDrawingOutsideViewBox;
+  final WidgetBuilder? placeholderBuilder;
+  final Color? color;
+  final BlendMode colorBlendMode;
+  final String? semanticsLabel;
+  final bool excludeFromSemantics;
+  final Clip clipBehavior;
+  final bool cacheColorFilter;
+  final SvgTheme? theme;
+
+  @override
+  Widget build(BuildContext context) => svgProvider is SvgAsset
+      ? SvgPicture.asset(
+          svgProvider.assetName!,
+          bundle: svgProvider.bundle,
+          package: svgProvider.package,
+          matchTextDirection: matchTextDirection,
+          width: width,
+          height: height,
+          fit: fit,
+          alignment: alignment,
+          allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+          placeholderBuilder: placeholderBuilder,
+          color: color,
+          colorBlendMode: colorBlendMode,
+          semanticsLabel: semanticsLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          clipBehavior: clipBehavior,
+          cacheColorFilter: cacheColorFilter,
+          theme: theme,
+        )
+      : Container();
 }
 
 class CircularProgress extends StatelessWidget {
@@ -261,6 +401,7 @@ class MessageView extends StatelessWidget {
     this.icon,
     this.errorIcon,
     this.action,
+    this.actionTooltip,
     this.onAction,
     this.message,
     this.emptyTitle,
@@ -280,6 +421,7 @@ class MessageView extends StatelessWidget {
     this.icon,
     this.errorIcon,
     this.action,
+    this.actionTooltip,
     this.onAction,
     this.message,
     this.emptyTitle,
@@ -298,6 +440,7 @@ class MessageView extends StatelessWidget {
   final Widget? icon;
   final Widget? errorIcon;
   final String? action;
+  final String? actionTooltip;
   final VoidCallback? onAction;
   final String? message;
   final String? emptyTitle;
@@ -323,11 +466,11 @@ class MessageView extends StatelessWidget {
         : emptyTitle != null
             ? "Nothing in $emptyTitle"
             : emptyMessage ?? message;
-    final _action = error != null
+    final _action = (error != null
         ? GetText.retry()
         : emptyTitle != null || emptyMessage != null
-            ? GetText.refresh()
-            : action;
+            ? action ?? GetText.refresh()
+            : action);
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.only(
@@ -356,7 +499,7 @@ class MessageView extends StatelessWidget {
             GetButton.outlined(
               child: Text(_action),
               onPressed: onAction,
-            ),
+            ).tooltip(actionTooltip),
         ],
       ),
     );
@@ -550,14 +693,14 @@ class TextBox extends StatelessWidget {
                 ? context.primaryBodyText1?.color ??
                     context.primaryColor.contrast
                 : context.secondaryColor))
-        .applyIf(subbed, (it) => it.subbed)!;
+        .applyIf(subbed, (it) => it?.subbed)!;
 
     Color _fillColor = (fillColor ?? (filled ? _color : null))
-            ?.applyIf(subbed, (it) => it.subbed) ??
+            ?.applyIf(subbed, (it) => it?.subbed) ??
         Colors.transparent;
 
     Color _borderColor = (borderColor ?? (_filled ? null : fillColor ?? _color))
-            ?.applyIf(subbed, (it) => it.subbed) ??
+            ?.applyIf(subbed, (it) => it?.subbed) ??
         Colors.transparent;
 
     return text == null
@@ -698,6 +841,29 @@ class ThemeBuilder extends StatelessWidget {
       : builder(context);
 }
 
+typedef TextValueWidgetBuilder = Widget Function(
+  BuildContext context,
+  TextEditingValue value,
+);
+
+class TextValueBuilder extends StatelessWidget {
+  const TextValueBuilder({
+    required this.value,
+    required this.builder,
+    Key? key,
+  }) : super(key: key);
+
+  final ValueListenable<TextEditingValue> value;
+  final TextValueWidgetBuilder builder;
+
+  @override
+  Widget build(BuildContext context) =>
+      ValueListenableBuilder<TextEditingValue>(
+        valueListenable: value,
+        builder: (context, value, __) => builder(context, value),
+      );
+}
+
 class GetSearchDelegate extends SearchDelegate {
   GetSearchDelegate({
     String? hint,
@@ -710,7 +876,7 @@ class GetSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) => buildResults(context);
 
   @override
-  ThemeData appBarTheme(BuildContext context) => GetTheme.blackWhite(
+  ThemeData appBarTheme(BuildContext context) => GetTheme.blackOffWhite(
         context,
         brightness: Brightness.dark,
       ).copyWith(

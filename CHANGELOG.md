@@ -1,3 +1,17 @@
+## [0.1.4]
+
+* Breaking Changes
+* Bug fixes
+* Performance improvements
+
+## [0.1.3+11]
+
+* GetX update
+
+## [0.1.3+10]
+
+* Bug fixes
+
 ## [0.1.3+9]
 
 * Bug fixes

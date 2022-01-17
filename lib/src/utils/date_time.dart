@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -53,6 +55,13 @@ extension Date on DateTime {
       );
 
   static DateTime get now => DateTime.now();
+
+  DateTimeRange range(Duration duration) {
+    final date = add(duration);
+    return date > this
+        ? DateTimeRange(start: this, end: date)
+        : DateTimeRange(start: date, end: this);
+  }
 
   int get inMilliseconds => millisecondsSinceEpoch;
 
@@ -152,6 +161,7 @@ extension Date on DateTime {
 
   String get formatMdHma => GetDateFormat.inMdHma.format(this);
 
+  /// dd-MMM-yyyy
   String get formatDMMMy => GetDateFormat.inDMMMy.format(this);
 
   String get formatDMMMyHm => GetDateFormat.inDMMMyHm.format(this);
@@ -212,6 +222,7 @@ extension GetDateFormat on DateFormat {
 
   static DateFormat get inMdHma => inMd.add(inHma, ", ");
 
+  /// dd-MMM-yyyy
   static DateFormat get inDMMMy => DateFormat("dd-MMM-yyyy");
 
   static DateFormat get inDMMMyHm => inDMMMy.add_Hm();
@@ -254,7 +265,7 @@ extension GetDateTimePickerX on GetInterface {
     required void Function(DateTime time) onPick,
     VoidCallback? onCancel,
   }) async {
-    var time = await showTimePicker(
+    final time = await showTimePicker(
       context: context!,
       initialTime: withTime?.timeOfDay ?? TimeOfDay.now(),
       cancelText: cancelText,
@@ -294,7 +305,7 @@ extension GetDateTimePickerX on GetInterface {
     required void Function(DateTime date) onPick,
     VoidCallback? onCancel,
   }) async {
-    var date = await showDatePicker(
+    final date = await showDatePicker(
       context: context!,
       initialDate: withDate ?? Date.now,
       firstDate: minDate ?? Date.from(year: 2000),
@@ -317,6 +328,70 @@ extension GetDateTimePickerX on GetInterface {
     );
     if (date != null) {
       onPick(withDate?.setting(date: date) ?? date);
+    } else {
+      onCancel?.call();
+    }
+  }
+
+  Future<void> dateRangePicker({
+    DateTimeRange? withRange,
+    DateTime? minDate,
+    DateTime? maxDate,
+    DateTime? currentDate,
+    String? cancelText,
+    String? confirmText,
+    String? saveText,
+    String? helpText,
+    String? errorFormatText,
+    String? errorInvalidText,
+    String? errorInvalidRangeText,
+    String? fieldEndHintText,
+    String? fieldEndLabelText,
+    String? fieldStartHintText,
+    String? fieldStartLabelText,
+    DatePickerEntryMode entryMode = DatePickerEntryMode.calendar,
+    ui.TextDirection? textDirection,
+    Locale? locale,
+    bool useRootNavigator = true,
+    RouteSettings? routeSettings,
+    TransitionBuilder? builder,
+    required void Function(DateTimeRange range) onPick,
+    VoidCallback? onCancel,
+  }) async {
+    final range = await showDateRangePicker(
+      context: context!,
+      initialDateRange: withRange,
+      firstDate: minDate ?? Date.from(year: 2000),
+      lastDate: maxDate ?? Date.now,
+      currentDate: currentDate,
+      cancelText: cancelText,
+      confirmText: confirmText,
+      saveText: saveText,
+      helpText: helpText,
+      errorFormatText: errorFormatText,
+      errorInvalidText: errorInvalidText,
+      errorInvalidRangeText: errorInvalidRangeText,
+      initialEntryMode: entryMode,
+      fieldEndHintText: fieldEndHintText,
+      fieldEndLabelText: fieldEndLabelText,
+      fieldStartHintText: fieldStartHintText,
+      fieldStartLabelText: fieldStartLabelText,
+      textDirection: textDirection,
+      locale: locale,
+      useRootNavigator: useRootNavigator,
+      routeSettings: routeSettings,
+      builder: builder ??
+          (context, child) => Theme(
+                data: context.theme.copyWith(brightness: Brightness.dark),
+                child: child!,
+              ),
+    );
+    if (range != null) {
+      onPick(withRange?.apply(() {
+            withRange.start.setting(date: range.start);
+            withRange.end.setting(date: range.end);
+          }) ??
+          range);
     } else {
       onCancel?.call();
     }

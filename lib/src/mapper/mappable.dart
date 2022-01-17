@@ -1,10 +1,4 @@
-library mappable;
-
-import 'dart:convert';
-
 import 'package:get_smart/get_smart.dart';
-
-import 'mapper.dart';
 
 abstract class Mappable with Comparable<Mappable> {
   static Map<Type, Function> factories = {};
@@ -12,19 +6,29 @@ abstract class Mappable with Comparable<Mappable> {
   static Mappable? getInstance(Type type) {
     final constructor = Mappable.factories[type];
     assert(constructor != null,
-        "${type.toString()} is not defined in Reflection.factories");
+        "${type.toString()} is not defined in Mappable.factories");
     return constructor?.call();
   }
 
+  Mapper get mapper => Mapper()..toJson(this);
+
+  Map<String, dynamic> get json => mapper.json;
+
+  String get jsonString => json.jsonString;
+
   void mapping(Mapper map);
 
-  void map() => mapping(Mapper());
+  void reset() => mapping(Mapper());
 
-  void remap() => mapping(Mapper.fromJson(toJson() ?? {}));
+  void remap([Mappable? other]) => mapping(Mapper.fromJson({
+        ...json,
+        ...?other?.json,
+      }));
 
-  Map<String, dynamic>? toJson() => Mapper().toJson(this);
-
-  String toJsonString() => json.encode(toJson());
+  T? copy<T>([Mappable? other]) => {
+        ...json,
+        ...?other?.json,
+      }.getObject<T>(builders: builders);
 
   List<Function> get builders;
 
@@ -39,12 +43,18 @@ abstract class Mappable with Comparable<Mappable> {
       ? 0
       : comparable?.compareTo(other.comparable) ?? 0;
 
-  int operator >(Mappable other) => compareTo(other);
+  int operator >(Mappable other) => greaterThan(other);
 
-  int operator <(Mappable other) => other.compareTo(this);
+  int greaterThan(Mappable other) => compareTo(other);
+
+  int operator <(Mappable other) => lessThan(other);
+
+  int lessThan(Mappable other) => other.compareTo(this);
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(Object other) => equals(other);
+
+  bool equals(Object other) {
     if (other.runtimeType != runtimeType) return false;
     return other is Mappable &&
         (identical(other, this) ||

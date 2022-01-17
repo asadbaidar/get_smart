@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_smart/get_smart.dart';
 
@@ -18,10 +17,14 @@ Object? $object(value) => value;
 /// Returns the name of type
 String $name(Type type) => type.toString();
 
-/// Returns the name of type preceded with backslash `/`
+/// Returns the name of type
+/// - preceded with backslash `/`
+/// - lowercase first letter
+/// - removed `Page` word
 ///
-/// i.e. "/typeName"
-String $route(Type type) => "/" + $name(type);
+/// i.e. TypeNamePage -> "/typeName"
+String $route(Type type) =>
+    "/" + $name(type).lowercaseFirst.replaceAll("Page", "");
 
 /// Schedules the given `task` with the [Priority.animation] and returns a
 /// [Future] that completes to the `task`'s eventual return value.
@@ -56,7 +59,7 @@ extension ObjectX on Object {
   void lets(void Function() apply) => apply();
 
   /// Apply the [operation] with [T] as parameter if [condition] is `true`
-  T? applyIf<T>(bool? condition, T Function(T) operation) {
+  T applyIf<T>(bool? condition, T Function(T) operation) {
     return (condition == true) ? operation(this as T) : this as T;
   }
 
@@ -74,26 +77,14 @@ extension ObjectX on Object {
     return value;
   }
 
-  /// Wrap the value of [T] into [Future.value]
-  FutureOr<T> future<T>() => Future.value(this as T);
+  /// Wrap the current object into [Future.value]
+  dynamic get future => Future<dynamic>.value(this);
 
   /// Returns [hashCode] as [String]
   String get hashString => hashCode.toString();
 
   /// Returns random integer seeded with [hashCode] and less than [max]
   int randomIn(int max) => Random(hashCode).nextInt(max);
-
-  /// Returns only name of the enum value with capitalized form
-  String get keyName => toString().split('.').last;
-
-  /// Returns only name of the enum value with uppercase form
-  String get keyNAME => keyName.uppercase;
-
-  /// Returns full path name of the enum value
-  String get rawName => toString();
-
-  /// Returns full path name of the enum value with uppercase form
-  String get rawNAME => rawName.uppercase;
 
   /// Returns the name of [runtimeType]
   String get typeName => $name(runtimeType);
@@ -102,16 +93,40 @@ extension ObjectX on Object {
   T? getObject<T>({T? as, List<Function>? builders}) =>
       Mapper.fromData(this).toMappable<T>(as: as, builders: builders);
 
+  /// Create and return a Mappable result for [T] from String or Map
+  GetResult<T>? getResult<T>({T? as, List<Function>? builders}) =>
+      Mapper.fromData(this).toMappable<GetResult<T>>(
+        as: GetResult<T>(),
+        builders: (builders ?? []) + ($cast<Mappable>(as)?.builders ?? []),
+      );
+
   /// Return the text from a text map with arguments based on current locale
   String $localized(
-    Map<Locale, Map<dynamic, String>> textMap, [
+    Map<String, Map<dynamic, String>> textMap, [
     List<dynamic>? arguments,
   ]) =>
-      textMap[GetLocalizations.current?.locale ?? GetLocalizations.english]
+      textMap[GetLocalizations.currentLocale ?? GetLocalizations.english]
           ?.mapTo((Map<dynamic, String> it) => it[this])
           ?.applyIf(
             arguments?.isNotEmpty,
-            (s) => sprintf(s, arguments!.map((e) => e ?? "").toList()),
+            (s) => sprintf(s ?? "", arguments!.map((e) => e ?? "").toList()),
           ) ??
       "";
+}
+
+extension EnumX on Enum {
+  /// Returns only name of the enum value with uppercase form
+  String get nameCAP => name.uppercase;
+
+  /// Returns only first letter of name of the enum value
+  String get nameFirst => name.take();
+
+  /// Returns only first letter of name of the enum value with uppercase form
+  String get nameFIRST => nameFirst.uppercase;
+
+  /// Returns full path name of the enum value
+  String get rawName => toString();
+
+  /// Returns full path name of the enum value with uppercase form
+  String get rawNAME => rawName.uppercase;
 }

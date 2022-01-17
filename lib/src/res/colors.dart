@@ -50,6 +50,162 @@ abstract class GetColors {
   static const black90 = Color(0xFF131313);
   static const black93 = Color(0xFF0C0C0C);
 
+  static const white93 = Color(0xfffefefe);
+  static const white90 = Color(0xfff7f7f7);
+  static const white85 = Color(0xffefefef);
+
+  static const grey = Color(0xff777777);
+  static const greyLight = Color(0xffB5B5B5);
+  static const greyDark = Color(0xff5B5B5B);
+  static const blackMatte = Color(0xff090909);
+  static const charcoal = Color(0xff252525);
+  static const charcoalDark = Color(0xff101010);
+  static const livid = Color(0xff395b74);
+  static const lividLight = Color(0xff78909c);
+  static const lividDark = Color(0xff2d495e);
+  static const yellow = Color(0xfffbc02d);
+  static const yellowDark = Color(0xffdaa206);
+  static const yellowDarker = Color(0xffd88916);
+  static const amber = Color(0xffffca28);
+  static const orange = Color(0xffe5680f);
+  static const orangeLight = Color(0xffff7043);
+  static const orangeDark = Color(0xffd66000);
+  static const orangeEve = Color(0xffe84d01);
+  static const brown = Color(0xff795548);
+  static const red = Color(0xffd50000);
+  static const redLight = Color(0xffef5350);
+  static const redDark = Color(0xffb40000);
+  static const cherry = Color(0xffc72349);
+  static const cherryDark = Color(0xffaf1e40);
+  static const pink = Color(0xffad1457);
+  static const pinkLight = Color(0xffec407a);
+  static const pinkDark = Color(0xff790e3c);
+  static const sky = Color(0xff1E88E5);
+  static const skyLight = Color(0xff42a5f5);
+  static const skyDark = Color(0xff0277bd);
+  static const blue = Color(0xff1769aa);
+  static const blueDark = Color(0xff14578c);
+  static const indigo = Color(0xff3F51B5);
+  static const indigoLight = Color(0xff5c6bc0);
+  static const indigoDark = Color(0xff2c387e);
+  static const purple = Color(0xff9c27b0);
+  static const purpleLight = Color(0xffab47bc);
+  static const purpleDark = Color(0xff6d1b7b);
+  static const purpleEve = Color(0xff723b48);
+  static const violet = Color(0xff673ab7);
+  static const violetDark = Color(0xff482880);
+  static const plum = Color(0xff625b91);
+  static const plumLight = Color(0xff7e57c2);
+  static const plumDark = Color(0xff514a78);
+  static const teal = Color(0xff039694);
+  static const tealLight = Color(0xff4DB6AC);
+  static const tealDark = Color(0xff006974);
+  static const green = Color(0xff0F9D58);
+  static const greenLight = Color(0xff7cb342);
+  static const greenLighter = Color(0xff66bb6a);
+  static const greenDark = Color(0xff0d844a);
+
+  static Color primary(String seed) =>
+      primaries[seed.randomIn(primaries.length)];
+
+  static Color accent(String seed) => accents[seed.randomIn(accents.length)];
+
+  static Color material(String seed) =>
+      materials[seed.randomIn(materials.length)];
+
+  static const primaries = [
+    Colors.red,
+    Colors.purple,
+    Colors.deepPurple,
+    Colors.amber,
+    Colors.indigo,
+    Colors.teal,
+    Colors.deepOrange,
+    Colors.lightGreen,
+    Colors.lightBlue,
+    Colors.green,
+    Colors.orange,
+    Colors.brown,
+    Colors.blue,
+    Colors.pink,
+    Colors.orange,
+    Colors.blueGrey,
+  ];
+
+  static const accents = [
+    Colors.redAccent,
+    Colors.purpleAccent,
+    Colors.indigoAccent,
+    Colors.orangeAccent,
+    Colors.blueAccent,
+    Colors.greenAccent,
+    Colors.deepPurpleAccent,
+    Colors.lightGreenAccent,
+    Colors.lightBlueAccent,
+    Colors.amberAccent,
+    Colors.pinkAccent,
+    Colors.deepOrangeAccent,
+  ];
+
+  static const materials = [
+    charcoal,
+    Colors.lightBlueAccent,
+    livid,
+    Colors.teal,
+    amber,
+    pinkDark,
+    orange,
+    Colors.indigoAccent,
+    pinkLight,
+    Colors.lightBlue,
+    redLight,
+    Colors.green,
+    cherry,
+    Colors.lightGreen,
+    purpleEve,
+    greenDark,
+    Colors.blueAccent,
+    violet,
+    Colors.blueGrey,
+    greenLighter,
+    Colors.deepOrangeAccent,
+    cherryDark,
+    lividDark,
+    Colors.blue,
+    pink,
+    skyLight,
+    Colors.greenAccent,
+    indigoDark,
+    green,
+    Colors.pinkAccent,
+    plum,
+    Colors.orange,
+    indigoLight,
+    Colors.pink,
+    orangeEve,
+    Colors.amber,
+    sky,
+    red,
+    Colors.orangeAccent,
+    purpleDark,
+    greenLight,
+    blue,
+    Colors.deepPurple,
+    redDark,
+    Colors.purple,
+    plumDark,
+    purple,
+    teal,
+    Colors.indigo,
+    violetDark,
+    tealDark,
+    Colors.purpleAccent,
+    blueDark,
+    lividLight,
+    Colors.deepPurpleAccent,
+    brown,
+  ];
+
   static const MaterialColor black = MaterialColor(
     0xFF000000,
     <int, Color>{

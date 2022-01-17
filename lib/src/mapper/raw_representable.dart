@@ -1,4 +1,4 @@
-import 'mappable.dart';
+import 'package:get_smart/get_smart.dart';
 
 abstract class RawRepresentable<RawValue> {
   const RawRepresentable({required this.rawValue});

@@ -31,9 +31,23 @@ class GetResult<T> extends GetObject {
 
   // ?? (T.toString() == "dynamic" ? isSucceeded : null);
 
+  @override
+  bool get isEmpty =>
+      (list?.isEmpty ?? true) &&
+      value == null &&
+      ($cast<GetObject>(value)?.isEmpty ?? true);
+
   get data => list ?? value;
 
   T? get firstValue => list?.firstOrNull;
+
+  T? get successValue => isSucceeded ? value : null;
+
+  get successData => isSucceeded ? data : null;
+
+  T? get successFirstValue => isSucceeded ? firstValue : null;
+
+  DateTime get time => currentTime!;
 
   String get tag => _tag ?? typeName;
 
@@ -66,6 +80,7 @@ class GetResult<T> extends GetObject {
   @override
   void mapping(Mapper map) {
     map(["tag"], (v) => _tag ??= v);
+    map(["time"], (v) => currentTime ??= v, DateTransform(fallback: Date.now));
     map(["status", "success"], (v) => _isSucceeded ??= v);
     map(["msg", "message"], (v) => _message ??= v);
     map.$<T>(["result"], data, (v) {
@@ -78,7 +93,7 @@ class GetResult<T> extends GetObject {
   }
 
   @override
-  String toString() => toJsonString();
+  String toString() => jsonString;
 }
 
 enum GetMethod {
@@ -293,7 +308,7 @@ abstract class GetWebAPI {
               })
             : body,
         options: Options(
-          method: method.keyNAME,
+          method: method.nameCAP,
           contentType: isMultipart ? "multipart/form-data" : null,
           headers: {auth: authToken},
         ),

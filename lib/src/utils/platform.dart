@@ -50,5 +50,5 @@ class GetPrefs {
   /// else
   ///   await prefs.reload();
   /// ```
-  Future<void> reload() async {}
+  Future reload() async {}
 }

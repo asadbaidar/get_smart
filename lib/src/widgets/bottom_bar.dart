@@ -30,7 +30,7 @@ class BottomBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         CrossFade(firstChild: top),
-        if (top == null) const GetLineSeparator.full(),
+        if (top == null) const GetDivider.full(),
         if (visible)
           BottomAppBar(
             elevation: top == null ? null : 0,
@@ -118,7 +118,7 @@ class ProgressSnackBar extends StatelessWidget {
   GetStatus get _status => status ?? GetStatus.canceled;
 
   @override
-  Widget build(BuildContext context) => GetSnackBar(
+  Widget build(BuildContext context) => SimpleSnackBar(
         message: _status.isBusy
             ? GetText.busy()
             : _status.isFailed
@@ -149,8 +149,8 @@ class ProgressSnackBar extends StatelessWidget {
       );
 }
 
-class GetSnackBar extends StatelessWidget {
-  const GetSnackBar({
+class SimpleSnackBar extends StatelessWidget {
+  const SimpleSnackBar({
     this.message,
     this.action,
     this.onAction,
@@ -202,10 +202,10 @@ class GetSnackBar extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Stack(children: [
-                    const GetLineSeparator.full(),
+                    const GetDivider.full(),
                     if (showProgress) LinearProgress(value: progress),
                   ]),
-                  GetBar(
+                  GetSnackBar(
                     snackPosition: withBottomBar == true
                         ? SnackPosition.TOP
                         : SnackPosition.BOTTOM,
