@@ -254,9 +254,9 @@ abstract class BaseGetController extends GetxController {
     Future<T?> future, {
     Object? key,
     bool throwException = false,
-  }) {
+  }) async {
     try {
-      return future;
+      return await future;
     } catch (e) {
       var _key = key ?? typeName;
       setErrorFor(_key, e);

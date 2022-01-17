@@ -1,6 +1,8 @@
 ## [0.1.4]
 
 * Breaking Changes
+* Bug fixes
+* Performance improvements
 
 ## [0.1.3+11]
 

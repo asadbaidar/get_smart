@@ -16,7 +16,7 @@ dependencies:
     path: ../
 
   camera: ^0.9.4+5
-  video_player: ^2.2.10
+  video_player: ^2.2.11
   rive: ^0.7.33
 
 dev_dependencies:
