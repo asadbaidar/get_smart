@@ -2,7 +2,7 @@ name: get_smart
 description: A package of widgets and utils to make flutter easy and smart.
 homepage: https://github.com/asadbaidar/get_smart
 
-version: 0.1.4
+version: 0.1.4+1
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -27,9 +27,7 @@ dependencies:
   http_parser: ^4.0.0
   timeago: ^3.1.0
   flutter_svg: ^1.0.1
-  #auto_size_text: ^3.0.0-nullsafety.0
-  #provider: ^4.3.2+3
-  #autocomplete_textfield: ^1.7.3
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_lints: ^1.0.4

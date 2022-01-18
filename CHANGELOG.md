@@ -1,3 +1,7 @@
+## [0.1.4+1]
+
+* Bug fixes progress bar
+
 ## [0.1.4]
 
 * Breaking Changes
