@@ -339,22 +339,19 @@ class CircularProgress extends StatelessWidget {
   final double? value;
 
   @override
-  Widget build(BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (visible)
-            Container(
-              height: size,
-              width: size,
-              margin: EdgeInsets.all(margin),
-              child: CircularProgressIndicator(
-                strokeWidth: strokeWidth,
-                backgroundColor: Colors.transparent,
-                color: color,
-                value: value,
-              ),
-            ),
-        ],
+  Widget build(BuildContext context) => CrossFade(
+        showFirst: visible,
+        firstChild: Container(
+          height: size,
+          width: size,
+          margin: EdgeInsets.all(margin),
+          child: CircularProgressIndicator(
+            strokeWidth: strokeWidth,
+            backgroundColor: Colors.transparent,
+            color: color,
+            value: value,
+          ),
+        ),
       );
 }
 
@@ -381,14 +378,16 @@ class LinearProgress extends StatelessWidget {
   final double? value;
 
   @override
-  Widget build(BuildContext context) => visible
-      ? LinearProgressIndicator(
+  Widget build(BuildContext context) => CrossFade(
+        showFirst: visible,
+        firstChild: LinearProgressIndicator(
           minHeight: height,
           backgroundColor: Colors.transparent,
           color: color,
           value: value,
-        )
-      : Container(height: height);
+        ),
+        secondChild: Container(height: height),
+      );
 
   PreferredSize get preferredSize => PreferredSize(
         preferredSize: Size.fromHeight(height),
