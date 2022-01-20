@@ -212,6 +212,9 @@ extension StringX on String {
 
   Future<String> get decrypted async => await GetCipher.instance.decrypt(this);
 
+  Future<String> cipher(CipherType type) async =>
+      await GetCipher.instance.apply(type, this);
+
   get json => jsonDecode(this);
 
   Uint8List? get base64Decoded {

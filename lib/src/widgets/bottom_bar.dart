@@ -1,7 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 
+class BottomBarBlank extends StatelessWidget {
+  const BottomBarBlank({
+    this.height = 0,
+    Key? key,
+  }) : super(key: key);
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) => SafeArea(
+        minimum: EdgeInsets.only(
+          bottom: context.viewInsets.bottom,
+        ),
+        left: false,
+        right: false,
+        top: false,
+        bottom: true,
+        child: Container(height: height),
+      );
+}
+
 class BottomBar extends StatelessWidget {
+  static const kHeight = 44.0;
+
   const BottomBar({
     this.left,
     this.right,
@@ -43,7 +66,7 @@ class BottomBar extends StatelessWidget {
               top: false,
               bottom: true,
               child: Container(
-                constraints: const BoxConstraints(minHeight: 44),
+                constraints: const BoxConstraints(minHeight: kHeight),
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

@@ -28,12 +28,23 @@ class GetPlatformChannel {
   }
 }
 
+enum CipherType { encryption, decryption }
+
+extension CipherTypeX on CipherType {
+  bool get isEncryption => this == CipherType.encryption;
+
+  bool get isDecryption => this == CipherType.decryption;
+}
+
 class GetCipher {
   static GetCipher instance = GetCipher();
 
   FutureOr<String> decrypt(String data) => data;
 
   FutureOr<String> encrypt(String data) => data;
+
+  FutureOr<String> apply(CipherType type, String data) =>
+      type.isEncryption ? encrypt(data) : decrypt(data);
 
   FutureOr<String> get authToken => "";
 }

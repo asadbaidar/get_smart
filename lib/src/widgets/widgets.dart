@@ -757,18 +757,20 @@ class Blur extends StatelessWidget {
   final Widget? child;
 
   @override
-  Widget build(BuildContext context) => ClipRect(
-        clipBehavior: clipBehavior,
-        clipper: clipper,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: blur,
-            sigmaY: blur,
-            tileMode: tileMode,
+  Widget build(BuildContext context) => blur <= 0
+      ? child ?? Container()
+      : ClipRect(
+          clipBehavior: clipBehavior,
+          clipper: clipper,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: blur,
+              sigmaY: blur,
+              tileMode: tileMode,
+            ),
+            child: child ?? Container(),
           ),
-          child: child ?? Container(),
-        ),
-      );
+        );
 }
 
 class Space extends StatelessWidget {
