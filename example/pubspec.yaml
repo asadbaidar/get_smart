@@ -15,8 +15,8 @@ dependencies:
   get_smart:
     path: ../
 
-  camera: ^0.9.4+5
-  video_player: ^2.2.11
+  camera: ^0.9.4+6
+  video_player: ^2.2.14
   rive: ^0.7.33
 
 dev_dependencies:
