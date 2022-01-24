@@ -186,15 +186,20 @@ class GetAppBar {
           title,
           textAlign: TextAlign.start,
           minFontSize: _minFontSize,
+          maxLines: 1,
           style: _style,
         );
       }
-      return Row(
-        children: [
-          if (_largeTitle != null) _largeTitle,
-          const Spacer(),
-          ..._largeActions ?? [],
-        ],
+      return Container(
+        constraints: BoxConstraints(minHeight: bottomConstant),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (_largeTitle != null) _largeTitle.flex(flex: 999999999999999999),
+            const Spacer(),
+            ..._largeActions ?? [],
+          ],
+        ),
       );
     }
 
