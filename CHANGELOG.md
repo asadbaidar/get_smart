@@ -1,3 +1,7 @@
+## [0.1.4+4]
+
+* GetTextField Bug fixes
+
 ## [0.1.4+3]
 
 * Bug fixes
