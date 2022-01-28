@@ -156,7 +156,7 @@ class GetTileData extends GetObject {
 
   @override
   bool get isEmpty =>
-      title?.notEmpty == null && subtitle?.notEmpty == null && !hasSubTiles;
+      super.isEmpty && subtitle?.notEmpty == null && !hasSubTiles;
 
   @override
   String get description => super.description.notEmpty ?? title ?? "";

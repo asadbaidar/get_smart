@@ -1,3 +1,7 @@
+## [0.1.4+5]
+
+*  Bug fixes in ```GetTileData.isEmpty```
+
 ## [0.1.4+4]
 
 * GetTextField Bug fixes
