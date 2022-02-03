@@ -23,9 +23,5 @@ Mapper
 // Inspired from https://github.com/markgravity/object_mapper
 ```
 
-utils/base_controllers.dart
-```
-BaseGetController
-```
-Inspired from [![get_stacked]](https://github.com/Prn-Ice/get_stacked)
+- "utils/base_controllers.dart" inspired from [get_stacked](https://github.com/Prn-Ice/get_stacked)
 
