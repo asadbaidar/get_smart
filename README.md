@@ -11,17 +11,9 @@ A full documentation will be available soon.
 
 ## Credits
 
-widgets/filterable_text_field.dart
-```
-GetFilterableTextField
-// Inspired from https://github.com/felixlucien/flutter-autocomplete-textfield
-```
+- **widgets/filterable_text_field.dart** inspired from [autocomplete_textfield](https://github.com/felixlucien/flutter-autocomplete-textfield)
 
-mapper/mapper.dart
-```
-Mapper
-// Inspired from https://github.com/markgravity/object_mapper
-```
+- **mapper/mapper.dart** inspired from [object_mapper](https://github.com/markgravity/object_mapper)
 
-- "utils/base_controllers.dart" inspired from [get_stacked](https://github.com/Prn-Ice/get_stacked)
+- **utils/base_controllers.dart** inspired from [get_stacked](https://github.com/Prn-Ice/get_stacked)
 
