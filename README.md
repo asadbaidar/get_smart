@@ -7,3 +7,25 @@ A package of widgets and utils to make flutter easy and smart.
 ## Getting Started
 
 A full documentation will be available soon.
+
+
+## Credits
+
+widgets/filterable_text_field.dart
+```
+GetFilterableTextField
+// Inspired from https://github.com/felixlucien/flutter-autocomplete-textfield
+```
+
+mapper/mapper.dart
+```
+Mapper
+// Inspired from https://github.com/markgravity/object_mapper
+```
+
+utils/base_controllers.dart
+```
+BaseGetController
+// Inspired from https://github.com/Prn-Ice/get_stacked
+```
+
