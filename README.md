@@ -26,6 +26,6 @@ Mapper
 utils/base_controllers.dart
 ```
 BaseGetController
-// Inspired from [![get_stacked]](https://github.com/Prn-Ice/get_stacked)
 ```
+Inspired from [![get_stacked]](https://github.com/Prn-Ice/get_stacked)
 
