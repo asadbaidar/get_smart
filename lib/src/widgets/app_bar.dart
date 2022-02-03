@@ -186,6 +186,7 @@ class GetAppBar {
           title,
           textAlign: TextAlign.start,
           minFontSize: _minFontSize,
+          overflow: TextOverflow.ellipsis,
           maxLines: 1,
           style: _style,
         );
@@ -195,7 +196,9 @@ class GetAppBar {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (_largeTitle != null) _largeTitle.flex(flex: 999999999999999999),
+            if (_largeTitle != null)
+              _largeTitle.flex(flex: 1000000000000000000, expanded: true),
+            if (_largeActions?.isNotEmpty == true) 2.spaceX,
             const Spacer(),
             ..._largeActions ?? [],
           ],

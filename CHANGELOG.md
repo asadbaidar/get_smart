@@ -1,3 +1,7 @@
+## [0.1.4+6]
+
+*  Bug fixes in ```GetAppBar.sliver```
+
 ## [0.1.4+5]
 
 *  Bug fixes in ```GetTileData.isEmpty```
