@@ -264,4 +264,13 @@ extension BytesToBase64 on Uint8List {
       return null;
     }
   }
+
+  String? toUTF8() {
+    try {
+      return utf8.decoder.convert(this);
+    } catch (e) {
+      $debugPrint(e, "toUTF8");
+      return null;
+    }
+  }
 }
