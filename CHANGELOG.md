@@ -1,3 +1,44 @@
+## [0.1.5]
+
+*  resolved lint issues
+*  updated packages
+
+## [0.1.4+9]
+
+*  lint issues fixed
+
+## [0.1.4+8]
+
+*  Version update
+
+## [0.1.4+7]
+
+*  Credits
+
+## [0.1.4+6]
+
+*  Bug fixes in ```GetAppBar.sliver```
+
+## [0.1.4+5]
+
+*  Bug fixes in ```GetTileData.isEmpty```
+
+## [0.1.4+4]
+
+* GetTextField Bug fixes
+
+## [0.1.4+3]
+
+* Bug fixes
+
+## [0.1.4+2]
+
+* Mapper updates
+
+## [0.1.4+1]
+
+* Bug fixes progress bar
+
 ## [0.1.4]
 
 * Breaking Changes

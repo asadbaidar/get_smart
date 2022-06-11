@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(26),
-            child: GetForm(
+            child: Form(
               key: form,
               child: Column(children: [
                 GetTextField(

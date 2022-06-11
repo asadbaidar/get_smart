@@ -38,7 +38,7 @@ class GetInteractiveViewer extends StatefulWidget {
   final bool enabled;
 
   @override
-  _GetInteractiveViewerState createState() => _GetInteractiveViewerState();
+  State<StatefulWidget> createState() => _GetInteractiveViewerState();
 }
 
 class _GetInteractiveViewerState extends State<GetInteractiveViewer>

@@ -449,7 +449,6 @@ class GetTheme {
       scaffoldBackgroundColor: isDark ? canvasColorDark : canvasColorLight,
       bottomAppBarColor: _bottomBackground,
       hintColor: theme.hintColor.hinted,
-      primaryColorBrightness: _primaryBrightness,
       primaryIconTheme: _primaryIconTheme,
       iconTheme: _iconTheme,
       fontFamily: fontFamily,

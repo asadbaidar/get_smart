@@ -28,7 +28,7 @@ abstract class Mappable with Comparable<Mappable> {
   T? copy<T>([Mappable? other]) => {
         ...json,
         ...?other?.json,
-      }.getObject<T>(builders: builders);
+      }.getObject<T>(as: this as T);
 
   List<Function> get builders;
 

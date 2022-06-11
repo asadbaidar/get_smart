@@ -153,9 +153,7 @@ extension GetAsset on Enum {
   String get pdf => asset().pdf;
 
   String asset([String? name]) =>
-      "assets/" +
-      typeName.replaceAll("Asset", "").replaceAll("Get", "").lowercase +
-      "/${name ?? this.name}";
+      "assets/${typeName.replaceAll("Asset", "").replaceAll("Get", "").lowercase}/${name ?? this.name}";
 
   imageAsset(String name) => asset(name).imageAsset ?? asset(name).svgAsset;
 }

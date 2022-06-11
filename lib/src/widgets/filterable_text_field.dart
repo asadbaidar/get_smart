@@ -7,6 +7,7 @@ typedef GetFilterItemBuilder<T> = Widget Function(
 
 typedef Filter<T> = bool Function(T value, String query);
 
+// autocomplete_textfield: ^1.7.3
 /// A wrapper of [GetTextField] with filterable suggestion features.
 class GetFilterableTextField<T extends Comparable> extends StatefulWidget {
   /// Callback to filter item: return true or false depending on input text
@@ -313,7 +314,7 @@ class GetFilterableTextFieldState<T extends Comparable>
     filteredItems = withoutFilter == true
         ? items
         : await getItems(items, itemSorter, itemFilter, itemCount, query);
-    if (itemsOverlayEntry == null) {
+    if (itemsOverlayEntry == null && mounted) {
       final Size textFieldSize = (context.findRenderObject() as RenderBox).size;
       final width = textFieldSize.width;
       final height = textFieldSize.height;

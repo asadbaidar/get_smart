@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 typedef OnValue<T> = void Function(T value);
 
@@ -29,16 +30,15 @@ typedef OnStringReturn = OnValueReturn<String>;
 
 extension UrlX on String {
   void launchUrl({bool? inApp, bool httpOnly = false}) async {
-    var url = !httpOnly || startsWith(RegExp("^(http|https)://"))
+    final url = !httpOnly || startsWith(RegExp("^(http|https)://"))
         ? this
         : "http://$this";
-    if (await canLaunch(url)) {
-      await launch(
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(
         url,
-        forceSafariVC: inApp ?? Get.isIOS,
-        forceWebView: inApp ?? Get.isIOS,
-        statusBarBrightness:
-            GetTheme.isDarkMode ? Brightness.dark : Brightness.light,
+        mode: inApp ?? Get.isIOS
+            ? LaunchMode.inAppWebView
+            : LaunchMode.platformDefault,
       );
     }
   }

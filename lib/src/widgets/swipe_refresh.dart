@@ -38,7 +38,6 @@ class SwipeRefresh extends StatelessWidget {
   @override
   Widget build(BuildContext context) => RefreshIndicator(
         key: _key,
-        child: child,
         onRefresh: onRefresh,
         displacement: displacement,
         edgeOffset: edgeOffset,
@@ -49,6 +48,7 @@ class SwipeRefresh extends StatelessWidget {
         triggerMode: triggerMode,
         color: color ?? context.primaryIconColor,
         backgroundColor: backgroundColor ?? context.primaryColor,
+        child: child,
       );
 
   static GlobalKey<SwipeRefreshState> get newKey =>

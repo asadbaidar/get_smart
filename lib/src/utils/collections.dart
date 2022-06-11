@@ -50,6 +50,8 @@ extension IterableMapEntry<K, V> on Iterable<MapEntry<K, V>> {
 }
 
 extension ListX<E> on List<E> {
+  String get jsonString => jsonEncode(this);
+
   E? get(int? index) {
     if (index != null && index < length) {
       return this[index];

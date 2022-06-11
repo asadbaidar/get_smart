@@ -16,71 +16,72 @@ class HomePage extends StatelessWidget {
           final dataSet = controller.alphabets;
           return ThemeBuilder(
             (context) => GetScaffold(
-              title: "Get Smart Home",
-              appBarActions: [
-                GetButton.icon(
-                  child: const RiveAnimation.asset("assets/rive/cancer.riv"),
-                  onPressed: () {},
-                ),
-                GetButton.icon(
-                  child: SvgPicture.asset(
-                    GetIconAsset.apple_filled.svg,
-                    package: GetAsset.package,
-                    color: context.secondaryColor,
+              sliver: GetListView.builder(
+                topSliverBuilder: (context) => GetAppBar.sliver(
+                  title: "Get Smart Home",
+                  progress: LinearProgress.standard(
+                    visible: controller.isBusy,
                   ),
-                  onPressed: () {},
+                    onRefresh: controller.refreshData,
+                  actions: [
+                    GetButton.icon(
+                      child:
+                          const RiveAnimation.asset("assets/rive/cancer.riv"),
+                      onPressed: () {},
+                    ),
+                    GetButton.icon(
+                      child: SvgPicture.asset(
+                        GetIconAsset.apple_filled.svg,
+                        package: GetAsset.package,
+                        color: context.secondaryColor,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ],
                 ),
-              ],
-              progress: LinearProgress.standard(
-                visible: controller.isBusy,
-              ),
-              child: SwipeRefresh(
-                onRefresh: controller.refreshData,
-                child: ListView.separated(
-                  itemCount: dataSet.length,
-                  separatorBuilder: (_, __) => const GetTileDivider(),
-                  itemBuilder: (_, index) {
-                    final data = dataSet[index];
-                    return GetTile.simple(
-                      leading: Text(data.id),
-                      title: data.description,
-                      color: data.color,
-                      accessory: data.attachment?.mapIt(
-                        (icon) => GetPopupMenu<GetFile>(
-                          cornerRadius: 0,
-                          elevation: 0,
-                          backgroundColor: Colors.transparent,
-                          items: [data.file!],
-                          childBuilder: (onPopup) => GetButton.icon(
-                            child: Icon(icon),
-                            onPressed:
-                                data.file?.isVideo == true ? () {} : onPopup,
-                          ),
-                          itemBuilder: (value, data) => Image(
-                            image: $cast(Get.isWeb
-                                ? NetworkImage(data.path)
-                                : FileImage(File(data.path))),
-                            alignment: Alignment.center,
-                            fit: BoxFit.cover,
-                            width: 207,
-                            height: 330,
-                          ).popupMenuItem(
-                            value: value,
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                          ),
+                itemCount: dataSet.length,
+                divider: DividerStyle.leading,
+                itemBuilder: (_, index) {
+                  final data = dataSet[index];
+                  return GetTile.simple(
+                    leading: Text(data.id),
+                    title: data.description,
+                    color: data.color,
+                    accessory: data.attachment?.mapIt(
+                      (icon) => GetPopupMenu<GetFile>(
+                        cornerRadius: 0,
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        items: [data.file!],
+                        childBuilder: (onPopup) => GetButton.icon(
+                          child: Icon(icon),
+                          onPressed:
+                              data.file?.isVideo == true ? () {} : onPopup,
+                        ),
+                        itemBuilder: (value, data) => Image(
+                          image: $cast(Get.isWeb
+                              ? NetworkImage(data.path)
+                              : FileImage(File(data.path))),
+                          alignment: Alignment.center,
+                          fit: BoxFit.cover,
+                          width: 207,
+                          height: 330,
+                        ).popupMenuItem(
+                          value: value,
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                         ),
                       ),
-                      tintAccessory: true,
-                      padAccessory: true,
-                      onTap: () => Get.to(
-                        () => const CameraPage(),
-                      )?.then((file) {
-                        data.file = file;
-                        controller.update();
-                      }),
-                    );
-                  },
-                ),
+                    ),
+                    tintAccessory: true,
+                    padAccessory: true,
+                    onTap: () => Get.to(
+                      () => const CameraPage(),
+                    )?.then((file) {
+                      data.file = file;
+                      controller.update();
+                    }),
+                  );
+                },
               ),
             ),
             theme: GetTheme.sky(context),

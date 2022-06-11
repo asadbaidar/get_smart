@@ -152,7 +152,6 @@ class BoxView extends StatelessWidget {
   Widget? _icon() => $cast<Icon>(
           $cast<IconData>(child)?.mapTo((IconData it) => Icon(it)) ?? child)
       ?.mapTo((Icon it) => IconTheme(
-            child: it,
             data: IconThemeData(
               size: it.size ??
                   iconSize ??
@@ -163,6 +162,7 @@ class BoxView extends StatelessWidget {
                           : 30),
               color: it.color ?? (filled ? color?.contrast : color),
             ),
+            child: it,
           ));
 
   double get _iconSize =>
@@ -339,22 +339,19 @@ class CircularProgress extends StatelessWidget {
   final double? value;
 
   @override
-  Widget build(BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (visible)
-            Container(
-              height: size,
-              width: size,
-              margin: EdgeInsets.all(margin),
-              child: CircularProgressIndicator(
-                strokeWidth: strokeWidth,
-                backgroundColor: Colors.transparent,
-                color: color,
-                value: value,
-              ),
-            ),
-        ],
+  Widget build(BuildContext context) => CrossFade(
+        showFirst: visible,
+        firstChild: Container(
+          height: size,
+          width: size,
+          margin: EdgeInsets.all(margin),
+          child: CircularProgressIndicator(
+            strokeWidth: strokeWidth,
+            backgroundColor: Colors.transparent,
+            color: color,
+            value: value,
+          ),
+        ),
       );
 }
 
@@ -381,14 +378,16 @@ class LinearProgress extends StatelessWidget {
   final double? value;
 
   @override
-  Widget build(BuildContext context) => visible
-      ? LinearProgressIndicator(
+  Widget build(BuildContext context) => CrossFade(
+        showFirst: visible,
+        firstChild: LinearProgressIndicator(
           minHeight: height,
           backgroundColor: Colors.transparent,
           color: color,
           value: value,
-        )
-      : Container(height: height);
+        ),
+        secondChild: Container(height: height),
+      );
 
   PreferredSize get preferredSize => PreferredSize(
         preferredSize: Size.fromHeight(height),
@@ -555,8 +554,8 @@ extension ClickableX on Widget {
       Clickable(
         enabled: enabled,
         onTap: onTap,
-        child: this,
         key: key,
+        child: this,
       );
 }
 
@@ -715,6 +714,13 @@ class TextBox extends StatelessWidget {
                   horizontal: horizontalPadding ?? padding,
                   vertical: verticalPadding ?? padding.half,
                 ),
+                decoration: GetBoxDecoration.all(
+                  context,
+                  border: borderWidth,
+                  color: _fillColor,
+                  borderColor: _borderColor,
+                  borderRadius: borderRadius,
+                ),
                 child: Padding(
                   padding:
                       EdgeInsets.only(top: 1.5, bottom: Get.isIOS ? 1.5 : 0),
@@ -727,13 +733,6 @@ class TextBox extends StatelessWidget {
                       fontSize: fontSize,
                     ),
                   ),
-                ),
-                decoration: GetBoxDecoration.all(
-                  context,
-                  border: borderWidth,
-                  color: _fillColor,
-                  borderColor: _borderColor,
-                  borderRadius: borderRadius,
                 ),
               ),
             ],
@@ -758,18 +757,20 @@ class Blur extends StatelessWidget {
   final Widget? child;
 
   @override
-  Widget build(BuildContext context) => ClipRect(
-        clipBehavior: clipBehavior,
-        clipper: clipper,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: blur,
-            sigmaY: blur,
-            tileMode: tileMode,
+  Widget build(BuildContext context) => blur <= 0
+      ? child ?? Container()
+      : ClipRect(
+          clipBehavior: clipBehavior,
+          clipper: clipper,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: blur,
+              sigmaY: blur,
+              tileMode: tileMode,
+            ),
+            child: child ?? Container(),
           ),
-          child: child ?? Container(),
-        ),
-      );
+        );
 }
 
 class Space extends StatelessWidget {

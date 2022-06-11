@@ -63,7 +63,7 @@ class GetAppLifecycle extends StatefulWidget {
   final VoidCallback? onDetached;
 
   @override
-  _GetAppLifecycleState createState() => _GetAppLifecycleState();
+  State<StatefulWidget> createState() => _GetAppLifecycleState();
 }
 
 class _GetAppLifecycleState extends State<GetAppLifecycle>
@@ -71,12 +71,12 @@ class _GetAppLifecycleState extends State<GetAppLifecycle>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

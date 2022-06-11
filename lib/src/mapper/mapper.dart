@@ -4,7 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:get_smart/get_smart.dart';
 
 typedef MapperSetter = dynamic Function(dynamic v);
+
 enum MapperType { fromJson, toJson }
+
 enum ValueType { unknown, typedList, list, map, numeric, string, bool }
 
 class Mapper {
@@ -40,17 +42,17 @@ class Mapper {
   }
 
   T? toMappable<T>({T? as, List<Function>? builders}) {
-    var _builders = [
+    final $builders = [
       ...($cast<Mappable>(as)?.builders ?? []),
       ...(builders ?? [])
     ];
-    for (var builder in _builders) {
+    for (final builder in $builders) {
       Mappable.factories.putIfAbsent(builder().runtimeType, () => builder);
     }
     $debugPrint(Mappable.factories);
     final object = toObject<T>(as?.runtimeType);
     if (kDebugMode) $debugPrint(object?.toString());
-    for (var builder in _builders) {
+    for (final builder in $builders) {
       Mappable.factories.remove(builder().runtimeType);
     }
     return object;
