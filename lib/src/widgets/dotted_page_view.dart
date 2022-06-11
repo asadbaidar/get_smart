@@ -47,7 +47,7 @@ class DottedPageView extends StatefulWidget {
   final Key? _key;
 
   @override
-  _DottedPageViewState createState() => _DottedPageViewState();
+  State<StatefulWidget> createState() => _DottedPageViewState();
 }
 
 class _DottedPageViewState extends State<DottedPageView>

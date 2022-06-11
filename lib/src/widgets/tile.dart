@@ -1828,69 +1828,6 @@ class GetTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GetTileRow.simple(
-              child: Column(children: [
-                GetTileRow.simple(
-                  child: titleChild,
-                  children: titleChildren,
-                  childrenPadding: titleChildrenPadding,
-                  text: title?.notEmpty,
-                  textStyle: _titleStyle?.copyWith(
-                    color: _titleColor?.applyIf(
-                      titleSubbed,
-                      (it) => it?.subbed,
-                    ),
-                  ),
-                  fontWeight: titleWeight,
-                  fontSize: titleSize,
-                  hint: titleHint,
-                  trailingText: trailingTitle,
-                  trailingStyle: trailingStyle,
-                  trailing: trailingTitleChild,
-                  trailingPadding: _trailingPadding,
-                  trailingColor: trailingColor,
-                  trailingSize: trailingSize,
-                  color: tintColor,
-                  maxLines: titleMaxLines,
-                  expanded: titleExpanded,
-                  alignment: alignment == CrossAxisAlignment.center
-                      ? alignment
-                      : CrossAxisAlignment.baseline,
-                  enabled: enabled,
-                  padding: EdgeInsets.zero,
-                  onTap: onTapTitle,
-                ),
-                if (_isTitle && _isSubtitle) verticalSpacing.spaceY,
-                GetTileRow.simple(
-                  child: subtitleChild,
-                  children: subtitleChildren,
-                  childrenPadding: subtitleChildrenPadding,
-                  text: subtitle?.notEmpty,
-                  textStyle: _subtitleStyle?.copyWith(
-                    color: _subtitleColor?.applyIf(
-                      subtitleSubbed,
-                      (it) => it?.subbed,
-                    ),
-                  ),
-                  fontWeight: subtitleWeight,
-                  fontSize: subtitleSize,
-                  hint: subtitleHint,
-                  trailingText: trailingSubtitle,
-                  trailingStyle: trailingStyle,
-                  trailing: trailingSubtitleChild,
-                  trailingPadding: _trailingPadding,
-                  trailingColor: trailingColor,
-                  trailingSize: trailingSize,
-                  color: tintColor,
-                  maxLines: subtitleMaxLines,
-                  expanded: subtitleExpanded,
-                  alignment: alignment == CrossAxisAlignment.center
-                      ? alignment
-                      : CrossAxisAlignment.baseline,
-                  enabled: enabled,
-                  padding: EdgeInsets.zero,
-                  onTap: onTapSubtitle,
-                )
-              ]),
               leading: leading,
               leadingSize: leadingSize,
               leadingSmall: leadingSmall,
@@ -1963,12 +1900,75 @@ class GetTile extends StatelessWidget {
                                 color: _accessoryColor,
                                 size: detail ? 14 : accessorySize,
                               ),
-                              child: _accessory!,
+                              child: _accessory,
                             ),
                           ),
                       ],
                     )
                   : null,
+              child: Column(children: [
+                GetTileRow.simple(
+                  child: titleChild,
+                  children: titleChildren,
+                  childrenPadding: titleChildrenPadding,
+                  text: title?.notEmpty,
+                  textStyle: _titleStyle?.copyWith(
+                    color: _titleColor?.applyIf(
+                      titleSubbed,
+                      (it) => it?.subbed,
+                    ),
+                  ),
+                  fontWeight: titleWeight,
+                  fontSize: titleSize,
+                  hint: titleHint,
+                  trailingText: trailingTitle,
+                  trailingStyle: trailingStyle,
+                  trailing: trailingTitleChild,
+                  trailingPadding: _trailingPadding,
+                  trailingColor: trailingColor,
+                  trailingSize: trailingSize,
+                  color: tintColor,
+                  maxLines: titleMaxLines,
+                  expanded: titleExpanded,
+                  alignment: alignment == CrossAxisAlignment.center
+                      ? alignment
+                      : CrossAxisAlignment.baseline,
+                  enabled: enabled,
+                  padding: EdgeInsets.zero,
+                  onTap: onTapTitle,
+                ),
+                if (_isTitle && _isSubtitle) verticalSpacing.spaceY,
+                GetTileRow.simple(
+                  child: subtitleChild,
+                  children: subtitleChildren,
+                  childrenPadding: subtitleChildrenPadding,
+                  text: subtitle?.notEmpty,
+                  textStyle: _subtitleStyle?.copyWith(
+                    color: _subtitleColor?.applyIf(
+                      subtitleSubbed,
+                      (it) => it?.subbed,
+                    ),
+                  ),
+                  fontWeight: subtitleWeight,
+                  fontSize: subtitleSize,
+                  hint: subtitleHint,
+                  trailingText: trailingSubtitle,
+                  trailingStyle: trailingStyle,
+                  trailing: trailingSubtitleChild,
+                  trailingPadding: _trailingPadding,
+                  trailingColor: trailingColor,
+                  trailingSize: trailingSize,
+                  color: tintColor,
+                  maxLines: subtitleMaxLines,
+                  expanded: subtitleExpanded,
+                  alignment: alignment == CrossAxisAlignment.center
+                      ? alignment
+                      : CrossAxisAlignment.baseline,
+                  enabled: enabled,
+                  padding: EdgeInsets.zero,
+                  onTap: onTapSubtitle,
+                )
+              ]),
             ),
             ...rows ?? [],
             SizedBox(height: _bottomPadding.half),

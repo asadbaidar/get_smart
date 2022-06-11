@@ -387,10 +387,9 @@ extension GetDateTimePickerX on GetInterface {
               ),
     );
     if (range != null) {
-      onPick(withRange?.apply(() {
-            withRange.start.setting(date: range.start);
-            withRange.end.setting(date: range.end);
-          }) ??
+      onPick(withRange?.apply(() => withRange
+            ..start.setting(date: range.start)
+            ..end.setting(date: range.end)) ??
           range);
     } else {
       onCancel?.call();

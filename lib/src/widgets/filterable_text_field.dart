@@ -314,7 +314,7 @@ class GetFilterableTextFieldState<T extends Comparable>
     filteredItems = withoutFilter == true
         ? items
         : await getItems(items, itemSorter, itemFilter, itemCount, query);
-    if (itemsOverlayEntry == null) {
+    if (itemsOverlayEntry == null && mounted) {
       final Size textFieldSize = (context.findRenderObject() as RenderBox).size;
       final width = textFieldSize.width;
       final height = textFieldSize.height;

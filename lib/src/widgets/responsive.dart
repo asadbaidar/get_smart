@@ -58,9 +58,9 @@ class Responsive extends StatelessWidget {
     return Wrap(
       alignment: alignment,
       runSpacing: runSpacing,
-      children: children,
       runAlignment: runAlignment,
       crossAxisAlignment: crossAxisAlignment,
+      children: children,
     );
   }
 }
@@ -149,21 +149,21 @@ class Div extends StatelessWidget {
   }
 
   Widget _createDivWidget(Widget child, BuildContext context) {
-    int _col = 0;
-    int _offsetWithCol = 0;
+    int col = 0;
+    int offsetWithCol = 0;
     double width = context.mediaQuery.size.width;
     if (width < _widthMobile) {
-      _col = colS;
-      _offsetWithCol = (offsetS + _col >= 12) ? 12 : offsetS + _col;
+      col = colS;
+      offsetWithCol = (offsetS + col >= 12) ? 12 : offsetS + col;
     } else if (width < _widthTab) {
-      _col = colM ?? colS;
-      _offsetWithCol = (offsetM + _col >= 12) ? 12 : offsetM + _col;
+      col = colM ?? colS;
+      offsetWithCol = (offsetM + col >= 12) ? 12 : offsetM + col;
     } else {
-      _col = colL ?? colM ?? colS;
-      _offsetWithCol = (offsetL + _col >= 12) ? 12 : offsetL + _col;
+      col = colL ?? colM ?? colS;
+      offsetWithCol = (offsetL + col >= 12) ? 12 : offsetL + col;
     }
     return LayoutBuilder(builder: (ctx, box) {
-      double width = (box.maxWidth / 12) * _offsetWithCol;
+      double width = (box.maxWidth / 12) * offsetWithCol;
       return width == 0
           ? const SizedBox.shrink()
           : SizedBox(
@@ -172,7 +172,7 @@ class Div extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  SizedBox(width: (box.maxWidth / 12) * _col, child: child),
+                  SizedBox(width: (box.maxWidth / 12) * col, child: child),
                 ],
               ),
             );

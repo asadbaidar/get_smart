@@ -42,8 +42,8 @@ class CameraPage extends StatelessWidget {
                 : FloatingActionButton(
                     backgroundColor: Colors.transparent,
                     splashColor: Colors.transparent,
-                    child: captureShape(),
                     onPressed: controller.capture,
+                    child: captureShape(),
                   ),
             bottomBar: controller.file == null
                 ? (!controller.hasActionError
@@ -58,25 +58,25 @@ class CameraPage extends StatelessWidget {
                 : Row(children: [
                     FloatingActionButton(
                       backgroundColor: Colors.red,
-                      child: const Icon(CupertinoIcons.clear),
                       onPressed: controller.cancelAction,
                       mini: true,
                       heroTag: null,
+                      child: const Icon(CupertinoIcons.clear),
                     ).paddingAll(24),
                     const Spacer(),
                     if (controller.file?.isVideo == true)
                       FloatingActionButton(
-                        child: Icon(controller.playIcon),
                         onPressed: controller.playVideo,
                         heroTag: null,
+                        child: Icon(controller.playIcon),
                       ).paddingAll(16),
                     const Spacer(),
                     FloatingActionButton(
                       backgroundColor: Colors.green,
-                      child: const Icon(CupertinoIcons.check_mark),
                       onPressed: controller.acceptFile,
                       mini: true,
                       heroTag: null,
+                      child: const Icon(CupertinoIcons.check_mark),
                     ).paddingAll(24),
                   ]),
             showProgress: controller.isAnyBusy,

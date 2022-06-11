@@ -1,3 +1,7 @@
+## [0.1.4+9]
+
+*  lint issues fixed
+
 ## [0.1.4+8]
 
 *  Version update

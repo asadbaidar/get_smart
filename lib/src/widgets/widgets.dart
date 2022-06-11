@@ -152,7 +152,6 @@ class BoxView extends StatelessWidget {
   Widget? _icon() => $cast<Icon>(
           $cast<IconData>(child)?.mapTo((IconData it) => Icon(it)) ?? child)
       ?.mapTo((Icon it) => IconTheme(
-            child: it,
             data: IconThemeData(
               size: it.size ??
                   iconSize ??
@@ -163,6 +162,7 @@ class BoxView extends StatelessWidget {
                           : 30),
               color: it.color ?? (filled ? color?.contrast : color),
             ),
+            child: it,
           ));
 
   double get _iconSize =>
@@ -554,8 +554,8 @@ extension ClickableX on Widget {
       Clickable(
         enabled: enabled,
         onTap: onTap,
-        child: this,
         key: key,
+        child: this,
       );
 }
 
@@ -714,6 +714,13 @@ class TextBox extends StatelessWidget {
                   horizontal: horizontalPadding ?? padding,
                   vertical: verticalPadding ?? padding.half,
                 ),
+                decoration: GetBoxDecoration.all(
+                  context,
+                  border: borderWidth,
+                  color: _fillColor,
+                  borderColor: _borderColor,
+                  borderRadius: borderRadius,
+                ),
                 child: Padding(
                   padding:
                       EdgeInsets.only(top: 1.5, bottom: Get.isIOS ? 1.5 : 0),
@@ -726,13 +733,6 @@ class TextBox extends StatelessWidget {
                       fontSize: fontSize,
                     ),
                   ),
-                ),
-                decoration: GetBoxDecoration.all(
-                  context,
-                  border: borderWidth,
-                  color: _fillColor,
-                  borderColor: _borderColor,
-                  borderRadius: borderRadius,
                 ),
               ),
             ],

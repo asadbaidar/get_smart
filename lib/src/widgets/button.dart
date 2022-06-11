@@ -823,7 +823,7 @@ abstract class GetButton {
                       SizedBox(height: mini ? 2 : 2.5),
                       Expanded(
                         child: Text(
-                          label!,
+                          label,
                           style: labelStyle ??
                               TextStyle(
                                 fontSize: 9,
@@ -1224,13 +1224,13 @@ abstract class GetButton {
   }) =>
       ThemeBuilder(
         (context) => CupertinoButton(
+          padding: EdgeInsets.only(left: Get.isIOS ? 9 : 2),
+          onPressed:
+              onPressed ?? () => Get.canPop ? Get.back() : Get.systemPop(),
           child: Icon(
             icon ?? (Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
             color: color ?? context.primaryIconColor,
           ),
-          padding: EdgeInsets.only(left: Get.isIOS ? 9 : 2),
-          onPressed:
-              onPressed ?? () => Get.canPop ? Get.back() : Get.systemPop(),
         ).tooltip(Get.localization.backButtonTooltip),
       );
 
@@ -1246,6 +1246,9 @@ abstract class GetButton {
   }) =>
       ThemeBuilder(
         (context) => CupertinoButton(
+          minSize: 0,
+          padding: EdgeInsets.zero,
+          onPressed: onPressed,
           child: AnimatedContainer(
             duration: 200.milliseconds,
             transformAlignment: Alignment.center,
@@ -1258,9 +1261,6 @@ abstract class GetButton {
               size: size,
             ),
           ),
-          minSize: 0,
-          padding: EdgeInsets.zero,
-          onPressed: onPressed,
         ).tooltip(tooltip),
       );
 

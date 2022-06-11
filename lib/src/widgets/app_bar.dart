@@ -68,6 +68,7 @@ class GetAppBar {
             title: customTitle ??
                 (title != null ? Text(title) : Container(height: 0)),
             bottom: PreferredSize(
+              preferredSize: Size.fromHeight(_bottomHeight),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -75,7 +76,6 @@ class GetAppBar {
                   if (_progress != null) _progress,
                 ],
               ),
-              preferredSize: Size.fromHeight(_bottomHeight),
             ),
             actions: _actions,
           )),
@@ -251,6 +251,9 @@ class GetAppBar {
           pinned: pinned,
           bottom: floating || _overlapping && pinned
               ? PreferredSize(
+                  preferredSize: Size.fromHeight(
+                    _floatingBottomHeight(visibility: _visibility),
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -286,9 +289,6 @@ class GetAppBar {
                       if (_progress != null && (!floating || _overlapping))
                         _progress,
                     ],
-                  ),
-                  preferredSize: Size.fromHeight(
-                    _floatingBottomHeight(visibility: _visibility),
                   ),
                 )
               : null,

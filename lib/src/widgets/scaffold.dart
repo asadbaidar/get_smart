@@ -218,7 +218,6 @@ class GetScaffold extends StatelessWidget {
                     ? CrossAxisAlignment.end
                     : CrossAxisAlignment.center),
             top: withBottomBar,
-            children: _bottomBarChildren,
             left: _bottomBarLeft,
             right: _bottomBarRight,
             center: subtitle?.notBlank == null
@@ -235,6 +234,7 @@ class GetScaffold extends StatelessWidget {
                       ),
                     )
                   ],
+            children: _bottomBarChildren,
           );
   }
 
