@@ -1,3 +1,8 @@
+## [0.1.4+5]
+
+*  resolved lint issues
+*  updated packages
+
 ## [0.1.4+9]
 
 *  lint issues fixed
