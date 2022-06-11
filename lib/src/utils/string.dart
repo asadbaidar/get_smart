@@ -212,6 +212,9 @@ extension StringX on String {
 
   Future<String> get decrypted async => await GetCipher.instance.decrypt(this);
 
+  Future<String> cipher(CipherType type) async =>
+      await GetCipher.instance.apply(type, this);
+
   get json => jsonDecode(this);
 
   Uint8List? get base64Decoded {
@@ -258,6 +261,15 @@ extension BytesToBase64 on Uint8List {
       return isEmpty ? null : base64Encode(this);
     } catch (e) {
       $debugPrint(e, "base64Encoded");
+      return null;
+    }
+  }
+
+  String? toUTF8() {
+    try {
+      return utf8.decoder.convert(this);
+    } catch (e) {
+      $debugPrint(e, "toUTF8");
       return null;
     }
   }

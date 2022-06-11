@@ -38,13 +38,11 @@ class GetFile {
   bool get isMediaOrDocs => name.isMediaOrDocs;
 
   @override
-  String toString() =>
-      "$typeName: " +
-      {
+  String toString() => "$typeName: ${{
         "path": path,
         "name": name,
         "size": size,
-      }.toString();
+      }}";
 
   static Future<List<GetMultipartFile>> toMultipart(List<GetFile> files) async {
     List<GetMultipartFile> multipartFiles = [];
@@ -94,17 +92,17 @@ class GetFile {
 }
 
 extension GetFileX on String {
-  String get svg => this + ".svg";
+  String get svg => "$this.svg";
 
-  String get png => this + ".png";
+  String get png => "$this.png";
 
-  String get gif => this + ".gif";
+  String get gif => "$this.gif";
 
-  String get jpg => this + ".jpg";
+  String get jpg => "$this.jpg";
 
-  String get jpeg => this + ".jpeg";
+  String get jpeg => "$this.jpeg";
 
-  String get pdf => this + ".pdf";
+  String get pdf => "$this.pdf";
 
   bool get isSVG => lowercase.endsWith("svg");
 

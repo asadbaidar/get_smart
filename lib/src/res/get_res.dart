@@ -1,4 +1,5 @@
 //packages
+export "package:auto_size_text/auto_size_text.dart";
 export 'package:collection/collection.dart';
 export "package:dots_indicator/dots_indicator.dart";
 export "package:flutter_svg/flutter_svg.dart";

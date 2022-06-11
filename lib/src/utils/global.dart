@@ -24,14 +24,13 @@ String $name(Type type) => type.toString();
 ///
 /// i.e. TypeNamePage -> "/typeName"
 String $route(Type type) =>
-    "/" + $name(type).lowercaseFirst.replaceAll("Page", "");
+    "/${$name(type).lowercaseFirst.replaceAll("Page", "")}";
 
 /// Schedules the given `task` with the [Priority.animation] and returns a
 /// [Future] that completes to the `task`'s eventual return value.
-Future<T> scheduleTask<T>(FutureOr<T> Function() task) async {
-  return await SchedulerBinding.instance!
-      .scheduleTask<FutureOr<T>>(task, Priority.animation);
-}
+Future<T> scheduleTask<T>(FutureOr<T> Function() task) async =>
+    await SchedulerBinding.instance
+        .scheduleTask<FutureOr<T>>(task, Priority.animation);
 
 Future<T> profileTask<T>(Future<T> Function() task) async {
   var time = Date.now.inMilliseconds;

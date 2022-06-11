@@ -175,7 +175,6 @@ extension GetWidgetX on Widget {
   }) =>
       enabled
           ? Material(
-              child: this,
               key: key,
               type: type,
               elevation: elevation,
@@ -187,6 +186,7 @@ extension GetWidgetX on Widget {
               borderOnForeground: borderOnForeground,
               clipBehavior: clipBehavior,
               animationDuration: animationDuration,
+              child: this,
             )
           : this;
 

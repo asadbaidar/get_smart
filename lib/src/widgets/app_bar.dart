@@ -68,6 +68,7 @@ class GetAppBar {
             title: customTitle ??
                 (title != null ? Text(title) : Container(height: 0)),
             bottom: PreferredSize(
+              preferredSize: Size.fromHeight(_bottomHeight),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -75,7 +76,6 @@ class GetAppBar {
                   if (_progress != null) _progress,
                 ],
               ),
-              preferredSize: Size.fromHeight(_bottomHeight),
             ),
             actions: _actions,
           )),
@@ -186,15 +186,23 @@ class GetAppBar {
           title,
           textAlign: TextAlign.start,
           minFontSize: _minFontSize,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
           style: _style,
         );
       }
-      return Row(
-        children: [
-          if (_largeTitle != null) _largeTitle,
-          const Spacer(),
-          ..._largeActions ?? [],
-        ],
+      return Container(
+        constraints: BoxConstraints(minHeight: bottomConstant),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (_largeTitle != null)
+              _largeTitle.flex(flex: 1000000000000000000, expanded: true),
+            if (_largeActions?.isNotEmpty == true) 2.spaceX,
+            const Spacer(),
+            ..._largeActions ?? [],
+          ],
+        ),
       );
     }
 
@@ -243,6 +251,9 @@ class GetAppBar {
           pinned: pinned,
           bottom: floating || _overlapping && pinned
               ? PreferredSize(
+                  preferredSize: Size.fromHeight(
+                    _floatingBottomHeight(visibility: _visibility),
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -278,9 +289,6 @@ class GetAppBar {
                       if (_progress != null && (!floating || _overlapping))
                         _progress,
                     ],
-                  ),
-                  preferredSize: Size.fromHeight(
-                    _floatingBottomHeight(visibility: _visibility),
                   ),
                 )
               : null,

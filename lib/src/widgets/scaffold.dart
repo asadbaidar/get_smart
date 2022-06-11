@@ -30,6 +30,7 @@ class GetScaffold extends StatelessWidget {
     this.titleStyle,
     this.centerTitle,
     this.extendBody = true,
+    this.extendSpace = true,
     this.showAppBarLeading = true,
     this.showProgress = false,
     this.showScrollbar = true,
@@ -71,6 +72,7 @@ class GetScaffold extends StatelessWidget {
   final TextStyle? titleStyle;
   final bool? centerTitle;
   final bool extendBody;
+  final bool extendSpace;
   final bool showAppBarLeading;
   final bool showProgress;
   final bool showScrollbar;
@@ -173,17 +175,31 @@ class GetScaffold extends StatelessWidget {
               backgroundColor: appBarColor,
             );
 
-  Widget _bottomBar(BuildContext context) => Blur(
-        blur: 6,
-        child: withBottomBar != null
-            ? _bottomAppBar
-            : CrossFade(
-                firstChild: _bottomBarHidden ? Container(height: 0) : bottomBar,
-                secondChild: _bottomAppBar,
-              ),
-      );
+  Widget _bottomBar(BuildContext context) => _hasNoBottomBar
+      ? _bottomBarBlank(context)
+      : withBottomBar != null
+          ? _bottomAppBar(context)
+          : CrossFade(
+              firstChild:
+                  _bottomBarHidden ? _bottomBarBlank(context) : bottomBar,
+              secondChild: _bottomAppBar(context),
+            );
 
-  Widget get _bottomAppBar {
+  bool get _hasNoBottomBar =>
+      _bottomBarHidden ||
+      bottomBar == null &&
+          subtitle?.notBlank == null &&
+          (interactive
+              ? (bottomBarLeftItems?.isEmpty ?? true) &&
+                  (bottomBarRightItems?.isEmpty ?? true) &&
+                  (bottomBarCenterItems?.isEmpty ?? true) &&
+                  (bottomBarChildren?.isEmpty ?? true)
+              : true);
+
+  Widget _bottomBarBlank(BuildContext context) =>
+      extendBody && extendSpace ? const BottomBarBlank() : Container(height: 0);
+
+  Widget _bottomAppBar(BuildContext context) {
     List<Widget> _bottomBarLeft = interactive ? bottomBarLeftItems ?? [] : [];
     List<Widget> _bottomBarRight = interactive ? bottomBarRightItems ?? [] : [];
     List<Widget> _bottomBarCenter =
@@ -194,7 +210,7 @@ class GetScaffold extends StatelessWidget {
             _bottomBarRight.isEmpty &&
             _bottomBarCenter.isEmpty &&
             _bottomBarChildren == null
-        ? Container(height: 0)
+        ? _bottomBarBlank(context)
         : BottomBar(
             visible: !_bottomBarHidden,
             alignment: bottomBarAlignment ??
@@ -202,7 +218,6 @@ class GetScaffold extends StatelessWidget {
                     ? CrossAxisAlignment.end
                     : CrossAxisAlignment.center),
             top: withBottomBar,
-            children: _bottomBarChildren,
             left: _bottomBarLeft,
             right: _bottomBarRight,
             center: subtitle?.notBlank == null
@@ -219,6 +234,7 @@ class GetScaffold extends StatelessWidget {
                       ),
                     )
                   ],
+            children: _bottomBarChildren,
           );
   }
 

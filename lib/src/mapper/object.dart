@@ -38,9 +38,14 @@ abstract class GetObject extends Mappable {
         StringTransform(capitalize: capitalized, removeSpace: removeSpace));
   }
 
-  Future get decrypted async {
-    id = await id.decrypted;
-    description = await description.decrypted;
+  Future get decrypted => cipher(CipherType.decryption);
+
+  Future encrypted<T extends GetObject>() async =>
+      copy<T>()?.cipher(CipherType.encryption);
+
+  Future cipher(CipherType type) async {
+    id = await id.cipher(type);
+    description = await description.cipher(type);
     return this;
   }
 

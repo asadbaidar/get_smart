@@ -304,7 +304,7 @@ abstract class GetWebAPI {
         data: isMultipart
             ? GetFormData.fromMap({
                 "data": body.jsonString,
-                "files": await GetFile.toMultipart(files!),
+                "files": await GetFile.toMultipart(files),
               })
             : body,
         options: Options(
@@ -336,7 +336,7 @@ class GetRequestCancel {
   final String id;
 
   @override
-  String toString() => "$typeName: " + {"id": id}.toString();
+  String toString() => "$typeName: ${{"id": id}}";
 }
 
 class GetRequestParcel<T, R> {
@@ -367,9 +367,7 @@ class GetRequestParcel<T, R> {
   String get key => id + path + authToken;
 
   @override
-  String toString() =>
-      "$typeName: " +
-      {
+  String toString() => "$typeName: ${{
         "id": id,
         "address": address,
         "path": path,
@@ -380,7 +378,7 @@ class GetRequestParcel<T, R> {
         "body": body,
         "builder": builder?.typeName,
         "result": result.toString(),
-      }.toString();
+      }}";
 }
 
 class GetIsolateEntry {
@@ -389,7 +387,7 @@ class GetIsolateEntry {
   final dynamic sendPort;
 
   @override
-  String toString() => "$typeName: " + {"sendPort": sendPort}.toString();
+  String toString() => "$typeName: ${{"sendPort": sendPort}}";
 }
 
 GetIsolate? get isolate => GetIsolate.instance;
