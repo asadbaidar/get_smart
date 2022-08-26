@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:example/src/camera/view_model.dart';
+import 'package:example/src/camera/controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
@@ -11,11 +11,11 @@ import 'package:video_player/video_player.dart';
 class CameraPage extends StatelessWidget {
   const CameraPage({Key? key}) : super(key: key);
 
-  CameraModel get controller => Get.$find()!;
+  MyCameraController get controller => Get.$find()!;
 
   @override
-  Widget build(BuildContext context) => GetBuilder<CameraModel>(
-        init: CameraModel(),
+  Widget build(BuildContext context) => GetBuilder<MyCameraController>(
+        init: MyCameraController(),
         builder: (controller) => ThemeBuilder(
           (context) => GetScaffold(
             title: "Capture Media",

@@ -12,5 +12,6 @@ export 'transforms/double_transform.dart';
 export 'transforms/enum_transform.dart';
 export 'transforms/get_transform.dart';
 export 'transforms/int_transform.dart';
+export 'transforms/nested_list_transform.dart';
 export 'transforms/string_transform.dart';
 export 'transforms/transformable.dart';

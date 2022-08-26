@@ -9,8 +9,8 @@ import 'package:video_player/video_player.dart';
 
 enum CameraAction { photo, video }
 
-class CameraModel extends GetController {
-  static CameraModel? get instance => Get.$find();
+class MyCameraController extends GetController {
+  static MyCameraController? get instance => Get.$find();
 
   var mode = CameraAction.photo;
 

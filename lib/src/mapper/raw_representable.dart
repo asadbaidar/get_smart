@@ -6,7 +6,7 @@ abstract class RawRepresentable<RawValue> {
   final RawValue rawValue;
 
   static RawRepresentable? getInstance(Type type, rawValue) {
-    final constructor = Mappable.factories[type];
+    final constructor = {}[type]; //TODO: Mappable.factories[type];
     if (constructor == null) return null;
     return constructor(rawValue);
   }

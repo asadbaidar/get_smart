@@ -1,13 +1,8 @@
 import 'package:get_smart/get_smart.dart';
 
 abstract class Mappable with Comparable<Mappable> {
-  static Map<Type, Function> factories = {};
-
-  static Mappable? getInstance(Type type) {
-    final constructor = Mappable.factories[type];
-    assert(constructor != null,
-        "${type.toString()} is not defined in Mappable.factories");
-    return constructor?.call();
+  Mappable() {
+    init();
   }
 
   Mapper get mapper => Mapper()..toJson(this);
@@ -16,21 +11,41 @@ abstract class Mappable with Comparable<Mappable> {
 
   String get jsonString => json.jsonString;
 
+  Map<String, dynamic> toJson() => json;
+
+  void fromJson(Map<String, dynamic> json) =>
+      mapping(Mapper.fromJson(json, factories));
+
+  void fromEntity() {}
+
+  void init() {}
+
   void mapping(Mapper map);
 
-  void reset() => mapping(Mapper());
+  /// For new objects, use this to initialize empty values.
+  void reset() => mapping(Mapper(factories));
 
+  /// Remap this object's null properties with [other] object ones.
   void remap([Mappable? other]) => mapping(Mapper.fromJson({
         ...json,
         ...?other?.json,
-      }));
+      }, factories));
 
+  /// Copies this and [other] object's properties to new one.
   T? copy<T>([Mappable? other]) => {
         ...json,
         ...?other?.json,
       }.getObject<T>(as: this as T);
 
   List<Function> get builders;
+
+  MapperFactory get factories {
+    final MapperFactory vFactories = {};
+    for (final builder in builders) {
+      vFactories.putIfAbsent(builder().runtimeType, () => builder);
+    }
+    return vFactories;
+  }
 
   String? get equatable => null;
 

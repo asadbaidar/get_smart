@@ -1,6 +1,6 @@
 import 'package:get_smart/get_smart.dart';
 
-class StringTransform implements Transformable<String, String> {
+class StringTransform implements Transformable<String, String?> {
   StringTransform({
     this.capitalize = false,
     this.capitalizeFirst = false,
@@ -26,7 +26,7 @@ class StringTransform implements Transformable<String, String> {
       );
 
   @override
-  String toJson(String? value) => _stringToJson(value, fallback);
+  String? toJson(String? value) => _stringToJson(value, fallback);
 }
 
 class RxStringTransform implements Transformable<RxString, String?> {
@@ -55,7 +55,7 @@ class RxStringTransform implements Transformable<RxString, String?> {
       ).obs;
 
   @override
-  String toJson(RxString? value) => _stringToJson(value?.value, fallback);
+  String? toJson(RxString? value) => _stringToJson(value?.value, fallback);
 }
 
 String _stringFromJson(
@@ -86,7 +86,8 @@ String _$stringFromJson(value, fallback) {
   }
 }
 
-String _stringToJson(String? value, fallback) {
+String? _stringToJson(String? value, fallback) {
   if (value == null) return fallback;
+  if (value.isEmpty) return null;
   return value;
 }

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:example/src/camera/view.dart';
-import 'package:example/src/home/view_model.dart';
+import 'package:example/src/home/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get_smart/get_smart.dart';
 import 'package:rive/rive.dart';
@@ -10,8 +10,8 @@ class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => GetBuilder<HomeModel>(
-        init: HomeModel(),
+  Widget build(BuildContext context) => GetBuilder<HomeController>(
+        init: HomeController(),
         builder: (controller) {
           final dataSet = controller.alphabets;
           return ThemeBuilder(
@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
                   progress: LinearProgress.standard(
                     visible: controller.isBusy,
                   ),
-                    onRefresh: controller.refreshData,
+                  onRefresh: controller.refreshData,
                   actions: [
                     GetButton.icon(
                       child:

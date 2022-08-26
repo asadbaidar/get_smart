@@ -317,6 +317,7 @@ abstract class GetWebAPI {
       return $object(response.data)?.getObject<T>(
             as: result,
             builders: $cast<Mappable>(builder)?.builders,
+            factories: $cast<Mappable>(builder)?.factories,
           ) ??
           getResult();
     } on DioError catch (e) {

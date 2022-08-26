@@ -89,14 +89,28 @@ extension ObjectX on Object {
   String get typeName => $name(runtimeType);
 
   /// Create and return a Mappable object for [T] from String or Map
-  T? getObject<T>({T? as, List<Function>? builders}) =>
-      Mapper.fromData(this).toMappable<T>(as: as, builders: builders);
+  T? getObject<T>({
+    T? as,
+    List<Function>? builders,
+    MapperFactory? factories,
+  }) =>
+      Mapper.fromData(this, factories).toMappable<T>(
+        as: as,
+        builders: builders,
+      );
 
   /// Create and return a Mappable result for [T] from String or Map
-  GetResult<T>? getResult<T>({T? as, List<Function>? builders}) =>
-      Mapper.fromData(this).toMappable<GetResult<T>>(
+  GetResult<T>? getResult<T>({
+    T? as,
+    List<Function>? builders,
+    MapperFactory? factories,
+  }) =>
+      Mapper.fromData(
+        this,
+        {...?factories, ...?$cast<Mappable>(as)?.factories},
+      ).toMappable<GetResult<T>>(
         as: GetResult<T>(),
-        builders: (builders ?? []) + ($cast<Mappable>(as)?.builders ?? []),
+        builders: builders,
       );
 
   /// Return the text from a text map with arguments based on current locale

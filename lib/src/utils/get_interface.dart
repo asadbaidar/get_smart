@@ -40,9 +40,17 @@ extension GetInterfaceX on GetInterface {
 
   void backUntil(String route) => until((r) => r.settings.name == route);
 
-  T? $arguments<T extends Mappable>({T? as, List<Function>? builders}) =>
+  T? $arguments<T extends Mappable>({
+    T? as,
+    List<Function>? builders,
+    MapperFactory? factories,
+  }) =>
       $cast<T>(Get.arguments) ??
-      $object(arguments)?.getObject<T>(as: as, builders: builders);
+      $object(arguments)?.getObject<T>(
+        as: as,
+        builders: builders,
+        factories: factories,
+      );
 
   /// Finds an Instance of the required Class <[S]>(or [tag])
   /// Returns null if not found.

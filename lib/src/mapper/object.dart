@@ -4,6 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:get_smart/get_smart.dart';
 
 abstract class GetObject extends Mappable {
+  GetObject({
+    String? id,
+    String? description,
+  })  : _id = id,
+        _description = description;
+
   DateTime? currentTime;
   String? _id;
   String? _description;
@@ -22,9 +28,9 @@ abstract class GetObject extends Mappable {
 
   GetObject? get fallback => null;
 
-  List<String> get idKeys => ["ID", "id"];
+  List<String> get idKeys => ["id", "ID"];
 
-  List<String> get descriptionKeys => ["DESCRIPTION", "description"];
+  List<String> get descriptionKeys => ["description", "DESCRIPTION"];
 
   bool get capitalized => false;
 
