@@ -1231,7 +1231,7 @@ abstract class GetButton {
             icon ?? (Get.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
             color: color ?? context.primaryIconColor,
           ),
-        ).tooltip(Get.localization.backButtonTooltip),
+        ).tooltip(MaterialLocalizations.of(context).backButtonTooltip),
       );
 
   static Widget detail({
